@@ -54,7 +54,7 @@ const LandingPage = () => {
             className="text-center mb-12"
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-primary-600 via-purple-600 to-secondary-600 bg-clip-text text-transparent">
-              Find Your College Org to Partner With
+              Find a Fraternity to help Build your Brand
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Discover 5,000+ Greek organizations across 250+ universities. Be the first to know when we launch.
