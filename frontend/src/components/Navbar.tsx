@@ -14,11 +14,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-lg">FB</span>
+          <Link to="/" className="flex items-center gap-2">
+            <span className="text-3xl">🧢</span>
+            <div className="flex flex-col -space-y-1">
+              <span className="text-2xl font-bold text-blue-600" style={{ fontFamily: 'cursive', letterSpacing: '-0.5px' }}>Fraternity</span>
+              <span className="text-2xl font-bold text-blue-600 pl-8" style={{ fontFamily: 'cursive', letterSpacing: '-0.5px' }}>Base</span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Fraternity Base</span>
           </Link>
 
           {/* Desktop Navigation */}

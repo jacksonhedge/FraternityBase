@@ -343,19 +343,16 @@ const AdminPageV3 = () => {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
-                {/* Animated Logo */}
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full blur-md opacity-75 group-hover:opacity-100 transition-opacity animate-pulse-glow" />
-                  <div className="relative w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center transform transition-transform group-hover:scale-110">
-                    <span className="text-white font-bold text-xl">FB</span>
-                  </div>
-                </div>
+                {/* Logo with baseball cap */}
+                <span className="text-4xl">🧢</span>
 
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 bg-clip-text text-transparent animate-shimmer bg-[length:200%_100%]">
-                      Fraternity Base
-                    </h1>
+                    <div className="flex flex-col -space-y-1">
+                      <h1 className="text-2xl font-bold text-blue-600" style={{ fontFamily: 'cursive', letterSpacing: '-0.5px' }}>
+                        Fraternity Base
+                      </h1>
+                    </div>
                     <Zap className="w-5 h-5 text-yellow-500 animate-bounce-subtle" />
                   </div>
                   <p className="text-sm text-gray-500 flex items-center">
