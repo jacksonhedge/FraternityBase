@@ -1,0 +1,16 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .fb-text { font-family: 'Brush Script MT', cursive; font-style: italic; }
+  </style>
+
+  <!-- FB Letters in stylized script font -->
+  <text x="60" y="75"
+        class="fb-text"
+        font-size="65"
+        font-weight="bold"
+        fill="#2B87D1"
+        text-anchor="middle"
+        transform="rotate(-5 60 60)">
+    FB
+  </text>
+</svg>

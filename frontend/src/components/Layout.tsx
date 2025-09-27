@@ -19,6 +19,7 @@ import {
   MapPin,
   UsersIcon,
   Settings,
+  GraduationCap,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -50,8 +51,11 @@ const Layout = () => {
       {/* Sidebar for desktop */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
         <div className="flex flex-col flex-1 bg-white border-r border-gray-200">
-          <div className="flex items-center justify-center h-16 px-4 bg-primary-600">
-            <h1 className="text-xl font-bold text-white">College Org Network</h1>
+          <div className="flex items-center h-16 px-4 bg-primary-600">
+            <div className="flex items-center gap-2">
+              <img src="/fb-logo.svg" alt="FB" className="w-8 h-8" />
+              <h1 className="text-xl font-bold text-white">FraternityBase</h1>
+            </div>
           </div>
           <nav className="flex-1 px-2 py-4 space-y-1">
             {navigation.map((item) => {
@@ -100,7 +104,10 @@ const Layout = () => {
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-          <h1 className="text-lg font-bold text-primary-600">College Org Network</h1>
+          <div className="flex items-center gap-1">
+            <img src="/fb-logo.svg" alt="FB" className="w-6 h-6" />
+            <h1 className="text-lg font-bold text-primary-600">FraternityBase</h1>
+          </div>
           <button className="p-2 text-gray-500 hover:text-gray-700">
             <Bell className="w-5 h-5" />
           </button>

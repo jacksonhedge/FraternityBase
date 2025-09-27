@@ -78,7 +78,10 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900">College Org Network</h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <img src="/fb-logo.svg" alt="FB" className="w-14 h-14" />
+            <h1 className="text-4xl font-bold text-gray-900">FraternityBase</h1>
+          </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
           <p className="mt-2 text-sm text-gray-600">
             Or{' '}

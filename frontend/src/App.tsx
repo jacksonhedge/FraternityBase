@@ -32,7 +32,7 @@ import AdminPageV3 from './pages/AdminPageV3';
 import AdminLoginPage from './pages/AdminLoginPage';
 
 function App() {
-  console.log('College Org Network App loaded - Routes available: /, /signup, /pricing, /login - v3');
+  console.log('🧢 FraternityBase App loaded - Routes available: /, /signup, /pricing, /login - v3');
 
   // Add a loading check
   if (!store) {
