@@ -14,17 +14,11 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand */}
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/logo.png"
-              alt="Fraternity Base"
-              className="h-8 w-auto"
-              onError={(e) => {
-                // Fallback if logo not found
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-            <span className="text-xl font-bold text-gray-900">Fraternity Base</span>
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-lg">FB</span>
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Fraternity Base</span>
           </Link>
 
           {/* Desktop Navigation */}

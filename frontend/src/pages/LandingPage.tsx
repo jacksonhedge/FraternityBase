@@ -5,30 +5,32 @@ import {
   Sparkles,
   Building2,
   Users,
-  TrendingUp
+  TrendingUp,
+  Mail,
+  CheckCircle,
+  ArrowRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 
 const LandingPage = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [email, setEmail] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleWaitlistSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/chapters?search=${encodeURIComponent(searchQuery)}`);
+    if (email.trim()) {
+      // Here you would normally send the email to your backend
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setEmail('');
+        setIsSubmitted(false);
+      }, 3000);
     }
   };
 
-  const popularSearches = [
-    'Sigma Chi chapters',
-    'Sororities at SEC schools',
-    'Business fraternities',
-    'Engineering organizations',
-    'Top chapters by engagement'
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 relative overflow-hidden">
@@ -55,72 +57,62 @@ const LandingPage = () => {
               Find Your College Org to Partner With
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover 5,000+ Greek organizations across 250+ universities with AI-powered search
+              Discover 5,000+ Greek organizations across 250+ universities. Be the first to know when we launch.
             </p>
           </motion.div>
 
-          {/* AI Search Bar */}
-          <motion.form
-            onSubmit={handleSearch}
+          {/* Waitlist Form */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className={`relative bg-white rounded-2xl shadow-2xl transition-all duration-300 ${
-              isSearchFocused ? 'ring-4 ring-primary-200 transform scale-105' : 'hover:shadow-3xl'
-            }`}>
-              <div className="flex items-center p-2">
-                <div className="flex items-center justify-center w-12 h-12 ml-2">
-                  <Sparkles className="w-6 h-6 text-primary-600" />
+            {!isSubmitted ? (
+              <form onSubmit={handleWaitlistSubmit}>
+                <div className={`relative bg-white rounded-2xl shadow-2xl transition-all duration-300 ${
+                  isFocused ? 'ring-4 ring-green-200 transform scale-105' : 'hover:shadow-3xl'
+                }`}>
+                  <div className="flex items-center p-2">
+                    <div className="flex items-center justify-center w-12 h-12 ml-2">
+                      <Mail className="w-6 h-6 text-green-600" />
+                    </div>
+                    <input
+                      type="email"
+                      placeholder="Enter your email to join the waitlist..."
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                      className="flex-1 px-4 py-6 text-lg focus:outline-none placeholder-gray-400"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      className="bg-gradient-to-r from-green-500 to-emerald-600 text-white mr-2 px-8 py-4 text-lg font-semibold rounded-xl flex items-center gap-2 hover:scale-105 transition-transform shadow-lg"
+                    >
+                      Join Waitlist
+                      <ArrowRight className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
-                <input
-                  type="text"
-                  placeholder="Try 'Top business fraternities at SEC schools' or 'Sororities with 150+ members'..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
-                  className="flex-1 px-4 py-6 text-lg focus:outline-none placeholder-gray-400"
-                />
-                <button
-                  type="submit"
-                  className="btn-primary mr-2 px-8 py-4 text-lg font-semibold flex items-center gap-2 hover:scale-105 transition-transform"
-                >
-                  <Search className="h-5 w-5" />
-                  Search
-                </button>
+
+                {/* Early Access Badge */}
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    EARLY ACCESS
+                  </span>
+                </div>
+              </form>
+            ) : (
+              <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
+                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">You're on the list!</h3>
+                <p className="text-gray-600">We'll notify you when Fraternity Base launches.</p>
               </div>
-            </div>
-
-            {/* AI Badge */}
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                AI-POWERED
-              </span>
-            </div>
-          </motion.form>
-
-          {/* Popular Searches */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-8 text-center"
-          >
-            <p className="text-sm text-gray-500 mb-3">Popular searches:</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {popularSearches.map((search, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSearchQuery(search)}
-                  className="px-4 py-2 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full text-sm hover:bg-white hover:text-primary-600 transition-all hover:scale-105 shadow-md"
-                >
-                  {search}
-                </button>
-              ))}
-            </div>
+            )}
           </motion.div>
+
 
           {/* Stats */}
           <motion.div
