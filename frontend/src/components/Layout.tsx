@@ -36,12 +36,12 @@ const Layout = () => {
   };
 
   const navigation = [
-    { name: 'Dashboard', href: '/app/dashboard', icon: Home },
-    { name: 'Fraternities', href: '/app/fraternities', icon: Users },
-    { name: 'Colleges', href: '/app/colleges', icon: Building2 },
-    { name: 'Map', href: '/app/map', icon: MapPin },
-    { name: 'Chapters', href: '/app/chapters', icon: Users },
-    { name: 'Team', href: '/app/team', icon: UsersIcon },
+    { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null },
+    { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW' },
+    { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null },
+    { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null },
+    { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null },
+    { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null },
   ];
 
   const isActive = (path: string) => location.pathname.startsWith(path);
@@ -64,14 +64,21 @@ const Layout = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                     isActive(item.href)
                       ? 'bg-primary-50 text-primary-700'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
-                  <Icon className="w-5 h-5 mr-3" />
-                  {item.name}
+                  <div className="flex items-center">
+                    <Icon className="w-5 h-5 mr-3" />
+                    {item.name}
+                  </div>
+                  {item.badge && (
+                    <span className="px-2 py-0.5 text-xs font-semibold text-white bg-green-500 rounded-full">
+                      {item.badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}
@@ -129,14 +136,21 @@ const Layout = () => {
                       key={item.name}
                       to={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
+                      className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md ${
                         isActive(item.href)
                           ? 'bg-primary-50 text-primary-700'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <Icon className="w-5 h-5 mr-3" />
-                      {item.name}
+                      <div className="flex items-center">
+                        <Icon className="w-5 h-5 mr-3" />
+                        {item.name}
+                      </div>
+                      {item.badge && (
+                        <span className="px-2 py-0.5 text-xs font-semibold text-white bg-green-500 rounded-full">
+                          {item.badge}
+                        </span>
+                      )}
                     </Link>
                   );
                 })}

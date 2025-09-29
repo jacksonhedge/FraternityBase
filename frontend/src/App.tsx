@@ -20,10 +20,13 @@ import FraternitiesPage from './pages/FraternitiesPage';
 import CollegesPage from './pages/CollegesPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
 import MapPage from './pages/MapPage';
+import MapPageFullScreen from './pages/MapPageFullScreen';
 import ChaptersPage from './pages/ChaptersPage';
 import ChapterDetailPage from './pages/ChapterDetailPage';
 import EventsPage from './pages/EventsPage';
+import EventDetailPage from './pages/EventDetailPage';
 import PartnershipsPage from './pages/PartnershipsPage';
+import PartnershipDetailPage from './pages/PartnershipDetailPage';
 import AmbassadorsPage from './pages/AmbassadorsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -58,17 +61,19 @@ function App() {
 
           {/* Private Routes */}
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
-            <Route index element={<Navigate to="/app/dashboard" replace />} />
+            <Route index element={<Navigate to="/app/map" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="team" element={<TeamPage />} />
             <Route path="fraternities" element={<FraternitiesPage />} />
             <Route path="colleges" element={<CollegesPage />} />
             <Route path="colleges/:id" element={<CollegeDetailPage />} />
-            <Route path="map" element={<MapPage />} />
+            <Route path="map" element={<MapPageFullScreen />} />
             <Route path="chapters" element={<ChaptersPage />} />
             <Route path="chapters/:id" element={<ChapterDetailPage />} />
             <Route path="events" element={<EventsPage />} />
+            <Route path="events/:id" element={<EventDetailPage />} />
             <Route path="partnerships" element={<PartnershipsPage />} />
+            <Route path="partnerships/:id" element={<PartnershipDetailPage />} />
             <Route path="ambassadors" element={<AmbassadorsPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
