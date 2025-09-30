@@ -8,7 +8,7 @@ const AdminLoginPage = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const ADMIN_PASSWORD = 'Hedge2025!';
+  const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'Hedge2025!';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +21,7 @@ const AdminLoginPage = () => {
         // Store admin auth in sessionStorage
         sessionStorage.setItem('adminAuthenticated', 'true');
         sessionStorage.setItem('adminLoginTime', new Date().toISOString());
+        sessionStorage.setItem('adminToken', import.meta.env.VITE_ADMIN_TOKEN || '');
         navigate('/admin-panel');
       } else {
         setError('Invalid password. Access denied.');
