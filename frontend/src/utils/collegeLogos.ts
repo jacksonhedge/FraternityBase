@@ -21,6 +21,7 @@ const CONFERENCE_MAP: Record<string, string> = {
   'North Carolina': 'ACC/North_Carolina_Tar_Heels_logo.png',
   'North Carolina State': 'ACC/North_Carolina_State_Wolfpack_logo.png',
   'Pittsburgh': 'ACC/Pittsburgh_Panthers_logo.png',
+  'SMU': 'ACC/SMU_Mustang_logo.png',
   'Syracuse': 'ACC/Syracuse_Orange_logo.png',
   'Virginia': 'ACC/Virginia_Cavaliers_logo.png',
   'Virginia Tech': 'ACC/Virginia_Tech_Hokies_logo.png',
@@ -50,7 +51,8 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Oklahoma': 'BIG 12/Oklahoma_Sooners_logo.png',
   'Oklahoma State': 'BIG 12/Oklahoma_State_Cowboys_logo.png',
   'TCU': 'BIG 12/TCU_Horned_Frogs_logo.png',
-  'Texas': 'BIG 12/Texas_Longhorns_logo.png',
+  'Texas': 'SEC/Texas_Longhorns_logo.png',
+  'UT Austin': 'SEC/Texas_Longhorns_logo.png',
   'Texas Tech': 'BIG 12/Texas_Tech_Red_Raiders_logo.png',
   'West Virginia': 'BIG 12/West_Virginia_Mountaineers_logo.png',
 
