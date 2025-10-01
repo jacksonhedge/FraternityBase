@@ -27,7 +27,7 @@ const PricingPage = () => {
       color: 'from-gray-500 to-gray-600',
       bgColor: 'from-gray-50 to-gray-100',
       features: [
-        '1 chapter lookup',
+        '1 Chapter (1 credit)',
         'Basic organization info',
         'Limited search filters',
         'Community support',
@@ -48,7 +48,7 @@ const PricingPage = () => {
       color: 'from-blue-500 to-blue-600',
       bgColor: 'from-blue-50 to-blue-100',
       features: [
-        '10 chapter lookups/month',
+        '10 Chapters (10 credits/month)',
         'Schedule with 3 organizations',
         'Full organization profiles',
         'Advanced search filters',
@@ -70,7 +70,7 @@ const PricingPage = () => {
       color: 'from-purple-500 to-purple-600',
       bgColor: 'from-purple-50 to-purple-100',
       features: [
-        '100 chapter lookups/month',
+        '100 Chapters (100 credits/month)',
         'Schedule with 50 organizations',
         'Full contact information',
         'API access (5000 calls/month)',
@@ -86,13 +86,13 @@ const PricingPage = () => {
     {
       id: 'enterprise',
       name: 'Enterprise',
-      price: 'Custom',
+      price: 'Talk to Sales',
       description: 'For large organizations',
       icon: Building2,
       color: 'from-gray-700 to-gray-800',
       bgColor: 'from-gray-50 to-gray-100',
       features: [
-        'Unlimited chapter lookups',
+        'Unlimited Chapters (unlimited credits)',
         'Unlimited scheduling with orgs',
         'Unlimited API calls',
         'Custom integrations & webhooks',
