@@ -574,17 +574,11 @@ const ChaptersPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
-                          {chapter.universities?.logo_url ? (
-                            <img
-                              src={chapter.universities.logo_url}
-                              alt={chapter.universities.name}
-                              className="w-8 h-8 object-contain"
-                            />
-                          ) : (
-                            <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
-                              {chapter.universities?.name?.[0] || '?'}
-                            </div>
-                          )}
+                          <img
+                            src={getCollegeLogoWithFallback(chapter.universities?.name || '')}
+                            alt={chapter.universities?.name || ''}
+                            className="w-10 h-10 rounded-lg object-contain"
+                          />
                           <div>
                             <div className="text-sm text-gray-900">{chapter.universities?.name || '-'}</div>
                             <div className="text-sm text-gray-500">{chapter.universities?.state || '-'}</div>
