@@ -42,9 +42,19 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Purdue': 'BIG 10/Purdue_Boilermakers_logo.png',
   'Rutgers': 'BIG 10/Rutgers_Scarlet_Knights_logo.png',
   'Wisconsin': 'BIG 10/Wisconsin_Badgers_logo.png',
+  'UCLA': 'BIG 10/UCLA.png',
+  'USC': 'BIG 10/USC_Trojans_logo.png',
+  'University of Washington': 'BIG 10/Washington_Huskies_logo.png',
+  'University of Oregon': 'BIG 10/Oregon_Ducks_logo.png',
 
   // Big 12
+  'Arizona State': 'BIG 12/Arizona_State_Sun_Devils_logo.png',
+  'University of Arizona': 'BIG 12/Arizona_Wildcats_logo.png',
+  'Arizona': 'BIG 12/Arizona_Wildcats_logo.png',
   'Baylor': 'BIG 12/Baylor_Bears_logo.png',
+  'BYU': 'BIG 12/BYU_Cougars_logo.png',
+  'University of Colorado Boulder': 'BIG 12/Colorado_Buffaloes_logo.png',
+  'Colorado': 'BIG 12/Colorado_Buffaloes_logo.png',
   'Iowa State': 'BIG 12/Iowa_State_Cyclones_logo.png',
   'Kansas': 'BIG 12/Kansas_Jayhawks_logo.png',
   'Kansas State': 'BIG 12/Kansas_State_Wildcats_logo.png',
@@ -54,6 +64,8 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Texas': 'SEC/Texas_Longhorns_logo.png',
   'UT Austin': 'SEC/Texas_Longhorns_logo.png',
   'Texas Tech': 'BIG 12/Texas_Tech_Red_Raiders_logo.png',
+  'University of Utah': 'BIG 12/Utah_Utes_logo.png',
+  'Utah': 'BIG 12/Utah_Utes_logo.png',
   'West Virginia': 'BIG 12/West_Virginia_Mountaineers_logo.png',
 
   // SEC
@@ -73,18 +85,24 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Vanderbilt': 'SEC/Vanderbilt_Commodores_logo.png',
 
   // PAC-12
-  'Arizona': 'PAC - 12/Arizona_Wildcats_logo.png',
-  'Arizona State': 'PAC - 12/Arizona_State_Sun_Devils_logo.png',
-  'California': 'PAC - 12/California_Golden_Bears_logo.png',
-  'Colorado': 'PAC - 12/Colorado_Buffaloes_logo.png',
-  'Oregon': 'PAC - 12/Oregon_Ducks_logo.png',
+  'UC Berkeley': 'ACC/California_Golden_Bears_logo.png',
+  'Stanford': 'ACC/Stanford_Cardinal_logo.png',
   'Oregon State': 'PAC - 12/Oregon_State_Beavers_logo.png',
-  'Stanford': 'PAC - 12/Stanford_Cardinal_logo.png',
-  'UCLA': 'PAC - 12/UCLA_Bruins_logo.png',
-  'USC': 'PAC - 12/USC_Trojans_logo.png',
-  'Utah': 'PAC - 12/Utah_Utes_logo.png',
-  'Washington': 'PAC - 12/Washington_Huskies_logo.png',
   'Washington State': 'PAC - 12/Washington_State_Cougars_logo.png',
+
+  // Mountain West / Big West / Big Sky
+  'Boise State': 'MW/Boise_State_Broncos_Logo.png',
+  'Colorado State': 'MW/Colorado_State_Rams_logo.png',
+  'University of New Mexico': 'MW/New_Mexico_Lobos_logo.png',
+  'New Mexico': 'MW/New_Mexico_Lobos_logo.png',
+  'UNLV': 'MW/UNLV_Rebels_logo.png',
+  'University of Nevada Reno': 'MW/Nevada_Wolf_Pack_logo.png',
+  'Nevada': 'MW/Nevada_Wolf_Pack_logo.png',
+  'University of Wyoming': 'MW/Wyoming_Cowboys_logo.png',
+  'Wyoming': 'MW/Wyoming_Cowboys_logo.png',
+
+  // UC San Diego will show initials (no logo file found)
+  // University of Montana will show initials (no logo file found)
 
   // Big East
   'Butler': 'BIG EAST/Butler_Bulldogs_logo.png',
