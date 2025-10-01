@@ -18,7 +18,8 @@ import {
   Briefcase,
   Home,
   BarChart3,
-  Lock
+  Lock,
+  Mail
 } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -113,9 +114,17 @@ interface ChapterUnlock {
   };
 }
 
+interface WaitlistEntry {
+  id: string;
+  email: string;
+  source?: string;
+  referrer?: string;
+  signup_date: string;
+}
+
 const AdminPageV4 = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'contacts'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'contacts' | 'waitlist'>('dashboard');
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -127,9 +136,9 @@ const AdminPageV4 = () => {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [officers, setOfficers] = useState<Officer[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCSVImport, setShowCSVImport] = useState(false);
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -249,6 +258,10 @@ const AdminPageV4 = () => {
         ]);
         setChapters(chaptersData.data || []);
         setOfficers(officersData.data || []);
+      } else if (activeTab === 'waitlist') {
+        const res = await fetch(`${API_URL}/admin/waitlist`, { headers: getAdminHeaders() });
+        const data = await res.json();
+        setWaitlistEntries(data.data || []);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -724,6 +737,27 @@ const AdminPageV4 = () => {
     off.chapters?.chapter_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Helper function to get initials from university name
+  const getInitials = (name: string) => {
+    const words = name.split(' ').filter(word =>
+      word.length > 0 && !['of', 'the', 'and', 'at'].includes(word.toLowerCase())
+    );
+    if (words.length === 1) {
+      return words[0].substring(0, 2).toUpperCase();
+    }
+    return words.slice(0, 2).map(word => word[0].toUpperCase()).join('');
+  };
+
+  // Helper function to generate color from string
+  const getColorFromString = (str: string) => {
+    const colors = [
+      'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-red-500',
+      'bg-yellow-500', 'bg-indigo-500', 'bg-pink-500', 'bg-teal-500'
+    ];
+    const hash = str.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return colors[hash % colors.length];
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar */}
@@ -860,6 +894,25 @@ const AdminPageV4 = () => {
               <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{officers.length}</span>
             )}
           </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('waitlist');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'waitlist'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Mail className="w-5 h-5" />
+            <span className="font-medium">Waitlist</span>
+            {waitlistEntries.length > 0 && (
+              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{waitlistEntries.length}</span>
+            )}
+          </button>
         </nav>
 
         {/* Bottom Section */}
@@ -891,6 +944,7 @@ const AdminPageV4 = () => {
               {activeTab === 'colleges' && 'Manage universities and colleges'}
               {activeTab === 'chapters' && 'Manage individual chapters'}
               {activeTab === 'contacts' && 'Manage chapter officers and contacts'}
+              {activeTab === 'waitlist' && 'View and manage waitlist signups'}
             </p>
           </div>
 
@@ -1007,7 +1061,7 @@ const AdminPageV4 = () => {
       )}
 
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'contacts') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'contacts' || activeTab === 'waitlist') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
@@ -1022,78 +1076,96 @@ const AdminPageV4 = () => {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2 cursor-pointer">
-                <Upload className="w-4 h-4" />
-                <span>CSV Import</span>
-                <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleCSVImport}
-                  className="hidden"
-                />
-              </label>
-              <button
-                onClick={() => setShowAIAssistant(!showAIAssistant)}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2"
-              >
-                <span>🤖</span>
-                <span>AI Assistant</span>
-              </button>
-              <button
-                onClick={() => {
-                  setShowForm(!showForm);
-                  setEditingId(null);
-                }}
-                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center space-x-2"
-              >
-                {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                <span>{showForm ? 'Cancel' : 'Add New'}</span>
-              </button>
+              {activeTab !== 'waitlist' && (
+                <>
+                  <label className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2 cursor-pointer">
+                    <Upload className="w-4 h-4" />
+                    <span>CSV Import</span>
+                    <input
+                      type="file"
+                      accept=".csv"
+                      onChange={handleCSVImport}
+                      className="hidden"
+                    />
+                  </label>
+                  <button
+                    onClick={() => {
+                      setShowForm(!showForm);
+                      setEditingId(null);
+                    }}
+                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center space-x-2"
+                  >
+                    {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                    <span>{showForm ? 'Cancel' : 'Add New'}</span>
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
-          {/* AI Assistant Modal */}
-          {showAIAssistant && (
-            <div className="mb-6 p-6 bg-purple-50 rounded-lg border-2 border-purple-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <span>🤖</span> AI Data Assistant
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Ask AI to help you find, format, or add data. Example: "Add the top 10 Big Ten universities"
-              </p>
-              <textarea
-                value={aiPrompt}
-                onChange={(e) => setAiPrompt(e.target.value)}
-                placeholder="What would you like me to help with?"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4 h-24"
-              />
-              <div className="flex justify-between items-start gap-4">
-                <div className="flex-1">
-                  {aiResponse && (
-                    <div className="p-4 bg-white rounded-lg border border-purple-200">
-                      <p className="text-sm font-medium text-gray-700 mb-2">AI Response:</p>
-                      <p className="text-sm text-gray-600 whitespace-pre-wrap">{aiResponse}</p>
-                    </div>
+          {/* AI Assistant Bar - Always Visible */}
+          <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-200 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">🤖</span>
+                  <h3 className="text-sm font-semibold text-gray-900">AI Data Assistant</h3>
+                  {aiStatus && (
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      aiStatus.connected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    }`}>
+                      {aiStatus.connected ? 'Online' : 'Offline'}
+                    </span>
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => setShowAIAssistant(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-                  >
-                    Close
-                  </button>
+                  <input
+                    type="text"
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey && aiPrompt.trim()) {
+                        handleAIAssist();
+                      }
+                    }}
+                    placeholder='Ask AI to help with data... (e.g., "Add top 10 Big Ten universities" or "Find all chapters in California")'
+                    className="flex-1 px-3 py-2 text-sm border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
                   <button
                     onClick={handleAIAssist}
-                    disabled={aiLoading || !aiPrompt}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={aiLoading || !aiPrompt.trim()}
+                    className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
                   >
-                    {aiLoading ? 'Processing...' : 'Ask AI'}
+                    {aiLoading ? (
+                      <>
+                        <span className="animate-spin">⚙️</span>
+                        <span>Processing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>✨</span>
+                        <span>Ask AI</span>
+                      </>
+                    )}
                   </button>
                 </div>
+                {aiResponse && (
+                  <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <p className="text-xs font-semibold text-purple-700">AI Response:</p>
+                      <button
+                        onClick={() => setAiResponse('')}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{aiResponse}</p>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
 
           {/* Fraternity Tab Content */}
           {activeTab === 'fraternities' && (
@@ -1366,8 +1438,12 @@ const AdminPageV4 = () => {
                       <tr key={uni.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            {uni.logo_url && (
+                            {uni.logo_url ? (
                               <img src={uni.logo_url} alt={uni.name} className="h-8 w-8 object-contain mr-3" />
+                            ) : (
+                              <div className={`h-8 w-8 rounded mr-3 flex items-center justify-center text-white text-xs font-bold ${getColorFromString(uni.name)}`}>
+                                {getInitials(uni.name)}
+                              </div>
                             )}
                             <div className="text-sm font-medium text-gray-900">{uni.name}</div>
                           </div>
@@ -1675,6 +1751,45 @@ const AdminPageV4 = () => {
                 </table>
               </div>
             </>
+          )}
+
+          {/* Waitlist Tab Content */}
+          {activeTab === 'waitlist' && (
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Referrer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Signup Date</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {waitlistEntries.map((entry) => (
+                    <tr key={entry.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{entry.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{entry.source || '-'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{entry.referrer || '-'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {new Date(entry.signup_date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {waitlistEntries.length === 0 && (
+                <div className="text-center py-12 text-gray-500">
+                  No waitlist entries yet
+                </div>
+              )}
+            </div>
           )}
         </div>
       )}

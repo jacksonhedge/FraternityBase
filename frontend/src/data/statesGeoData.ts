@@ -116,12 +116,15 @@ export const COLLEGE_LOCATIONS = {
   "Carnegie Mellon": { lat: 40.4433, lng: -79.9436, state: "PA", fraternities: 22, sororities: 18, totalMembers: 1800, conference: "UAA", division: "D3" },
   "Villanova": { lat: 40.0384, lng: -75.3434, state: "PA", fraternities: 25, sororities: 20, totalMembers: 2000, conference: "BIG EAST", division: "D1" },
   "University of Pittsburgh": { lat: 40.4444, lng: -79.9608, state: "PA", fraternities: 42, sororities: 24, totalMembers: 3200, conference: "ACC", division: "D1" },
+  "Bucknell University": { lat: 40.9546, lng: -76.8836, state: "PA", fraternities: 7, sororities: 10, totalMembers: 1500, conference: "PATRIOT", division: "D1" },
+  "Gettysburg College": { lat: 39.8340, lng: -77.2360, state: "PA", fraternities: 5, sororities: 6, totalMembers: 900, conference: "CENTENNIAL", division: "D3" },
 
   // New York
   "Cornell University": { lat: 42.4534, lng: -76.4735, state: "NY", fraternities: 52, sororities: 30, totalMembers: 4200, conference: "IVY", division: "D1" },
   "Syracuse University": { lat: 43.0392, lng: -76.1351, state: "NY", fraternities: 48, sororities: 28, totalMembers: 3800, conference: "ACC", division: "D1" },
   "Columbia University": { lat: 40.8075, lng: -73.9626, state: "NY", fraternities: 35, sororities: 22, totalMembers: 2500, conference: "IVY", division: "D1" },
   "NYU": { lat: 40.7295, lng: -73.9965, state: "NY", fraternities: 32, sororities: 25, totalMembers: 2800, conference: "UAA", division: "D3" },
+  "Colgate University": { lat: 42.8193, lng: -75.5354, state: "NY", fraternities: 6, sororities: 6, totalMembers: 1800, conference: "PATRIOT", division: "D1" },
 
   // California
   "UCLA": { lat: 34.0689, lng: -118.4452, state: "CA", fraternities: 62, sororities: 35, totalMembers: 5200, conference: "PAC-12", division: "D1" },
@@ -140,6 +143,8 @@ export const COLLEGE_LOCATIONS = {
   "University of Florida": { lat: 29.6436, lng: -82.3549, state: "FL", fraternities: 65, sororities: 35, totalMembers: 5000, conference: "SEC", division: "D1" },
   "Florida State": { lat: 30.4419, lng: -84.2985, state: "FL", fraternities: 60, sororities: 33, totalMembers: 4800, conference: "ACC", division: "D1" },
   "University of Miami": { lat: 25.7216, lng: -80.2793, state: "FL", fraternities: 42, sororities: 25, totalMembers: 3200, conference: "ACC", division: "D1" },
+  "Rollins College": { lat: 28.5915, lng: -81.3484, state: "FL", fraternities: 5, sororities: 5, totalMembers: 800, conference: "SUNSHINE STATE", division: "D2" },
+  "Florida Southern College": { lat: 28.0314, lng: -81.9475, state: "FL", fraternities: 7, sororities: 7, totalMembers: 1000, conference: "SUNSHINE STATE", division: "D2" },
 
   // Illinois
   "Northwestern": { lat: 42.0565, lng: -87.6753, state: "IL", fraternities: 45, sororities: 28, totalMembers: 3500, conference: "BIG 10", division: "D1" },
@@ -155,14 +160,17 @@ export const COLLEGE_LOCATIONS = {
   "Harvard": { lat: 42.3770, lng: -71.1167, state: "MA", fraternities: 32, sororities: 20, totalMembers: 2200, conference: "IVY", division: "D1" },
   "MIT": { lat: 42.3601, lng: -71.0942, state: "MA", fraternities: 28, sororities: 18, totalMembers: 1900, conference: "NEWMAC", division: "D3" },
   "Boston University": { lat: 42.3505, lng: -71.1054, state: "MA", fraternities: 40, sororities: 25, totalMembers: 3000, conference: "PATRIOT", division: "D1" },
+  "Bentley University": { lat: 42.3876, lng: -71.2206, state: "MA", fraternities: 6, sororities: 5, totalMembers: 900, conference: "NORTHEAST-10", division: "D2" },
 
   // Michigan
   "University of Michigan": { lat: 42.2780, lng: -83.7382, state: "MI", fraternities: 70, sororities: 37, totalMembers: 5500, conference: "BIG 10", division: "D1" },
   "Michigan State": { lat: 42.7018, lng: -84.4822, state: "MI", fraternities: 65, sororities: 34, totalMembers: 5000, conference: "BIG 10", division: "D1" },
+  "Grand Valley State University": { lat: 42.9633, lng: -85.8881, state: "MI", fraternities: 8, sororities: 9, totalMembers: 1200, conference: "GLIAC", division: "D2" },
 
   // Ohio
   "Ohio State": { lat: 40.0067, lng: -83.0305, state: "OH", fraternities: 68, sororities: 36, totalMembers: 5400, conference: "BIG 10", division: "D1" },
   "Miami University": { lat: 39.5079, lng: -84.7452, state: "OH", fraternities: 55, sororities: 30, totalMembers: 4200, conference: "MAC", division: "D1" },
+  "Denison University": { lat: 40.0724, lng: -82.5277, state: "OH", fraternities: 10, sororities: 8, totalMembers: 1300, conference: "NCAC", division: "D3" },
 
   // North Carolina
   "Duke": { lat: 36.0011, lng: -78.9389, state: "NC", fraternities: 42, sororities: 25, totalMembers: 3200, conference: "ACC", division: "D1" },
@@ -172,10 +180,13 @@ export const COLLEGE_LOCATIONS = {
   // Virginia
   "University of Virginia": { lat: 38.0336, lng: -78.5080, state: "VA", fraternities: 58, sororities: 30, totalMembers: 4400, conference: "ACC", division: "D1" },
   "Virginia Tech": { lat: 37.2284, lng: -80.4234, state: "VA", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "ACC", division: "D1" },
+  "Washington and Lee University": { lat: 37.7853, lng: -79.4399, state: "VA", fraternities: 13, sororities: 12, totalMembers: 2200, conference: "ODAC", division: "D3" },
 
   // Indiana
   "Indiana University": { lat: 39.1766, lng: -86.5131, state: "IN", fraternities: 62, sororities: 33, totalMembers: 4800, conference: "BIG 10", division: "D1" },
   "Purdue": { lat: 40.4237, lng: -86.9212, state: "IN", fraternities: 55, sororities: 28, totalMembers: 4100, conference: "BIG 10", division: "D1" },
+  "DePauw University": { lat: 39.6397, lng: -86.8617, state: "IN", fraternities: 13, sororities: 12, totalMembers: 2400, conference: "NCAC", division: "D3" },
+  "Wabash College": { lat: 40.0398, lng: -86.9068, state: "IN", fraternities: 9, sororities: 0, totalMembers: 1100, conference: "NCAC", division: "D3" },
 
   // Wisconsin
   "University of Wisconsin": { lat: 43.0766, lng: -89.4125, state: "WI", fraternities: 58, sororities: 31, totalMembers: 4500, conference: "BIG 10", division: "D1" },
@@ -187,6 +198,8 @@ export const COLLEGE_LOCATIONS = {
   // Tennessee
   "Vanderbilt": { lat: 36.1447, lng: -86.8027, state: "TN", fraternities: 42, sororities: 24, totalMembers: 3100, conference: "SEC", division: "D1" },
   "University of Tennessee": { lat: 35.9544, lng: -83.9295, state: "TN", fraternities: 52, sororities: 28, totalMembers: 3900, conference: "SEC", division: "D1" },
+  "Sewanee": { lat: 35.2034, lng: -85.9197, state: "TN", fraternities: 10, sororities: 10, totalMembers: 1400, conference: "SAA", division: "D3" },
+  "Rhodes College": { lat: 35.1558, lng: -89.9910, state: "TN", fraternities: 8, sororities: 9, totalMembers: 1300, conference: "SAA", division: "D3" },
 
   // South Carolina
   "Clemson": { lat: 34.6834, lng: -82.8374, state: "SC", fraternities: 45, sororities: 25, totalMembers: 3400, conference: "ACC", division: "D1" },
@@ -213,10 +226,12 @@ export const COLLEGE_LOCATIONS = {
   "Ole Miss": { lat: 34.3665, lng: -89.5348, state: "MS", fraternities: 48, sororities: 28, totalMembers: 3800, conference: "SEC", division: "D1" },
   "Mississippi State": { lat: 33.4549, lng: -88.7904, state: "MS", fraternities: 45, sororities: 26, totalMembers: 3500, conference: "SEC", division: "D1" },
   "Southern Miss": { lat: 31.3307, lng: -89.3378, state: "MS", fraternities: 32, sororities: 20, totalMembers: 2400, conference: "SBC", division: "D1" },
+  "Millsaps College": { lat: 32.3200, lng: -90.1743, state: "MS", fraternities: 5, sororities: 3, totalMembers: 700, conference: "SAA", division: "D3" },
 
   // Kentucky
   "University of Kentucky": { lat: 38.0297, lng: -84.5037, state: "KY", fraternities: 48, sororities: 27, totalMembers: 3700, conference: "SEC", division: "D1" },
   "University of Louisville": { lat: 38.2104, lng: -85.7584, state: "KY", fraternities: 38, sororities: 22, totalMembers: 2800, conference: "ACC", division: "D1" },
+  "Centre College": { lat: 37.6433, lng: -84.7810, state: "KY", fraternities: 5, sororities: 4, totalMembers: 650, conference: "SAA", division: "D3" },
 
   // Arkansas
   "University of Arkansas": { lat: 36.0679, lng: -94.1748, state: "AR", fraternities: 42, sororities: 24, totalMembers: 3200, conference: "SEC", division: "D1" },
