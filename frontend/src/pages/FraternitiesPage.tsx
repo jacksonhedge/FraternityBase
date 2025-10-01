@@ -67,7 +67,11 @@ const FraternitiesPage = () => {
     return matchesSearch && matchesType && matchesCouncil;
   });
 
-  const sortedOrganizations = [...filteredOrganizations].sort((a, b) => {
+  // Separate Sigma Chi as pinned organization
+  const sigmaChi = filteredOrganizations.find(org => org.name === 'Sigma Chi');
+  const otherOrgs = filteredOrganizations.filter(org => org.name !== 'Sigma Chi');
+
+  const sortedOrganizations = [...otherOrgs].sort((a, b) => {
     switch (sortBy) {
       case 'name':
         return a.name.localeCompare(b.name);
@@ -81,6 +85,9 @@ const FraternitiesPage = () => {
         return 0;
     }
   });
+
+  // Put Sigma Chi first if it's in the filtered results
+  const finalOrganizations = sigmaChi ? [sigmaChi, ...sortedOrganizations] : sortedOrganizations;
 
   const stats = {
     totalOrgs: filteredOrganizations.length,
@@ -201,10 +208,13 @@ const FraternitiesPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {sortedOrganizations.map((org) => (
-                <tr key={org.id} className="hover:bg-gray-50 transition-colors">
+              {finalOrganizations.map((org) => (
+                <tr key={org.id} className={`hover:bg-gray-50 transition-colors ${org.name === 'Sigma Chi' ? 'bg-blue-50 border-l-4 border-blue-600' : ''}`}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
+                      {org.name === 'Sigma Chi' && (
+                        <Star className="w-5 h-5 text-yellow-500 mr-2 fill-yellow-500" />
+                      )}
                       <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
                         org.type === 'fraternity' ? 'bg-blue-100' : 'bg-pink-100'
                       }`}>
@@ -215,7 +225,12 @@ const FraternitiesPage = () => {
                         </span>
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{org.name}</div>
+                        <div className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                          {org.name}
+                          {org.name === 'Sigma Chi' && (
+                            <span className="text-xs px-2 py-0.5 bg-blue-600 text-white rounded-full">Featured</span>
+                          )}
+                        </div>
                         <div className="text-xs text-gray-500">{org.motto.slice(0, 40)}...</div>
                       </div>
                     </div>
