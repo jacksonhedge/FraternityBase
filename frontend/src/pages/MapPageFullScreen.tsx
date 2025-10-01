@@ -526,20 +526,20 @@ const MapPageFullScreen = () => {
       </div>
 
       {/* Division Filter Buttons */}
-      <div className="absolute top-4 right-4 z-[1001] flex items-center gap-2 bg-white rounded-lg shadow-lg p-2">
+      <div className="absolute top-4 right-4 z-[1001] flex flex-wrap items-center justify-end gap-2 bg-white rounded-lg shadow-lg p-2 max-w-md">
         <button
           onClick={() => setDivisionFilter('power4')}
-          className={`px-4 py-2 rounded-md font-semibold text-sm transition-all ${
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'power4'
               ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Power 4
+          Power 5
         </button>
         <button
           onClick={() => setDivisionFilter('d1')}
-          className={`px-4 py-2 rounded-md font-semibold text-sm transition-all ${
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd1'
               ? 'bg-blue-600 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -549,7 +549,7 @@ const MapPageFullScreen = () => {
         </button>
         <button
           onClick={() => setDivisionFilter('d2')}
-          className={`px-4 py-2 rounded-md font-semibold text-sm transition-all ${
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd2'
               ? 'bg-green-600 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -559,7 +559,7 @@ const MapPageFullScreen = () => {
         </button>
         <button
           onClick={() => setDivisionFilter('d3')}
-          className={`px-4 py-2 rounded-md font-semibold text-sm transition-all ${
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd3'
               ? 'bg-orange-600 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -569,7 +569,7 @@ const MapPageFullScreen = () => {
         </button>
         <button
           onClick={() => setDivisionFilter('all')}
-          className={`px-4 py-2 rounded-md font-semibold text-sm transition-all ${
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'all'
               ? 'bg-gray-800 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
