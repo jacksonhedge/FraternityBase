@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, GraduationCap, Users, MapPin, Calendar, TrendingUp, Building2, Award, Grid, List, ChevronRight, Filter } from 'lucide-react';
+import { COLLEGE_LOCATIONS } from '../data/statesGeoData';
+import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const CollegesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -8,227 +10,32 @@ const CollegesPage = () => {
   const [selectedDivision, setSelectedDivision] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const colleges = [
-    // NCAA Division I Schools
-    {
-      id: 1,
-      name: 'University of Alabama',
-      location: 'Tuscaloosa, AL',
-      state: 'AL',
-      division: 'Division I',
-      conference: 'SEC',
-      students: 38563,
-      greekLife: 68,
-      greekPercentage: 36,
-      image: 'https://ui-avatars.com/api/?name=UA&background=9e1b32&color=fff&size=200',
-      topOrgs: ['Sigma Chi', 'Alpha Phi', 'Kappa Alpha'],
-      nextEvent: 'Greek Week - April 10-17',
-      partnershipOpportunities: 24,
-      avgDealSize: '$52,000',
-      founded: 1831,
-      mascot: 'Crimson Tide'
-    },
-    {
-      id: 2,
-      name: 'University of Florida',
-      location: 'Gainesville, FL',
-      state: 'FL',
-      division: 'Division I',
-      conference: 'SEC',
-      students: 52218,
-      greekLife: 65,
-      greekPercentage: 22,
-      image: 'https://ui-avatars.com/api/?name=UF&background=0021a5&color=fff&size=200',
-      topOrgs: ['Delta Delta Delta', 'Pi Kappa Alpha', 'Chi Omega'],
-      nextEvent: 'Spring Philanthropy Week - March 20-27',
-      partnershipOpportunities: 31,
-      avgDealSize: '$48,000',
-      founded: 1853,
-      mascot: 'Gators'
-    },
-    {
-      id: 3,
-      name: 'University of Georgia',
-      location: 'Athens, GA',
-      state: 'GA',
-      division: 'Division I',
-      conference: 'SEC',
-      students: 39147,
-      greekLife: 63,
-      greekPercentage: 28,
-      image: 'https://ui-avatars.com/api/?name=UGA&background=ba0c2f&color=fff&size=200',
-      topOrgs: ['Kappa Kappa Gamma', 'Sigma Alpha Epsilon', 'Alpha Delta Pi'],
-      nextEvent: 'Dawgs for a Cause - April 5',
-      partnershipOpportunities: 27,
-      avgDealSize: '$45,000',
-      founded: 1785,
-      mascot: 'Bulldogs'
-    },
-    {
-      id: 4,
-      name: 'Auburn University',
-      location: 'Auburn, AL',
-      state: 'AL',
-      division: 'Division I',
-      conference: 'SEC',
-      students: 31526,
-      greekLife: 52,
-      greekPercentage: 29,
-      image: 'https://ui-avatars.com/api/?name=AU&background=f26522&color=fff&size=200',
-      topOrgs: ['Beta Theta Pi', 'Phi Mu', 'Alpha Tau Omega'],
-      nextEvent: 'War Eagle Greek Challenge - March 30',
-      partnershipOpportunities: 19,
-      avgDealSize: '$42,000',
-      founded: 1856,
-      mascot: 'Tigers'
-    },
-    {
-      id: 5,
-      name: 'LSU',
-      location: 'Baton Rouge, LA',
-      state: 'LA',
-      division: 'Division I',
-      conference: 'SEC',
-      students: 35000,
-      greekLife: 45,
-      greekPercentage: 18,
-      image: 'https://ui-avatars.com/api/?name=LSU&background=461d7c&color=fff&size=200',
-      topOrgs: ['Kappa Alpha Psi', 'Delta Zeta', 'Sigma Nu'],
-      nextEvent: 'Geaux Greek Week - April 15-22',
-      partnershipOpportunities: 22,
-      avgDealSize: '$38,000',
-      founded: 1860,
-      mascot: 'Tigers'
-    },
-    {
-      id: 6,
-      name: 'University of Texas at Austin',
-      location: 'Austin, TX',
-      state: 'TX',
-      division: 'Division I',
-      conference: 'Big 12',
-      students: 51991,
-      greekLife: 72,
-      greekPercentage: 17,
-      image: 'https://ui-avatars.com/api/?name=UT&background=bf5700&color=fff&size=200',
-      topOrgs: ['Texas Cowboys', 'Pi Beta Phi', 'Fiji'],
-      nextEvent: 'Round Up Week - April 8-14',
-      partnershipOpportunities: 35,
-      avgDealSize: '$58,000',
-      founded: 1883,
-      mascot: 'Longhorns'
-    },
-    {
-      id: 7,
-      name: 'University of Michigan',
-      location: 'Ann Arbor, MI',
-      state: 'MI',
-      division: 'Division I',
-      conference: 'Big Ten',
-      students: 46002,
-      greekLife: 62,
-      greekPercentage: 24,
-      image: 'https://ui-avatars.com/api/?name=UM&background=00274c&color=ffcb05&size=200',
-      topOrgs: ['Theta Chi', 'Alpha Phi', 'Sigma Phi Epsilon'],
-      nextEvent: 'Greek Week - April 3-10',
-      partnershipOpportunities: 28,
-      avgDealSize: '$50,000',
-      founded: 1817,
-      mascot: 'Wolverines'
-    },
-    {
-      id: 8,
-      name: 'UCLA',
-      location: 'Los Angeles, CA',
-      state: 'CA',
-      division: 'Division I',
-      conference: 'Pac-12',
-      students: 45742,
-      greekLife: 65,
-      greekPercentage: 13,
-      image: 'https://ui-avatars.com/api/?name=UCLA&background=2774ae&color=ffd100&size=200',
-      topOrgs: ['Sigma Chi', 'Kappa Kappa Gamma', 'Alpha Tau Omega'],
-      nextEvent: 'Bruin Bash Greek Edition - April 12',
-      partnershipOpportunities: 30,
-      avgDealSize: '$55,000',
-      founded: 1919,
-      mascot: 'Bruins'
-    },
-    // NCAA Division II Schools
-    {
-      id: 9,
-      name: 'Rollins College',
-      location: 'Winter Park, FL',
-      state: 'FL',
-      division: 'Division II',
-      conference: 'Sunshine State',
-      students: 3200,
-      greekLife: 11,
-      greekPercentage: 35,
-      image: 'https://ui-avatars.com/api/?name=RC&background=002e5d&color=ffc627&size=200',
-      topOrgs: ['Kappa Delta', 'Chi Psi', 'Phi Delta Theta'],
-      nextEvent: 'Fox Day Greek Games - March 25',
-      partnershipOpportunities: 8,
-      avgDealSize: '$25,000',
-      founded: 1885,
-      mascot: 'Tars'
-    },
-    {
-      id: 10,
-      name: 'University of Tampa',
-      location: 'Tampa, FL',
-      state: 'FL',
-      division: 'Division II',
-      conference: 'Sunshine State',
-      students: 10000,
-      greekLife: 22,
-      greekPercentage: 20,
-      image: 'https://ui-avatars.com/api/?name=UT&background=7f0000&color=fff&size=200',
-      topOrgs: ['Sigma Phi Epsilon', 'Zeta Tau Alpha', 'Delta Zeta'],
-      nextEvent: 'Spartan Showcase - April 2',
-      partnershipOpportunities: 12,
-      avgDealSize: '$28,000',
-      founded: 1931,
-      mascot: 'Spartans'
-    },
-    // NCAA Division III Schools
-    {
-      id: 11,
-      name: 'Emory University',
-      location: 'Atlanta, GA',
-      state: 'GA',
-      division: 'Division III',
-      conference: 'UAA',
-      students: 14458,
-      greekLife: 31,
-      greekPercentage: 30,
-      image: 'https://ui-avatars.com/api/?name=EU&background=012169&color=f2a900&size=200',
-      topOrgs: ['Alpha Epsilon Pi', 'Kappa Alpha', 'Pi Beta Phi'],
-      nextEvent: 'Dooley Week - April 10-16',
-      partnershipOpportunities: 15,
-      avgDealSize: '$35,000',
-      founded: 1836,
-      mascot: 'Eagles'
-    },
-    {
-      id: 12,
-      name: 'Washington University in St. Louis',
-      location: 'St. Louis, MO',
-      state: 'MO',
-      division: 'Division III',
-      conference: 'UAA',
-      students: 15852,
-      greekLife: 24,
-      greekPercentage: 35,
-      image: 'https://ui-avatars.com/api/?name=WU&background=a51417&color=fff&size=200',
-      topOrgs: ['Sigma Alpha Mu', 'Alpha Omicron Pi', 'Beta Theta Pi'],
-      nextEvent: 'WILD Spring Concert - April 8',
-      partnershipOpportunities: 14,
-      avgDealSize: '$32,000',
-      founded: 1853,
-      mascot: 'Bears'
-    }
-  ];
+  // Convert COLLEGE_LOCATIONS to the format expected by the UI
+  const colleges = useMemo(() => {
+    return Object.entries(COLLEGE_LOCATIONS).map(([name, data], index) => {
+      // Remove state suffix like "(KY)" from the name for display
+      const displayName = name.replace(/\s*\([A-Z]{2}\)\s*$/, '');
+
+      return {
+        id: index + 1,
+        name: displayName,
+        location: `${data.state}`,
+        state: data.state,
+        division: data.division === 'D1' ? 'Division I' : data.division === 'D2' ? 'Division II' : 'Division III',
+        conference: data.conference || 'Independent',
+        students: data.totalMembers * 10, // Rough estimate based on Greek life members
+        greekLife: data.fraternities + data.sororities,
+        greekPercentage: Math.round((data.totalMembers / (data.totalMembers * 10)) * 100),
+        image: getCollegeLogoWithFallback(displayName),
+        topOrgs: ['Sigma Chi', 'Alpha Phi', 'Kappa Alpha'], // Mock data
+        nextEvent: 'Greek Week', // Mock data
+        partnershipOpportunities: data.division === 'D1' ? 24 : data.division === 'D2' ? 12 : 8,
+        avgDealSize: data.division === 'D1' ? '$50,000' : data.division === 'D2' ? '$28,000' : '$15,000',
+        founded: 1900, // Mock data
+        mascot: '' // Mock data
+      };
+    });
+  }, []);
 
   const states = [...new Set(colleges.map(c => c.state))].sort();
 
