@@ -16,18 +16,52 @@ import Navbar from '../components/Navbar';
 const LandingPage = () => {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
-  const handleWaitlistSubmit = (e: React.FormEvent) => {
+  const handleWaitlistSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
-      // Here you would normally send the email to your backend
-      setIsSubmitted(true);
-      setTimeout(() => {
+    if (!email.trim()) return;
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const response = await fetch(`${API_URL}/waitlist`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          source: 'landing',
+          referrer: window.location.href
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsSubmitted(true);
         setEmail('');
-        setIsSubmitted(false);
-      }, 3000);
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 5000);
+      } else {
+        if (response.status === 409) {
+          setError('You\'re already on the waitlist!');
+        } else {
+          setError(data.error || 'Something went wrong. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error('Waitlist signup error:', error);
+      setError('Unable to connect. Please check your internet connection and try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +87,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-primary-600 via-purple-600 to-secondary-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 pb-2 bg-gradient-to-r from-primary-600 via-purple-600 to-secondary-600 bg-clip-text text-transparent leading-tight">
               Find a Fraternity to help Build your Brand
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -86,16 +120,34 @@ const LandingPage = () => {
                       onBlur={() => setIsFocused(false)}
                       className="flex-1 px-4 py-6 text-lg focus:outline-none placeholder-gray-400"
                       required
+                      disabled={isLoading}
                     />
                     <button
                       type="submit"
-                      className="bg-gradient-to-r from-green-500 to-emerald-600 text-white mr-2 px-8 py-4 text-lg font-semibold rounded-xl flex items-center gap-2 hover:scale-105 transition-transform shadow-lg"
+                      disabled={isLoading || !email.trim()}
+                      className="bg-gradient-to-r from-green-500 to-emerald-600 text-white mr-2 px-8 py-4 text-lg font-semibold rounded-xl flex items-center gap-2 hover:scale-105 transition-transform shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                     >
-                      Join Waitlist
-                      <ArrowRight className="h-5 w-5" />
+                      {isLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          Joining...
+                        </>
+                      ) : (
+                        <>
+                          Join Waitlist
+                          <ArrowRight className="h-5 w-5" />
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-red-600 text-center">{error}</p>
+                  </div>
+                )}
 
                 {/* Early Access Badge */}
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -106,9 +158,14 @@ const LandingPage = () => {
               </form>
             ) : (
               <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">You're on the list!</h3>
-                <p className="text-gray-600">We'll notify you when Fraternity Base launches.</p>
+                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4 animate-pulse" />
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">🎉 You're on the waitlist!</h3>
+                <p className="text-gray-600 mb-4">We've sent you a confirmation email with all the details.</p>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="text-green-700 text-sm">
+                    <strong>What's next?</strong> We'll email you 48 hours before launch with your early access link and 30% discount code.
+                  </p>
+                </div>
               </div>
             )}
           </motion.div>

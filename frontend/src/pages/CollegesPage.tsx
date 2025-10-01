@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, GraduationCap, Users, MapPin, Calendar, TrendingUp, Building2, Award, Grid, List, ChevronRight, Filter } from 'lucide-react';
 
 const CollegesPage = () => {
@@ -446,11 +447,11 @@ const CollegesPage = () => {
                       {college.partnershipOpportunities} Opportunities
                     </span>
                   </div>
-                  <button
-                    onClick={() => window.location.href = `/app/colleges/${college.id}`}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                  <Link
+                    to={`/app/colleges/${college.id}`}
+                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium text-center">
                     View Details
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -541,10 +542,12 @@ const CollegesPage = () => {
                     <span className="text-sm font-semibold text-green-600">{college.avgDealSize}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button className="text-blue-600 hover:text-blue-900 text-sm font-medium flex items-center gap-1">
+                    <Link
+                      to={`/app/colleges/${college.id}`}
+                      className="text-blue-600 hover:text-blue-900 text-sm font-medium flex items-center gap-1">
                       View
                       <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}

@@ -31,8 +31,11 @@ import AmbassadorsPage from './pages/AmbassadorsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import ProfilePage from './pages/ProfilePage';
 import PricingPage from './pages/PricingPage';
+import CreditsPage from './pages/CreditsPage';
 import AdminPageV3 from './pages/AdminPageV3';
+import AdminPageV4 from './pages/AdminPageV4';
 import AdminLoginPage from './pages/AdminLoginPage';
+import AdminAnalyticsDashboard from './pages/AdminAnalyticsDashboard';
 
 function App() {
   console.log('🧢 FraternityBase App loaded - Routes available: /, /signup, /pricing, /login - v3');
@@ -55,9 +58,9 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/pending-approval" element={<PendingApprovalPage />} />
-          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin-login" element={<AdminLoginPage />} />
-          <Route path="/admin-panel" element={<AdminRoute><AdminPageV3 /></AdminRoute>} />
+          <Route path="/admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />
 
           {/* Private Routes */}
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
@@ -77,6 +80,7 @@ function App() {
             <Route path="ambassadors" element={<AmbassadorsPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="credits" element={<CreditsPage />} />
           </Route>
         </Routes>
       </Router>

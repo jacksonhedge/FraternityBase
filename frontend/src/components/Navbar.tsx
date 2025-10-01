@@ -24,41 +24,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <Link
-              to="/browse"
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                isActive('/browse')
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:text-blue-600'
-              }`}
-            >
-              <Search className="w-4 h-4" />
-              Browse
-            </Link>
-
-            <Link
-              to="/pricing"
-              className={`px-3 py-2 rounded-lg transition-colors ${
-                isActive('/pricing')
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:text-blue-600'
-              }`}
-            >
-              Pricing
-            </Link>
-
-            <Link
-              to="/about"
-              className={`px-3 py-2 rounded-lg transition-colors ${
-                isActive('/about')
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:text-blue-600'
-              }`}
-            >
-              About
-            </Link>
-
-            <div className="flex items-center gap-3 ml-4">
+            <div className="flex items-center gap-3">
               <Link
                 to="/login"
                 className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors"
@@ -96,61 +62,22 @@ const Navbar = () => {
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-4 space-y-2">
             <Link
-              to="/browse"
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                isActive('/browse')
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
+              to="/login"
+              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <Search className="w-4 h-4" />
-              Browse Organizations
+              <LogIn className="w-4 h-4" />
+              Log In
             </Link>
 
             <Link
-              to="/pricing"
-              className={`block px-3 py-2 rounded-lg transition-colors ${
-                isActive('/pricing')
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
+              to="/signup"
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mt-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Pricing
+              <UserPlus className="w-4 h-4" />
+              Sign Up
             </Link>
-
-            <Link
-              to="/about"
-              className={`block px-3 py-2 rounded-lg transition-colors ${
-                isActive('/about')
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About
-            </Link>
-
-            <div className="border-t border-gray-200 pt-2 mt-2">
-              <Link
-                to="/login"
-                className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <LogIn className="w-4 h-4" />
-                Log In
-              </Link>
-
-              <Link
-                to="/signup"
-                className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mt-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <UserPlus className="w-4 h-4" />
-                Sign Up
-              </Link>
-            </div>
           </div>
         </div>
       )}

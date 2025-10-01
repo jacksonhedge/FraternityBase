@@ -20,6 +20,7 @@ import {
   UsersIcon,
   Settings,
   GraduationCap,
+  Zap,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -41,6 +42,7 @@ const Layout = () => {
     { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null },
     { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null },
     { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null },
+    { name: 'Buy Credits', href: '/app/credits', icon: Zap, badge: null },
     { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null },
   ];
 
