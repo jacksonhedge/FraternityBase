@@ -1,0 +1,1078 @@
+college,state,division,type
+Alabama Agricultural and Mechanical University,AL,Division I,Public
+Alabama State University,AL,Division I,Public
+Auburn University,AL,Division I,Public
+Jacksonville State University,AL,Division I,Public
+Samford University,AL,Division I,Private
+The University of Alabama,AL,Division I,Public
+Troy University,AL,Division I,Public
+University of Alabama at Birmingham,AL,Division I,Public
+University of North Alabama,AL,Division I,Public
+University of South Alabama,AL,Division I,Public
+Arkansas State University,AR,Division I,Public
+University of Arkansas,AR,Division I,Public
+University of Arkansas at Little Rock,AR,Division I,Public
+University of Arkansas at Pine Bluff,AR,Division I,Public
+University of Central Arkansas,AR,Division I,Public
+Arizona State University,AZ,Division I,Public
+Grand Canyon University,AZ,Division I,Private
+Northern Arizona University,AZ,Division I,Public
+University of Arizona,AZ,Division I,Public
+California Baptist University,CA,Division I,Private
+California Polytechnic State University,CA,Division I,Public
+"California State University, Bakersfield",CA,Division I,Public
+"California State University, Fresno",CA,Division I,Public
+"California State University, Fullerton",CA,Division I,Public
+"California State University, Long Beach",CA,Division I,Public
+"California State University, Northridge",CA,Division I,Public
+"California State University, Sacramento",CA,Division I,Public
+Leland Stanford Junior University,CA,Division I,Private
+Loyola Marymount University,CA,Division I,Private
+Pepperdine University,CA,Division I,Private
+Saint Mary's College of California,CA,Division I,Private
+San Diego State University,CA,Division I,Public
+San Jose State University,CA,Division I,Public
+Santa Clara University,CA,Division I,Private
+"University of California, Berkeley",CA,Division I,Public
+"University of California, Davis",CA,Division I,Public
+"University of California, Irvine",CA,Division I,Public
+"University of California, Los Angeles",CA,Division I,Public
+"University of California, Riverside",CA,Division I,Public
+"University of California, San Diego",CA,Division I,Public
+"University of California, Santa Barbara",CA,Division I,Public
+University of San Diego,CA,Division I,Private
+University of San Francisco,CA,Division I,Private
+University of Southern California,CA,Division I,Private
+University of the Pacific,CA,Division I,Private
+Colorado State University,CO,Division I,Public
+United States Air Force Academy,CO,Division I,Federal
+University of Colorado Boulder,CO,Division I,Public
+University of Denver,CO,Division I,Private
+University of Northern Colorado,CO,Division I,Public
+Central Connecticut State University,CT,Division I,Public
+Fairfield University,CT,Division I,Private
+Quinnipiac University,CT,Division I,Private
+Sacred Heart University,CT,Division I,Private
+University of Connecticut,CT,Division I,Public
+Yale University,CT,Division I,Private
+American University,DC,Division I,Private
+Georgetown University,DC,Division I,Private
+Howard University,DC,Division I,Private
+The George Washington University,DC,Division I,Private
+Delaware State University,DE,Division I,Public[O 1]
+University of Delaware,DE,Division I,Public[O 1]
+Bethune–Cookman University,FL,Division I,Private
+Florida Agricultural and Mechanical University,FL,Division I,Public
+Florida Atlantic University,FL,Division I,Public
+Florida Gulf Coast University,FL,Division I,Public
+Florida International University,FL,Division I,Public
+Florida State University,FL,Division I,Public
+Jacksonville University,FL,Division I,Private
+Stetson University,FL,Division I,Private
+University of Central Florida,FL,Division I,Public
+University of Florida,FL,Division I,Public
+University of Miami,FL,Division I,Private
+University of North Florida,FL,Division I,Public
+University of South Florida,FL,Division I,Public
+Georgia Institute of Technology,GA,Division I,Public
+Georgia Southern University,GA,Division I,Public
+Georgia State University,GA,Division I,Public
+Kennesaw State University,GA,Division I,Public
+Mercer University,GA,Division I,Private
+University of Georgia,GA,Division I,Public
+University of Hawaiʻi at Mānoa,HI,Division I,Public
+Drake University,IA,Division I,Private
+Iowa State University of Science and Technology[N 6],IA,Division I,Public
+State University of Iowa[N 10],IA,Division I,Public
+University of Northern Iowa,IA,Division I,Public
+Boise State University,ID,Division I,Public
+Idaho State University,ID,Division I,Public
+University of Idaho,ID,Division I,Public
+Bradley University,IL,Division I,Private
+Chicago State University,IL,Division I,Public
+DePaul University,IL,Division I,Private
+Eastern Illinois University,IL,Division I,Public
+Illinois State University,IL,Division I,Public
+Loyola University Chicago,IL,Division I,Private
+Northern Illinois University,IL,Division I,Public
+Northwestern University,IL,Division I,Private
+Southern Illinois University Carbondale,IL,Division I,Public
+Southern Illinois University Edwardsville,IL,Division I,Public
+University of Illinois Chicago,IL,Division I,Public
+University of Illinois Urbana-Champaign,IL,Division I,Public
+Western Illinois University,IL,Division I,Public
+Ball State University,IN,Division I,Public
+Butler University,IN,Division I,Private
+Indiana State University,IN,Division I,Public
+Indiana University Bloomington,IN,Division I,Public
+Indiana University Indianapolis,IN,Division I,Public
+Purdue University,IN,Division I,Public
+Purdue University Fort Wayne,IN,Division I,Public
+University of Evansville,IN,Division I,Private
+University of Notre Dame du Lac,IN,Division I,Private
+University of Southern Indiana,IN,Division I,Public
+Valparaiso University,IN,Division I,Private
+Kansas State University,KS,Division I,Public
+University of Kansas,KS,Division I,Public
+Wichita State University,KS,Division I,Public
+Bellarmine University,KY,Division I,Private
+Eastern Kentucky University,KY,Division I,Public
+Morehead State University,KY,Division I,Public
+Murray State University,KY,Division I,Public
+Northern Kentucky University,KY,Division I,Public
+University of Kentucky,KY,Division I,Public
+University of Louisville,KY,Division I,Public
+Western Kentucky University,KY,Division I,Public
+Grambling State University,LA,Division I,Public
+Louisiana State University and Agricultural and Mechanical College,LA,Division I,Public
+Louisiana Tech University,LA,Division I,Public
+McNeese State University,LA,Division I,Public
+Nicholls State University,LA,Division I,Public
+Northwestern State University of Louisiana,LA,Division I,Public
+Southeastern Louisiana University,LA,Division I,Public
+Southern University and A&M College,LA,Division I,Public
+Tulane University of Louisiana,LA,Division I,Private
+University of Louisiana at Lafayette,LA,Division I,Public
+University of Louisiana at Monroe,LA,Division I,Public
+University of New Orleans,LA,Division I,Public
+Boston College,MA,Division I,Private
+Boston University,MA,Division I,Private
+College of the Holy Cross,MA,Division I,Private
+Harvard University,MA,Division I,Private
+Merrimack College,MA,Division I,Private
+Northeastern University,MA,Division I,Private
+Stonehill College,MA,Division I,Private
+University of Massachusetts Amherst,MA,Division I,Public
+University of Massachusetts Lowell,MA,Division I,Public
+Coppin State University,MD,Division I,Public
+Loyola University Maryland,MD,Division I,Private
+Morgan State University,MD,Division I,Public
+Mount Saint Mary's University,MD,Division I,Private
+Towson University,MD,Division I,Public
+United States Naval Academy,MD,Division I,Federal
+University of Maryland Eastern Shore,MD,Division I,Public
+"University of Maryland, Baltimore County",MD,Division I,Public
+"University of Maryland, College Park",MD,Division I,Public
+University of Maine,ME,Division I,Public
+Central Michigan University,MI,Division I,Public
+Eastern Michigan University,MI,Division I,Public
+Michigan State University,MI,Division I,Public
+Oakland University,MI,Division I,Public
+University of Detroit Mercy,MI,Division I,Private
+University of Michigan,MI,Division I,Public
+Western Michigan University,MI,Division I,Public
+University of Minnesota,MN,Division I,Public
+University of Saint Thomas,MN,Division I,Private
+Lindenwood University,MO,Division I,Private
+Missouri State University,MO,Division I,Public
+Saint Louis University,MO,Division I,Private
+Southeast Missouri State University,MO,Division I,Public
+University of Missouri–Columbia[N 22],MO,Division I,Public
+University of Missouri–Kansas City,MO,Division I,Public
+Alcorn State University,MS,Division I,Public
+Jackson State University,MS,Division I,Public
+Mississippi State University,MS,Division I,Public
+Mississippi Valley State University,MS,Division I,Public
+The University of Mississippi,MS,Division I,Public
+University of Southern Mississippi,MS,Division I,Public
+Montana State University,MT,Division I,Public
+University of Montana,MT,Division I,Public
+Appalachian State University,NC,Division I,Public
+Campbell University,NC,Division I,Private
+Davidson College,NC,Division I,Private
+Duke University,NC,Division I,Private
+East Carolina University,NC,Division I,Public
+Elon University,NC,Division I,Private
+Gardner–Webb University,NC,Division I,Private
+High Point University,NC,Division I,Private
+North Carolina Agricultural and Technical State University,NC,Division I,Public
+North Carolina Central University,NC,Division I,Public
+North Carolina State University,NC,Division I,Public
+Queens University of Charlotte,NC,Division I,Private
+University of North Carolina at Asheville,NC,Division I,Public
+University of North Carolina at Chapel Hill,NC,Division I,Public
+University of North Carolina at Charlotte,NC,Division I,Public
+University of North Carolina at Greensboro,NC,Division I,Public
+University of North Carolina at Wilmington,NC,Division I,Public
+Wake Forest University,NC,Division I,Private
+Western Carolina University,NC,Division I,Public
+North Dakota State University of Agriculture and Applied Sciences,ND,Division I,Public
+University of North Dakota,ND,Division I,Public
+Creighton University,NE,Division I,Private
+University of Nebraska Omaha,NE,Division I,Public
+University of Nebraska–Lincoln,NE,Division I,Public
+Dartmouth College,NH,Division I,Private
+University of New Hampshire,NH,Division I,Public
+Fairleigh Dickinson University,NJ,Division I,Private
+Monmouth University,NJ,Division I,Private
+New Jersey Institute of Technology,NJ,Division I,Public
+Princeton University,NJ,Division I,Private
+Rider University,NJ,Division I,Private
+Rutgers University–New Brunswick,NJ,Division I,Public
+Saint Peter's University,NJ,Division I,Private
+Seton Hall University,NJ,Division I,Private
+New Mexico State University,NM,Division I,Public
+The University of New Mexico,NM,Division I,Public
+"University of Nevada, Las Vegas",NV,Division I,Public
+"University of Nevada, Reno",NV,Division I,Public
+Canisius University,NY,Division I,Private
+Colgate University,NY,Division I,Private
+Columbia University in the City of New York,NY,Division I,Private
+Cornell University,NY,Division I,Private
+Fordham University,NY,Division I,Private
+Hofstra University,NY,Division I,Private
+Iona University,NY,Division I,Private
+Long Island University,NY,Division I,Private
+Manhattan University,NY,Division I,Private
+Marist College,NY,Division I,Private
+Niagara University,NY,Division I,Private
+Saint Bonaventure University,NY,Division I,Private
+Saint John's University,NY,Division I,Private
+Siena College,NY,Division I,Private
+State University of New York at Albany[N 11],NY,Division I,Public
+State University of New York at Binghamton[N 13],NY,Division I,Public
+State University of New York at Buffalo[N 14],NY,Division I,Public
+State University of New York at Stony Brook[N 15],NY,Division I,Public
+Syracuse University,NY,Division I,Private
+United States Military Academy,NY,Division I,Federal
+Wagner College,NY,Division I,Private
+Bowling Green State University,OH,Division I,Public
+Cleveland State University,OH,Division I,Public
+Kent State University,OH,Division I,Public
+Miami University,OH,Division I,Public
+The Ohio State University,OH,Division I,Public
+The Ohio University,OH,Division I,Public
+The University of Akron,OH,Division I,Public
+University of Cincinnati,OH,Division I,Public
+University of Dayton,OH,Division I,Private
+University of Toledo,OH,Division I,Public
+Wright State University,OH,Division I,Public
+Xavier University,OH,Division I,Private
+Youngstown State University,OH,Division I,Public
+Oklahoma State University–Stillwater,OK,Division I,Public
+Oral Roberts University,OK,Division I,Private
+The University of Tulsa,OK,Division I,Private
+University of Oklahoma,OK,Division I,Public
+Oregon State University,OR,Division I,Public
+Portland State University,OR,Division I,Public
+University of Oregon,OR,Division I,Public
+University of Portland,OR,Division I,Private
+Bucknell University,PA,Division I,Private
+Drexel University,PA,Division I,Private
+Duquesne University of the Holy Spirit,PA,Division I,Private
+La Salle University,PA,Division I,Private
+Lafayette College,PA,Division I,Private
+Lehigh University,PA,Division I,Private
+Robert Morris University,PA,Division I,Private
+Saint Francis University[C 6],PA,Division I,Private
+Saint Joseph's University,PA,Division I,Private
+Temple University,PA,Division I,Public[O 3]
+The Pennsylvania State University,PA,Division I,Public[O 3]
+University of Pennsylvania,PA,Division I,Private
+University of Pittsburgh,PA,Division I,Public[O 3]
+Villanova University,PA,Division I,Private
+Brown University,RI,Division I,Private
+Bryant University,RI,Division I,Private
+Providence College,RI,Division I,Private
+University of Rhode Island,RI,Division I,Public
+Charleston Southern University,SC,Division I,Private
+Clemson University,SC,Division I,Public
+Coastal Carolina University,SC,Division I,Public
+College of Charleston,SC,Division I,Public
+Furman University,SC,Division I,Private
+Presbyterian College,SC,Division I,Private
+South Carolina State University,SC,Division I,Public
+"The Citadel, The Military College of South Carolina[be]",SC,Division I,Public
+University of South Carolina,SC,Division I,Public
+University of South Carolina Upstate,SC,Division I,Public
+Winthrop University,SC,Division I,Public
+Wofford College,SC,Division I,Private
+South Dakota State University,SD,Division I,Public
+University of South Dakota,SD,Division I,Public
+Austin Peay State University,TN,Division I,Public
+Belmont University,TN,Division I,Private
+East Tennessee State University,TN,Division I,Public
+Lipscomb University,TN,Division I,Private
+Middle Tennessee State University,TN,Division I,Public
+Tennessee State University,TN,Division I,Public
+Tennessee Technological University,TN,Division I,Public
+The University of Tennessee at Chattanooga,TN,Division I,Public
+The University of Tennessee at Martin,TN,Division I,Public
+"The University of Tennessee, Knoxville",TN,Division I,Public
+University of Memphis,TN,Division I,Public
+Vanderbilt University,TN,Division I,Private
+Abilene Christian University,TX,Division I,Private
+Baylor University,TX,Division I,Private
+East Texas A&M University,TX,Division I,Public
+Houston Christian University,TX,Division I,Private
+Lamar University,TX,Division I,Public
+Prairie View A&M University,TX,Division I,Public
+Sam Houston State University,TX,Division I,Public
+Southern Methodist University,TX,Division I,Private
+Stephen F. Austin State University[N 16],TX,Division I,Public
+Tarleton State University,TX,Division I,Public
+Texas A&M University,TX,Division I,Public
+Texas A&M University–Corpus Christi,TX,Division I,Public
+Texas Christian University,TX,Division I,Private
+Texas Southern University,TX,Division I,Public
+Texas State University,TX,Division I,Public
+Texas Tech University,TX,Division I,Public
+The University of Texas Rio Grande Valley,TX,Division I,Public
+The University of Texas at Arlington,TX,Division I,Public
+The University of Texas at Austin,TX,Division I,Public
+The University of Texas at El Paso,TX,Division I,Public
+The University of Texas at San Antonio,TX,Division I,Public
+University of Houston,TX,Division I,Public
+University of North Texas,TX,Division I,Public
+University of the Incarnate Word,TX,Division I,Private
+William Marsh Rice University,TX,Division I,Private
+Brigham Young University,UT,Division I,Private
+Southern Utah University,UT,Division I,Public
+University of Utah,UT,Division I,Public
+Utah State University,UT,Division I,Public
+Utah Tech University,UT,Division I,Public
+Utah Valley University,UT,Division I,Public
+Weber State University,UT,Division I,Public
+George Mason University,VA,Division I,Public
+Hampton University,VA,Division I,Private
+James Madison University,VA,Division I,Public
+Liberty University,VA,Division I,Private
+Longwood University,VA,Division I,Public
+Norfolk State University,VA,Division I,Public
+Old Dominion University,VA,Division I,Public
+Radford University,VA,Division I,Public
+The College of William and Mary in Virginia,VA,Division I,Public
+University of Richmond,VA,Division I,Private
+University of Virginia,VA,Division I,Public
+Virginia Commonwealth University,VA,Division I,Public
+Virginia Military Institute[be],VA,Division I,Public
+Virginia Polytechnic Institute and State University,VA,Division I,Public
+The University of Vermont and State Agricultural College,VT,Division I,Public
+Eastern Washington University,WA,Division I,Public
+Gonzaga University,WA,Division I,Private
+Seattle University,WA,Division I,Private
+University of Washington,WA,Division I,Public
+Washington State University,WA,Division I,Public
+Marquette University,WI,Division I,Private
+University of Wisconsin–Green Bay,WI,Division I,Public
+University of Wisconsin–Madison,WI,Division I,Public
+University of Wisconsin–Milwaukee,WI,Division I,Public
+Marshall University,WV,Division I,Public
+West Virginia University,WV,Division I,Public
+University of Wyoming,WY,Division I,Public
+West Virginia Wesleyan College,"1,041",Division II,Mountain East Conference
+Mars Hill University,"1,049",Division II,South Atlantic Conference
+Goldey-Beacom College,"1,074",Division II,Central Atlantic Collegiate Conference
+Dominican University New York,"1,083",Division II,Central Atlantic Collegiate Conference
+Tusculum University,"1,105",Division II,South Atlantic Conference
+Erskine College,"1,132",Division II,Conference Carolinas
+Westminster University,"1,155",Division II,Rocky Mountain Athletic Conference
+Wheeling University,"1,171",Division II,Mountain East Conference
+Franklin Pierce University,"1,172",Division II,Northeast-10 Conference
+Edward Waters University,"1,177",Division II,Southern Intercollegiate Athletic Conference
+Quincy University,"1,192",Division II,Great Lakes Valley Conference
+Mansfield University of Pennsylvania,"1,195",Division II,Pennsylvania State Athletic Conference
+Ohio Dominican University,"1,209",Division II,Great Midwest Athletic Conference
+Barton College,"1,235",Division II,Conference Carolinas
+Lake Erie College,"1,236",Division II,Great Midwest Athletic Conference
+Catawba College,"1,241",Division II,South Atlantic Conference
+Coker University,"1,263",Division II,South Atlantic Conference
+Malone University,"1,268",Division II,Great Midwest Athletic Conference
+Emory & Henry University,"1,292",Division II,South Atlantic Conference
+King University,"1,295",Division II,Conference Carolinas
+Johnson C. Smith University,"1,302",Division II,Central Intercollegiate Athletic Association
+Westmont College,"1,312",Division II,Pacific West Conference
+Bluefield State University,"1,313",Division II,Central Intercollegiate Athletic Association
+Saint Michael's College,"1,370",Division II,Northeast-10 Conference
+Chestnut Hill College,"1,417",Division II,Central Atlantic Collegiate Conference
+Shorter University,"1,447",Division II,Conference Carolinas
+Jessup University,"1,484",Division II,Pacific West Conference
+Miles College,"1,489",Division II,Southern Intercollegiate Athletic Conference
+Saint Martin's University,"1,505",Division II,Great Northwest Athletic Conference
+Newberry College,"1,521",Division II,South Atlantic Conference
+Oklahoma Baptist University,"1,569",Division II,Great American Conference
+Hillsdale College,"1,573",Division II,Great Midwest Athletic Conference
+Lubbock Christian University,"1,595",Division II,Lone Star Conference
+Roberts Wesleyan University,"1,619",Division II,East Coast Conference
+University of Sioux Falls,"1,624",Division II,Northern Sun Intercollegiate Conference
+Northwest Nazarene University,"1,646",Division II,Great Northwest Athletic Conference
+Lake Superior State University,"1,669",Division II,Great Lakes Intercollegiate Athletic Conference
+Belmont Abbey College,"1,687",Division II,Conference Carolinas
+University of Minnesota Crookston,"1,729",Division II,Northern Sun Intercollegiate Conference
+"Pennsylvania Western University, Clarion","1,743",Division II,Pennsylvania State Athletic Conference
+Benedict College,"1,746",Division II,Southern Intercollegiate Athletic Conference
+Glenville State University,"1,772",Division II,Mountain East Conference
+Virginia Union University,"1,783",Division II,Central Intercollegiate Athletic Association
+University of Pittsburgh at Johnstown,"1,809",Division II,Pennsylvania State Athletic Conference
+Christian Brothers University,"1,813",Division II,Gulf South Conference
+Dominican University of California,"1,818",Division II,Pacific West Conference
+Thomas More University,"1,844",Division II,Great Midwest Athletic Conference
+Lincoln University (PA),"1,848",Division II,Central Intercollegiate Athletic Association
+Ouachita Baptist University,"1,858",Division II,Great American Conference
+Eckerd College,"1,893",Division II,Sunshine State Conference
+Georgian Court University,"1,910",Division II,Central Atlantic Collegiate Conference
+Young Harris College,"1,922",Division II,Conference Carolinas
+Kentucky State University,"1,932",Division II,Southern Intercollegiate Athletic Conference
+Concord University,"1,943",Division II,Mountain East Conference
+St. Thomas Aquinas College,"1,950",Division II,East Coast Conference
+Claflin University,"1,960",Division II,Central Intercollegiate Athletic Association
+Converse University,"1,967",Division II,Conference Carolinas
+Seton Hill University,"1,989",Division II,Pennsylvania State Athletic Conference
+Colorado Mesa University,"10,139",Division II,Rocky Mountain Athletic Conference
+St. Cloud State University,"10,164",Division II,Northern Sun Intercollegiate Conference
+University of Texas at Tyler,"10,183",Division II,Lone Star Conference
+Valdosta State University,"10,305",Division II,Gulf South Conference
+Colorado Christian University,"10,563",Division II,Rocky Mountain Athletic Conference
+University of Alaska Anchorage,"10,687",Division II,Great Northwest Athletic Conference
+University of Puerto Rico at Mayagüez,"10,716",Division II,Independent
+College of Staten Island,"10,973",Division II,East Coast Conference
+University of Colorado Colorado Springs,"11,213",Division II,Rocky Mountain Athletic Conference
+University of Tampa,"11,429",Division II,Sunshine State Conference
+University of Puerto Rico at Río Piedras,"11,493",Division II,Independent
+Angelo State University,"11,542",Division II,Lone Star Conference
+Augusta University,"11,584",Division II,Peach Belt Conference
+"California State University, East Bay","12,323",Division II,California Collegiate Athletic Association
+University of Central Oklahoma,"12,554",Division II,Mid-America Intercollegiate Athletics Association
+Fort Hays State University,"12,843",Division II,Mid-America Intercollegiate Athletics Association
+University of Central Missouri,"12,857",Division II,Mid-America Intercollegiate Athletics Association
+"California State University, Chico","13,504",Division II,California Collegiate Athletic Association
+Pace University,"14,092",Division II,Northeast-10 Conference
+Saint Leo University,"14,190",Division II,Sunshine State Conference
+"California State University, Dominguez Hills","14,299",Division II,California Collegiate Athletic Association
+Western Washington University,"14,700",Division II,Great Northwest Athletic Conference
+"Minnesota State University, Mankato","14,709",Division II,Northern Sun Intercollegiate Conference
+University of Missouri-St. Louis,"14,787",Division II,Great Lakes Valley Conference
+University of West Florida,"14,797",Division II,Gulf South Conference
+California State University San Marcos,"14,999",Division II,California Collegiate Athletic Association
+Texas Woman's University[j],"15,361",Division II,Lone Star Conference
+Queens College,"15,965",Division II,East Coast Conference
+West Chester University of Pennsylvania,"17,202",Division II,Pennsylvania State Athletic Conference
+Metropolitan State University of Denver,"17,782",Division II,Rocky Mountain Athletic Conference
+"California State University, San Bernardino","17,900",Division II,California Collegiate Athletic Association
+University of North Georgia,"19,298",Division II,Peach Belt Conference
+American International College,"2,010",Division II,Northeast-10 Conference
+Assumption University,"2,044",Division II,Northeast-10 Conference
+Henderson State University,"2,061",Division II,Great American Conference
+Northwestern Oklahoma State University,"2,081",Division II,Great American Conference
+Lincoln University (MO),"2,093",Division II,Great Lakes Valley Conference
+Chadron State College,"2,098",Division II,Rocky Mountain Athletic Conference
+Saint Anselm College,"2,111",Division II,Northeast-10 Conference
+Oklahoma Christian University,"2,153",Division II,Lone Star Conference
+University of Mount Olive,"2,154",Division II,Conference Carolinas
+Augustana University,"2,158",Division II,Northern Sun Intercollegiate Conference
+Southern Nazarene University,"2,165",Division II,Great American Conference
+Caldwell University,"2,193",Division II,Central Atlantic Collegiate Conference
+University of South Carolina Beaufort,"2,204",Division II,Peach Belt Conference
+Morehouse College[e],"2,206",Division II,Southern Intercollegiate Athletic Conference
+Vanguard University,"2,219",Division II,Pacific West Conference
+Northwood University,"2,227",Division II,Great Midwest Athletic Conference
+University of Virginia's College at Wise,"2,253",Division II,South Atlantic Conference
+Lenoir-Rhyne University,"2,255",Division II,South Atlantic Conference
+"Pennsylvania Western University, Edinboro","2,259",Division II,Pennsylvania State Athletic Conference
+Elizabeth City State University,"2,261",Division II,Central Intercollegiate Athletic Association
+Seattle Pacific University,"2,261",Division II,Great Northwest Athletic Conference
+Drury University,"2,268",Division II,Great Lakes Valley Conference
+West Liberty University,"2,291",Division II,Mountain East Conference
+North Greenville University,"2,304",Division II,Conference Carolinas
+Walsh University,"2,311",Division II,Great Midwest Athletic Conference
+Chaminade University of Honolulu,"2,369",Division II,Pacific West Conference
+D'Youville University,"2,376",Division II,East Coast Conference
+Felician University,"2,427",Division II,Central Atlantic Collegiate Conference
+McKendree University,"2,442",Division II,Great Lakes Valley Conference
+Flagler College,"2,530",Division II,Peach Belt Conference
+Daemen University,"2,540",Division II,East Coast Conference
+South Dakota School of Mines and Technology,"2,579",Division II,Rocky Mountain Athletic Conference
+Carson-Newman University,"2,585",Division II,South Atlantic Conference
+Delta State University,"2,654",Division II,Gulf South Conference
+Lock Haven University of Pennsylvania,"2,702",Division II,Pennsylvania State Athletic Conference
+New Mexico Highlands University,"2,704",Division II,Rocky Mountain Athletic Conference
+Southwest Baptist University,"2,709",Division II,Great Lakes Valley Conference
+"Pennsylvania Western University, California","2,717",Division II,Pennsylvania State Athletic Conference
+Union University,"2,718",Division II,Gulf South Conference
+Central State University,"2,719",Division II,Southern Intercollegiate Athletic Conference
+Minot State University,"2,751",Division II,Northern Sun Intercollegiate Conference
+Southern New Hampshire University,"2,769[i]",Division II,Northeast-10 Conference
+University of Hawai'i at Hilo,"2,781",Division II,Pacific West Conference
+Newman University,"2,787",Division II,Mid-America Intercollegiate Athletics Association
+University of Arkansas at Monticello,"2,856",Division II,Great American Conference
+Fresno Pacific University,"2,889",Division II,Pacific West Conference(California Collegiate Athletic Association in 2026)
+Fort Valley State University,"2,905",Division II,Southern Intercollegiate Athletic Conference
+Florida Southern College,"2,915",Division II,Sunshine State Conference
+University of Puerto Rico at Bayamón,"2,967",Division II,Independent
+Wilmington University,"20,384",Division II,Central Atlantic Collegiate Conference
+Post University,"21,699",Division II,Central Atlantic Collegiate Conference
+Grand Valley State University,"22,011",Division II,Great Lakes Intercollegiate Athletic Conference
+San Francisco State University,"22,357",Division II,California Collegiate Athletic Association
+"California State University, Los Angeles","22,740",Division II,California Collegiate Athletic Association
+Nova Southeastern University,"22,830",Division II,Sunshine State Conference
+Wayne State University,"23,553",Division II,Great Lakes Intercollegiate Athletic Conference
+Simon Fraser University,"26,776",Division II,Great Northwest Athletic Conference
+"California State Polytechnic University, Pomona","27,196",Division II,California Collegiate Athletic Association
+Adams State University,"3,007",Division II,Rocky Mountain Athletic Conference
+Rollins College,"3,047",Division II,Sunshine State Conference
+University of Charleston,"3,051",Division II,Mountain East Conference
+Tuskegee University,"3,121",Division II,Southern Intercollegiate Athletic Conference
+University of Montevallo,"3,142",Division II,Gulf South Conference
+Trevecca Nazarene University,"3,196",Division II,Gulf South Conference
+Savannah State University,"3,208",Division II,Southern Intercollegiate Athletic Conference
+West Virginia State University,"3,247",Division II,Mountain East Conference
+Holy Family University,"3,278",Division II,Central Atlantic Collegiate Conference
+Rogers State University,"3,281",Division II,Mid-America Intercollegiate Athletics Association
+St. Edward's University,"3,309",Division II,Lone Star Conference
+Fairmont State University,"3,325",Division II,Mountain East Conference
+Shepherd University,"3,339",Division II,Pennsylvania State Athletic Conference
+Black Hills State University,"3,346",Division II,Rocky Mountain Athletic Conference
+Frostburg State University,"3,422",Division II,Mountain East Conference
+Wingate University,"3,424",Division II,South Atlantic Conference
+St. Mary's University,"3,457",Division II,Lone Star Conference
+Rockhurst University,"3,496",Division II,Great Lakes Valley Conference
+Lynn University,"3,520",Division II,Sunshine State Conference
+Concordia University-Irvine,"3,522",Division II,Pacific West Conference
+Western New Mexico University,"3,531",Division II,Lone Star Conference
+Fort Lewis College,"3,544",Division II,Rocky Mountain Athletic Conference
+Western Colorado University,"3,548",Division II,Rocky Mountain Athletic Conference
+Cameron University,"3,559",Division II,Lone Star Conference
+Truman State University,"3,664",Division II,Great Lakes Valley Conference
+Georgia Southwestern State University,"3,704",Division II,Peach Belt Conference
+Northern State University,"3,711",Division II,Northern Sun Intercollegiate Conference
+Lee University,"3,714",Division II,Gulf South Conference
+Colorado State University-Pueblo,"3,716",Division II,Rocky Mountain Athletic Conference
+Missouri Western State University,"3,716",Division II,Mid-America Intercollegiate Athletics Association
+Tiffin University,"3,726",Division II,Great Midwest Athletic Conference
+University of Mary,"3,801",Division II,Northern Sun Intercollegiate Conference
+Western Oregon University,"3,823",Division II,Great Northwest Athletic Conference
+University of Bridgeport,"3,838",Division II,Central Atlantic Collegiate Conference
+University of South Carolina Aiken,"3,855",Division II,Peach Belt Conference
+East Central University,"3,935",Division II,Great American Conference
+University of Wisconsin-Parkside,"3,947",Division II,Great Lakes Intercollegiate Athletic Conference
+Bemidji State University,"4,076",Division II,Northern Sun Intercollegiate Conference
+Montana State University Billings,"4,129",Division II,Great Northwest Athletic Conference
+Missouri Southern State University,"4,147",Division II,Mid-America Intercollegiate Athletics Association
+Palm Beach Atlantic University,"4,147",Division II,Sunshine State Conference
+Dallas Baptist University[b],"4,157",Division II,Lone Star Conference
+Winston-Salem State University,"4,192",Division II,Central Intercollegiate Athletic Association
+University of the District of Columbia,"4,202",Division II,East Coast Conference
+Mississippi College,"4,250",Division II,Gulf South Conference
+Clark Atlanta University,"4,252",Division II,Southern Intercollegiate Athletic Conference
+Francis Marion University,"4,261",Division II,Conference Carolinas
+Lander University,"4,423",Division II,Peach Belt Conference
+Anderson University,"4,519",Division II,South Atlantic Conference
+Bentley University,"4,526",Division II,Northeast-10 Conference
+Emporia State University,"4,557",Division II,Mid-America Intercollegiate Athletics Association
+Harding University,"4,608",Division II,Great American Conference
+Regis University,"4,627",Division II,Rocky Mountain Athletic Conference
+University of Illinois at Springfield,"4,628",Division II,Great Lakes Valley Conference
+Gannon University,"4,665",Division II,Pennsylvania State Athletic Conference
+Wayne State College,"4,666",Division II,Northern Sun Intercollegiate Conference
+Southern Arkansas University,"4,733",Division II,Great American Conference
+Hawai'i Pacific University,"4,748",Division II,Pacific West Conference
+Point Loma Nazarene University,"4,813",Division II,Pacific West Conference
+Molloy University,"4,845",Division II,East Coast Conference
+Davenport University,"4,848",Division II,Great Lakes Intercollegiate Athletic Conference
+University of Findlay,"5,057",Division II,Great Midwest Athletic Conference
+Southwestern Oklahoma State University,"5,163",Division II,Great American Conference
+Shippensburg University of Pennsylvania,"5,165",Division II,Pennsylvania State Athletic Conference
+Auburn University at Montgomery,"5,219",Division II,Gulf South Conference
+Midwestern State University,"5,324",Division II,Lone Star Conference
+Washburn University,"5,327",Division II,Mid-America Intercollegiate Athletics Association
+University of Indianapolis,"5,447",Division II,Great Lakes Valley Conference
+Biola University,"5,448",Division II,Pacific West Conference
+University of Arkansas-Fort Smith,"5,463",Division II,Mid-America Intercollegiate Athletics Association
+Minnesota State University Moorhead,"5,547",Division II,Northern Sun Intercollegiate Conference
+Upper Iowa University,"5,559",Division II,Great Lakes Valley Conference
+Virginia State University,"5,605",Division II,Central Intercollegiate Athletic Association
+East Stroudsburg University of Pennsylvania,"5,636",Division II,Pennsylvania State Athletic Conference
+Eastern New Mexico University,"5,737",Division II,Lone Star Conference
+Pittsburg State University,"5,774",Division II,Mid-America Intercollegiate Athletics Association
+Southeastern Oklahoma State University,"5,801",Division II,Great American Conference
+University of Nebraska at Kearney,"5,881",Division II,Mid-America Intercollegiate Athletics Association
+Concordia University-St. Paul,"5,928",Division II,Northern Sun Intercollegiate Conference
+"California State Polytechnic University, Humboldt","6,045",Division II,California Collegiate Athletic Association
+Winona State University,"6,072",Division II,Northern Sun Intercollegiate Conference
+Lincoln Memorial University,"6,081",Division II,South Atlantic Conference
+Clayton State University,"6,172",Division II,Peach Belt Conference
+University of West Alabama,"6,195",Division II,Gulf South Conference
+Azusa Pacific University[a],"6,272",Division II,Pacific West Conference
+Bowie State University,"6,353",Division II,Central Intercollegiate Athletic Association
+Cedarville University,"6,384",Division II,Great Midwest Athletic Conference
+Ashland University,"6,433",Division II,Great Midwest Athletic Conference
+Lewis University,"6,636",Division II,Great Lakes Valley Conference
+Albany State University,"6,809",Division II,Southern Intercollegiate Athletic Conference
+Saginaw Valley State University,"6,822",Division II,Great Lakes Intercollegiate Athletic Conference
+Barry University,"6,825",Division II,Sunshine State Conference
+Texas A&M University-Kingsville,"6,862",Division II,Lone Star Conference
+Northern Michigan University,"6,958",Division II,Great Lakes Intercollegiate Athletic Conference
+LeMoyne-Owen College,613,Division II,Southern Intercollegiate Athletic Conference
+Allen University,657,Division II,Southern Intercollegiate Athletic Conference
+Davis & Elkins College,683,Division II,Mountain East Conference
+Millersville University of Pennsylvania,"7,009",Division II,Pennsylvania State Athletic Conference
+Georgia College & State University,"7,097",Division II,Peach Belt Conference
+Fayetteville State University,"7,113",Division II,Central Intercollegiate Athletic Association
+Missouri University of Science and Technology,"7,154",Division II,Great Lakes Valley Conference
+Bloomsburg University of Pennsylvania,"7,206",Division II,Pennsylvania State Athletic Conference
+Florida Institute of Technology,"7,223",Division II,Sunshine State Conference
+University of Texas Permian Basin,"7,372",Division II,Lone Star Conference
+Michigan Technological University,"7,430",Division II,Great Lakes Intercollegiate Athletic Conference
+University of Alaska Fairbanks,"7,451",Division II,Great Northwest Athletic Conference
+Kutztown University of Pennsylvania,"7,468",Division II,Pennsylvania State Athletic Conference
+Adelphi University,"7,603",Division II,Northeast-10 Conference
+Colorado School of Mines,"7,608",Division II,Rocky Mountain Athletic Conference
+University of North Carolina at Pembroke,"7,674",Division II,Conference Carolinas
+"California State University, Monterey Bay","7,713",Division II,California Collegiate Athletic Association
+Southwest Minnesota State University,"7,773",Division II,Northern Sun Intercollegiate Conference
+Columbus State University,"7,937",Division II,Peach Belt Conference
+Chowan University,708,Division II,Conference Carolinas
+Saint Augustine's University,725,Division II,Independent
+Northeastern State University,"8,002",Division II,Mid-America Intercollegiate Athletics Association
+Thomas Jefferson University,"8,315",Division II,Central Atlantic Collegiate Conference
+Slippery Rock University of Pennsylvania,"8,394",Division II,Pennsylvania State Athletic Conference
+Central Washington University,"8,509",Division II,Great Northwest Athletic Conference
+Texas A&M International University,"8,532",Division II,Lone Star Conference
+University of Alabama in Huntsville,"8,564",Division II,Gulf South Conference
+Arkansas Tech University,"8,746",Division II,Great American Conference
+Embry-Riddle Aeronautical University,"8,755",Division II,Sunshine State Conference
+Mercy University,"8,774",Division II,East Coast Conference
+Livingstone College,814,Division II,Central Intercollegiate Athletic Association
+Lane College,822,Division II,Southern Intercollegiate Athletic Conference
+Kentucky Wesleyan College,864,Division II,Great Midwest Athletic Conference
+Salem University,894,Division II,Independent
+West Texas A&M University,"9,037",Division II,Lone Star Conference
+Purdue University Northwest,"9,051",Division II,Great Lakes Intercollegiate Athletic Conference
+Indiana University of Pennsylvania,"9,081",Division II,Pennsylvania State Athletic Conference
+Northwest Missouri State University,"9,152",Division II,Mid-America Intercollegiate Athletics Association
+Maryville University,"9,250",Division II,Great Lakes Valley Conference
+University of Minnesota Duluth,"9,253",Division II,Northern Sun Intercollegiate Conference
+"California State University, Stanislaus","9,295",Division II,California Collegiate Athletic Association
+Southern Connecticut State University,"9,377",Division II,Northeast-10 Conference
+Ferris State University,"9,959",Division II,Great Lakes Intercollegiate Athletic Conference
+Lees-McRae College,917,Division II,Conference Carolinas
+Spring Hill College,920,Division II,Southern Intercollegiate Athletic Conference
+Emmanuel University,932,Division II,Conference Carolinas
+William Jewell College,956,Division II,Great Lakes Valley Conference
+Shaw University,962,Division II,Central Intercollegiate Athletic Association
+Ursuline College[l],970,Division II,Great Midwest Athletic Conference
+Southern Wesleyan University,980,Division II,Conference Carolinas
+Knox College,"1,001",Division III,Midwest Conference
+University of Pittsburgh at Bradford,"1,003",Division III,Allegheny Mountain Collegiate Conference
+Saint Elizabeth University,"1,009",Division III,Atlantic East Conference
+Hiram College,"1,011",Division III,Presidents' Athletic Conference
+Houghton University,"1,014",Division III,Empire 8
+University of Minnesota Morris,"1,020",Division III,Upper Midwest Athletic Conference
+Transylvania University,"1,022",Division III,Heartland Collegiate Athletic Conference
+Keystone College,"1,051",Division III,United East Conference
+Greenville University,"1,053",Division III,St. Louis Intercollegiate Athletic Conference
+Cairn University,"1,056",Division III,United East Conference
+Heidelberg University,"1,059",Division III,Ohio Athletic Conference
+Lycoming College,"1,063",Division III,Landmark Conference
+Agnes Scott College[A 1],"1,077",Division III,Collegiate Conference of the South
+United States Coast Guard Academy,"1,081",Division III,New England Women's and Men's Athletic Conference
+Cornell College,"1,084",Division III,Midwest Conference
+Wisconsin Lutheran College,"1,094",Division III,Northern Athletics Collegiate Conference
+Central College,"1,095",Division III,American Rivers Conference[2]
+Hendrix College,"1,107",Division III,Southern Collegiate Athletic Conference
+Hartwick College,"1,113",Division III,Empire 8
+Johnson & Wales University Charlotte[A 13],"1,128",Division III,Coast to Coast Athletic Conference
+Austin College,"1,136",Division III,Southern Collegiate Athletic Conference
+Maryville College,"1,147",Division III,Collegiate Conference of the South(Southern Athletic Association in 2026)
+Dean College,"1,151",Division III,Great Northeast Athletic Conference
+Hanover College,"1,157",Division III,Heartland Collegiate Athletic Conference
+Albertus Magnus College,"1,161",Division III,Great Northeast Athletic Conference
+Washington & Jefferson College,"1,162",Division III,Presidents' Athletic Conference
+Simpson College,"1,163",Division III,American Rivers Conference[2]
+Marietta College,"1,171",Division III,Ohio Athletic Conference
+Manchester University,"1,175",Division III,Heartland Collegiate Athletic Conference
+Kalamazoo College,"1,196",Division III,Michigan Intercollegiate Athletic Association
+Guilford College,"1,208",Division III,Old Dominion Athletic Conference
+Schreiner University,"1,208",Division III,Southern Collegiate Athletic Conference(American Southwest Conference in 2026)
+Loras College,"1,213",Division III,American Rivers Conference[2]
+"Pennsylvania State University, Brandywine[A 2]","1,223",Division III,United East Conference
+Allegheny College,"1,231",Division III,Presidents' Athletic Conference
+Cedar Crest College[A 1],"1,248",Division III,United East Conference
+Rockford University,"1,249",Division III,Northern Athletics Collegiate Conference
+Anderson University,"1,255",Division III,Heartland Collegiate Athletic Conference
+Geneva College,"1,258",Division III,Presidents' Athletic Conference
+Alma College,"1,273",Division III,Michigan Intercollegiate Athletic Association
+Coe College,"1,278",Division III,American Rivers Conference[2]
+Keuka College,"1,284",Division III,Empire 8
+Eastern Mennonite University,"1,292",Division III,Old Dominion Athletic Conference
+Juniata College,"1,292",Division III,Landmark Conference
+Waynesburg University,"1,315",Division III,Presidents' Athletic Conference
+Marian University,"1,319",Division III,Northern Athletics Collegiate Conference
+University of Pittsburgh at Greensburg,"1,326",Division III,Allegheny Mountain Collegiate Conference
+Anna Maria College,"1,332",Division III,Massachusetts State Collegiate Athletic Conference
+Elms College,"1,332",Division III,Great Northeast Athletic Conference
+Wittenberg University,"1,333",Division III,North Coast Athletic Conference
+North Carolina Wesleyan University,"1,345",Division III,USA South Athletic Conference
+State University of New York Maritime College,"1,350",Division III,Skyline Conference
+Albion College,"1,354",Division III,Michigan Intercollegiate Athletic Association
+Nichols College,"1,354",Division III,Conference of New England
+Centre College,"1,356",Division III,Southern Athletic Association
+Texas Lutheran University,"1,361",Division III,Southern Collegiate Athletic Conference
+Massachusetts Maritime Academy[A 15],"1,362",Division III,Massachusetts State Collegiate Athletic Conference
+Gallaudet University,"1,364",Division III,United East Conference
+Averett University,"1,378",Division III,Old Dominion Athletic Conference
+Lawrence University,"1,410",Division III,Midwest Conference
+Haverford College,"1,424",Division III,Centennial Conference
+Bridgewater College,"1,436",Division III,Old Dominion Athletic Conference
+Saint Vincent College,"1,442",Division III,Presidents' Athletic Conference
+College of Saint Benedict[A 20][A 1],"1,451",Division III,Minnesota Intercollegiate Athletic Conference
+Ohio Wesleyan University,"1,452",Division III,North Coast Athletic Conference
+Centenary University,"1,453",Division III,Atlantic East Conference
+Southwestern University,"1,457",Division III,Southern Athletic Association
+Luther College,"1,463",Division III,American Rivers Conference(Midwest Conference in 2026)
+Saint Joseph's College of Maine,"1,463",Division III,Great Northeast Athletic Conference
+Wartburg College,"1,472",Division III,American Rivers Conference[2]
+Berea College,"1,487",Division III,Heartland Collegiate Athletic Conference
+Ursinus College,"1,492",Division III,Centennial Conference
+Goucher College,"1,500",Division III,Landmark Conference
+Saint Mary's College[A 1],"1,518",Division III,Michigan Intercollegiate Athletic Association
+Oglethorpe University,"1,522",Division III,Southern Athletic Association
+Randolph–Macon College,"1,523",Division III,Old Dominion Athletic Conference
+Lasell University,"1,527",Division III,Great Northeast Athletic Conference
+Whitman College,"1,544",Division III,Northwest Conference
+Spalding University,"1,555",Division III,St. Louis Intercollegiate Athletic Conference
+Illinois Wesleyan University,"1,576",Division III,College Conference of Illinois and Wisconsin
+Meredith College[A 1],"1,576",Division III,USA South Athletic Conference
+St. Mary's College of Maryland,"1,587",Division III,United East Conference
+Gordon College,"1,610",Division III,Conference of New England
+Concordia University Texas,"1,614",Division III,Southern Collegiate Athletic Conference
+Saint John's University[A 20][A 11],"1,624",Division III,Minnesota Intercollegiate Athletic Conference
+Swarthmore College,"1,644",Division III,Centennial Conference
+Albright College,"1,652",Division III,MAC Commonwealth
+Hardin–Simmons University,"1,655",Division III,American Southwest Conference
+Millikin University,"1,659",Division III,College Conference of Illinois and Wisconsin
+Bryn Mawr College[A 1],"1,666",Division III,Centennial Conference
+Thomas College,"1,669",Division III,North Atlantic Conference
+Nebraska Wesleyan University,"1,690",Division III,American Rivers Conference[2]
+University of the South[A 21],"1,693",Division III,Southern Athletic Association
+Wilson College,"1,694",Division III,United East Conference
+Virginia Wesleyan University,"1,711",Division III,Old Dominion Athletic Conference
+Alverno College[A 1],"1,719",Division III,Northern Athletics Collegiate Conference
+Linfield University,"1,726",Division III,Northwest Conference
+Crown College,"1,727",Division III,Upper Midwest Athletic Conference
+Sarah Lawrence College,"1,743",Division III,Skyline Conference
+Bates College,"1,753",Division III,New England Small College Athletic Conference
+Adrian College,"1,760",Division III,Michigan Intercollegiate Athletic Association
+Methodist University,"1,768",Division III,USA South Athletic Conference
+Grinnell College,"1,775",Division III,Midwest Conference
+Mary Baldwin University,"1,792",Division III,USA South Athletic Conference
+State University of New York at Cobleskill,"1,792",Division III,North Atlantic Conference(State University of New York Athletic Conference in 2026)
+University of Dubuque,"1,795",Division III,American Rivers Conference[2]
+Lake Forest College,"1,818",Division III,Midwest Conference
+Muhlenberg College,"1,818",Division III,Centennial Conference
+DePauw University,"1,819",Division III,North Coast Athletic Conference
+East Texas Baptist University,"1,833",Division III,American Southwest Conference
+Roanoke College,"1,835",Division III,Old Dominion Athletic Conference
+Notre Dame of Maryland University,"1,836",Division III,United East Conference
+Piedmont University,"1,840",Division III,Collegiate Conference of the South
+Alfred University,"1,843",Division III,Empire 8
+Bowdoin College,"1,850",Division III,New England Small College Athletic Conference
+Occidental College,"1,854",Division III,Southern California Intercollegiate Athletic Conference
+Trinity Washington University[A 1],"1,865",Division III,Independent
+Concordia College,"1,868",Division III,Minnesota Intercollegiate Athletic Conference
+College of Wooster,"1,876",Division III,North Coast Athletic Conference
+Amherst College,"1,910",Division III,New England Small College Athletic Conference
+Franklin & Marshall College[A 8],"1,911",Division III,Centennial Conference
+University of Puget Sound,"1,914",Division III,Northwest Conference
+King's College,"1,932",Division III,MAC Freedom
+University of Saint Joseph,"1,939",Division III,Great Northeast Athletic Conference
+Asbury University,"1,942",Division III,Collegiate Conference of the South
+"Pennsylvania State University, Berks College","1,944",Division III,United East Conference
+University of Maine at Farmington,"1,950",Division III,North Atlantic Conference
+Buena Vista University,"1,951",Division III,American Rivers Conference[2]
+Gustavus Adolphus College,"1,952",Division III,Minnesota Intercollegiate Athletic Conference
+Rhodes College,"1,952",Division III,Southern Athletic Association
+Curry College,"1,994",Division III,Conference of New England
+Connecticut College,"1,995",Division III,New England Small College Athletic Conference
+Regent University[A 13],"10,168",Division III,Coast to Coast Athletic Conference
+University of Wisconsin–La Crosse,"10,299",Division III,Wisconsin Intercollegiate Athletic Conference
+Rutgers University–Newark,"10,809",Division III,New Jersey Athletic Conference
+University of Wisconsin–Whitewater,"11,519",Division III,Wisconsin Intercollegiate Athletic Conference
+Massachusetts Institute of Technology [A 14],"11,920",Division III,New England Women's and Men's Athletic Conference
+University of Rochester,"12,160",Division III,University Athletic Association
+Case Western Reserve University,"12,266",Division III,University Athletic Association
+Lehman College,"12,894",Division III,City University of New York Athletic Conference
+Tufts University,"13,274",Division III,New England Small College Athletic Conference
+Kean University,"13,352",Division III,New Jersey Athletic Conference
+John Jay College of Criminal Justice,"13,510",Division III,City University of New York Athletic Conference
+University of Wisconsin–Oshkosh,"13,761",Division III,Wisconsin Intercollegiate Athletic Conference
+Brooklyn College,"13,935",Division III,City University of New York Athletic Conference
+City College of New York,"15,012",Division III,City University of New York Athletic Conference
+Emory University,"15,046",Division III,University Athletic Association
+Carnegie Mellon University,"15,596",Division III,University Athletic Association
+University of Massachusetts Boston,"15,810",Division III,Little East Conference
+Washington University in St. Louis,"16,500",Division III,University Athletic Association
+Rochester Institute of Technology[A 18][A 19],"16,863",Division III,Liberty League
+University of Chicago,"18,339",Division III,University Athletic Association
+Rowan University,"19,660",Division III,New Jersey Athletic Conference
+Baruch College,"19,698",Division III,City University of New York Athletic Conference
+"University of California, Santa Cruz","19,764",Division III,Coast to Coast Athletic Conference
+Edgewood College,"2,001",Division III,Northern Athletics Collegiate Conference
+State University of New York at Morrisville,"2,040",Division III,State University of New York Athletic Conference
+Hamilton College,"2,048",Division III,New England Small College Athletic Conference
+Emmanuel College,"2,059",Division III,Great Northeast Athletic Conference
+Russell Sage College,"2,064",Division III,Empire 8
+Carleton College,"2,069",Division III,Minnesota Intercollegiate Athletic Conference
+Hood College,"2,078",Division III,MAC Commonwealth
+Union College[A 18][A 19],"2,082",Division III,Liberty League
+Mount St. Joseph University,"2,083",Division III,Heartland Collegiate Athletic Conference
+St. Lawrence University[A 5][A 6],"2,089",Division III,Liberty League
+Misericordia University,"2,107",Division III,MAC Freedom
+Muskingum University,"2,108",Division III,Ohio Athletic Conference
+Willamette University,"2,112",Division III,Northwest Conference
+Lebanon Valley College,"2,142",Division III,MAC Freedom
+Macalester College,"2,142",Division III,Minnesota Intercollegiate Athletic Conference
+Elizabethtown College,"2,152",Division III,Landmark Conference
+Gwynedd Mercy University,"2,165",Division III,Atlantic East Conference
+St. Norbert College,"2,165",Division III,Northern Athletics Collegiate Conference
+Williams College,"2,168",Division III,New England Small College Athletic Conference
+University of Mount Union,"2,169",Division III,Ohio Athletic Conference
+Neumann University,"2,171",Division III,Atlantic East Conference(MAC Commonwealth in 2026.)
+Colorado College[A 5][A 7],"2,173",Division III,Southern Collegiate Athletic Conference
+University of Dallas,"2,182",Division III,Southern Collegiate Athletic Conference
+Kenyon College,"2,184",Division III,North Coast Athletic Conference
+University of Maine at Presque Isle,"2,187",Division III,North Atlantic Conference[4]
+Delaware Valley University,"2,189",Division III,MAC Freedom
+Vermont State University–Castleton,"2,210",Division III,Little East Conference
+Dickinson College,"2,217",Division III,Centennial Conference
+Drew University,"2,226",Division III,Landmark Conference
+Mississippi University for Women,"2,227",Division III,St. Louis Intercollegiate Athletic Conference
+Mount Saint Mary College,"2,246",Division III,Skyline Conference
+Susquehanna University,"2,247",Division III,Landmark Conference
+Rose-Hulman Institute of Technology,"2,250",Division III,Heartland Collegiate Athletic Conference
+Trinity College,"2,276",Division III,New England Small College Athletic Conference
+Washington and Lee University,"2,277",Division III,Old Dominion Athletic Conference
+Colby College,"2,284",Division III,New England Small College Athletic Conference
+Carlow University[A 2],"2,310",Division III,Allegheny Mountain Collegiate Conference
+Chatham University,"2,319",Division III,Presidents' Athletic Conference
+Mount Holyoke College[A 1],"2,330",Division III,New England Women's and Men's Athletic Conference
+Whitworth University,"2,345",Division III,Northwest Conference
+Otterbein University,"2,357",Division III,Ohio Athletic Conference
+Grove City College,"2,365",Division III,Presidents' Athletic Conference
+Berry College,"2,370",Division III,Southern Athletic Association
+Manhattanville University,"2,379",Division III,Skyline Conference
+Capital University,"2,388",Division III,Ohio Athletic Conference
+Denison University,"2,405",Division III,North Coast Athletic Conference
+Immaculata University,"2,407",Division III,Atlantic East Conference
+Wellesley College[A 1],"2,418",Division III,New England Women's and Men's Athletic Conference
+"Pennsylvania State University, Altoona","2,421",Division III,Allegheny Mountain Collegiate Conference
+Hamline University,"2,432",Division III,Minnesota Intercollegiate Athletic Conference
+Nazareth University,"2,439",Division III,Empire 8
+Lancaster Bible College,"2,455",Division III,United East Conference
+Vassar College,"2,456",Division III,Liberty League
+California Institute of Technology,"2,463",Division III,Southern California Intercollegiate Athletic Conference
+Augustana College,"2,484",Division III,College Conference of Illinois and Wisconsin
+Alvernia University,"2,485",Division III,MAC Commonwealth
+McMurry University,"2,549",Division III,Southern Collegiate Athletic Conference(American Southwest Conference in 2026)
+University of Lynchburg,"2,592",Division III,Old Dominion Athletic Conference
+La Roche University,"2,618",Division III,Allegheny Mountain Collegiate Conference
+North Park University,"2,624",Division III,College Conference of Illinois and Wisconsin
+Moravian University,"2,658",Division III,Landmark Conference
+Trinity University,"2,694",Division III,Southern Athletic Association
+State University of New York Polytechnic Institute,"2,704",Division III,Empire 8
+University of Wisconsin–Superior,"2,726",Division III,Upper Midwest Athletic Conference
+Pacific Lutheran University,"2,737",Division III,Northwest Conference
+State University of New York at Potsdam,"2,751",Division III,State University of New York Athletic Conference
+Carthage College,"2,771",Division III,College Conference of Illinois and Wisconsin
+John Carroll University,"2,773",Division III,North Coast Athletic Conference
+Skidmore College,"2,776",Division III,Liberty League
+State University of New York at Delhi,"2,777",Division III,North Atlantic Conference(State University of New York Athletic Conference in 2026)
+"Fairleigh Dickinson University, Florham","2,778",Division III,MAC Freedom
+Springfield College,"2,785",Division III,New England Women's and Men's Athletic Conference
+Lakeland University,"2,786",Division III,Northern Athletics Collegiate Conference
+Wheaton College,"2,799",Division III,College Conference of Illinois and Wisconsin
+Smith College[A 1],"2,830",Division III,New England Women's and Men's Athletic Conference
+Milwaukee School of Engineering,"2,834",Division III,Northern Athletics Collegiate Conference
+Salve Regina University,"2,836",Division III,New England Women's and Men's Athletic Conference
+Regis College,"2,842",Division III,Great Northeast Athletic Conference
+Keene State College,"2,846",Division III,Little East Conference
+Marywood University,"2,850",Division III,Atlantic East Conference(MAC Freedom in 2026)
+New England College,"2,856",Division III,Great Northeast Athletic Conference
+North Central College,"2,856",Division III,College Conference of Illinois and Wisconsin
+Middlebury College,"2,857",Division III,New England Small College Athletic Conference
+Pomona College and Pitzer College[A 16],"2,868[A 17]",Division III,Southern California Intercollegiate Athletic Conference
+Rivier University,"2,879",Division III,Great Northeast Athletic Conference
+McDaniel College,"2,882",Division III,Centennial Conference
+Gettysburg College,"2,895",Division III,Centennial Conference
+DeSales University,"2,919",Division III,MAC Freedom
+State University of New York at Canton,"2,919",Division III,State University of New York Athletic Conference
+Bard College,"2,922",Division III,Liberty League
+Mount Aloysius College,"2,967",Division III,Allegheny Mountain Collegiate Conference
+Oberlin College,"2,976",Division III,North Coast Athletic Conference
+The College of St. Scholastica,"2,979",Division III,Minnesota Intercollegiate Athletic Conference
+Benedictine University,"2,989",Division III,Northern Athletics Collegiate Conference
+Montclair State University,"22,570",Division III,New Jersey Athletic Conference
+Hunter College,"22,879",Division III,City University of New York Athletic Conference
+Ohio Northern University,"3,042",Division III,Ohio Athletic Conference
+St. Olaf College,"3,074",Division III,Minnesota Intercollegiate Athletic Conference
+"Pennsylvania State University, Abington","3,095",Division III,United East Conference
+Husson University,"3,133",Division III,North Atlantic Conference
+Lesley University,"3,134",Division III,North Atlantic Conference
+Arcadia University,"3,142",Division III,MAC Freedom
+Augsburg University,"3,161",Division III,Minnesota Intercollegiate Athletic Conference
+Carroll University,"3,176",Division III,College Conference of Illinois and Wisconsin
+University of Redlands,"3,192",Division III,Southern California Intercollegiate Athletic Conference
+University of Mount Saint Vincent,"3,202",Division III,Skyline Conference
+State University of New York at Fredonia,"3,220",Division III,State University of New York Athletic Conference
+State University of New York at Purchase,"3,229",Division III,Skyline Conference
+University of Northwestern - St. Paul,"3,262",Division III,Upper Midwest Athletic Conference
+Wesleyan University,"3,271",Division III,New England Small College Athletic Conference
+Norwich University,"3,274",Division III,Great Northeast Athletic Conference
+Baldwin Wallace University,"3,308",Division III,Ohio Athletic Conference
+"Pennsylvania State University, Behrend","3,323",Division III,Allegheny Mountain Collegiate Conference
+Messiah University,"3,344",Division III,MAC Commonwealth
+Calvin University,"3,364",Division III,Michigan Intercollegiate Athletic Association
+Hope College,"3,368",Division III,Michigan Intercollegiate Athletic Association
+LeTourneau University,"3,389",Division III,Southern Collegiate Athletic Conference
+California Lutheran University,"3,413",Division III,Southern California Intercollegiate Athletic Conference
+Dominican University,"3,424",Division III,Northern Athletics Collegiate Conference
+"Claremont McKenna College, Harvey Mudd College, and Scripps College[A 3]","3,436[A 4]",Division III,Southern California Intercollegiate Athletic Conference
+Pacific University,"3,479",Division III,Northwest Conference
+Stevenson University,"3,507",Division III,MAC Commonwealth
+University of Mary Hardin–Baylor,"3,520",Division III,American Southwest Conference
+Bethel University,"3,521",Division III,Minnesota Intercollegiate Athletic Conference
+Lewis & Clark College,"3,526",Division III,Northwest Conference
+St. Catherine University[A 1],"3,533",Division III,Minnesota Intercollegiate Athletic Conference
+Western New England University,"3,574",Division III,Conference of New England
+Clarkson University[A 5][A 6],"3,603",Division III,Liberty League
+Belhaven University,"3,616",Division III,Collegiate Conference of the South
+Marymount University,"3,667",Division III,Atlantic East Conference
+St. John Fisher University,"3,674",Division III,Empire 8
+York College of Pennsylvania,"3,720",Division III,MAC Commonwealth
+Utica University,"3,733",Division III,Empire 8
+Alfred State College,"3,749",Division III,Allegheny Mountain Collegiate Conference(State University of New York Athletic Conference in 2026)
+Franciscan University of Steubenville,"3,750",Division III,Presidents' Athletic Conference
+University of Mary Washington,"3,808",Division III,Coast to Coast Athletic Conference
+University of St. Thomas (Texas),"3,813",Division III,Southern Collegiate Athletic Conference
+Saint Mary's University of Minnesota,"3,831",Division III,Minnesota Intercollegiate Athletic Conference
+Plymouth State University,"3,839",Division III,Little East Conference
+Medgar Evers College,"3,846",Division III,City University of New York Athletic Conference
+Elmhurst University,"3,906",Division III,College Conference of Illinois and Wisconsin
+State University of New York at Geneseo,"3,928",Division III,Empire 8
+Babson College,"3,943",Division III,New England Women's and Men's Athletic Conference
+Eastern Connecticut State University,"3,979",Division III,Little East Conference
+Johns Hopkins University[A 12],"30,362",Division III,Centennial Conference
+Principia College,338,Division III,St. Louis Intercollegiate Athletic Conference
+Blackburn College,389,Division III,St. Louis Intercollegiate Athletic Conference
+Wentworth Institute of Technology,"4,018",Division III,Conference of New England
+Framingham State University,"4,028",Division III,Massachusetts State Collegiate Athletic Conference
+Clark University,"4,124",Division III,New England Women's and Men's Athletic Conference
+Western Connecticut State University,"4,137",Division III,Little East Conference
+Endicott College,"4,254",Division III,Conference of New England
+Pennsylvania College of Technology,"4,307",Division III,United East Conference
+Shenandoah University,"4,343",Division III,Old Dominion Athletic Conference
+Roger Williams University,"4,344",Division III,Conference of New England
+Johnson & Wales University,"4,372",Division III,Conference of New England
+State University of New York at Plattsburgh,"4,417",Division III,State University of New York Athletic Conference
+State University of New York at Old Westbury,"4,449",Division III,Skyline Conference
+Trine University,"4,471",Division III,Michigan Intercollegiate Athletic Association
+Christopher Newport University,"4,503",Division III,Coast to Coast Athletic Conference
+George Fox University,"4,531",Division III,Northwest Conference
+Westfield State University,"4,555",Division III,Massachusetts State Collegiate Athletic Conference
+"Pennsylvania State University, Harrisburg","4,651",Division III,United East Conference
+University of Scranton,"4,825",Division III,Landmark Conference
+Ithaca College,"4,828",Division III,Liberty League
+Sweet Briar College[A 1][A 15],464,Division III,Old Dominion Athletic Conference
+Simmons University[A 1][A 15],"5,053",Division III,Great Northeast Athletic Conference
+Concordia University Wisconsin,"5,063",Division III,Northern Athletics Collegiate Conference(College Conference of Illinois and Wisconsin in 2027)
+University of Wisconsin–River Falls,"5,064",Division III,Wisconsin Intercollegiate Athletic Conference
+Concordia University Chicago,"5,066",Division III,Northern Athletics Collegiate Conference
+Catholic University of America,"5,171",Division III,Landmark Conference
+Wilkes University,"5,198",Division III,Landmark Conference
+Pratt Institute,"5,232",Division III,Atlantic East Conference
+Brandeis University,"5,302",Division III,University Athletic Association
+State University of New York at Oneonta,"5,514",Division III,State University of New York Athletic Conference
+Ramapo College,"5,521",Division III,New Jersey Athletic Conference
+University of La Verne,"5,596",Division III,Southern California Intercollegiate Athletic Conference
+Widener University,"5,610",Division III,MAC Commonwealth
+Worcester State University,"5,611",Division III,Massachusetts State Collegiate Athletic Conference
+Emerson College,"5,670",Division III,New England Women's and Men's Athletic Conference
+Rhode Island College,"5,767",Division III,Little East Conference
+Rutgers University–Camden,"5,776",Division III,New Jersey Athletic Conference
+New Jersey City University,"5,833",Division III,New Jersey Athletic Conference(City University of New York Athletic Conference in 2027)
+University of Hartford,"5,913",Division III,Conference of New England
+Aurora University,"5,935",Division III,Northern Athletics Collegiate Conference
+Mitchell College,500,Division III,Great Northeast Athletic Conference
+Salem College[A 1],519,Division III,USA South Athletic Conference
+Eureka College,527,Division III,St. Louis Intercollegiate Athletic Conference
+New York University,"57,335",Division III,University Athletic Association
+University of Valley Forge,573,Division III,United East Conference
+Lyon College,584,Division III,St. Louis Intercollegiate Athletic Conference
+Westminster College,593,Division III,St. Louis Intercollegiate Athletic Conference
+"York College, City University of New York","6,161",Division III,City University of New York Athletic Conference
+Salem State University,"6,239",Division III,Massachusetts State Collegiate Athletic Conference
+Fitchburg State University,"6,296",Division III,Massachusetts State Collegiate Athletic Conference
+Buffalo State University,"6,470",Division III,State University of New York Athletic Conference
+University of New England,"6,473",Division III,Conference of New England
+University of Wisconsin–Platteville,"6,696",Division III,Wisconsin Intercollegiate Athletic Conference
+Suffolk University,"6,697",Division III,Conference of New England
+State University of New York at Oswego,"6,756",Division III,State University of New York Athletic Conference
+State University of New York at Cortland,"6,780",Division III,State University of New York Athletic Conference
+Yeshiva University,"6,826",Division III,Skyline Conference
+State University of New York at Brockport,"6,931",Division III,Empire 8
+University of Wisconsin–Stout,"6,951",Division III,Wisconsin Intercollegiate Athletic Conference
+Eastern University,"6,981",Division III,MAC Commonwealth
+Millsaps College,626,Division III,Southern Athletic Association
+Randolph College,634,Division III,Old Dominion Athletic Conference
+Wesleyan College[A 1][b],641,Division III,Collegiate Conference of the South
+Centenary College of Louisiana,648,Division III,Southern Collegiate Athletic Conference
+Vermont State University–Johnson,650,Division III,North Atlantic Conference
+Elmira College,657,Division III,Empire 8
+Bethany College,671,Division III,Presidents' Athletic Conference
+LaGrange College,671,Division III,Collegiate Conference of the South
+Bluffton University,678,Division III,Heartland Collegiate Athletic Conference
+Earlham College,696,Division III,Heartland Collegiate Athletic Conference
+Rensselaer Polytechnic Institute [A 5][A 6],"7,024",Division III,Liberty League
+Salisbury University,"7,030",Division III,Coast to Coast Athletic Conference
+Worcester Polytechnic Institute,"7,353",Division III,New England Women's and Men's Athletic Conference
+State University of New York at New Paltz,"7,420",Division III,State University of New York Athletic Conference(New Jersey Athletic Conference in 2026)
+University of Southern Maine,"7,528",Division III,Little East Conference
+Webster University,"7,606",Division III,St. Louis Intercollegiate Athletic Conference
+The College of New Jersey,"7,652",Division III,New Jersey Athletic Conference
+University of Massachusetts Dartmouth,"7,759",Division III,Little East Conference
+Monmouth College,727,Division III,Midwest Conference
+William Peace University,730,Division III,USA South Athletic Conference
+Ripon College,734,Division III,Midwest Conference
+University of the Ozarks,763,Division III,Southern Collegiate Athletic Conference
+Rosemont College[a],777,Division III,United East Conference
+Brevard College,787,Division III,USA South Athletic Conference
+Warren Wilson College,797,Division III,Coast to Coast Athletic Conference
+University of Wisconsin–Stevens Point,"8,109",Division III,Wisconsin Intercollegiate Athletic Conference
+Illinois Institute of Technology,"8,563",Division III,Northern Athletics Collegiate Conference
+Stockton University,"8,788",Division III,New Jersey Athletic Conference
+Stevens Institute of Technology,"8,842",Division III,MAC Freedom
+Hobart College[A 9][A 10][A 11],818,Division III,Liberty League
+Hollins University[A 1],821,Division III,Old Dominion Athletic Conference
+Howard Payne University,833,Division III,American Southwest Conference
+Wabash College[A 11],845,Division III,North Coast Athletic Conference
+William Smith College[A 10][A 1],851,Division III,Liberty League
+Whittier College,859,Division III,Southern California Intercollegiate Athletic Conference
+Martin Luther College,860,Division III,Upper Midwest Athletic Conference
+Huntingdon College,869,Division III,Collegiate Conference of the South
+Vermont State University–Lyndon,871,Division III,North Atlantic Conference
+Hampden–Sydney College,876,Division III,Old Dominion Athletic Conference
+Greensboro College,898,Division III,USA South Athletic Conference
+William Paterson University,"9,426",Division III,New Jersey Athletic Conference
+Farmingdale State College,"9,541",Division III,Skyline Conference
+Bridgewater State University,"9,550",Division III,Massachusetts State Collegiate Athletic Conference
+Chapman University,"9,961",Division III,Southern California Intercollegiate Athletic Conference
+University of Wisconsin–Eau Claire,"9,991",Division III,Wisconsin Intercollegiate Athletic Conference
+Bethany Lutheran College,902,Division III,Upper Midwest Athletic Conference
+Maine Maritime Academy,913,Division III,North Atlantic Conference
+Washington College,916,Division III,Centennial Conference
+Thiel College,920,Division III,Presidents' Athletic Conference
+Covenant College,928,Division III,Collegiate Conference of the South
+Massachusetts College of Liberal Arts,933,Division III,Massachusetts State Collegiate Athletic Conference
+Beloit College,948,Division III,Midwest Conference
+Colby–Sawyer College,950,Division III,Great Northeast Athletic Conference
+Pfeiffer University,954,Division III,USA South Athletic Conference
+Illinois College,958,Division III,Midwest Conference
+United States Merchant Marine Academy,961,Division III,Skyline Conference
+Wilmington College,964,Division III,Ohio Athletic Conference
+Franklin College,966,Division III,Heartland Collegiate Athletic Conference
+Southern Virginia University,967,Division III,USA South Athletic Conference
+Hilbert College,973,Division III,Allegheny Mountain Collegiate Conference
+University of Olivet,973,Division III,Michigan Intercollegiate Athletic Association
+Maranatha Baptist University,977,Division III,Independent
+St. Joseph's University,980,Division III,Skyline Conference
+North Central University,984,Division III,Upper Midwest Athletic Conference
