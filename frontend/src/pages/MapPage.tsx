@@ -388,7 +388,7 @@ const MapPage = () => {
   // Reset to USA view
   const handleResetToUSA = () => {
     if (mapRef.current) {
-      mapRef.current.setView([39.8283, -98.5795], 4);
+      mapRef.current.setView([37.5, -98.5795], 4);
       setSelectedState(null);
       setSelectedCollege(null);
       setSelectedChapter(null);
@@ -418,37 +418,14 @@ const MapPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-              <MapPin className="w-8 h-8 text-primary-600" />
-              Interactive US Fraternity & Sorority Map
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Explore Greek life across America with precise locations and real-time coordinates
-            </p>
-          </div>
-
-          {/* Search Bar */}
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Search state or college..."
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 w-64"
-              />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            </div>
-            <button
-              onClick={handleSearch}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Search
-            </button>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <MapPin className="w-8 h-8 text-primary-600" />
+            Interactive US Fraternity & Sorority Map
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Explore Greek life across America with precise locations and real-time coordinates
+          </p>
         </div>
 
         {/* Statistics Bar */}
@@ -489,7 +466,7 @@ const MapPage = () => {
         </div>
 
         <MapContainer
-          center={[39.8283, -98.5795]}
+          center={[37.5, -98.5795]}
           zoom={4}
           minZoom={4}
           maxBounds={[
@@ -644,7 +621,7 @@ const MapPage = () => {
               <button
                 onClick={() => {
                   setSelectedState(null);
-                  mapRef.current?.setView([39.8283, -98.5795], 4);
+                  mapRef.current?.setView([37.5, -98.5795], 4);
                 }}
                 className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full"
               >
