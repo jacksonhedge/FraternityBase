@@ -1,0 +1,353 @@
+state,college,division,conference,subdivision,public_private,hbcu
+AL,Alabama A&M University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+AL,Alabama State University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+AL,Auburn University,Division I,Southeastern Conference,I-FBS,Public,No
+AL,Jacksonville State University,Division I,Conference USA,I-FCS,Public,No
+AL,Samford University,Division I,Southern Conference,I-FCS,Private,No
+AL,Troy University,Division I,Sun Belt Conference,I-FBS,Public,No
+AL,University of Alabama,Division I,Southeastern Conference,I-FBS,Public,No
+AL,University of Alabama at Birmingham,Division I,American Athletic Conference,I-FBS,Public,No
+AL,University of South Alabama,Division I,Sun Belt Conference,I-FBS,Public,No
+AK,University of Alaska Anchorage,Division II,Great Northwest Athletic Conference,II,Public,No
+AK,University of Alaska Fairbanks,Division II,Great Northwest Athletic Conference,II,Public,No
+AZ,Arizona State University,Division I,Big 12 Conference,I-FBS,Public,No
+AZ,Grand Canyon University,Division I,Western Athletic Conference,I,Private,No
+AZ,Northern Arizona University,Division I,Big Sky Conference,I-FCS,Public,No
+AZ,University of Arizona,Division I,Big 12 Conference,I-FBS,Public,No
+AR,Arkansas State University,Division I,Sun Belt Conference,I-FBS,Public,No
+AR,University of Arkansas,Division I,Southeastern Conference,I-FBS,Public,No
+AR,University of Arkansas at Little Rock,Division I,Ohio Valley Conference,I,Public,No
+AR,University of Arkansas at Pine Bluff,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+AR,University of Central Arkansas,Division I,ASUN Conference,I-FCS,Public,No
+CA,California Baptist University,Division I,Western Athletic Conference,I,Private,No
+CA,California Polytechnic State University,Division I,Big West Conference,I-FCS,Public,No
+CA,California State University Bakersfield,Division I,Big West Conference,I,Public,No
+CA,California State University Fresno,Division I,Mountain West Conference,I-FBS,Public,No
+CA,California State University Fullerton,Division I,Big West Conference,I,Public,No
+CA,California State University Long Beach,Division I,Big West Conference,I,Public,No
+CA,California State University Northridge,Division I,Big West Conference,I,Public,No
+CA,California State University Sacramento,Division I,Big Sky Conference,I-FCS,Public,No
+CA,Loyola Marymount University,Division I,West Coast Conference,I,Private,No
+CA,Pepperdine University,Division I,West Coast Conference,I,Private,No
+CA,Saint Mary's College of California,Division I,West Coast Conference,I,Private,No
+CA,San Diego State University,Division I,Mountain West Conference,I-FBS,Public,No
+CA,San Jose State University,Division I,Mountain West Conference,I-FBS,Public,No
+CA,Santa Clara University,Division I,West Coast Conference,I,Private,No
+CA,Stanford University,Division I,Atlantic Coast Conference,I-FBS,Private,No
+CA,University of California Berkeley,Division I,Atlantic Coast Conference,I-FBS,Public,No
+CA,University of California Davis,Division I,Big West Conference,I-FCS,Public,No
+CA,University of California Irvine,Division I,Big West Conference,I,Public,No
+CA,University of California Los Angeles,Division I,Big Ten Conference,I-FBS,Public,No
+CA,University of California Riverside,Division I,Big West Conference,I,Public,No
+CA,University of California San Diego,Division I,Big West Conference,I,Public,No
+CA,University of California Santa Barbara,Division I,Big West Conference,I,Public,No
+CA,University of San Diego,Division I,West Coast Conference,I-FCS,Private,No
+CA,University of San Francisco,Division I,West Coast Conference,I,Private,No
+CA,University of Southern California,Division I,Big Ten Conference,I-FBS,Private,No
+CA,University of the Pacific,Division I,West Coast Conference,I,Private,No
+CO,Colorado State University,Division I,Mountain West Conference,I-FBS,Public,No
+CO,United States Air Force Academy,Division I,Mountain West Conference,I-FBS,Public,No
+CO,University of Colorado Boulder,Division I,Big 12 Conference,I-FBS,Public,No
+CO,University of Denver,Division I,Summit League,I,Private,No
+CO,University of Northern Colorado,Division I,Big Sky Conference,I-FCS,Public,No
+CT,Central Connecticut State University,Division I,Northeast Conference,I-FCS,Public,No
+CT,Fairfield University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+CT,Quinnipiac University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+CT,Sacred Heart University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+CT,University of Connecticut,Division I,Big East Conference,I-FBS,Public,No
+CT,Yale University,Division I,Ivy League,I-FCS,Private,No
+DE,Delaware State University,Division I,Mid-Eastern Athletic Conference,I-FCS,Public,Yes
+DE,University of Delaware,Division I,Coastal Athletic Association,I-FCS,Public,No
+DC,American University,Division I,Patriot League,I,Private,No
+DC,Georgetown University,Division I,Big East Conference,I,Private,No
+DC,Howard University,Division I,Mid-Eastern Athletic Conference,I-FCS,Private,Yes
+FL,Bethune-Cookman University,Division I,Southwestern Athletic Conference,I-FCS,Private,Yes
+FL,Florida A&M University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+FL,Florida Atlantic University,Division I,American Athletic Conference,I-FBS,Public,No
+FL,Florida Gulf Coast University,Division I,ASUN Conference,I,Public,No
+FL,Florida International University,Division I,Conference USA,I-FBS,Public,No
+FL,Florida State University,Division I,Atlantic Coast Conference,I-FBS,Public,No
+FL,Jacksonville University,Division I,ASUN Conference,I,Private,No
+FL,Stetson University,Division I,ASUN Conference,I,Private,No
+FL,University of Central Florida,Division I,Big 12 Conference,I-FBS,Public,No
+FL,University of Florida,Division I,Southeastern Conference,I-FBS,Public,No
+FL,University of Miami,Division I,Atlantic Coast Conference,I-FBS,Private,No
+FL,University of North Florida,Division I,ASUN Conference,I,Public,No
+FL,University of South Florida,Division I,American Athletic Conference,I-FBS,Public,No
+GA,Georgia Institute of Technology,Division I,Atlantic Coast Conference,I-FBS,Public,No
+GA,Georgia Southern University,Division I,Sun Belt Conference,I-FBS,Public,No
+GA,Georgia State University,Division I,Sun Belt Conference,I-FBS,Public,No
+GA,Kennesaw State University,Division I,Conference USA,I-FCS,Public,No
+GA,Mercer University,Division I,Southern Conference,I-FCS,Private,No
+GA,Savannah State University,Division I,Independent,I-FCS,Public,Yes
+GA,University of Georgia,Division I,Southeastern Conference,I-FBS,Public,No
+HI,University of Hawaii at Manoa,Division I,Mountain West Conference,I-FBS,Public,No
+ID,Boise State University,Division I,Mountain West Conference,I-FBS,Public,No
+ID,Idaho State University,Division I,Big Sky Conference,I-FCS,Public,No
+IL,Bradley University,Division I,Missouri Valley Conference,I,Private,No
+IL,Chicago State University,Division I,Northeast Conference,I,Public,No
+IL,DePaul University,Division I,Big East Conference,I,Private,No
+IL,Eastern Illinois University,Division I,Ohio Valley Conference,I-FCS,Public,No
+IL,Illinois State University,Division I,Missouri Valley Conference,I-FCS,Public,No
+IL,Loyola University Chicago,Division I,Atlantic 10 Conference,I,Private,No
+IL,Northern Illinois University,Division I,Mid-American Conference,I-FBS,Public,No
+IL,Northwestern University,Division I,Big Ten Conference,I-FBS,Private,No
+IL,Southern Illinois University Carbondale,Division I,Missouri Valley Conference,I-FCS,Public,No
+IL,Southern Illinois University Edwardsville,Division I,Ohio Valley Conference,I,Public,No
+IL,University of Illinois Chicago,Division I,Missouri Valley Conference,I,Public,No
+IL,University of Illinois Urbana-Champaign,Division I,Big Ten Conference,I-FBS,Public,No
+IL,Western Illinois University,Division I,Ohio Valley Conference,I-FCS,Public,No
+IN,Ball State University,Division I,Mid-American Conference,I-FBS,Public,No
+IN,Butler University,Division I,Big East Conference,I,Private,No
+IN,Indiana State University,Division I,Missouri Valley Conference,I-FCS,Public,No
+IN,Indiana University Bloomington,Division I,Big Ten Conference,I-FBS,Public,No
+IN,Indiana University Indianapolis,Division I,Horizon League,I,Public,No
+IN,Purdue University,Division I,Big Ten Conference,I-FBS,Public,No
+IN,University of Evansville,Division I,Missouri Valley Conference,I,Private,No
+IN,University of Notre Dame,Division I,Atlantic Coast Conference,I-FBS,Private,No
+IN,Valparaiso University,Division I,Missouri Valley Conference,I,Private,No
+IA,Drake University,Division I,Missouri Valley Conference,I-FCS,Private,No
+IA,Iowa State University,Division I,Big 12 Conference,I-FBS,Public,No
+IA,University of Iowa,Division I,Big Ten Conference,I-FBS,Public,No
+IA,University of Northern Iowa,Division I,Missouri Valley Conference,I-FCS,Public,No
+KS,Kansas State University,Division I,Big 12 Conference,I-FBS,Public,No
+KS,University of Kansas,Division I,Big 12 Conference,I-FBS,Public,No
+KS,Wichita State University,Division I,American Athletic Conference,I,Public,No
+KY,Bellarmine University,Division I,ASUN Conference,I,Private,No
+KY,Eastern Kentucky University,Division I,ASUN Conference,I-FCS,Public,No
+KY,Morehead State University,Division I,Pioneer Football League,I-FCS,Public,No
+KY,Murray State University,Division I,Missouri Valley Conference,I-FCS,Public,No
+KY,Northern Kentucky University,Division I,Horizon League,I,Public,No
+KY,University of Kentucky,Division I,Southeastern Conference,I-FBS,Public,No
+KY,University of Louisville,Division I,Atlantic Coast Conference,I-FBS,Public,No
+KY,Western Kentucky University,Division I,Conference USA,I-FBS,Public,No
+LA,Grambling State University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+LA,Louisiana State University,Division I,Southeastern Conference,I-FBS,Public,No
+LA,Louisiana Tech University,Division I,Conference USA,I-FBS,Public,No
+LA,McNeese State University,Division I,Southland Conference,I-FCS,Public,No
+LA,Nicholls State University,Division I,Southland Conference,I-FCS,Public,No
+LA,Northwestern State University,Division I,Southland Conference,I-FCS,Public,No
+LA,Southeastern Louisiana University,Division I,Southland Conference,I-FCS,Public,No
+LA,Southern University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+LA,Tulane University,Division I,American Athletic Conference,I-FBS,Private,No
+LA,University of Louisiana at Lafayette,Division I,Sun Belt Conference,I-FBS,Public,No
+LA,University of Louisiana at Monroe,Division I,Sun Belt Conference,I-FBS,Public,No
+LA,University of New Orleans,Division I,Southland Conference,I,Public,No
+ME,University of Maine,Division I,America East Conference,I-FCS,Public,No
+MD,Coppin State University,Division I,Mid-Eastern Athletic Conference,I,Public,Yes
+MD,Loyola University Maryland,Division I,Patriot League,I,Private,No
+MD,Morgan State University,Division I,Mid-Eastern Athletic Conference,I-FCS,Public,Yes
+MD,Mount St. Mary's University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+MD,Towson University,Division I,Coastal Athletic Association,I-FCS,Public,No
+MD,United States Naval Academy,Division I,American Athletic Conference,I-FBS,Public,No
+MD,University of Maryland Baltimore County,Division I,America East Conference,I,Public,No
+MD,University of Maryland College Park,Division I,Big Ten Conference,I-FBS,Public,No
+MA,Boston College,Division I,Atlantic Coast Conference,I-FBS,Private,No
+MA,Boston University,Division I,Patriot League,I,Private,No
+MA,College of the Holy Cross,Division I,Patriot League,I-FCS,Private,No
+MA,Harvard University,Division I,Ivy League,I-FCS,Private,No
+MA,Merrimack College,Division I,Metro Atlantic Athletic Conference,I,Private,No
+MA,Northeastern University,Division I,Coastal Athletic Association,I,Private,No
+MA,University of Massachusetts Amherst,Division I,Mid-American Conference,I-FBS,Public,No
+MA,University of Massachusetts Lowell,Division I,America East Conference,I,Public,No
+MI,Central Michigan University,Division I,Mid-American Conference,I-FBS,Public,No
+MI,Detroit Mercy,Division I,Horizon League,I,Private,No
+MI,Eastern Michigan University,Division I,Mid-American Conference,I-FBS,Public,No
+MI,Michigan State University,Division I,Big Ten Conference,I-FBS,Public,No
+MI,Oakland University,Division I,Horizon League,I,Public,No
+MI,University of Michigan,Division I,Big Ten Conference,I-FBS,Public,No
+MI,Wayne State University,Division II,Great Lakes Intercollegiate Athletic Conference,II,Public,No
+MI,Western Michigan University,Division I,Mid-American Conference,I-FBS,Public,No
+MN,University of Minnesota Twin Cities,Division I,Big Ten Conference,I-FBS,Public,No
+MS,Alcorn State University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+MS,Jackson State University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+MS,Mississippi State University,Division I,Southeastern Conference,I-FBS,Public,No
+MS,Mississippi Valley State University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+MS,University of Mississippi,Division I,Southeastern Conference,I-FBS,Public,No
+MS,University of Southern Mississippi,Division I,Sun Belt Conference,I-FBS,Public,No
+MO,Missouri State University,Division I,Missouri Valley Conference,I-FCS,Public,No
+MO,Saint Louis University,Division I,Atlantic 10 Conference,I,Private,No
+MO,Southeast Missouri State University,Division I,Ohio Valley Conference,I-FCS,Public,No
+MO,University of Missouri,Division I,Southeastern Conference,I-FBS,Public,No
+MO,University of Missouri Kansas City,Division I,Summit League,I,Public,No
+MT,Montana State University,Division I,Big Sky Conference,I-FCS,Public,No
+MT,University of Montana,Division I,Big Sky Conference,I-FCS,Public,No
+NE,Creighton University,Division I,Big East Conference,I,Private,No
+NE,University of Nebraska Lincoln,Division I,Big Ten Conference,I-FBS,Public,No
+NE,University of Nebraska Omaha,Division I,Summit League,I,Public,No
+NV,University of Nevada Las Vegas,Division I,Mountain West Conference,I-FBS,Public,No
+NV,University of Nevada Reno,Division I,Mountain West Conference,I-FBS,Public,No
+NH,Dartmouth College,Division I,Ivy League,I-FCS,Private,No
+NH,University of New Hampshire,Division I,Coastal Athletic Association,I-FCS,Public,No
+NJ,Fairleigh Dickinson University,Division I,Northeast Conference,I,Private,No
+NJ,Monmouth University,Division I,Coastal Athletic Association,I,Private,No
+NJ,New Jersey Institute of Technology,Division I,America East Conference,I,Public,No
+NJ,Princeton University,Division I,Ivy League,I-FCS,Private,No
+NJ,Rider University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NJ,Rutgers University,Division I,Big Ten Conference,I-FBS,Public,No
+NJ,Saint Peter's University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NJ,Seton Hall University,Division I,Big East Conference,I,Private,No
+NM,New Mexico State University,Division I,Conference USA,I-FBS,Public,No
+NM,University of New Mexico,Division I,Mountain West Conference,I-FBS,Public,No
+NY,Binghamton University,Division I,America East Conference,I,Public,No
+NY,Canisius University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NY,Colgate University,Division I,Patriot League,I-FCS,Private,No
+NY,Columbia University,Division I,Ivy League,I-FCS,Private,No
+NY,Cornell University,Division I,Ivy League,I-FCS,Private,No
+NY,Fordham University,Division I,Atlantic 10 Conference,I-FCS,Private,No
+NY,Hofstra University,Division I,Coastal Athletic Association,I,Private,No
+NY,Iona University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NY,Long Island University,Division I,Northeast Conference,I-FCS,Private,No
+NY,Manhattan College,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NY,Marist College,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NY,Niagara University,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NY,Saint Bonaventure University,Division I,Atlantic 10 Conference,I,Private,No
+NY,Saint Francis College,Division I,Northeast Conference,I,Private,No
+NY,Saint John's University,Division I,Big East Conference,I,Private,No
+NY,Siena College,Division I,Metro Atlantic Athletic Conference,I,Private,No
+NY,St. Francis Brooklyn,Division I,Northeast Conference,I,Private,No
+NY,Stony Brook University,Division I,Coastal Athletic Association,I-FCS,Public,No
+NY,Syracuse University,Division I,Atlantic Coast Conference,I-FBS,Private,No
+NY,United States Military Academy,Division I,American Athletic Conference,I-FBS,Public,No
+NY,University at Albany SUNY,Division I,Coastal Athletic Association,I-FCS,Public,No
+NY,University at Buffalo SUNY,Division I,Mid-American Conference,I-FBS,Public,No
+NY,Wagner College,Division I,Northeast Conference,I-FCS,Private,No
+NC,Appalachian State University,Division I,Sun Belt Conference,I-FBS,Public,No
+NC,Campbell University,Division I,Coastal Athletic Association,I-FCS,Private,No
+NC,Davidson College,Division I,Atlantic 10 Conference,I-FCS,Private,No
+NC,Duke University,Division I,Atlantic Coast Conference,I-FBS,Private,No
+NC,East Carolina University,Division I,American Athletic Conference,I-FBS,Public,No
+NC,Elon University,Division I,Coastal Athletic Association,I-FCS,Private,No
+NC,Gardner-Webb University,Division I,Big South Conference,I-FCS,Private,No
+NC,High Point University,Division I,Big South Conference,I,Private,No
+NC,North Carolina A&T State University,Division I,Colonial Athletic Association,I-FCS,Public,Yes
+NC,North Carolina Central University,Division I,Mid-Eastern Athletic Conference,I-FCS,Public,Yes
+NC,North Carolina State University,Division I,Atlantic Coast Conference,I-FBS,Public,No
+NC,University of North Carolina at Chapel Hill,Division I,Atlantic Coast Conference,I-FBS,Public,No
+NC,University of North Carolina at Charlotte,Division I,American Athletic Conference,I-FBS,Public,No
+NC,University of North Carolina at Greensboro,Division I,Southern Conference,I,Public,No
+NC,University of North Carolina at Wilmington,Division I,Coastal Athletic Association,I,Public,No
+NC,Wake Forest University,Division I,Atlantic Coast Conference,I-FBS,Private,No
+NC,Western Carolina University,Division I,Southern Conference,I-FCS,Public,No
+ND,North Dakota State University,Division I,Summit League,I-FCS,Public,No
+ND,University of North Dakota,Division I,Summit League,I-FCS,Public,No
+OH,Bowling Green State University,Division I,Mid-American Conference,I-FBS,Public,No
+OH,Cleveland State University,Division I,Horizon League,I,Public,No
+OH,Kent State University,Division I,Mid-American Conference,I-FBS,Public,No
+OH,Miami University,Division I,Mid-American Conference,I-FBS,Public,No
+OH,Ohio State University,Division I,Big Ten Conference,I-FBS,Public,No
+OH,Ohio University,Division I,Mid-American Conference,I-FBS,Public,No
+OH,University of Akron,Division I,Mid-American Conference,I-FBS,Public,No
+OH,University of Cincinnati,Division I,Big 12 Conference,I-FBS,Public,No
+OH,University of Dayton,Division I,Atlantic 10 Conference,I-FCS,Private,No
+OH,University of Toledo,Division I,Mid-American Conference,I-FBS,Public,No
+OH,Wright State University,Division I,Horizon League,I,Public,No
+OH,Xavier University,Division I,Big East Conference,I,Private,No
+OH,Youngstown State University,Division I,Missouri Valley Conference,I-FCS,Public,No
+OK,Oklahoma State University,Division I,Big 12 Conference,I-FBS,Public,No
+OK,Oral Roberts University,Division I,Summit League,I,Private,No
+OK,University of Oklahoma,Division I,Southeastern Conference,I-FBS,Public,No
+OK,University of Tulsa,Division I,American Athletic Conference,I-FBS,Private,No
+OR,Oregon State University,Division I,West Coast Conference,I-FBS,Public,No
+OR,Portland State University,Division I,Big Sky Conference,I-FCS,Public,No
+OR,University of Oregon,Division I,Big Ten Conference,I-FBS,Public,No
+OR,University of Portland,Division I,West Coast Conference,I,Private,No
+PA,Bucknell University,Division I,Patriot League,I-FCS,Private,No
+PA,Drexel University,Division I,Coastal Athletic Association,I,Private,No
+PA,Duquesne University,Division I,Atlantic 10 Conference,I-FCS,Private,No
+PA,La Salle University,Division I,Atlantic 10 Conference,I,Private,No
+PA,Lafayette College,Division I,Patriot League,I-FCS,Private,No
+PA,Lehigh University,Division I,Patriot League,I-FCS,Private,No
+PA,Pennsylvania State University,Division I,Big Ten Conference,I-FBS,Public,No
+PA,Robert Morris University,Division I,Horizon League,I-FCS,Private,No
+PA,Saint Francis University,Division I,Northeast Conference,I-FCS,Private,No
+PA,Saint Joseph's University,Division I,Atlantic 10 Conference,I,Private,No
+PA,Temple University,Division I,American Athletic Conference,I-FBS,Public,No
+PA,University of Pennsylvania,Division I,Ivy League,I-FCS,Private,No
+PA,University of Pittsburgh,Division I,Atlantic Coast Conference,I-FBS,Public,No
+PA,Villanova University,Division I,Big East Conference,I-FCS,Private,No
+RI,Brown University,Division I,Ivy League,I-FCS,Private,No
+RI,Bryant University,Division I,America East Conference,I-FCS,Private,No
+RI,Providence College,Division I,Big East Conference,I,Private,No
+RI,University of Rhode Island,Division I,Atlantic 10 Conference,I-FCS,Public,No
+SC,Charleston Southern University,Division I,Big South Conference,I-FCS,Private,No
+SC,Clemson University,Division I,Atlantic Coast Conference,I-FBS,Public,No
+SC,Coastal Carolina University,Division I,Sun Belt Conference,I-FBS,Public,No
+SC,College of Charleston,Division I,Coastal Athletic Association,I,Public,No
+SC,Furman University,Division I,Southern Conference,I-FCS,Private,No
+SC,Presbyterian College,Division I,Pioneer Football League,I-FCS,Private,No
+SC,South Carolina State University,Division I,Mid-Eastern Athletic Conference,I-FCS,Public,Yes
+SC,The Citadel,Division I,Southern Conference,I-FCS,Public,No
+SC,University of South Carolina,Division I,Southeastern Conference,I-FBS,Public,No
+SC,Winthrop University,Division I,Big South Conference,I,Public,No
+SC,Wofford College,Division I,Southern Conference,I-FCS,Private,No
+SD,South Dakota State University,Division I,Summit League,I-FCS,Public,No
+SD,University of South Dakota,Division I,Summit League,I-FCS,Public,No
+TN,Austin Peay State University,Division I,ASUN Conference,I-FCS,Public,No
+TN,Belmont University,Division I,Missouri Valley Conference,I,Private,No
+TN,East Tennessee State University,Division I,Southern Conference,I-FCS,Public,No
+TN,Lipscomb University,Division I,ASUN Conference,I,Private,No
+TN,Middle Tennessee State University,Division I,Conference USA,I-FBS,Public,No
+TN,Tennessee State University,Division I,Ohio Valley Conference,I-FCS,Public,Yes
+TN,Tennessee Technological University,Division I,Ohio Valley Conference,I-FCS,Public,No
+TN,University of Memphis,Division I,American Athletic Conference,I-FBS,Public,No
+TN,University of Tennessee Chattanooga,Division I,Southern Conference,I-FCS,Public,No
+TN,University of Tennessee Knoxville,Division I,Southeastern Conference,I-FBS,Public,No
+TN,University of Tennessee Martin,Division I,Ohio Valley Conference,I-FCS,Public,No
+TN,Vanderbilt University,Division I,Southeastern Conference,I-FBS,Private,No
+TX,Abilene Christian University,Division I,Western Athletic Conference,I-FCS,Private,No
+TX,Baylor University,Division I,Big 12 Conference,I-FBS,Private,No
+TX,Houston Christian University,Division I,Southland Conference,I-FCS,Private,No
+TX,Lamar University,Division I,Southland Conference,I-FCS,Public,No
+TX,Prairie View A&M University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+TX,Rice University,Division I,American Athletic Conference,I-FBS,Private,No
+TX,Sam Houston State University,Division I,Conference USA,I-FCS,Public,No
+TX,Southern Methodist University,Division I,Atlantic Coast Conference,I-FBS,Private,No
+TX,Stephen F. Austin State University,Division I,Western Athletic Conference,I-FCS,Public,No
+TX,Texas A&M University,Division I,Southeastern Conference,I-FBS,Public,No
+TX,Texas A&M University-Corpus Christi,Division I,Southland Conference,I,Public,No
+TX,Texas Christian University,Division I,Big 12 Conference,I-FBS,Private,No
+TX,Texas Southern University,Division I,Southwestern Athletic Conference,I-FCS,Public,Yes
+TX,Texas State University,Division I,Sun Belt Conference,I-FBS,Public,No
+TX,Texas Tech University,Division I,Big 12 Conference,I-FBS,Public,No
+TX,University of Houston,Division I,Big 12 Conference,I-FBS,Public,No
+TX,University of North Texas,Division I,American Athletic Conference,I-FBS,Public,No
+TX,University of Texas at Arlington,Division I,Western Athletic Conference,I,Public,No
+TX,University of Texas at Austin,Division I,Southeastern Conference,I-FBS,Public,No
+TX,University of Texas at El Paso,Division I,Conference USA,I-FBS,Public,No
+TX,University of Texas at San Antonio,Division I,American Athletic Conference,I-FBS,Public,No
+TX,University of Texas Rio Grande Valley,Division I,Western Athletic Conference,I,Public,No
+UT,Brigham Young University,Division I,Big 12 Conference,I-FBS,Private,No
+UT,Southern Utah University,Division I,Western Athletic Conference,I-FCS,Public,No
+UT,Utah State University,Division I,Mountain West Conference,I-FBS,Public,No
+UT,Utah Tech University,Division I,Western Athletic Conference,I-FCS,Public,No
+UT,Utah Valley University,Division I,Western Athletic Conference,I,Public,No
+UT,University of Utah,Division I,Big 12 Conference,I-FBS,Public,No
+UT,Weber State University,Division I,Big Sky Conference,I-FCS,Public,No
+VT,University of Vermont,Division I,America East Conference,I,Public,No
+VA,College of William & Mary,Division I,Coastal Athletic Association,I-FCS,Public,No
+VA,George Mason University,Division I,Atlantic 10 Conference,I,Public,No
+VA,Hampton University,Division I,Coastal Athletic Association,I-FCS,Private,Yes
+VA,James Madison University,Division I,Sun Belt Conference,I-FBS,Public,No
+VA,Liberty University,Division I,Conference USA,I-FBS,Private,No
+VA,Longwood University,Division I,Big South Conference,I,Public,No
+VA,Norfolk State University,Division I,Mid-Eastern Athletic Conference,I-FCS,Public,Yes
+VA,Old Dominion University,Division I,Sun Belt Conference,I-FBS,Public,No
+VA,Radford University,Division I,Big South Conference,I,Public,No
+VA,University of Richmond,Division I,Atlantic 10 Conference,I-FCS,Private,No
+VA,University of Virginia,Division I,Atlantic Coast Conference,I-FBS,Public,No
+VA,Virginia Commonwealth University,Division I,Atlantic 10 Conference,I,Public,No
+VA,Virginia Military Institute,Division I,Southern Conference,I-FCS,Public,No
+VA,Virginia Polytechnic Institute and State University,Division I,Atlantic Coast Conference,I-FBS,Public,No
+WA,Eastern Washington University,Division I,Big Sky Conference,I-FCS,Public,No
+WA,Gonzaga University,Division I,West Coast Conference,I,Private,No
+WA,Seattle University,Division I,Western Athletic Conference,I,Private,No
+WA,University of Washington,Division I,Big Ten Conference,I-FBS,Public,No
+WA,Washington State University,Division I,West Coast Conference,I-FBS,Public,No
+WV,Marshall University,Division I,Sun Belt Conference,I-FBS,Public,No
+WV,West Virginia University,Division I,Big 12 Conference,I-FBS,Public,No
+WI,Marquette University,Division I,Big East Conference,I,Private,No
+WI,University of Wisconsin Green Bay,Division I,Horizon League,I,Public,No
+WI,University of Wisconsin Madison,Division I,Big Ten Conference,I-FBS,Public,No
+WI,University of Wisconsin Milwaukee,Division I,Horizon League,I,Public,No
+WY,University of Wyoming,Division I,Mountain West Conference,I-FBS,Public,No
