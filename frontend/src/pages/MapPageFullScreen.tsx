@@ -139,7 +139,8 @@ const MapPageFullScreen = () => {
     navigate('/login');
   };
 
-  const navigation = [
+  // Database section - full catalog
+  const databaseNavigation = [
     { name: 'Dashboard', href: '/app/dashboard', icon: Home },
     { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW' },
     { name: 'Colleges', href: '/app/colleges', icon: Building2 },
@@ -148,10 +149,14 @@ const MapPageFullScreen = () => {
     { name: 'Team', href: '/app/team', icon: UsersIcon },
   ];
 
-  const myConnections = [
-    { name: 'Unlocked Chapters', href: '/app/unlocked-chapters', icon: Unlock, count: 0 },
-    { name: 'Unlocked Members', href: '/app/unlocked-members', icon: UsersIcon, count: 0 },
-    { name: 'Unlocked Schools', href: '/app/unlocked-schools', icon: GraduationCap, count: 0 },
+  // My Section - company's unlocked data
+  const mySection = [
+    { name: 'My Dashboard', href: '/app/my-dashboard', icon: Home, count: 0 },
+    { name: 'My Map', href: '/app/my-map', icon: MapPin, count: 0 },
+    { name: 'My Colleges', href: '/app/my-colleges', icon: Building2, count: 0 },
+    { name: 'My Chapters', href: '/app/my-chapters', icon: GraduationCap, count: 0 },
+    { name: 'My Fraternities', href: '/app/my-fraternities', icon: UsersIcon, count: 0 },
+    { name: 'My Team', href: '/app/my-team', icon: UsersIcon, count: 0 },
   ];
 
   // Load US states GeoJSON
@@ -635,44 +640,54 @@ const MapPageFullScreen = () => {
 
             {/* Navigation Links */}
             <nav className="p-4 space-y-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                      isActive
-                        ? isDarkMode
-                          ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/50'
-                          : 'bg-primary-600 text-white shadow-lg shadow-primary-500/50'
-                        : isDarkMode
-                          ? 'text-cyan-300 hover:bg-cyan-900/30 hover:text-cyan-400'
-                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                    }`}
-                    onClick={() => setShowNavMenu(false)}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span className="font-medium">{item.name}</span>
-                    {item.badge && (
-                      <span className="ml-auto px-2 py-0.5 text-xs font-semibold bg-green-500 text-white rounded-full">
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
+              {/* Database Section */}
+              <div>
+                <h3 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider ${
+                  isDarkMode ? 'text-cyan-400/70' : 'text-gray-500'
+                }`}>
+                  Database
+                </h3>
+                <div className="space-y-1 mt-2">
+                  {databaseNavigation.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.href;
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                          isActive
+                            ? isDarkMode
+                              ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/50'
+                              : 'bg-primary-600 text-white shadow-lg shadow-primary-500/50'
+                            : isDarkMode
+                              ? 'text-cyan-300 hover:bg-cyan-900/30 hover:text-cyan-400'
+                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                        }`}
+                        onClick={() => setShowNavMenu(false)}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="font-medium">{item.name}</span>
+                        {item.badge && (
+                          <span className="ml-auto px-2 py-0.5 text-xs font-semibold bg-green-500 text-white rounded-full">
+                            {item.badge}
+                          </span>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
 
-              {/* My Connections Section */}
+              {/* My Section */}
               <div className="pt-4">
                 <h3 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider ${
                   isDarkMode ? 'text-cyan-400/70' : 'text-gray-500'
                 }`}>
-                  My Connections
+                  My Section
                 </h3>
                 <div className="space-y-1 mt-2">
-                  {myConnections.map((item) => {
+                  {mySection.map((item) => {
                     const Icon = item.icon;
                     const isActive = location.pathname === item.href;
                     return (
