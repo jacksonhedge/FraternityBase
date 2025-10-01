@@ -45,7 +45,7 @@ import {
 
 const AdminPageV3 = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'fraternities' | 'colleges' | 'chapters' | 'contacts'>('fraternities');
+  const [activeTab, setActiveTab] = useState<'fraternities' | 'colleges' | 'chapters' | 'contacts' | 'waitlist'>('waitlist');
   const [uploadMode, setUploadMode] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -116,6 +116,17 @@ const AdminPageV3 = () => {
     linkedIn: ''
   });
 
+  // Waitlist state
+  const [waitlistData, setWaitlistData] = useState({
+    entries: [],
+    stats: {
+      total: 0,
+      today: 0,
+      thisWeek: 0
+    }
+  });
+  const [waitlistLoading, setWaitlistLoading] = useState(false);
+
   // Mock data
   const fraternities = [
     { id: '1', name: 'Sigma Chi' },
@@ -172,6 +183,7 @@ const AdminPageV3 = () => {
   ];
 
   const tabs = [
+    { id: 'waitlist', label: 'Waitlist', icon: Mail, color: 'from-green-500 to-emerald-500' },
     { id: 'fraternities', label: 'Fraternities', icon: Building2, color: 'from-blue-500 to-cyan-500' },
     { id: 'colleges', label: 'Colleges', icon: GraduationCap, color: 'from-purple-500 to-pink-500' },
     { id: 'chapters', label: 'Chapters', icon: Users, color: 'from-emerald-500 to-green-500' },
@@ -283,6 +295,32 @@ const AdminPageV3 = () => {
     });
     setIsLoading(false);
   };
+
+  // Waitlist data fetching
+  const fetchWaitlistData = async () => {
+    setWaitlistLoading(true);
+    try {
+      const response = await fetch('http://localhost:3001/api/admin/waitlist');
+      const data = await response.json();
+
+      if (data.success) {
+        setWaitlistData(data.data);
+      } else {
+        console.error('Failed to fetch waitlist data:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching waitlist data:', error);
+    } finally {
+      setWaitlistLoading(false);
+    }
+  };
+
+  // Load waitlist data when tab is selected
+  useEffect(() => {
+    if (activeTab === 'waitlist') {
+      fetchWaitlistData();
+    }
+  }, [activeTab]);
 
   // CSV handlers
   const handleFraternityCSVUpload = (data: any[]) => {
@@ -512,6 +550,7 @@ const AdminPageV3 = () => {
 
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 animate-fade-in">
+                    {activeTab === 'waitlist' && 'Waitlist Management'}
                     {activeTab === 'fraternities' && 'Fraternity Management'}
                     {activeTab === 'colleges' && 'College Management'}
                     {activeTab === 'chapters' && 'Chapter Management'}
@@ -563,6 +602,113 @@ const AdminPageV3 = () => {
             </div>
 
             {/* Fraternity Form/Upload */}
+            {activeTab === 'waitlist' && (
+              <div className="animate-fade-in-up">
+                {/* Waitlist Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <Users className="w-6 h-6 text-green-600" />
+                      </div>
+                      <span className="text-2xl font-bold text-gray-900">{waitlistData.stats.total}</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-700">Total Signups</h3>
+                    <p className="text-sm text-gray-500">All time waitlist entries</p>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <Calendar className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <span className="text-2xl font-bold text-gray-900">{waitlistData.stats.today}</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-700">Today</h3>
+                    <p className="text-sm text-gray-500">New signups today</p>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-2 bg-purple-100 rounded-lg">
+                        <TrendingUp className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <span className="text-2xl font-bold text-gray-900">{waitlistData.stats.thisWeek}</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-700">This Week</h3>
+                    <p className="text-sm text-gray-500">Past 7 days</p>
+                  </div>
+                </div>
+
+                {/* Waitlist Table */}
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                  <div className="p-6 border-b border-gray-100">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">Waitlist Entries</h3>
+                      <button
+                        onClick={fetchWaitlistData}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                      >
+                        <Activity className="w-4 h-4" />
+                        Refresh
+                      </button>
+                    </div>
+                  </div>
+
+                  {waitlistLoading ? (
+                    <div className="p-8 text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mx-auto"></div>
+                      <p className="text-gray-500 mt-2">Loading waitlist data...</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="text-left p-4 font-semibold text-gray-700">Email</th>
+                            <th className="text-left p-4 font-semibold text-gray-700">Source</th>
+                            <th className="text-left p-4 font-semibold text-gray-700">Signup Date</th>
+                            <th className="text-left p-4 font-semibold text-gray-700">Referrer</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {waitlistData.entries.length === 0 ? (
+                            <tr>
+                              <td colSpan={4} className="text-center p-8 text-gray-500">
+                                No waitlist entries yet. Start marketing to get your first signups!
+                              </td>
+                            </tr>
+                          ) : (
+                            waitlistData.entries.map((entry: any) => (
+                              <tr key={entry.id} className="border-t border-gray-100 hover:bg-gray-50">
+                                <td className="p-4">
+                                  <div className="flex items-center gap-2">
+                                    <Mail className="w-4 h-4 text-gray-400" />
+                                    <span className="font-medium text-gray-900">{entry.email}</span>
+                                  </div>
+                                </td>
+                                <td className="p-4">
+                                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                    {entry.source || 'landing'}
+                                  </span>
+                                </td>
+                                <td className="p-4 text-gray-600">
+                                  {new Date(entry.signup_date).toLocaleDateString()}
+                                </td>
+                                <td className="p-4 text-gray-500 text-sm truncate max-w-xs">
+                                  {entry.referrer || 'Direct'}
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {activeTab === 'fraternities' && (
               <>
                 {uploadMode ? (

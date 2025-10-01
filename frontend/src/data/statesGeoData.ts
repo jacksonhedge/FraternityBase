@@ -110,181 +110,181 @@ export const STATE_BOUNDS = {
 // College locations with precise coordinates
 export const COLLEGE_LOCATIONS = {
   // Pennsylvania
-  "Penn State": { lat: 40.7982, lng: -77.8599, state: "PA", fraternities: 58, sororities: 32, totalMembers: 4500 },
-  "University of Pennsylvania": { lat: 39.9522, lng: -75.1932, state: "PA", fraternities: 45, sororities: 28, totalMembers: 3200 },
-  "Temple University": { lat: 39.9808, lng: -75.1548, state: "PA", fraternities: 38, sororities: 25, totalMembers: 2800 },
-  "Carnegie Mellon": { lat: 40.4433, lng: -79.9436, state: "PA", fraternities: 22, sororities: 18, totalMembers: 1800 },
-  "Villanova": { lat: 40.0384, lng: -75.3434, state: "PA", fraternities: 25, sororities: 20, totalMembers: 2000 },
-  "University of Pittsburgh": { lat: 40.4444, lng: -79.9608, state: "PA", fraternities: 42, sororities: 24, totalMembers: 3200 },
+  "Penn State": { lat: 40.7982, lng: -77.8599, state: "PA", fraternities: 58, sororities: 32, totalMembers: 4500, conference: "BIG 10", division: "D1" },
+  "University of Pennsylvania": { lat: 39.9522, lng: -75.1932, state: "PA", fraternities: 45, sororities: 28, totalMembers: 3200, conference: "IVY", division: "D1" },
+  "Temple University": { lat: 39.9808, lng: -75.1548, state: "PA", fraternities: 38, sororities: 25, totalMembers: 2800, conference: "AAC", division: "D1" },
+  "Carnegie Mellon": { lat: 40.4433, lng: -79.9436, state: "PA", fraternities: 22, sororities: 18, totalMembers: 1800, conference: "UAA", division: "D3" },
+  "Villanova": { lat: 40.0384, lng: -75.3434, state: "PA", fraternities: 25, sororities: 20, totalMembers: 2000, conference: "BIG EAST", division: "D1" },
+  "University of Pittsburgh": { lat: 40.4444, lng: -79.9608, state: "PA", fraternities: 42, sororities: 24, totalMembers: 3200, conference: "ACC", division: "D1" },
 
   // New York
-  "Cornell University": { lat: 42.4534, lng: -76.4735, state: "NY", fraternities: 52, sororities: 30, totalMembers: 4200 },
-  "Syracuse University": { lat: 43.0392, lng: -76.1351, state: "NY", fraternities: 48, sororities: 28, totalMembers: 3800 },
-  "Columbia University": { lat: 40.8075, lng: -73.9626, state: "NY", fraternities: 35, sororities: 22, totalMembers: 2500 },
-  "NYU": { lat: 40.7295, lng: -73.9965, state: "NY", fraternities: 32, sororities: 25, totalMembers: 2800 },
+  "Cornell University": { lat: 42.4534, lng: -76.4735, state: "NY", fraternities: 52, sororities: 30, totalMembers: 4200, conference: "IVY", division: "D1" },
+  "Syracuse University": { lat: 43.0392, lng: -76.1351, state: "NY", fraternities: 48, sororities: 28, totalMembers: 3800, conference: "ACC", division: "D1" },
+  "Columbia University": { lat: 40.8075, lng: -73.9626, state: "NY", fraternities: 35, sororities: 22, totalMembers: 2500, conference: "IVY", division: "D1" },
+  "NYU": { lat: 40.7295, lng: -73.9965, state: "NY", fraternities: 32, sororities: 25, totalMembers: 2800, conference: "UAA", division: "D3" },
 
   // California
-  "UCLA": { lat: 34.0689, lng: -118.4452, state: "CA", fraternities: 62, sororities: 35, totalMembers: 5200 },
-  "USC": { lat: 34.0224, lng: -118.2851, state: "CA", fraternities: 58, sororities: 33, totalMembers: 4800 },
-  "Stanford": { lat: 37.4275, lng: -122.1697, state: "CA", fraternities: 38, sororities: 25, totalMembers: 3000 },
-  "UC Berkeley": { lat: 37.8719, lng: -122.2585, state: "CA", fraternities: 55, sororities: 30, totalMembers: 4500 },
-  "UC San Diego": { lat: 32.8801, lng: -117.2340, state: "CA", fraternities: 42, sororities: 28, totalMembers: 3500 },
+  "UCLA": { lat: 34.0689, lng: -118.4452, state: "CA", fraternities: 62, sororities: 35, totalMembers: 5200, conference: "PAC-12", division: "D1" },
+  "USC": { lat: 34.0224, lng: -118.2851, state: "CA", fraternities: 58, sororities: 33, totalMembers: 4800, conference: "PAC-12", division: "D1" },
+  "Stanford": { lat: 37.4275, lng: -122.1697, state: "CA", fraternities: 38, sororities: 25, totalMembers: 3000, conference: "PAC-12", division: "D1" },
+  "UC Berkeley": { lat: 37.8719, lng: -122.2585, state: "CA", fraternities: 55, sororities: 30, totalMembers: 4500, conference: "PAC-12", division: "D1" },
+  "UC San Diego": { lat: 32.8801, lng: -117.2340, state: "CA", fraternities: 42, sororities: 28, totalMembers: 3500, conference: "BIG WEST", division: "D1" },
 
   // Texas
-  "UT Austin": { lat: 30.2849, lng: -97.7341, state: "TX", fraternities: 72, sororities: 38, totalMembers: 5800 },
-  "Texas A&M": { lat: 30.6014, lng: -96.3144, state: "TX", fraternities: 65, sororities: 35, totalMembers: 5200 },
-  "Rice University": { lat: 29.7174, lng: -95.4018, state: "TX", fraternities: 28, sororities: 20, totalMembers: 2200 },
-  "SMU": { lat: 32.8407, lng: -96.7847, state: "TX", fraternities: 45, sororities: 28, totalMembers: 3500 },
+  "UT Austin": { lat: 30.2849, lng: -97.7341, state: "TX", fraternities: 72, sororities: 38, totalMembers: 5800, conference: "SEC", division: "D1" },
+  "Texas A&M": { lat: 30.6014, lng: -96.3144, state: "TX", fraternities: 65, sororities: 35, totalMembers: 5200, conference: "SEC", division: "D1" },
+  "Rice University": { lat: 29.7174, lng: -95.4018, state: "TX", fraternities: 28, sororities: 20, totalMembers: 2200, conference: "AAC", division: "D1" },
+  "SMU": { lat: 32.8407, lng: -96.7847, state: "TX", fraternities: 45, sororities: 28, totalMembers: 3500, conference: "ACC", division: "D1" },
 
   // Florida
-  "University of Florida": { lat: 29.6436, lng: -82.3549, state: "FL", fraternities: 65, sororities: 35, totalMembers: 5000 },
-  "Florida State": { lat: 30.4419, lng: -84.2985, state: "FL", fraternities: 60, sororities: 33, totalMembers: 4800 },
-  "University of Miami": { lat: 25.7216, lng: -80.2793, state: "FL", fraternities: 42, sororities: 25, totalMembers: 3200 },
+  "University of Florida": { lat: 29.6436, lng: -82.3549, state: "FL", fraternities: 65, sororities: 35, totalMembers: 5000, conference: "SEC", division: "D1" },
+  "Florida State": { lat: 30.4419, lng: -84.2985, state: "FL", fraternities: 60, sororities: 33, totalMembers: 4800, conference: "ACC", division: "D1" },
+  "University of Miami": { lat: 25.7216, lng: -80.2793, state: "FL", fraternities: 42, sororities: 25, totalMembers: 3200, conference: "ACC", division: "D1" },
 
   // Illinois
-  "Northwestern": { lat: 42.0565, lng: -87.6753, state: "IL", fraternities: 45, sororities: 28, totalMembers: 3500 },
-  "UIUC": { lat: 40.1020, lng: -88.2272, state: "IL", fraternities: 68, sororities: 36, totalMembers: 5300 },
-  "University of Chicago": { lat: 41.7886, lng: -87.5987, state: "IL", fraternities: 25, sororities: 18, totalMembers: 1800 },
+  "Northwestern": { lat: 42.0565, lng: -87.6753, state: "IL", fraternities: 45, sororities: 28, totalMembers: 3500, conference: "BIG 10", division: "D1" },
+  "UIUC": { lat: 40.1020, lng: -88.2272, state: "IL", fraternities: 68, sororities: 36, totalMembers: 5300, conference: "BIG 10", division: "D1" },
+  "University of Chicago": { lat: 41.7886, lng: -87.5987, state: "IL", fraternities: 25, sororities: 18, totalMembers: 1800, conference: "UAA", division: "D3" },
 
   // Georgia
-  "University of Georgia": { lat: 33.9480, lng: -83.3773, state: "GA", fraternities: 63, sororities: 34, totalMembers: 4900 },
-  "Georgia Tech": { lat: 33.7756, lng: -84.3963, state: "GA", fraternities: 48, sororities: 26, totalMembers: 3600 },
-  "Emory University": { lat: 33.7970, lng: -84.3222, state: "GA", fraternities: 35, sororities: 22, totalMembers: 2500 },
+  "University of Georgia": { lat: 33.9480, lng: -83.3773, state: "GA", fraternities: 63, sororities: 34, totalMembers: 4900, conference: "SEC", division: "D1" },
+  "Georgia Tech": { lat: 33.7756, lng: -84.3963, state: "GA", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "ACC", division: "D1" },
+  "Emory University": { lat: 33.7970, lng: -84.3222, state: "GA", fraternities: 35, sororities: 22, totalMembers: 2500, conference: "UAA", division: "D3" },
 
   // Massachusetts
-  "Harvard": { lat: 42.3770, lng: -71.1167, state: "MA", fraternities: 32, sororities: 20, totalMembers: 2200 },
-  "MIT": { lat: 42.3601, lng: -71.0942, state: "MA", fraternities: 28, sororities: 18, totalMembers: 1900 },
-  "Boston University": { lat: 42.3505, lng: -71.1054, state: "MA", fraternities: 40, sororities: 25, totalMembers: 3000 },
+  "Harvard": { lat: 42.3770, lng: -71.1167, state: "MA", fraternities: 32, sororities: 20, totalMembers: 2200, conference: "IVY", division: "D1" },
+  "MIT": { lat: 42.3601, lng: -71.0942, state: "MA", fraternities: 28, sororities: 18, totalMembers: 1900, conference: "NEWMAC", division: "D3" },
+  "Boston University": { lat: 42.3505, lng: -71.1054, state: "MA", fraternities: 40, sororities: 25, totalMembers: 3000, conference: "PATRIOT", division: "D1" },
 
   // Michigan
-  "University of Michigan": { lat: 42.2780, lng: -83.7382, state: "MI", fraternities: 70, sororities: 37, totalMembers: 5500 },
-  "Michigan State": { lat: 42.7018, lng: -84.4822, state: "MI", fraternities: 65, sororities: 34, totalMembers: 5000 },
+  "University of Michigan": { lat: 42.2780, lng: -83.7382, state: "MI", fraternities: 70, sororities: 37, totalMembers: 5500, conference: "BIG 10", division: "D1" },
+  "Michigan State": { lat: 42.7018, lng: -84.4822, state: "MI", fraternities: 65, sororities: 34, totalMembers: 5000, conference: "BIG 10", division: "D1" },
 
   // Ohio
-  "Ohio State": { lat: 40.0067, lng: -83.0305, state: "OH", fraternities: 68, sororities: 36, totalMembers: 5400 },
-  "Miami University": { lat: 39.5079, lng: -84.7452, state: "OH", fraternities: 55, sororities: 30, totalMembers: 4200 },
+  "Ohio State": { lat: 40.0067, lng: -83.0305, state: "OH", fraternities: 68, sororities: 36, totalMembers: 5400, conference: "BIG 10", division: "D1" },
+  "Miami University": { lat: 39.5079, lng: -84.7452, state: "OH", fraternities: 55, sororities: 30, totalMembers: 4200, conference: "MAC", division: "D1" },
 
   // North Carolina
-  "Duke": { lat: 36.0011, lng: -78.9389, state: "NC", fraternities: 42, sororities: 25, totalMembers: 3200 },
-  "UNC Chapel Hill": { lat: 35.9049, lng: -79.0469, state: "NC", fraternities: 55, sororities: 32, totalMembers: 4300 },
-  "Wake Forest": { lat: 36.1355, lng: -80.2773, state: "NC", fraternities: 35, sororities: 20, totalMembers: 2500 },
+  "Duke": { lat: 36.0011, lng: -78.9389, state: "NC", fraternities: 42, sororities: 25, totalMembers: 3200, conference: "ACC", division: "D1" },
+  "UNC Chapel Hill": { lat: 35.9049, lng: -79.0469, state: "NC", fraternities: 55, sororities: 32, totalMembers: 4300, conference: "ACC", division: "D1" },
+  "Wake Forest": { lat: 36.1355, lng: -80.2773, state: "NC", fraternities: 35, sororities: 20, totalMembers: 2500, conference: "ACC", division: "D1" },
 
   // Virginia
-  "University of Virginia": { lat: 38.0336, lng: -78.5080, state: "VA", fraternities: 58, sororities: 30, totalMembers: 4400 },
-  "Virginia Tech": { lat: 37.2284, lng: -80.4234, state: "VA", fraternities: 48, sororities: 26, totalMembers: 3600 },
+  "University of Virginia": { lat: 38.0336, lng: -78.5080, state: "VA", fraternities: 58, sororities: 30, totalMembers: 4400, conference: "ACC", division: "D1" },
+  "Virginia Tech": { lat: 37.2284, lng: -80.4234, state: "VA", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "ACC", division: "D1" },
 
   // Indiana
-  "Indiana University": { lat: 39.1766, lng: -86.5131, state: "IN", fraternities: 62, sororities: 33, totalMembers: 4800 },
-  "Purdue": { lat: 40.4237, lng: -86.9212, state: "IN", fraternities: 55, sororities: 28, totalMembers: 4100 },
+  "Indiana University": { lat: 39.1766, lng: -86.5131, state: "IN", fraternities: 62, sororities: 33, totalMembers: 4800, conference: "BIG 10", division: "D1" },
+  "Purdue": { lat: 40.4237, lng: -86.9212, state: "IN", fraternities: 55, sororities: 28, totalMembers: 4100, conference: "BIG 10", division: "D1" },
 
   // Wisconsin
-  "University of Wisconsin": { lat: 43.0766, lng: -89.4125, state: "WI", fraternities: 58, sororities: 31, totalMembers: 4500 },
+  "University of Wisconsin": { lat: 43.0766, lng: -89.4125, state: "WI", fraternities: 58, sororities: 31, totalMembers: 4500, conference: "BIG 10", division: "D1" },
 
   // Alabama
-  "University of Alabama": { lat: 33.2098, lng: -87.5692, state: "AL", fraternities: 68, sororities: 35, totalMembers: 5300 },
-  "Auburn University": { lat: 32.6099, lng: -85.4808, state: "AL", fraternities: 55, sororities: 30, totalMembers: 4200 },
+  "University of Alabama": { lat: 33.2098, lng: -87.5692, state: "AL", fraternities: 68, sororities: 35, totalMembers: 5300, conference: "SEC", division: "D1" },
+  "Auburn University": { lat: 32.6099, lng: -85.4808, state: "AL", fraternities: 55, sororities: 30, totalMembers: 4200, conference: "SEC", division: "D1" },
 
   // Tennessee
-  "Vanderbilt": { lat: 36.1447, lng: -86.8027, state: "TN", fraternities: 42, sororities: 24, totalMembers: 3100 },
-  "University of Tennessee": { lat: 35.9544, lng: -83.9295, state: "TN", fraternities: 52, sororities: 28, totalMembers: 3900 },
+  "Vanderbilt": { lat: 36.1447, lng: -86.8027, state: "TN", fraternities: 42, sororities: 24, totalMembers: 3100, conference: "SEC", division: "D1" },
+  "University of Tennessee": { lat: 35.9544, lng: -83.9295, state: "TN", fraternities: 52, sororities: 28, totalMembers: 3900, conference: "SEC", division: "D1" },
 
   // South Carolina
-  "Clemson": { lat: 34.6834, lng: -82.8374, state: "SC", fraternities: 45, sororities: 25, totalMembers: 3400 },
-  "University of South Carolina": { lat: 33.9938, lng: -81.0299, state: "SC", fraternities: 48, sororities: 27, totalMembers: 3600 },
+  "Clemson": { lat: 34.6834, lng: -82.8374, state: "SC", fraternities: 45, sororities: 25, totalMembers: 3400, conference: "ACC", division: "D1" },
+  "University of South Carolina": { lat: 33.9938, lng: -81.0299, state: "SC", fraternities: 48, sororities: 27, totalMembers: 3600, conference: "SEC", division: "D1" },
 
   // Arizona
-  "Arizona State": { lat: 33.4242, lng: -111.9281, state: "AZ", fraternities: 60, sororities: 32, totalMembers: 4600 },
-  "University of Arizona": { lat: 32.2319, lng: -110.9501, state: "AZ", fraternities: 55, sororities: 30, totalMembers: 4200 },
+  "Arizona State": { lat: 33.4242, lng: -111.9281, state: "AZ", fraternities: 60, sororities: 32, totalMembers: 4600, conference: "PAC-12", division: "D1" },
+  "University of Arizona": { lat: 32.2319, lng: -110.9501, state: "AZ", fraternities: 55, sororities: 30, totalMembers: 4200, conference: "PAC-12", division: "D1" },
 
   // Colorado
-  "University of Colorado Boulder": { lat: 40.0150, lng: -105.2705, state: "CO", fraternities: 48, sororities: 26, totalMembers: 3600 },
-  "Colorado State": { lat: 40.5734, lng: -105.0865, state: "CO", fraternities: 38, sororities: 22, totalMembers: 2800 },
+  "University of Colorado Boulder": { lat: 40.0150, lng: -105.2705, state: "CO", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "PAC-12", division: "D1" },
+  "Colorado State": { lat: 40.5734, lng: -105.0865, state: "CO", fraternities: 38, sororities: 22, totalMembers: 2800, conference: "MW", division: "D1" },
 
   // Washington
-  "University of Washington": { lat: 47.6553, lng: -122.3035, state: "WA", fraternities: 52, sororities: 28, totalMembers: 3900 },
-  "Washington State": { lat: 46.7319, lng: -117.1542, state: "WA", fraternities: 45, sororities: 25, totalMembers: 3400 },
+  "University of Washington": { lat: 47.6553, lng: -122.3035, state: "WA", fraternities: 52, sororities: 28, totalMembers: 3900, conference: "PAC-12", division: "D1" },
+  "Washington State": { lat: 46.7319, lng: -117.1542, state: "WA", fraternities: 45, sororities: 25, totalMembers: 3400, conference: "PAC-12", division: "D1" },
 
   // Louisiana
-  "LSU": { lat: 30.4133, lng: -91.1800, state: "LA", fraternities: 52, sororities: 30, totalMembers: 4100 },
-  "Tulane": { lat: 29.9389, lng: -90.1208, state: "LA", fraternities: 38, sororities: 22, totalMembers: 2800 },
-  "Louisiana Tech": { lat: 32.5252, lng: -92.6377, state: "LA", fraternities: 28, sororities: 18, totalMembers: 2000 },
+  "LSU": { lat: 30.4133, lng: -91.1800, state: "LA", fraternities: 52, sororities: 30, totalMembers: 4100, conference: "SEC", division: "D1" },
+  "Tulane": { lat: 29.9389, lng: -90.1208, state: "LA", fraternities: 38, sororities: 22, totalMembers: 2800, conference: "AAC", division: "D1" },
+  "Louisiana Tech": { lat: 32.5252, lng: -92.6377, state: "LA", fraternities: 28, sororities: 18, totalMembers: 2000, conference: "CUSA", division: "D1" },
 
   // Mississippi
-  "Ole Miss": { lat: 34.3665, lng: -89.5348, state: "MS", fraternities: 48, sororities: 28, totalMembers: 3800 },
-  "Mississippi State": { lat: 33.4549, lng: -88.7904, state: "MS", fraternities: 45, sororities: 26, totalMembers: 3500 },
-  "Southern Miss": { lat: 31.3307, lng: -89.3378, state: "MS", fraternities: 32, sororities: 20, totalMembers: 2400 },
+  "Ole Miss": { lat: 34.3665, lng: -89.5348, state: "MS", fraternities: 48, sororities: 28, totalMembers: 3800, conference: "SEC", division: "D1" },
+  "Mississippi State": { lat: 33.4549, lng: -88.7904, state: "MS", fraternities: 45, sororities: 26, totalMembers: 3500, conference: "SEC", division: "D1" },
+  "Southern Miss": { lat: 31.3307, lng: -89.3378, state: "MS", fraternities: 32, sororities: 20, totalMembers: 2400, conference: "SBC", division: "D1" },
 
   // Kentucky
-  "University of Kentucky": { lat: 38.0297, lng: -84.5037, state: "KY", fraternities: 48, sororities: 27, totalMembers: 3700 },
-  "University of Louisville": { lat: 38.2104, lng: -85.7584, state: "KY", fraternities: 38, sororities: 22, totalMembers: 2800 },
+  "University of Kentucky": { lat: 38.0297, lng: -84.5037, state: "KY", fraternities: 48, sororities: 27, totalMembers: 3700, conference: "SEC", division: "D1" },
+  "University of Louisville": { lat: 38.2104, lng: -85.7584, state: "KY", fraternities: 38, sororities: 22, totalMembers: 2800, conference: "ACC", division: "D1" },
 
   // Arkansas
-  "University of Arkansas": { lat: 36.0679, lng: -94.1748, state: "AR", fraternities: 42, sororities: 24, totalMembers: 3200 },
+  "University of Arkansas": { lat: 36.0679, lng: -94.1748, state: "AR", fraternities: 42, sororities: 24, totalMembers: 3200, conference: "SEC", division: "D1" },
 
   // Missouri
-  "Mizzou": { lat: 38.9404, lng: -92.3277, state: "MO", fraternities: 52, sororities: 29, totalMembers: 4000 },
-  "Washington University": { lat: 38.6488, lng: -90.3108, state: "MO", fraternities: 35, sororities: 20, totalMembers: 2500 },
+  "Mizzou": { lat: 38.9404, lng: -92.3277, state: "MO", fraternities: 52, sororities: 29, totalMembers: 4000, conference: "SEC", division: "D1" },
+  "Washington University": { lat: 38.6488, lng: -90.3108, state: "MO", fraternities: 35, sororities: 20, totalMembers: 2500, conference: "UAA", division: "D3" },
 
   // Kansas
-  "University of Kansas": { lat: 38.9543, lng: -95.2558, state: "KS", fraternities: 48, sororities: 26, totalMembers: 3600 },
-  "Kansas State": { lat: 39.1910, lng: -96.5803, state: "KS", fraternities: 42, sororities: 24, totalMembers: 3200 },
+  "University of Kansas": { lat: 38.9543, lng: -95.2558, state: "KS", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "BIG 12", division: "D1" },
+  "Kansas State": { lat: 39.1910, lng: -96.5803, state: "KS", fraternities: 42, sororities: 24, totalMembers: 3200, conference: "BIG 12", division: "D1" },
 
   // Nebraska
-  "University of Nebraska": { lat: 40.8202, lng: -96.7005, state: "NE", fraternities: 45, sororities: 26, totalMembers: 3500 },
+  "University of Nebraska": { lat: 40.8202, lng: -96.7005, state: "NE", fraternities: 45, sororities: 26, totalMembers: 3500, conference: "BIG 10", division: "D1" },
 
   // Iowa
-  "University of Iowa": { lat: 41.6611, lng: -91.5302, state: "IA", fraternities: 50, sororities: 28, totalMembers: 3900 },
-  "Iowa State": { lat: 42.0266, lng: -93.6465, state: "IA", fraternities: 48, sororities: 26, totalMembers: 3600 },
+  "University of Iowa": { lat: 41.6611, lng: -91.5302, state: "IA", fraternities: 50, sororities: 28, totalMembers: 3900, conference: "BIG 10", division: "D1" },
+  "Iowa State": { lat: 42.0266, lng: -93.6465, state: "IA", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "BIG 12", division: "D1" },
 
   // Minnesota
-  "University of Minnesota": { lat: 44.9742, lng: -93.2277, state: "MN", fraternities: 52, sororities: 28, totalMembers: 3900 },
+  "University of Minnesota": { lat: 44.9742, lng: -93.2277, state: "MN", fraternities: 52, sororities: 28, totalMembers: 3900, conference: "BIG 10", division: "D1" },
 
   // Oklahoma
-  "University of Oklahoma": { lat: 35.2058, lng: -97.4452, state: "OK", fraternities: 55, sororities: 30, totalMembers: 4200 },
-  "Oklahoma State": { lat: 36.1156, lng: -97.0584, state: "OK", fraternities: 48, sororities: 26, totalMembers: 3600 },
+  "University of Oklahoma": { lat: 35.2058, lng: -97.4452, state: "OK", fraternities: 55, sororities: 30, totalMembers: 4200, conference: "SEC", division: "D1" },
+  "Oklahoma State": { lat: 36.1156, lng: -97.0584, state: "OK", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "BIG 12", division: "D1" },
 
   // Oregon
-  "University of Oregon": { lat: 44.0448, lng: -123.0718, state: "OR", fraternities: 42, sororities: 24, totalMembers: 3200 },
-  "Oregon State": { lat: 44.5646, lng: -123.2780, state: "OR", fraternities: 38, sororities: 22, totalMembers: 2800 },
+  "University of Oregon": { lat: 44.0448, lng: -123.0718, state: "OR", fraternities: 42, sororities: 24, totalMembers: 3200, conference: "PAC-12", division: "D1" },
+  "Oregon State": { lat: 44.5646, lng: -123.2780, state: "OR", fraternities: 38, sororities: 22, totalMembers: 2800, conference: "PAC-12", division: "D1" },
 
   // West Virginia
-  "West Virginia University": { lat: 39.6350, lng: -79.9539, state: "WV", fraternities: 42, sororities: 24, totalMembers: 3200 },
+  "West Virginia University": { lat: 39.6350, lng: -79.9539, state: "WV", fraternities: 42, sororities: 24, totalMembers: 3200, conference: "BIG 12", division: "D1" },
 
   // Maryland
-  "University of Maryland": { lat: 38.9869, lng: -76.9426, state: "MD", fraternities: 48, sororities: 26, totalMembers: 3600 },
+  "University of Maryland": { lat: 38.9869, lng: -76.9426, state: "MD", fraternities: 48, sororities: 26, totalMembers: 3600, conference: "BIG 10", division: "D1" },
 
   // New Jersey
-  "Rutgers": { lat: 40.5008, lng: -74.4474, state: "NJ", fraternities: 52, sororities: 28, totalMembers: 3900 },
+  "Rutgers": { lat: 40.5008, lng: -74.4474, state: "NJ", fraternities: 52, sororities: 28, totalMembers: 3900, conference: "BIG 10", division: "D1" },
 
   // Connecticut
-  "UConn": { lat: 41.8084, lng: -72.2512, state: "CT", fraternities: 38, sororities: 22, totalMembers: 2800 },
+  "UConn": { lat: 41.8084, lng: -72.2512, state: "CT", fraternities: 38, sororities: 22, totalMembers: 2800, conference: "BIG EAST", division: "D1" },
 
   // Rhode Island
-  "Brown University": { lat: 41.8268, lng: -71.4025, state: "RI", fraternities: 30, sororities: 18, totalMembers: 2200 },
+  "Brown University": { lat: 41.8268, lng: -71.4025, state: "RI", fraternities: 30, sororities: 18, totalMembers: 2200, conference: "IVY", division: "D1" },
 
   // New Mexico
-  "University of New Mexico": { lat: 35.0844, lng: -106.6198, state: "NM", fraternities: 32, sororities: 20, totalMembers: 2400 },
+  "University of New Mexico": { lat: 35.0844, lng: -106.6198, state: "NM", fraternities: 32, sororities: 20, totalMembers: 2400, conference: "MW", division: "D1" },
 
   // Nevada
-  "UNLV": { lat: 36.1082, lng: -115.1450, state: "NV", fraternities: 38, sororities: 22, totalMembers: 2800 },
-  "University of Nevada Reno": { lat: 39.5445, lng: -119.8154, state: "NV", fraternities: 32, sororities: 20, totalMembers: 2400 },
+  "UNLV": { lat: 36.1082, lng: -115.1450, state: "NV", fraternities: 38, sororities: 22, totalMembers: 2800, conference: "MW", division: "D1" },
+  "University of Nevada Reno": { lat: 39.5445, lng: -119.8154, state: "NV", fraternities: 32, sororities: 20, totalMembers: 2400, conference: "MW", division: "D1" },
 
   // Utah
-  "University of Utah": { lat: 40.7649, lng: -111.8421, state: "UT", fraternities: 35, sororities: 20, totalMembers: 2500 },
-  "BYU": { lat: 40.2519, lng: -111.6493, state: "UT", fraternities: 0, sororities: 0, totalMembers: 0 },
+  "University of Utah": { lat: 40.7649, lng: -111.8421, state: "UT", fraternities: 35, sororities: 20, totalMembers: 2500, conference: "PAC-12", division: "D1" },
+  "BYU": { lat: 40.2519, lng: -111.6493, state: "UT", fraternities: 0, sororities: 0, totalMembers: 0, conference: "BIG 12", division: "D1" },
 
   // Idaho
-  "Boise State": { lat: 43.6025, lng: -116.2023, state: "ID", fraternities: 28, sororities: 18, totalMembers: 2000 },
+  "Boise State": { lat: 43.6025, lng: -116.2023, state: "ID", fraternities: 28, sororities: 18, totalMembers: 2000, conference: "MW", division: "D1" },
 
   // Montana
-  "University of Montana": { lat: 46.8595, lng: -113.9856, state: "MT", fraternities: 25, sororities: 16, totalMembers: 1800 },
+  "University of Montana": { lat: 46.8595, lng: -113.9856, state: "MT", fraternities: 25, sororities: 16, totalMembers: 1800, conference: "BIG SKY", division: "D1" },
 
   // Wyoming
-  "University of Wyoming": { lat: 41.3147, lng: -105.5652, state: "WY", fraternities: 22, sororities: 15, totalMembers: 1600 },
+  "University of Wyoming": { lat: 41.3147, lng: -105.5652, state: "WY", fraternities: 22, sororities: 15, totalMembers: 1600, conference: "MW", division: "D1" },
 
   // South Dakota
-  "South Dakota State": { lat: 44.3114, lng: -96.7854, state: "SD", fraternities: 18, sororities: 12, totalMembers: 1400 },
+  "South Dakota State": { lat: 44.3114, lng: -96.7854, state: "SD", fraternities: 18, sororities: 12, totalMembers: 1400, conference: "SUMMIT", division: "D1" },
 
   // North Dakota
-  "University of North Dakota": { lat: 47.9225, lng: -97.0731, state: "ND", fraternities: 20, sororities: 14, totalMembers: 1500 }
+  "University of North Dakota": { lat: 47.9225, lng: -97.0731, state: "ND", fraternities: 20, sororities: 14, totalMembers: 1500, conference: "SUMMIT", division: "D1" }
 };

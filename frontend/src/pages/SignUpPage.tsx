@@ -138,11 +138,14 @@ const SignUpPage = () => {
         <div className="max-w-md mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
+            <div className="inline-block bg-yellow-100 text-yellow-800 text-sm font-semibold px-4 py-2 rounded-full mb-4">
+              🚀 Coming Soon
+            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Start Your Free Trial
+              Join the Waitlist
             </h1>
             <p className="text-gray-600">
-              Get 14 days free with 1 chapter lookup included
+              Registration is temporarily closed. Join our waitlist for early access!
             </p>
           </div>
 
@@ -164,7 +167,10 @@ const SignUpPage = () => {
           </div>
 
           {/* Sign Up Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 opacity-60 pointer-events-none">
+            <div className="bg-gray-100 border border-gray-300 text-gray-700 px-4 py-3 rounded-md text-sm text-center mb-6">
+              Registration is temporarily closed while we prepare for launch
+            </div>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Field */}
               <div>
@@ -264,21 +270,11 @@ const SignUpPage = () => {
 
               {/* Submit Button */}
               <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                type="button"
+                disabled
+                className="w-full bg-gray-400 text-white py-3 px-6 rounded-lg font-medium cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {isLoading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Creating Account...
-                  </>
-                ) : (
-                  <>
-                    Start Free Trial
-                    <ArrowRight className="w-5 h-5" />
-                  </>
-                )}
+                Registration Closed
               </button>
 
               {/* Terms */}
@@ -293,6 +289,16 @@ const SignUpPage = () => {
                 </Link>
               </p>
             </form>
+          </div>
+
+          {/* Waitlist CTA */}
+          <div className="mt-6 text-center">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors shadow-lg"
+            >
+              Join Our Waitlist Instead →
+            </Link>
           </div>
 
           {/* Already have account */}

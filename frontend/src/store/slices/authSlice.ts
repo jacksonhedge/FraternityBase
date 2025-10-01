@@ -20,10 +20,12 @@ interface AuthState {
   isLoading: boolean;
 }
 
+const token = localStorage.getItem('token');
+
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem('token'),
-  isAuthenticated: false,
+  token: token,
+  isAuthenticated: !!token, // Set to true if token exists
   isLoading: false,
 };
 

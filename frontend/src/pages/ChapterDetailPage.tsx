@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -14,12 +14,86 @@ import {
   Building,
   DollarSign,
   ChevronDown,
-  ExternalLink
+  ExternalLink,
+  Lock,
+  Unlock
 } from 'lucide-react';
+import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const ChapterDetailPage = () => {
   const { id } = useParams();
   const [selectedYear, setSelectedYear] = useState('2025-2026');
+
+  // Credit unlock system
+  const [unlockStatus, setUnlockStatus] = useState<string[]>([]);
+  const [balance, setBalance] = useState(0);
+  const [isUnlocking, setIsUnlocking] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (id && token) {
+      // Fetch unlock status for this chapter
+      fetch(`${API_URL}/chapters/${id}/unlock-status`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => setUnlockStatus(data.unlocked || []))
+        .catch(err => console.error('Failed to fetch unlock status:', err));
+
+      // Fetch credit balance
+      fetch(`${API_URL}/credits/balance`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => setBalance(data.balance || 0))
+        .catch(err => console.error('Failed to fetch balance:', err));
+    }
+  }, [id, token]);
+
+  const handleUnlock = async (unlockType: string, creditCost: number) => {
+    if (!token || !id) return;
+
+    if (balance < creditCost) {
+      alert(`Insufficient credits! You need ${creditCost} credits but only have ${balance}.`);
+      return;
+    }
+
+    const confirmMessage = `This will cost ${creditCost} credits. You currently have ${balance} credits. Continue?`;
+    if (!confirm(confirmMessage)) return;
+
+    setIsUnlocking(true);
+
+    try {
+      const response = await fetch(`${API_URL}/chapters/${id}/unlock`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ unlockType })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setUnlockStatus([...unlockStatus, unlockType]);
+        setBalance(data.remainingBalance);
+        alert(`✅ Unlocked! ${data.creditsSpent} credits spent. Remaining balance: ${data.remainingBalance}`);
+        window.location.reload(); // Refresh to show unlocked data
+      } else {
+        alert(`❌ ${data.error || 'Failed to unlock'}`);
+      }
+    } catch (error) {
+      console.error('Error unlocking chapter:', error);
+      alert('Error unlocking chapter. Please try again.');
+    } finally {
+      setIsUnlocking(false);
+    }
+  };
+
+  const isUnlocked = (unlockType: string) => unlockStatus.includes(unlockType);
 
   // Mock data - would come from API based on ID
   const chapter = {
@@ -187,6 +261,11 @@ const ChapterDetailPage = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
+          <img
+            src={getCollegeLogoWithFallback(chapter.university)}
+            alt={chapter.university}
+            className="w-16 h-16 object-contain"
+          />
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               {chapter.fraternity} - {chapter.chapterName}
@@ -269,27 +348,80 @@ const ChapterDetailPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Leadership Section */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Chapter Leadership</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-gray-900">Chapter Leadership</h2>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Award className="w-4 h-4" />
+              {balance} credits
+            </div>
+          </div>
+
+          {/* Unlock Banner */}
+          {!isUnlocked('officer_contacts') && (
+            <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg">
+              <div className="flex items-start gap-3">
+                <Lock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 mb-1">🔒 Officer Contacts Locked</h3>
+                  <p className="text-sm text-gray-700 mb-3">
+                    Unlock full contact information (emails & phones) for all officers to reach out directly.
+                  </p>
+                  <button
+                    onClick={() => handleUnlock('officer_contacts', 8)}
+                    disabled={isUnlocking}
+                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isUnlocking ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Unlocking...
+                      </>
+                    ) : (
+                      <>
+                        <Unlock className="w-4 h-4" />
+                        Unlock for 8 Credits
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isUnlocked('officer_contacts') && (
+            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
+              <Unlock className="w-5 h-5 text-green-600" />
+              <span className="text-sm font-medium text-green-900">Officer contacts unlocked! ✅</span>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {currentYearData.president && (
               <div className="border rounded-lg p-4">
                 <h3 className="font-semibold text-gray-900">President</h3>
                 <p className="text-gray-900 mt-1">{currentYearData.president.name}</p>
                 <p className="text-sm text-gray-600">{currentYearData.president.major} • {currentYearData.president.year}</p>
-                <div className="mt-2 space-y-1">
-                  {(currentYearData.president.emails || [currentYearData.president.email]).filter(Boolean).map((email, idx) => (
-                    <a key={idx} href={`mailto:${email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                      <Mail className="w-4 h-4 mr-1" />
-                      {email}
-                    </a>
-                  ))}
-                  {currentYearData.president.phone && (
-                    <a href={`tel:${currentYearData.president.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                      <Phone className="w-4 h-4 mr-1" />
-                      {currentYearData.president.phone}
-                    </a>
-                  )}
-                </div>
+                {isUnlocked('officer_contacts') ? (
+                  <div className="mt-2 space-y-1">
+                    {(currentYearData.president.emails || [currentYearData.president.email]).filter(Boolean).map((email, idx) => (
+                      <a key={idx} href={`mailto:${email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                        <Mail className="w-4 h-4 mr-1" />
+                        {email}
+                      </a>
+                    ))}
+                    {currentYearData.president.phone && (
+                      <a href={`tel:${currentYearData.president.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                        <Phone className="w-4 h-4 mr-1" />
+                        {currentYearData.president.phone}
+                      </a>
+                    )}
+                  </div>
+                ) : (
+                  <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                    <Lock className="w-4 h-4" />
+                    <span>Unlock to view contacts</span>
+                  </div>
+                )}
               </div>
             )}
 

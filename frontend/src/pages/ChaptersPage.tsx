@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -11,16 +11,76 @@ import {
   ChevronDown,
   ExternalLink,
   Instagram,
-  Globe
+  Globe,
+  List,
+  Grid3x3,
+  Unlock,
+  Clock,
+  CheckCircle,
+  Mail,
+  Phone,
+  Download
 } from 'lucide-react';
+import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+interface Chapter {
+  id: string;
+  chapter_name: string;
+  member_count?: number;
+  status: string;
+  founded_date?: string;
+  house_address?: string;
+  instagram_handle?: string;
+  website?: string;
+  contact_email?: string;
+  phone?: string;
+  greek_organizations?: {
+    id: string;
+    name: string;
+    greek_letters?: string;
+    organization_type: 'fraternity' | 'sorority';
+  };
+  universities?: {
+    id: string;
+    name: string;
+    location: string;
+    state: string;
+    student_count?: number;
+    logo_url?: string;
+  };
+}
 
 const ChaptersPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'size' | 'name' | 'university'>('size');
   const [filterState, setFilterState] = useState('all');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data - fraternities only, sorted by chapter size
-  const chapters = [
+  // Fetch chapters from database
+  useEffect(() => {
+    const fetchChapters = async () => {
+      try {
+        const res = await fetch(`${API_URL}/chapters`);
+        const data = await res.json();
+        if (data.success) {
+          setChapters(data.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching chapters:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChapters();
+  }, []);
+
+  // Mock data kept as fallback for now
+  const mockChapters = [
     {
       id: 1,
       fraternity: 'Sigma Chi',
@@ -220,45 +280,167 @@ const ChaptersPage = () => {
     }
   ];
 
-  // Filter and sort logic
+  // Filter and sort logic adapted for database structure
   const filteredChapters = chapters
     .filter(chapter => {
-      const matchesSearch =
-        chapter.fraternity.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        chapter.university.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        chapter.chapterName.toLowerCase().includes(searchTerm.toLowerCase());
+      const fraternityName = chapter.greek_organizations?.name || '';
+      const universityName = chapter.universities?.name || '';
+      const chapterName = chapter.chapter_name || '';
+      const state = chapter.universities?.state || '';
 
-      const matchesState = filterState === 'all' || chapter.state === filterState;
+      const matchesSearch =
+        fraternityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        universityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        chapterName.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesState = filterState === 'all' || state === filterState;
 
       return matchesSearch && matchesState;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case 'size':
-          return b.size - a.size;
+          return (b.member_count || 0) - (a.member_count || 0);
         case 'name':
-          return a.fraternity.localeCompare(b.fraternity);
+          return (a.greek_organizations?.name || '').localeCompare(b.greek_organizations?.name || '');
         case 'university':
-          return a.university.localeCompare(b.university);
+          return (a.universities?.name || '').localeCompare(b.universities?.name || '');
         default:
           return 0;
       }
     });
 
   // Get unique states for filter
-  const states = [...new Set(chapters.map(c => c.state))].sort();
+  const states = [...new Set(chapters.map(c => c.universities?.state).filter(Boolean))].sort();
+
+  // Mock unlocked chapters (TODO: Fetch from API)
+  const unlockedChapters = [
+    {
+      id: 1,
+      name: 'Penn State Sigma Chi',
+      university: 'Pennsylvania State University',
+      members: 95,
+      grade: 'A',
+      unlockedAt: '2025-09-28',
+      expiresAt: '2026-03-28',
+      accessLevel: 'full',
+      creditsSpent: 200
+    }
+  ];
 
   return (
     <div className="space-y-6">
+      {/* MY UNLOCKED CHAPTERS */}
+      {unlockedChapters.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm border-2 border-green-200">
+          <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <Unlock className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">My Unlocked Chapters</h2>
+                  <p className="text-sm text-gray-600">
+                    {unlockedChapters.length} chapter{unlockedChapters.length !== 1 ? 's' : ''} with active access
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {unlockedChapters.map((chapter) => {
+                const daysUntilExpiry = chapter.expiresAt
+                  ? Math.ceil((new Date(chapter.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+                  : null;
+
+                return (
+                  <Link
+                    key={chapter.id}
+                    to={`/app/chapters/${chapter.id}`}
+                    className="block border-2 border-green-200 hover:border-green-400 rounded-lg p-4 bg-gradient-to-br from-white to-green-50 transition-all hover:shadow-md"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-start gap-3 flex-1">
+                        <img
+                          src={getCollegeLogoWithFallback(chapter.university)}
+                          alt={chapter.university}
+                          className="w-12 h-12 object-contain flex-shrink-0"
+                        />
+                        <div>
+                          <h3 className="font-bold text-gray-900">{chapter.name}</h3>
+                          <p className="text-sm text-gray-600">{chapter.university}</p>
+                        </div>
+                      </div>
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">
+                        {chapter.grade}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                      <span className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        {chapter.members}
+                      </span>
+                      {daysUntilExpiry && (
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          {daysUntilExpiry}d
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2 text-xs">
+                      {chapter.accessLevel === 'full' && (
+                        <>
+                          <Mail className="w-4 h-4 text-green-600" />
+                          <Phone className="w-4 h-4 text-green-600" />
+                        </>
+                      )}
+                      <button className="ml-auto p-1 hover:bg-green-100 rounded">
+                        <Download className="w-4 h-4 text-gray-600" />
+                      </button>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Fraternity Chapters</h1>
-          <p className="text-gray-600 mt-2">Manage and view all active fraternity chapters</p>
+          <h1 className="text-3xl font-bold text-gray-900">Browse All Chapters</h1>
+          <p className="text-gray-600 mt-2">240 Sigma Chi chapters • 18,500+ members • Unlock with credits</p>
         </div>
-        <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-          Add New Chapter
-        </button>
+        <div className="flex items-center gap-3">
+          {/* View Toggle */}
+          <div className="flex items-center bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('list')}
+              className={`px-3 py-2 rounded-md transition-colors ${
+                viewMode === 'list'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <List className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`px-3 py-2 rounded-md transition-colors ${
+                viewMode === 'grid'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <Grid3x3 className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Stats */}
@@ -276,7 +458,7 @@ const ChaptersPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold text-gray-900">
-                {chapters.reduce((sum, ch) => sum + ch.size, 0).toLocaleString()}
+                {chapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0).toLocaleString()}
               </p>
               <p className="text-sm text-gray-600">Total Members</p>
             </div>
@@ -287,7 +469,7 @@ const ChaptersPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold text-gray-900">
-                {Math.round(chapters.reduce((sum, ch) => sum + ch.size, 0) / chapters.length)}
+                {chapters.length > 0 ? Math.round(chapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0) / chapters.length) : 0}
               </p>
               <p className="text-sm text-gray-600">Avg Chapter Size</p>
             </div>
@@ -340,81 +522,173 @@ const ChaptersPage = () => {
         </div>
       </div>
 
-      {/* Chapters List */}
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Fraternity
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  University
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Chapter
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Size
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  President
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Greek Rank
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredChapters.map((chapter) => (
-                <tr key={chapter.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{chapter.fraternity}</div>
-                    <div className="text-sm text-gray-500">{chapter.chapterName}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{chapter.university}</div>
-                    <div className="text-sm text-gray-500">{chapter.state}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Founded {chapter.founded}</div>
-                    <div className="text-sm text-gray-500">{chapter.house}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-lg font-semibold text-gray-900">{chapter.size}</div>
-                    <div className="text-sm text-gray-500">members</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{chapter.president}</div>
-                    <div className="text-sm text-gray-500">{chapter.presidentEmail}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <span className="text-sm font-medium text-gray-900">{chapter.greekRank}</span>
-                      <span className="text-sm text-gray-500 ml-1">/ 5.0</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <Link
-                      to={`/app/chapters/${chapter.id}`}
-                      className="text-primary-600 hover:text-primary-900 mr-3"
-                    >
-                      View Profile
-                    </Link>
-                    <button className="text-gray-600 hover:text-gray-900">
-                      Edit
-                    </button>
-                  </td>
+      {/* Chapters List or Grid */}
+      {viewMode === 'list' ? (
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Fraternity
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    University
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Chapter
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Size
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    President
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Greek Rank
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                      Loading chapters...
+                    </td>
+                  </tr>
+                ) : filteredChapters.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                      No chapters found
+                    </td>
+                  </tr>
+                ) : (
+                  filteredChapters.map((chapter) => (
+                    <tr key={chapter.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{chapter.greek_organizations?.name || '-'}</div>
+                        <div className="text-sm text-gray-500">{chapter.chapter_name || '-'}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-3">
+                          {chapter.universities?.logo_url ? (
+                            <img
+                              src={chapter.universities.logo_url}
+                              alt={chapter.universities.name}
+                              className="w-8 h-8 object-contain"
+                            />
+                          ) : (
+                            <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                              {chapter.universities?.name?.[0] || '?'}
+                            </div>
+                          )}
+                          <div>
+                            <div className="text-sm text-gray-900">{chapter.universities?.name || '-'}</div>
+                            <div className="text-sm text-gray-500">{chapter.universities?.state || '-'}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{chapter.founded_date ? `Founded ${new Date(chapter.founded_date).getFullYear()}` : '-'}</div>
+                        <div className="text-sm text-gray-500">{chapter.house_address || '-'}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-lg font-semibold text-gray-900">{chapter.member_count || '-'}</div>
+                        <div className="text-sm text-gray-500">members</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">Contact Locked</div>
+                        <div className="text-sm text-gray-500">Unlock to view</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <span className="text-sm font-medium text-gray-900">-</span>
+                          <span className="text-sm text-gray-500 ml-1">/ 5.0</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <Link
+                          to={`/app/chapters/${chapter.id}`}
+                          className="text-primary-600 hover:text-primary-900 mr-3"
+                        >
+                          View
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredChapters.map((chapter) => (
+            <Link
+              key={chapter.id}
+              to={`/app/chapters/${chapter.id}`}
+              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-200 hover:border-primary-300"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start gap-3">
+                  <img
+                    src={getCollegeLogoWithFallback(chapter.universities?.name || '')}
+                    alt={chapter.universities?.name || ''}
+                    className="w-14 h-14 object-contain flex-shrink-0"
+                  />
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">{chapter.greek_organizations?.name || '-'}</h3>
+                    <p className="text-sm text-gray-600">{chapter.chapter_name || '-'}</p>
+                  </div>
+                </div>
+                <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-semibold rounded">
+                  {chapter.universities?.state || '-'}
+                </span>
+              </div>
+
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center text-sm text-gray-600">
+                  <MapPin className="w-4 h-4 mr-2 text-gray-400" />
+                  {chapter.universities?.name || '-'}
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Users className="w-4 h-4 mr-2 text-gray-400" />
+                  {chapter.member_count || 0} members
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Calendar className="w-4 h-4 mr-2 text-gray-400" />
+                  Founded {chapter.founded_date ? new Date(chapter.founded_date).getFullYear() : '-'}
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm">
+                    <p className="font-medium text-gray-900">Contact Locked</p>
+                    <p className="text-gray-500">Unlock to view</p>
+                  </div>
+                  <div className="flex items-center">
+                    <Award className="w-4 h-4 text-yellow-500 mr-1" />
+                    <span className="text-sm font-semibold text-gray-900">-</span>
+                  </div>
+                </div>
+              </div>
+
+              {chapter.instagram_handle && (
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Instagram className="w-4 h-4 mr-2" />
+                    {chapter.instagram_handle}
+                  </div>
+                </div>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
 
       {/* Featured Chapter - Sigma Chi Penn State */}
       <div className="bg-gradient-to-r from-blue-600 to-yellow-500 rounded-lg shadow-lg p-6 text-white">

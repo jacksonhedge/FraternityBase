@@ -59,6 +59,15 @@ interface Chapter {
   chapter_name: string;
   member_count?: number;
   status: string;
+  charter_date?: string;
+  house_address?: string;
+  instagram_handle?: string;
+  website?: string;
+  contact_email?: string;
+  phone?: string;
+  engagement_score?: number;
+  partnership_openness?: string;
+  event_frequency?: number;
   greek_organizations?: { name: string };
   universities?: { name: string; state: string };
 }
@@ -70,8 +79,10 @@ interface Officer {
   position: string;
   email?: string;
   phone?: string;
+  linkedin_profile?: string;
   graduation_year?: number;
   major?: string;
+  is_primary_contact?: boolean;
   chapters?: {
     chapter_name: string;
     greek_organizations: { name: string };
@@ -85,6 +96,7 @@ interface Company {
   email: string;
   credits_balance: number;
   created_at: string;
+  total_spent?: number;
   unlocks?: ChapterUnlock[];
 }
 
@@ -1666,6 +1678,7 @@ const AdminPageV4 = () => {
           )}
         </div>
       )}
+        </div>
       </div>
     </div>
   );

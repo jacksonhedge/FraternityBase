@@ -1,0 +1,233 @@
+chapter_name,university,city,state_province,country,region
+Alpha,Miami University,Oxford,OH,United States,Southern Ohio
+Alpha Alpha,Hobart College,Geneva,NY,United States,Northwestern New York
+Alpha Beta,University of California-Berkeley,Berkeley,CA,United States,California Bay Area
+Alpha Chi,Pennsylvania State University,State College,PA,United States,Central Pennsylvania
+Alpha Epsilon,University of Nebraska,Lincoln,NE,United States,Kansas/Nebraska
+Alpha Gamma,Ohio State University,Columbus,OH,United States,Southern Ohio
+Alpha Kappa,Hillsdale College,Hillsdale,MI,United States,West Michigan
+Alpha Nu,University of Texas-Austin,Austin,TX,United States,Central Texas
+Alpha Omega,Stanford University,Stanford,CA,United States,California Bay Area
+Alpha Omicron,Tulane University,New Orleans,LA,United States,Southern
+Alpha Phi,Cornell University,Ithaca,NY,United States,Northwestern New York
+Alpha Pi,Albion College,Albion,MI,United States,West Michigan
+Alpha Sigma,University of Minnesota,Minneapolis,MN,United States,North Central
+Alpha Tau,University of North Carolina,Chapel Hill,NC,United States,Eastern North Carolina
+Alpha Theta,Massachusetts Institute of Technology,Boston,MA,United States,Boston Harbor
+Alpha Upsilon,University of Southern California,Los Angeles,CA,United States,Los Angeles Coastal
+Alpha Zeta,Beloit College,Beloit,WI,United States,Wisconsin
+Beta Chi,Emory University,Atlanta,GA,United States,North Georgia
+Beta Delta,University of Montana,Missoula,MT,United States,The Big Sky
+Beta Epsilon,University of Utah,Salt Lake City,UT,United States,Utah/Nevada
+Beta Eta,Case Western Reserve University,Cleveland,OH,United States,Northern Ohio
+Beta Gamma,Colorado College,Colorado Springs,CO,United States,Rocky Mountain
+Beta Iota,University of Oregon,Eugene,OR,United States,Northwestern
+Beta Kappa,University of Oklahoma,Norman,OK,United States,Oklahoma/Arkansas
+Beta Lambda,Duke University,Durham,NC,United States,Eastern North Carolina
+Beta Mu,University of Colorado-Boulder,Boulder,CO,United States,Rocky Mountain
+Beta Omega,University of Toronto-Toronto Metropolitan University,Toronto,ON,Canada,Ontario
+Beta Phi,University of Arizona,Tucson,AZ,United States,Grand Canyon
+Beta Pi,Oregon State University,Corvallis,OR,United States,Northwestern
+Beta Psi,Georgia Institute of Technology,Atlanta,GA,United States,North Georgia
+Beta Rho,Montana State University,Bozeman,MT,United States,The Big Sky
+Beta Sigma,University of Tennessee-Knoxville,Knoxville,TN,United States,East Tennessee
+Beta Upsilon,Washington State University,Pullman,WA,United States,The Big Sky
+Beta Xi,University of New Mexico,Albuquerque,NM,United States,Southwestern
+Beta Zeta,University of North Dakota,Grand Forks,ND,United States,North Central
+Chi,Hanover College,Hanover,IN,United States,Central Kentucky
+Chi Chi,Birmingham-Southern College,Birmingham,AL,United States,Alabama Northern
+Delta,University of Georgia,Athens,GA,United States,North Georgia
+Delta Chi,Wabash College,Crawfordsville,IN,United States,Central Indiana
+Delta Delta,Purdue University,West Lafayette,IN,United States,Central Indiana
+Delta Epsilon,North Carolina State University,Raleigh,NC,United States,Eastern North Carolina
+Delta Eta,University of California-Los Angeles,Los Angeles,CA,United States,Los Angeles Coastal
+Delta Iota,University of Denver,Denver,CO,United States,Rocky Mountain
+Delta Kappa,Bowling Green State University,Bowling Green,OH,United States,Northern Ohio
+Delta Mu,Southern Methodist University,Dallas,TX,United States,Northern Texas
+Delta Nu,Wake Forest University,Winston-Salem,NC,United States,Western North Carolina
+Delta Omega,University of Tulsa,Tulsa,OK,United States,Oklahoma/Arkansas
+Delta Omicron,University of British Columbia-Simon Fraser University,Vancouver,BC,Canada,Northwestern
+Delta Phi,University of Puget Sound,Tacoma,WA,United States,Northwestern
+Delta Psi,Rensselaer Polytechnic Institute,Troy,NY,United States,Hudson Valley
+Delta Rho,Bradley University,Peoria,IL,United States,Central Illinois
+Delta Sigma,University of Rhode Island,Portsmouth,RI,United States,Connecticut/Rhode Island
+Delta Theta,University of Tennessee-Chattanooga,Chattanooga,TN,United States,East Tennessee
+Delta Upsilon,Kansas State University,Manhattan,KS,United States,Kansas/Nebraska
+Delta Xi,San Diego State University,San Diego,CA,United States,Southern California
+Delta Zeta,Willamette University,Salem,OR,United States,Northwestern
+Epsilon,George Washington University,Washington,DC,United States,Eastern
+Epsilon Eta,California State University-Fresno,Fresno,CA,United States,California Central Valley
+Epsilon Kappa,University of Memphis,Memphis,TN,United States,Mississippi River
+Epsilon Lambda,Ripon College,Ripon,WI,United States,Wisconsin
+Epsilon Mu,Texas Christian University,Fort Worth,TX,United States,Northern Texas
+Epsilon Nu,Texas Tech University,Lubbock,TX,United States,Southwestern
+Epsilon Omega,Ball State University,Muncie,IN,United States,Central Indiana
+Epsilon Omicron,Western University,London,ON,Canada,Ontario
+Epsilon Phi,Southeast Missouri State University,Cape Girardeau,MO,United States,Mississippi River
+Epsilon Psi,Sam Houston State University,Spring,TX,United States,East Texas
+Epsilon Sigma,Florida Southern College,Lakeland,FL,United States,Central Florida
+Epsilon Tau,Murray State University,Murray,KY,United States,Mississippi River
+Epsilon Theta,San Jose State University,San Jose,CA,United States,California Bay Area
+Epsilon Xi,University of Houston,Houston,TX,United States,East Texas
+Epsilon Zeta,Florida State University,Tallahassee,FL,United States,North Florida
+Eta,University of Mississippi,Oxford,MS,United States,Southern
+Eta Alpha,Eastern Kentucky University,Richmond,KY,United States,Central Kentucky
+Eta Beta,California State University-Long Beach,Long Beach,CA,United States,Los Angeles Coastal
+Eta Chi,Youngstown State University,Youngstown,OH,United States,Northern Ohio
+Eta Delta,Tennessee Tech University,Cookeville,TN,United States,East Tennessee
+Eta Epsilon,University of South Alabama,Mobile,AL,United States,Alabama/Gulf Coast
+Eta Gamma,Middle Tennessee State University,Murfreesboro,TN,United States,Mid-South
+Eta Iota,Embry-Riddle Aeronautical University-Daytona Beach,Daytona Beach,FL,United States,Central Florida
+Eta Kappa,Missouri State University,Springfield,MO,United States,Missouri
+Eta Mu,Eastern Illinois University,Mattoon,IL,United States,Central Illinois
+Eta Omega,Baylor University,Waco,TX,United States,Central Texas
+Eta Omicron,Indiana University of Pennsylvania,Indiana,PA,United States,West Virginia/West Pennsylvania
+Eta Phi,Troy University,Troy,AL,United States,Alabama/Gulf Coast
+Eta Pi,University of Central Florida,Orlando,FL,United States,Central Florida
+Eta Rho,University of North Alabama,Florence,AL,United States,Alabama Northern
+Eta Sigma,University of California-Irvine,Irvine,CA,United States,Southern California
+Eta Tau,Stephen F. Austin State University,Nacogdoches,TX,United States,East Texas
+Eta Theta,Georgia Southwestern State University,Americus,GA,United States,North Georgia
+Eta Upsilon,Texas A&M University-College Station,College Station,TX,United States,East Texas
+Eta Xi,Austin Peay State University,Clarksville,TN,United States,Mid-South
+Eta Zeta,Georgia Southern University,Statesboro,GA,United States,South Carolina
+Gamma Chi,University of Maryland,College Park,MD,United States,Eastern
+Gamma Delta,Oklahoma State University,Stillwater,OK,United States,Oklahoma/Arkansas
+Gamma Epsilon,Whitman College,Walla Walla,WA,United States,The Big Sky
+Gamma Eta,University of Idaho,Moscow,ID,United States,The Big Sky
+Gamma Iota,Louisiana State University,Baton Rouge,LA,United States,Southern
+Gamma Kappa,Utah State University,Logan,UT,United States,Utah/Nevada
+Gamma Lambda,McGill University,Montreal,PQ,Canada,Saint Lawrence
+Gamma Nu,University of South Carolina,Columbia,SC,United States,South Carolina
+Gamma Omega,University of Connecticut,Storrs Mansfield,CT,United States,Connecticut/Rhode Island
+Gamma Phi,University of Miami,Coral Gables,FL,United States,South Florida/Everglades
+Gamma Pi,University of Rochester,Rochester,NY,United States,Northwestern New York
+Gamma Rho,Dalhousie University-St. Mary's University,Halifax,NS,Canada,North Atlantic
+Gamma Sigma,Auburn University,Auburn,AL,United States,Alabama/Gulf Coast
+Gamma Tau,North Dakota State University,Fargo,ND,United States,North Central
+Gamma Theta,University of Florida,Gainesville,FL,United States,North Florida
+Gamma Upsilon,Mississippi State University,Mississippi State,MS,United States,Southern
+Gamma Xi,University of Wyoming,Laramie,WY,United States,Rocky Mountain
+Gamma Zeta,Union College,Schenectady,NY,United States,Hudson Valley
+Iota Epsilon,College of Charleston,Charleston,SC,United States,South Carolina
+Iota Eta,Western Connecticut State University,Danbury,CT,United States,Hudson Valley
+Iota Gamma,Jacksonville University,Jacksonville,FL,United States,North Florida
+Iota Iota,University of Alabama,Tuscaloosa,AL,United States,Alabama Northern
+Iota Kappa,Fairleigh Dickinson University,Denville,NJ,United States,Hudson Valley
+Iota Lambda,University of Louisville,Louisville,KY,United States,Central Kentucky
+Iota Mu,Wilfrid Laurier University,Waterloo,ON,Canada,Ontario
+Iota Nu,Furman University,Greenville,SC,United States,South Carolina
+Iota Omega,Loyola Marymount University,Los Angeles,CA,United States,Southern California
+Iota Omicron,Western Illinois University,Macomb,IL,United States,Mid-Central
+Iota Phi,University of North Texas,Denton,TX,United States,Northern Texas
+Iota Pi,Marquette University,Milwaukee,WI,United States,Wisconsin
+Iota Sigma,Valparaiso University,Valparaiso,IN,United States,Chicagoland
+Iota Tau,University of St. Thomas,Saint Paul,MN,United States,North Central
+Iota Upsilon,Boston University,Boston,MA,United States,Boston Harbor
+Iota Xi,George Mason University,Fairfax,VA,United States,Eastern
+Iota Zeta,Clarkson University,Potsdam,NY,United States,Saint Lawrence
+Kappa,Bucknell University,Lewisburg,PA,United States,Central Pennsylvania
+Kappa Beta,University of North Florida,jacksonville,FL,United States,North Florida
+Kappa Chi,Villanova University,Villanova,PA,United States,Mid Atlantic
+Kappa Epsilon,University of Delaware,Newark,DE,United States,Mid Atlantic
+Kappa Eta,Harvard University,Cambridge,MA,United States,Boston Harbor
+Kappa Gamma,Western Carolina University,Cullowhee,NC,United States,Western North Carolina
+Kappa Iota,Southern Utah University,Cedar City,UT,United States,Utah/Nevada
+Kappa Kappa,University of Illinois,Champaign,IL,United States,Central Illinois
+Kappa Lambda,The College of Idaho,Caldwell,ID,United States,The Big Sky
+Kappa Mu,University of Windsor,Windsor,ON,Canada,East Michigan
+Kappa Omicron,Pepperdine University,Malibu,CA,United States,Los Angeles Coastal
+Kappa Phi,Embry-Riddle Aeronautical University-Prescott,Prescott,AZ,United States,Grand Canyon
+Kappa Pi,Towson University,Towson,MD,United States,Eastern
+Kappa Psi,University of Tennessee-Martin,Martin,TN,United States,Mississippi River
+Kappa Rho,American University,Washington,DC,United States,Eastern
+Kappa Sigma,University of the Pacific,Stockton,CA,United States,California Central Valley
+Kappa Tau,Minnesota State University-Mankato,Mankato,MN,United States,North Central
+Kappa Theta,California State University-Chico,Chico,CA,United States,California Central Valley
+Kappa Xi,Tarleton State University,Stephenville,TX,United States,Central Texas
+Kappa Zeta,Radford University,Radford,VA,United States,Western Virginia
+Lambda,Indiana University,Bloomington,IN,United States,Central Indiana
+Lambda Alpha,Knox College,Galesburg,IL,United States,Mid-Central
+Lambda Chi,University of Wisconsin-Milwaukee,Milwaukee,WI,United States,Wisconsin
+Lambda Delta,University of California-Merced,Merced,CA,United States,California Central Valley
+Lambda Epsilon,University of New Haven,West Haven,CT,United States,Connecticut/Rhode Island
+Lambda Eta,Bryant University,Smithfield,RI,United States,Connecticut/Rhode Island
+Lambda Gamma,Santa Clara University,Santa Clara,CA,United States,California Bay Area
+Lambda Iota,Florida International University,Miami,FL,United States,South Florida/Everglades
+Lambda Kappa,Rochester Institute of Technology,Rochester,NY,United States,Northwestern New York
+Lambda Lambda,University of Kentucky,Lexington,KY,United States,Central Kentucky
+Lambda Mu,Valdosta State University,Valdosta,GA,United States,North Florida
+Lambda Nu,Loyola University-Chicago,Chicago,IL,United States,Chicagoland
+Lambda Omega,DePaul University,Chicago,IL,United States,Chicagoland
+Lambda Omicron,Southern Illinois University-Carbondale,Carbondale,IL,United States,Mississippi River
+Lambda Phi,University of West Georgia,Carrollton,GA,United States,North Georgia
+Lambda Pi,Carnegie Mellon University,Pittsburgh,PA,United States,West Virginia/West Pennsylvania
+Lambda Psi,University of Louisiana-Lafayette,Lafayette,LA,United States,Southern
+Lambda Sigma,University of New Hampshire,Durham,NH,United States,North Atlantic
+Lambda Tau,Florida Atlantic University,Wilton Manors,FL,United States,South Florida/Everglades
+Lambda Theta,University of Ottawa,Ottawa,ON,Canada,Saint Lawrence
+Lambda Upsilon,Bentley University,Waltham,MA,United States,Boston Harbor
+Lambda Xi,Boise State University,Boise,ID,United States,The Big Sky
+Lambda Zeta,Florida Gulf Coast University,Fort Myers,FL,United States,South Florida/Everglades
+Mu,Denison University,Granville,OH,United States,Southern Ohio
+Mu Alpha,University of North Carolina-Charlotte,Charlotte,NC,United States,Western North Carolina
+Mu Beta,California State University-San Marcos,San Marcos,CA,United States,Southern California
+Mu Epsilon,University of Massachusetts-Amherst,Amherst,MA,United States,North Atlantic
+Mu Eta,West Chester University of Pennsylvania,West Chester,PA,United States,Mid Atlantic
+Mu Gamma,Binghamton University,Binghamton,NY,United States,Northwestern New York
+Mu Iota,University of Texas-San Antonio,San Antonio,TX,United States,Central Texas
+Mu Kappa,University of North Carolina-Wilmington,Wilmington,NC,United States,Eastern North Carolina
+Mu Lambda,Sacred Heart University,Fairfield,CT,United States,Connecticut/Rhode Island
+Mu Mu,West Virginia University,Morgantown,WV,United States,West Virginia/West Pennsylvania
+Mu Theta,Georgetown University,Washington,DC,United States,Eastern
+Mu Zeta,Brock University,Thorold,ON,Canada,Ontario
+Nu,Cumberland University,Lebanon,TN,United States,Mid-South
+Nu Nu,Columbia University,New York,NY,United States,Hudson Valley
+Omega Omega,University of Arkansas,Fayetteville,AR,United States,Oklahoma/Arkansas
+Omicron Omicron,University of Chicago,Chicago,IL,United States,Chicagoland
+Phi Phi,University of Pennsylvania,Philadelphia,PA,United States,Mid Atlantic
+Pi,Samford University,Birmingham,AL,United States,Alabama Northern
+Psi,University of Virginia,Charlottesville,VA,United States,Eastern Virginia
+Psi Psi,Syracuse University,Syracuse,NY,United States,Northwestern New York
+Rho,Butler University,Indianapolis,IN,United States,Central Indiana
+Rho Rho,University of Maine,Orono,ME,United States,North Atlantic
+Sigma,Princeton University,Princeton,NJ,United States,Central Pennsylvania
+Sigma Sigma,Hampden-Sydney College,Hampden Sydney,VA,United States,Eastern Virginia
+Tau,Roanoke College,Salem,VA,United States,Western Virginia
+Theta,Gettysburg College,Gettysburg,PA,United States,Central Pennsylvania
+Theta Beta,University of South Florida,Tampa,FL,United States,Central Florida
+Theta Chi,Arkansas State University,State University,AR,United States,Oklahoma/Arkansas
+Theta Epsilon,University of North Georgia,Dahlonega,GA,United States,North Georgia
+Theta Eta,Missouri University of Science & Technology,Rolla,MO,United States,Missouri
+Theta Gamma,Drake University,Des Moines,IA,United States,Mid-Central
+Theta Iota,Saint Louis University,Saint Louis,MO,United States,Missouri
+Theta Mu,Spring Hill College,Mobile,AL,United States,Alabama/Gulf Coast
+Theta Nu,Alma College,Alma,MI,United States,East Michigan
+Theta Omega,Elon University,Elon,NC,United States,Eastern North Carolina
+Theta Omicron,University of California-Davis,Davis,CA,United States,California Central Valley
+Theta Psi,University of Waterloo,Waterloo,ON,Canada,Ontario
+Theta Rho,Illinois State University,Normal,IL,United States,Central Illinois
+Theta Sigma,California State Polytechnic University-Pomona,Pomona,CA,United States,Southern California
+Theta Tau,Texas State University-San Marcos,San Marcos,TX,United States,Central Texas
+Theta Theta,University of Michigan,Ann Arbor,MI,United States,East Michigan
+Theta Upsilon,Yale University,New Haven,CT,United States,Connecticut/Rhode Island
+Theta Zeta,Bridgewater State University,Bridgewater,MA,United States,Boston Harbor
+Upsilon Upsilon,University of Washington,Seattle,WA,United States,Northwestern
+Xi,DePauw University,Greencastle,IN,United States,Central Indiana
+Zeta,Washington & Lee University,Lexington,VA,United States,Western Virginia
+Zeta Eta,Texas A&M University-Commerce,Commerce,TX,United States,Northern Texas
+Zeta Iota,Pittsburg State University,Pittsburg,KS,United States,Kansas/Nebraska
+Zeta Kappa,University of California-Santa Barbara,Goleta,CA,United States,Los Angeles Coastal
+Zeta Lambda,Kent State University,Kent,OH,United States,Northern Ohio
+Zeta Mu,Western Kentucky University,Bowling Green,KY,United States,Mid-South
+Zeta Nu,Western Michigan University,Kalamazoo,MI,United States,West Michigan
+Zeta Omega,East Tennessee State University,Johnson City,TN,United States,East Tennessee
+Zeta Omicron,Northern Arizona University,Flagstaff,AZ,United States,Grand Canyon
+Zeta Phi,New Mexico State University,Las Cruces,NM,United States,Southwestern
+Zeta Pi,Texas A&M University-Kingsville,Kingsville,TX,United States,Central Texas
+Zeta Psi,University of Cincinnati,Cincinnati,OH,United States,Southern Ohio
+Zeta Tau,Fort Hays State University,Hays,KS,United States,Kansas/Nebraska
+Zeta Theta A,Kettering University,Flushing,MI,United States,East Michigan
+Zeta Theta B,Kettering University,Flushing,MI,United States,East Michigan
+Zeta Upsilon,The College of William & Mary,Williamsburg,VA,United States,Eastern Virginia
+Zeta Zeta,Centre College,Danville,KY,United States,Central Kentucky
