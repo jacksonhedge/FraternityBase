@@ -131,7 +131,7 @@ const MapPageFullScreen = () => {
   const [showNavMenu, setShowNavMenu] = useState(false);
   const [hoveredCollege, setHoveredCollege] = useState<{ name: string; data: any } | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false); // Toggle between radar (dark) and logo (light) mode - default to light
-  const [divisionFilter, setDivisionFilter] = useState<'all' | 'power4' | 'd1' | 'd2' | 'd3'>('all');
+  const [divisionFilter, setDivisionFilter] = useState<'all' | 'power4' | 'd1' | 'd2' | 'd3'>('power4');
   const mapRef = useRef<any>(null);
 
   const handleLogout = () => {

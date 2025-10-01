@@ -7,7 +7,7 @@ import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 const CollegesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedState, setSelectedState] = useState('all');
-  const [selectedDivision, setSelectedDivision] = useState('all');
+  const [selectedDivision, setSelectedDivision] = useState('Division I');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Convert COLLEGE_LOCATIONS to the format expected by the UI
