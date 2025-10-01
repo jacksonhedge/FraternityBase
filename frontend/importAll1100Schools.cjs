@@ -1,14 +1,15 @@
 /**
- * Script to import NCAA schools from CSV and merge with existing college data
+ * Script to import all 1,100 NCAA schools from simplified CSV
  *
- * Run with: node importNCAASchools.js
+ * CSV Format: college,state,division,type
+ * Run with: node importAll1100Schools.cjs
  */
 
 const fs = require('fs');
 const path = require('path');
 
 // Read the CSV file
-const csvPath = path.join(__dirname, 'ncaa_schools_complete.csv');
+const csvPath = '/Users/jacksonfitzgerald/ncaa_schools_complete.csv';
 const csvContent = fs.readFileSync(csvPath, 'utf-8');
 
 // Read existing statesGeoData
@@ -22,10 +23,13 @@ const ncaaSchools = [];
 for (const line of lines) {
   if (!line.trim()) continue;
 
-  const parts = line.split(',');
-  if (parts.length < 7) continue;
+  // Split by comma, but handle commas in quoted strings
+  const parts = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+  if (!parts || parts.length < 3) continue;
 
-  const [state, college, division, conference, subdivision, publicPrivate, hbcu] = parts;
+  const college = parts[0].replace(/"/g, '').trim();
+  const state = parts[1].replace(/"/g, '').trim();
+  const division = parts[2].replace(/"/g, '').trim();
 
   if (!college || !state) continue;
 
@@ -40,17 +44,22 @@ for (const line of lines) {
   }
 
   ncaaSchools.push({
-    name: college.trim(),
-    state: state.trim(),
+    name: college,
+    state: state,
     division: divisionCode,
-    conference: conference.trim().toUpperCase(),
-    subdivision: subdivision.trim(),
-    publicPrivate: publicPrivate.trim(),
-    hbcu: hbcu.trim() === 'Yes'
+    conference: '' // Will try to preserve existing conference data
   });
 }
 
 console.log(`📚 Parsed ${ncaaSchools.length} NCAA schools from CSV`);
+
+// Count by division
+const divisionCounts = {
+  D1: ncaaSchools.filter(s => s.division === 'D1').length,
+  D2: ncaaSchools.filter(s => s.division === 'D2').length,
+  D3: ncaaSchools.filter(s => s.division === 'D3').length
+};
+console.log(`📊 Division breakdown: D1=${divisionCounts.D1}, D2=${divisionCounts.D2}, D3=${divisionCounts.D3}`);
 
 // Extract existing COLLEGE_LOCATIONS from statesGeoData.ts
 const collegeLocationsMatch = geoDataContent.match(/export const COLLEGE_LOCATIONS = \{([\s\S]*?)\n\};/);
@@ -61,7 +70,7 @@ if (!collegeLocationsMatch) {
 const existingCollegesText = collegeLocationsMatch[1];
 const existingColleges = {};
 
-// Parse existing colleges (simplified regex parsing)
+// Parse existing colleges
 const collegePattern = /"([^"]+)":\s*\{([^}]+)\}/g;
 let match;
 
@@ -69,7 +78,6 @@ while ((match = collegePattern.exec(existingCollegesText)) !== null) {
   const collegeName = match[1];
   const dataStr = match[2];
 
-  // Extract lat, lng, state, etc.
   const latMatch = dataStr.match(/lat:\s*([-\d.]+)/);
   const lngMatch = dataStr.match(/lng:\s*([-\d.]+)/);
   const stateMatch = dataStr.match(/state:\s*"([^"]+)"/);
@@ -146,7 +154,8 @@ const STATE_CENTERS = {
   'WA': { lat: 47.400902, lng: -121.490494 },
   'WV': { lat: 38.491226, lng: -80.954453 },
   'WI': { lat: 44.268543, lng: -89.616508 },
-  'WY': { lat: 42.755966, lng: -107.302490 }
+  'WY': { lat: 42.755966, lng: -107.302490 },
+  'PR': { lat: 18.220833, lng: -66.590149 }
 };
 
 let mergedCount = 0;
@@ -156,9 +165,11 @@ let newCount = 0;
 function normalizeCollegeName(name) {
   return name
     .toLowerCase()
+    .replace(/^the\s+/g, '')
     .replace(/university of /g, '')
     .replace(/state university/g, '')
     .replace(/college/g, '')
+    .replace(/university/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -184,17 +195,19 @@ for (const ncaaSchool of ncaaSchools) {
   }
 
   if (existingKey) {
-    // Update existing college with conference/division from NCAA data
+    // Update existing college with division from NCAA data, preserve conference
     mergedColleges[existingKey] = {
       ...existingColleges[existingKey],
-      conference: ncaaSchool.conference || existingColleges[existingKey].conference,
-      division: ncaaSchool.division || existingColleges[existingKey].division
+      division: ncaaSchool.division
     };
     mergedCount++;
   } else {
     // Add new college with estimated location (state center + random offset)
     const stateCenter = STATE_CENTERS[ncaaSchool.state];
-    if (!stateCenter) continue;
+    if (!stateCenter) {
+      console.log(`⚠️  Skipping ${ncaaName} - unknown state: ${ncaaSchool.state}`);
+      continue;
+    }
 
     // Random offset to spread schools around state center
     const latOffset = (Math.random() - 0.5) * 2; // ±1 degree
@@ -207,7 +220,7 @@ for (const ncaaSchool of ncaaSchools) {
       fraternities: ncaaSchool.division === 'D1' ? 30 : ncaaSchool.division === 'D2' ? 15 : 8,
       sororities: ncaaSchool.division === 'D1' ? 20 : ncaaSchool.division === 'D2' ? 10 : 5,
       totalMembers: ncaaSchool.division === 'D1' ? 2500 : ncaaSchool.division === 'D2' ? 1000 : 500,
-      conference: ncaaSchool.conference,
+      conference: ncaaSchool.conference || '',
       division: ncaaSchool.division
     };
     newCount++;
@@ -217,6 +230,14 @@ for (const ncaaSchool of ncaaSchools) {
 console.log(`✅ Merged ${mergedCount} existing colleges with NCAA data`);
 console.log(`➕ Added ${newCount} new colleges from NCAA data`);
 console.log(`📍 Total colleges: ${Object.keys(mergedColleges).length}`);
+
+// Verify division counts in final data
+const finalDivisionCounts = {
+  D1: Object.values(mergedColleges).filter(c => c.division === 'D1').length,
+  D2: Object.values(mergedColleges).filter(c => c.division === 'D2').length,
+  D3: Object.values(mergedColleges).filter(c => c.division === 'D3').length
+};
+console.log(`✅ Final division counts: D1=${finalDivisionCounts.D1}, D2=${finalDivisionCounts.D2}, D3=${finalDivisionCounts.D3}`);
 
 // Generate new COLLEGE_LOCATIONS export
 const sortedColleges = Object.entries(mergedColleges).sort((a, b) => {
@@ -262,5 +283,8 @@ fs.writeFileSync(geoDataPath, newGeoDataContent, 'utf-8');
 console.log(`\n🎉 Successfully updated ${geoDataPath}`);
 console.log(`📊 Final stats:`);
 console.log(`   - Total colleges: ${Object.keys(mergedColleges).length}`);
+console.log(`   - D1 schools: ${finalDivisionCounts.D1}`);
+console.log(`   - D2 schools: ${finalDivisionCounts.D2}`);
+console.log(`   - D3 schools: ${finalDivisionCounts.D3}`);
 console.log(`   - Existing updated: ${mergedCount}`);
 console.log(`   - New additions: ${newCount}`);

@@ -133,18 +133,35 @@ const CONFERENCE_MAP: Record<string, string> = {
  * @returns Path to logo file or null if not found
  */
 export function getCollegeLogo(collegeName: string): string | null {
-  // Normalize the name
-  const normalized = collegeName.trim();
+  // Normalize the name - remove state suffix like "(KY)" if present
+  const normalized = collegeName.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
 
   // Direct lookup
   if (CONFERENCE_MAP[normalized]) {
     return `/college-logos/${CONFERENCE_MAP[normalized]}`;
   }
 
-  // Try partial matches
+  // Try exact match with common variations
+  const variations = [
+    normalized,
+    normalized.replace(/^University of /, ''),
+    normalized.replace(/^The /, ''),
+    `University of ${normalized}`,
+  ];
+
+  for (const variation of variations) {
+    if (CONFERENCE_MAP[variation]) {
+      return `/college-logos/${CONFERENCE_MAP[variation]}`;
+    }
+  }
+
+  // Only do partial matching if the lookup key is an exact substring match
+  // This prevents "Kentucky State" from matching "Kentucky"
   const lowerName = normalized.toLowerCase();
   for (const [key, path] of Object.entries(CONFERENCE_MAP)) {
-    if (key.toLowerCase().includes(lowerName) || lowerName.includes(key.toLowerCase())) {
+    const lowerKey = key.toLowerCase();
+    // Exact match only - no partial matching
+    if (lowerKey === lowerName) {
       return `/college-logos/${path}`;
     }
   }

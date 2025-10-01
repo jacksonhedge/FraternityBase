@@ -257,7 +257,7 @@ const MapPageFullScreen = () => {
         if (divisionFilter === 'all') return true;
 
         if (divisionFilter === 'power4') {
-          const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+          const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC', 'PAC-12', 'PAC - 12'];
           return power4Conferences.includes(college.conference || '');
         }
 
@@ -999,8 +999,8 @@ const MapPageFullScreen = () => {
             if (divisionFilter === 'all') return true;
 
             if (divisionFilter === 'power4') {
-              // Power 4: SEC, BIG 10, BIG 12, ACC
-              const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+              // Power 5: SEC, BIG 10, BIG 12, ACC, PAC-12
+              const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC', 'PAC-12', 'PAC - 12'];
               return power4Conferences.includes(collegeData.conference || '');
             }
 
