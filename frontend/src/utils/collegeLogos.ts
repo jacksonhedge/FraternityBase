@@ -153,10 +153,24 @@ export function getCollegeLogo(collegeName: string): string | null {
 }
 
 /**
- * Get logo with fallback to placeholder
+ * Get logo with fallback to data URL with initials
  */
 export function getCollegeLogoWithFallback(collegeName: string): string {
-  return getCollegeLogo(collegeName) || '/placeholder-college-logo.png';
+  const logo = getCollegeLogo(collegeName);
+  if (logo) return logo;
+
+  // Generate a data URL SVG with initials as fallback
+  const initials = getCollegeInitials(collegeName);
+  const svg = `
+    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" fill="#4F46E5"/>
+      <text x="50" y="50" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="central">
+        ${initials}
+      </text>
+    </svg>
+  `.trim();
+
+  return `data:image/svg+xml;base64,${btoa(svg)}`;
 }
 
 /**
