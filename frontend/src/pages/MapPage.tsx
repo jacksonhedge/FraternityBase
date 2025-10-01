@@ -120,24 +120,26 @@ const MapControls = ({ map, onResetView, showResetButton }: {
 
 // College logo or initials component
 const CollegeLogo = ({ collegeName, className = "w-16 h-16" }: { collegeName: string; className?: string }) => {
+  const [imageError, setImageError] = useState(false);
   const logoUrl = getCollegeLogo(collegeName);
 
-  if (logoUrl) {
+  // Show initials if no logo URL or image failed to load
+  if (!logoUrl || imageError) {
+    const initials = getCollegeInitials(collegeName);
     return (
-      <img
-        src={logoUrl}
-        alt={collegeName}
-        className={`${className} object-contain flex-shrink-0`}
-      />
+      <div className={`${className} flex-shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center`}>
+        <span className="text-white font-bold text-xl">{initials}</span>
+      </div>
     );
   }
 
-  // Show initials when no logo available
-  const initials = getCollegeInitials(collegeName);
   return (
-    <div className={`${className} flex-shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center`}>
-      <span className="text-white font-bold text-xl">{initials}</span>
-    </div>
+    <img
+      src={logoUrl}
+      alt={collegeName}
+      className={`${className} object-contain flex-shrink-0`}
+      onError={() => setImageError(true)}
+    />
   );
 };
 
