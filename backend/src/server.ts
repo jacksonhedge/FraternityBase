@@ -1660,6 +1660,113 @@ app.post('/api/waitlist', async (req, res) => {
   }
 });
 
+// Get all waitlist entries (admin only)
+app.get('/api/admin/waitlist', requireAdmin, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('waitlist')
+      .select('*')
+      .order('signup_date', { ascending: false });
+
+    if (error) throw error;
+
+    console.log(`✅ Retrieved ${data?.length || 0} waitlist entries`);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error fetching waitlist:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Clean up duplicate universities (admin only)
+app.post('/api/admin/clean-duplicates', requireAdmin, async (req, res) => {
+  try {
+    // Fetch all universities
+    const { data: universities, error: fetchError } = await supabase
+      .from('universities')
+      .select('*')
+      .order('created_at', { ascending: true }); // Keep oldest entries
+
+    if (fetchError) throw fetchError;
+
+    // Group by normalized name
+    const grouped = new Map<string, any[]>();
+    universities?.forEach((uni) => {
+      const key = uni.name.trim().toLowerCase();
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key)!.push(uni);
+    });
+
+    // Find duplicates and keep only the first (oldest) one
+    const duplicates = Array.from(grouped.entries())
+      .filter(([_, unis]) => unis.length > 1);
+
+    let deletedCount = 0;
+    let mergedChapters = 0;
+    const deletedIds: string[] = [];
+
+    for (const [name, unis] of duplicates) {
+      // Keep the first one (oldest), merge and delete the rest
+      const keepUni = unis[0];
+      const toDelete = unis.slice(1);
+
+      for (const uni of toDelete) {
+        // First, move any chapters from duplicate to the kept university
+        const { data: chaptersToMove, error: chaptersError } = await supabase
+          .from('chapters')
+          .select('id')
+          .eq('university_id', uni.id);
+
+        if (chaptersError) {
+          console.error(`Error fetching chapters for ${uni.id}:`, chaptersError);
+          continue;
+        }
+
+        if (chaptersToMove && chaptersToMove.length > 0) {
+          const { error: updateError } = await supabase
+            .from('chapters')
+            .update({ university_id: keepUni.id })
+            .eq('university_id', uni.id);
+
+          if (updateError) {
+            console.error(`Error moving chapters from ${uni.id} to ${keepUni.id}:`, updateError);
+            continue;
+          }
+
+          mergedChapters += chaptersToMove.length;
+          console.log(`✅ Moved ${chaptersToMove.length} chapters from duplicate to original`);
+        }
+
+        // Now delete the duplicate university
+        const { error: deleteError } = await supabase
+          .from('universities')
+          .delete()
+          .eq('id', uni.id);
+
+        if (deleteError) {
+          console.error(`Error deleting university ${uni.id}:`, deleteError);
+        } else {
+          deletedCount++;
+          deletedIds.push(uni.id);
+          console.log(`✅ Deleted duplicate: ${name} (ID: ${uni.id})`);
+        }
+      }
+    }
+
+    console.log(`✅ Cleaned up ${deletedCount} duplicate universities, merged ${mergedChapters} chapters`);
+    res.json({
+      success: true,
+      deletedCount,
+      mergedChapters,
+      duplicatesFound: duplicates.length,
+      message: `Removed ${deletedCount} duplicate entries from ${duplicates.length} duplicate universities and merged ${mergedChapters} chapters`
+    });
+  } catch (error: any) {
+    console.error('Error cleaning duplicates:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Start server (only in development, not in Vercel serverless)
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
