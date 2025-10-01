@@ -131,7 +131,7 @@ const MapPageFullScreen = () => {
   const [showNavMenu, setShowNavMenu] = useState(false);
   const [hoveredCollege, setHoveredCollege] = useState<{ name: string; data: any } | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false); // Toggle between radar (dark) and logo (light) mode - default to light
-  const [divisionFilter, setDivisionFilter] = useState<'all' | 'power4' | 'd1' | 'd2' | 'd3'>('power4');
+  const [divisionFilter, setDivisionFilter] = useState<'all' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('power4');
   const mapRef = useRef<any>(null);
 
   const handleLogout = () => {
@@ -146,6 +146,12 @@ const MapPageFullScreen = () => {
     { name: 'Chapters', href: '/app/chapters', icon: GraduationCap },
     { name: 'Fraternities', href: '/app/fraternities', icon: UsersIcon },
     { name: 'Team', href: '/app/team', icon: UsersIcon },
+  ];
+
+  const myConnections = [
+    { name: 'Unlocked Chapters', href: '/app/unlocked-chapters', icon: Unlock, count: 0 },
+    { name: 'Unlocked Members', href: '/app/unlocked-members', icon: UsersIcon, count: 0 },
+    { name: 'Unlocked Schools', href: '/app/unlocked-schools', icon: GraduationCap, count: 0 },
   ];
 
   // Load US states GeoJSON
@@ -249,12 +255,18 @@ const MapPageFullScreen = () => {
     console.log('✅ Found state abbreviation:', stateAbbr);
 
     const collegesInState = Object.entries(COLLEGE_LOCATIONS)
-      .filter(([_, college]) => {
+      .filter(([name, college]) => {
         // First filter by state
         if (college.state !== stateAbbr) return false;
 
         // Then filter by division
         if (divisionFilter === 'all') return true;
+
+        if (divisionFilter === 'mychapters') {
+          // TODO: Replace with actual unlocked chapters from user's account
+          // For now, return empty array (no unlocked chapters)
+          return false;
+        }
 
         if (divisionFilter === 'power4') {
           const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC', 'PAC-12', 'PAC - 12'];
@@ -528,6 +540,16 @@ const MapPageFullScreen = () => {
       {/* Division Filter Buttons */}
       <div className="absolute top-4 right-4 z-[1001] flex flex-wrap items-center justify-end gap-2 bg-white rounded-lg shadow-lg p-2 max-w-md">
         <button
+          onClick={() => setDivisionFilter('mychapters')}
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
+            divisionFilter === 'mychapters'
+              ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          My Chapters
+        </button>
+        <button
           onClick={() => setDivisionFilter('power4')}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'power4'
@@ -612,7 +634,7 @@ const MapPageFullScreen = () => {
             </div>
 
             {/* Navigation Links */}
-            <nav className="p-4 space-y-2">
+            <nav className="p-4 space-y-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
               {navigation.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.href;
@@ -641,6 +663,45 @@ const MapPageFullScreen = () => {
                   </Link>
                 );
               })}
+
+              {/* My Connections Section */}
+              <div className="pt-4">
+                <h3 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider ${
+                  isDarkMode ? 'text-cyan-400/70' : 'text-gray-500'
+                }`}>
+                  My Connections
+                </h3>
+                <div className="space-y-1 mt-2">
+                  {myConnections.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.href;
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                          isActive
+                            ? isDarkMode
+                              ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/50'
+                              : 'bg-primary-600 text-white shadow-lg shadow-primary-500/50'
+                            : isDarkMode
+                              ? 'text-cyan-300 hover:bg-cyan-900/30 hover:text-cyan-400'
+                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                        }`}
+                        onClick={() => setShowNavMenu(false)}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="font-medium">{item.name}</span>
+                        <span className={`ml-auto px-2 py-0.5 text-xs font-semibold rounded-full ${
+                          isDarkMode ? 'bg-cyan-900 text-cyan-300' : 'bg-gray-200 text-gray-700'
+                        }`}>
+                          {item.count}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
             </nav>
 
             {/* Logout Button */}
@@ -997,6 +1058,12 @@ const MapPageFullScreen = () => {
           .filter(([collegeName, collegeData]) => {
             // Filter based on division
             if (divisionFilter === 'all') return true;
+
+            if (divisionFilter === 'mychapters') {
+              // TODO: Replace with actual unlocked chapters from user's account
+              // For now, return false to show no markers
+              return false;
+            }
 
             if (divisionFilter === 'power4') {
               // Power 5: SEC, BIG 10, BIG 12, ACC, PAC-12
