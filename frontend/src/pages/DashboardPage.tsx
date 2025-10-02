@@ -35,13 +35,16 @@ const DashboardPage = () => {
   const [creditBalance, setCreditBalance] = useState(0);
   const [lifetimeCredits, setLifetimeCredits] = useState(0);
   const [unlockedChapters, setUnlockedChapters] = useState<any[]>([]);
+  const [stats, setStats] = useState<any[]>([]);
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [topChapters, setTopChapters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    // Fetch credit balance and unlocked chapters
+    // Fetch all dashboard data
     if (token) {
       Promise.all([
         fetch(`${API_URL}/credits/balance`, {
@@ -49,12 +52,74 @@ const DashboardPage = () => {
         }).then(res => res.json()),
         fetch(`${API_URL}/chapters/unlocked`, {
           headers: { 'Authorization': `Bearer ${token}` }
+        }).then(res => res.json()),
+        fetch(`${API_URL}/chapters`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }).then(res => res.json()),
+        fetch(`${API_URL}/admin/universities`, {
+          headers: { 'Authorization': `Bearer ${token}` }
         }).then(res => res.json())
       ])
-        .then(([creditsData, chaptersData]) => {
+        .then(([creditsData, chaptersData, allChaptersData, universitiesData]) => {
           setCreditBalance(creditsData.balance || 0);
           setLifetimeCredits(creditsData.lifetime || 0);
           setUnlockedChapters(chaptersData.data || []);
+
+          // Calculate real stats from API data
+          const chapters = allChaptersData.data || [];
+          const universities = universitiesData.data || [];
+
+          // Get unique states
+          const states = new Set(universities.map((u: any) => u.state).filter(Boolean));
+
+          setStats([
+            {
+              label: 'Greek Chapters',
+              value: chapters.length.toString(),
+              change: 'Total in database',
+              trend: 'neutral',
+              icon: Users,
+              color: 'primary',
+              description: 'Active chapters tracked'
+            },
+            {
+              label: 'Universities',
+              value: universities.length.toString(),
+              change: 'With Greek life',
+              trend: 'neutral',
+              icon: Target,
+              color: 'green',
+              description: 'Schools in database'
+            },
+            {
+              label: 'States Covered',
+              value: states.size.toString(),
+              change: 'Nationwide',
+              trend: 'neutral',
+              icon: TrendingUp,
+              color: 'blue',
+              description: 'Geographic coverage'
+            }
+          ]);
+
+          // Recent activities - for now empty until we track this
+          setRecentActivities([]);
+
+          // Top chapters - show random chapters from database
+          const randomChapters = chapters
+            .filter((c: any) => c.member_count > 0)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 3)
+            .map((c: any) => ({
+              id: c.id,
+              name: `${c.universities?.name || 'Unknown'} ${c.greek_organizations?.name || 'Chapter'}`,
+              university: c.universities?.name || 'Unknown University',
+              members: c.member_count || 0,
+              grade: 'A',
+              status: '100 credits'
+            }));
+          setTopChapters(randomChapters);
+
           setLoading(false);
         })
         .catch(err => {
@@ -86,105 +151,6 @@ const DashboardPage = () => {
       }, 10000);
     }
   }, [searchParams, setSearchParams]);
-
-  // Data Inventory Stats - What we have for sale
-  const stats = [
-    {
-      label: 'Greek Chapters',
-      value: '240',
-      change: 'Sigma Chi only',
-      trend: 'neutral',
-      icon: Users,
-      color: 'primary',
-      description: 'Active chapters nationwide'
-    },
-    {
-      label: 'Potential Members',
-      value: '18,500+',
-      change: 'Verified contacts',
-      trend: 'neutral',
-      icon: Target,
-      color: 'green',
-      description: 'Undergrads & alumni'
-    },
-    {
-      label: 'States Covered',
-      value: '48',
-      change: 'Coast to coast',
-      trend: 'neutral',
-      icon: TrendingUp,
-      color: 'blue',
-      description: 'National coverage'
-    },
-    {
-      label: 'Data Quality',
-      value: 'A-Grade',
-      change: 'Verified 2024',
-      trend: 'up',
-      icon: Award,
-      color: 'purple',
-      description: 'Fresh, accurate data'
-    }
-  ];
-
-  const recentActivities = [
-    {
-      type: 'unlock',
-      title: 'Unlocked USC Sigma Chi roster (85 members)',
-      time: '2 hours ago',
-      status: 'new',
-      credits: -25
-    },
-    {
-      type: 'purchase',
-      title: 'Purchased 500 credits - Popular Pack',
-      time: '5 hours ago',
-      status: 'confirmed',
-      credits: +500
-    },
-    {
-      type: 'export',
-      title: 'Exported UCLA Sigma Chi contact list',
-      time: '1 day ago',
-      status: 'confirmed',
-      credits: -25
-    },
-    {
-      type: 'unlock',
-      title: 'Unlocked officer contacts - Ohio State Sigma Chi',
-      time: '2 days ago',
-      status: 'confirmed',
-      credits: -50
-    }
-  ];
-
-  // Top chapters available to unlock
-  const topChapters = [
-    {
-      id: 'usc-sigma-chi',
-      name: 'USC Sigma Chi',
-      university: 'University of Southern California',
-      members: 85,
-      grade: 'A',
-      status: 'Free Demo'
-    },
-    {
-      id: 'ucla-sigma-chi',
-      name: 'UCLA Sigma Chi',
-      university: 'University of California, Los Angeles',
-      members: 92,
-      grade: 'A',
-      status: '100 credits'
-    },
-    {
-      id: 'ohio-state-sigma-chi',
-      name: 'Ohio State Sigma Chi',
-      university: 'The Ohio State University',
-      members: 110,
-      grade: 'A+',
-      status: '120 credits'
-    }
-  ];
 
   return (
     <div className="space-y-6">
@@ -386,17 +352,18 @@ const DashboardPage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-              <Activity className="w-5 h-5 mr-2 text-primary-600" />
-              Recent Credit Activity
-            </h2>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {recentActivities.map((activity, index) => (
+        {/* Recent Activity - Only show if there are activities */}
+        {recentActivities.length > 0 && (
+          <div className="bg-white rounded-lg shadow-sm">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                <Activity className="w-5 h-5 mr-2 text-primary-600" />
+                Recent Credit Activity
+              </h2>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {recentActivities.map((activity, index) => (
                 <div key={index} className="flex items-start justify-between">
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0">
@@ -432,8 +399,10 @@ const DashboardPage = () => {
             </button>
           </div>
         </div>
+        )}
 
-        {/* Top Chapters to Unlock */}
+        {/* Top Chapters to Unlock - Only show if there are chapters */}
+        {topChapters.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center">
@@ -477,10 +446,11 @@ const DashboardPage = () => {
               ))}
             </div>
             <Link to="/app/chapters" className="inline-block mt-4 text-primary-600 text-sm font-medium hover:text-primary-700">
-              Browse all 240 chapters →
+              Browse all chapters →
             </Link>
           </div>
         </div>
+        )}
       </div>
 
       {/* Credit Usage Chart Placeholder */}
