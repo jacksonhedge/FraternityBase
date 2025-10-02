@@ -269,6 +269,7 @@ const AdminPageV4 = () => {
         setChapters(chaptersData.data || []);
         setUsers(usersData.data || []);
       } else if (activeTab === 'users') {
+        console.log('📊 Loading Users tab data...');
         const [chaptersRes, usersRes] = await Promise.all([
           fetch(`${API_URL}/admin/chapters`, { headers: getAdminHeaders() }),
           fetch(`${API_URL}/admin/officers`, { headers: getAdminHeaders() })
@@ -277,6 +278,11 @@ const AdminPageV4 = () => {
           chaptersRes.json(),
           usersRes.json()
         ]);
+        console.log('✅ Users data loaded:', {
+          totalUsers: usersData.data?.length || 0,
+          sampleUser: usersData.data?.[0],
+          totalChapters: chaptersData.data?.length || 0
+        });
         setChapters(chaptersData.data || []);
         setUsers(usersData.data || []);
       } else if (activeTab === 'waitlist') {
@@ -2277,15 +2283,29 @@ const AdminPageV4 = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredUsers.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.position}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {user.chapters?.universities.name} - {user.chapters?.greek_organizations.name}
+                    {filteredUsers.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                          <Users className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+                          <p className="text-lg font-medium">No users found</p>
+                          <p className="text-sm mt-1">
+                            {searchTerm ? 'Try adjusting your search' : 'Import a roster CSV or add users manually'}
+                          </p>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.email || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      </tr>
+                    ) : (
+                      filteredUsers.map((user) => (
+                        <tr key={user.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.name}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.position}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {user.chapters?.chapter_name || '-'}
+                            {user.chapters?.greek_organizations?.name && (
+                              <span className="text-gray-400 ml-2">• {user.chapters.greek_organizations.name}</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.email || '-'}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
                             onClick={() => handleUserEdit(user)}
                             className="text-primary-600 hover:text-primary-900 mr-3"
@@ -2300,7 +2320,7 @@ const AdminPageV4 = () => {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    )))}
                   </tbody>
                 </table>
               </div>
