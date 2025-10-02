@@ -252,23 +252,26 @@ const AdminPageV4 = () => {
         const data = await res.json();
         setUniversities(data.data || []);
       } else if (activeTab === 'chapters') {
-        const [orgsRes, unisRes, chaptersRes] = await Promise.all([
+        const [orgsRes, unisRes, chaptersRes, usersRes] = await Promise.all([
           fetch(`${API_URL}/admin/greek-organizations`, { headers: getAdminHeaders() }),
           fetch(`${API_URL}/admin/universities`, { headers: getAdminHeaders() }),
-          fetch(`${API_URL}/admin/chapters`, { headers: getAdminHeaders() })
+          fetch(`${API_URL}/admin/chapters`, { headers: getAdminHeaders() }),
+          fetch(`${API_URL}/admin/officers`, { headers: getAdminHeaders() })
         ]);
-        const [orgsData, unisData, chaptersData] = await Promise.all([
+        const [orgsData, unisData, chaptersData, usersData] = await Promise.all([
           orgsRes.json(),
           unisRes.json(),
-          chaptersRes.json()
+          chaptersRes.json(),
+          usersRes.json()
         ]);
         setGreekOrgs(orgsData.data || []);
         setUniversities(unisData.data || []);
         setChapters(chaptersData.data || []);
+        setUsers(usersData.data || []);
       } else if (activeTab === 'users') {
         const [chaptersRes, usersRes] = await Promise.all([
           fetch(`${API_URL}/admin/chapters`, { headers: getAdminHeaders() }),
-          fetch(`${API_URL}/admin/users`, { headers: getAdminHeaders() })
+          fetch(`${API_URL}/admin/officers`, { headers: getAdminHeaders() })
         ]);
         const [chaptersData, usersData] = await Promise.all([
           chaptersRes.json(),
@@ -2115,7 +2118,29 @@ const AdminPageV4 = () => {
                           {ch.universities?.name || '-'} ({ch.universities?.state || '-'})
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ch.chapter_name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{ch.member_count || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {(() => {
+                            const actualCount = users.filter(u => u.chapter_id === ch.id).length;
+                            const targetCount = ch.member_count || 0;
+                            const percentage = targetCount > 0 ? Math.round((actualCount / targetCount) * 100) : 0;
+                            const isComplete = actualCount >= targetCount && targetCount > 0;
+
+                            return (
+                              <div className="flex items-center gap-2">
+                                <span className={isComplete ? 'text-green-600 font-medium' : 'text-gray-900'}>
+                                  {actualCount}
+                                </span>
+                                <span className="text-gray-400">/</span>
+                                <span className="text-gray-500">{targetCount || '?'}</span>
+                                {targetCount > 0 && (
+                                  <span className={`text-xs ${percentage >= 80 ? 'text-green-600' : percentage >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                    ({percentage}%)
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
                             onClick={() => handleChapterEdit(ch)}
