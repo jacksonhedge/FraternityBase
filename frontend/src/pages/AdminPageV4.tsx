@@ -53,6 +53,8 @@ interface University {
   website?: string;
   logo_url?: string;
   chapter_count?: number;
+  bars_nearby?: number;
+  unlock_count?: number;
 }
 
 interface Chapter {
@@ -1444,8 +1446,8 @@ const AdminPageV4 = () => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">State</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapters</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Students</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Greek %</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bars</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unlocks</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
@@ -1478,10 +1480,10 @@ const AdminPageV4 = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {uni.student_count ? uni.student_count.toLocaleString() : '-'}
+                          {uni.bars_nearby || 0}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {uni.greek_percentage ? `${(uni.greek_percentage * 100).toFixed(1)}%` : '-'}
+                          {uni.unlock_count || 0}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
