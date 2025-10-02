@@ -21,6 +21,10 @@ import {
   Settings,
   GraduationCap,
   Zap,
+  Lock,
+  Unlock,
+  MessageSquare,
+  Utensils,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -38,10 +42,13 @@ const Layout = () => {
 
   const navigation = [
     { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null },
+    { name: 'My Chapters', href: '/app/my-chapters', icon: Unlock, badge: null },
     { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW' },
     { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null },
     { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null },
     { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null },
+    { name: 'Outreach Help', href: '/app/outreach', icon: MessageSquare, badge: null },
+    { name: 'Bars/Restaurants', href: '/app/bars', icon: Utensils, badge: 'SOON' },
     { name: 'Buy Credits', href: '/app/credits', icon: Zap, badge: null },
     { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null },
   ];

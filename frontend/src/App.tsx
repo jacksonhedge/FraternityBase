@@ -36,6 +36,9 @@ import AdminPageV3 from './pages/AdminPageV3';
 import AdminPageV4 from './pages/AdminPageV4';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminAnalyticsDashboard from './pages/AdminAnalyticsDashboard';
+import MyChaptersPage from './pages/MyChaptersPage';
+import OutreachPage from './pages/OutreachPage';
+import BarsPage from './pages/BarsPage';
 
 function App() {
   console.log('🧢 FraternityBase App loaded - Routes available: /, /signup, /pricing, /login - v3');
@@ -66,6 +69,7 @@ function App() {
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Navigate to="/app/map" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="my-chapters" element={<MyChaptersPage />} />
             <Route path="team" element={<TeamPage />} />
             <Route path="fraternities" element={<FraternitiesPage />} />
             <Route path="colleges" element={<CollegesPage />} />
@@ -73,6 +77,8 @@ function App() {
             <Route path="map" element={<MapPageFullScreen />} />
             <Route path="chapters" element={<ChaptersPage />} />
             <Route path="chapters/:id" element={<ChapterDetailPage />} />
+            <Route path="outreach" element={<OutreachPage />} />
+            <Route path="bars" element={<BarsPage />} />
             <Route path="events" element={<EventsPage />} />
             <Route path="events/:id" element={<EventDetailPage />} />
             <Route path="partnerships" element={<PartnershipsPage />} />
