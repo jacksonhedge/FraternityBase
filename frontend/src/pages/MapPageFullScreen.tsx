@@ -423,7 +423,7 @@ const MapPageFullScreen = () => {
     return null;
   };
 
-  // Handle state click - fetch from database
+  // Handle state click - use hardcoded data to match what's shown on map
   const handleStateClick = async (feature: any) => {
     console.log('==================================================');
     console.log('🗺️ [MapPage - handleStateClick] State clicked:', feature.properties.name);
@@ -436,93 +436,46 @@ const MapPageFullScreen = () => {
     }
     console.log('✅ [MapPage - handleStateClick] Found state abbreviation:', stateAbbr);
 
-    try {
-      // Fetch colleges from database for this state
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-      const token = localStorage.getItem('token');
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-      };
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
+    // Use hardcoded data to match what's actually shown on the map
+    let collegesInState = Object.entries(COLLEGE_LOCATIONS)
+      .filter(([name, college]) => college.state === stateAbbr)
+      .map(([name, data]) => ({ name, ...data }));
 
-      console.log(`🌐 [MapPage - handleStateClick] Fetching colleges from: ${API_URL}/admin/universities`);
-      const res = await fetch(`${API_URL}/admin/universities`, { headers });
-      const data = await res.json();
-      console.log(`📊 [MapPage - handleStateClick] Received ${data.data?.length || 0} colleges from API`);
-
-      if (data.data) {
-        // Filter colleges by state
-        let collegesInState = data.data
-          .filter((uni: any) => uni.state === stateAbbr)
-          .map((uni: any) => {
-            const coords = getCollegeCoordinates(uni.name, stateAbbr);
-            return {
-              name: uni.name,
-              lat: coords?.lat || 0,
-              lng: coords?.lng || 0,
-              state: uni.state,
-              fraternities: uni.chapter_count || 0,
-              sororities: 0, // Database doesn't distinguish, total is in chapter_count
-              totalMembers: uni.chapter_count * 80 || 0, // Estimate
-              conference: uni.conference,
-              division: 'D1' // Assuming D1 for now
-            };
-          })
-          .filter((college: any) => college.lat !== 0 && college.lng !== 0); // Only keep colleges with valid coordinates
-
-        // Apply division filter
-        if (divisionFilter === 'power4') {
-          const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
-          collegesInState = collegesInState.filter((c: any) =>
-            power4Conferences.includes(c.conference || '')
-          );
-        }
-
-        const totalChapters = collegesInState.reduce(
-          (sum: number, c: any) => sum + c.fraternities + c.sororities, 0
-        );
-        const totalMembers = collegesInState.reduce(
-          (sum: number, c: any) => sum + c.totalMembers, 0
-        );
-
-        setSelectedState({
-          name: feature.properties.name,
-          abbr: stateAbbr,
-          colleges: collegesInState,
-          totalChapters,
-          totalMembers
-        });
-
-        console.log(`✅ [MapPage - handleStateClick] Loaded ${collegesInState.length} colleges for ${stateAbbr}`);
-        console.log(`📊 [MapPage - handleStateClick] Total chapters: ${totalChapters}, Total members: ${totalMembers}`);
-        console.log(`🎯 [MapPage - handleStateClick] Setting sidebar to show state view`);
-        console.log('==================================================');
-      }
-    } catch (error) {
-      console.error('❌ [MapPage - handleStateClick] Error fetching colleges:', error);
-      console.error('❌ [MapPage - handleStateClick] Error details:', error instanceof Error ? error.message : 'Unknown error');
-      // Fallback to hardcoded data
-      const collegesInState = Object.entries(COLLEGE_LOCATIONS)
-        .filter(([name, college]) => college.state === stateAbbr)
-        .map(([name, data]) => ({ name, ...data }));
-
-      const totalChapters = collegesInState.reduce(
-        (sum, c) => sum + c.fraternities + c.sororities, 0
+    // Apply division filter to match map markers
+    if (divisionFilter === 'power4') {
+      const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+      collegesInState = collegesInState.filter((c: any) =>
+        power4Conferences.includes(c.conference || '')
       );
-      const totalMembers = collegesInState.reduce(
-        (sum, c) => sum + c.totalMembers, 0
-      );
-
-      setSelectedState({
-        name: feature.properties.name,
-        abbr: stateAbbr,
-        colleges: collegesInState,
-        totalChapters,
-        totalMembers
-      });
+    } else if (divisionFilter === 'd1') {
+      collegesInState = collegesInState.filter((c: any) => c.division === 'D1');
+    } else if (divisionFilter === 'd2') {
+      collegesInState = collegesInState.filter((c: any) => c.division === 'D2');
+    } else if (divisionFilter === 'd3') {
+      collegesInState = collegesInState.filter((c: any) => c.division === 'D3');
+    } else if (divisionFilter === 'mychapters') {
+      collegesInState = []; // No colleges shown in mychapters filter yet
     }
+
+    const totalChapters = collegesInState.reduce(
+      (sum, c) => sum + c.fraternities + c.sororities, 0
+    );
+    const totalMembers = collegesInState.reduce(
+      (sum, c) => sum + c.totalMembers, 0
+    );
+
+    setSelectedState({
+      name: feature.properties.name,
+      abbr: stateAbbr,
+      colleges: collegesInState,
+      totalChapters,
+      totalMembers
+    });
+
+    console.log(`✅ [MapPage - handleStateClick] Loaded ${collegesInState.length} colleges for ${stateAbbr}`);
+    console.log(`📊 [MapPage - handleStateClick] Total chapters: ${totalChapters}, Total members: ${totalMembers}`);
+    console.log(`🎯 [MapPage - handleStateClick] Setting sidebar to show state view`);
+    console.log('==================================================');
 
     setShowSidebar(true);
     setViewMode('state'); // Change to state view mode

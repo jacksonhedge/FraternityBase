@@ -1257,7 +1257,7 @@ export const COLLEGE_LOCATIONS = {
   "Milwaukee School of Engineering (WI)": { lat: 44.878, lng: -89.9333, state: "WI", fraternities: 8, sororities: 5, totalMembers: 500, conference: "", division: "D3" },
   "Ripon College (WI)": { lat: 43.5169, lng: -88.7417, state: "WI", fraternities: 8, sororities: 5, totalMembers: 500, conference: "", division: "D3" },
   "St. Norbert College (WI)": { lat: 43.6691, lng: -89.0993, state: "WI", fraternities: 8, sororities: 5, totalMembers: 500, conference: "", division: "D3" },
-  "University of Wisconsin-Parkside (WI)": { lat: 43.5794, lng: -89.0798, state: "WI", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "BIG 10", division: "D2" },
+  "University of Wisconsin-Parkside (WI)": { lat: 43.5794, lng: -89.0798, state: "WI", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
   "University of Wisconsin–Eau Claire (WI)": { lat: 44.9293, lng: -90.1794, state: "WI", fraternities: 8, sororities: 5, totalMembers: 500, conference: "", division: "D3" },
   "University of Wisconsin–Green Bay (WI)": { lat: 45.0364, lng: -89.2464, state: "WI", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
   "University of Wisconsin–La Crosse (WI)": { lat: 44.3574, lng: -89.1186, state: "WI", fraternities: 8, sororities: 5, totalMembers: 500, conference: "", division: "D3" },
