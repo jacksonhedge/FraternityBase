@@ -232,7 +232,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     const { unlockType } = req.body;
 
     // Validate unlock type
-    const validTypes = ['roster', 'emails', 'phones', 'officers', 'full'];
+    const validTypes = ['roster', 'emails', 'phones', 'officers', 'full', 'warm_introduction'];
     if (!unlockType || !validTypes.includes(unlockType)) {
       return res.status(400).json({ error: 'Invalid unlock type' });
     }
@@ -256,7 +256,8 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       emails: 25,
       phones: 25,
       officers: 15,
-      full: 50
+      full: 50,
+      warm_introduction: 35
     };
 
     const cost = creditCosts[unlockType];
