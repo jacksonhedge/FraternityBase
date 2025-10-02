@@ -19,7 +19,12 @@ import {
   Home,
   BarChart3,
   Lock,
-  Mail
+  Mail,
+  DollarSign,
+  TrendingUp,
+  CreditCard,
+  UserPlus,
+  Star
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 
@@ -55,6 +60,7 @@ interface University {
   chapter_count?: number;
   bars_nearby?: number;
   unlock_count?: number;
+  conference?: string;
 }
 
 interface Chapter {
@@ -77,17 +83,19 @@ interface Chapter {
   universities?: { name: string; state: string };
 }
 
-interface Officer {
+interface User {
   id: string;
   chapter_id: string;
   name: string;
   position: string;
+  member_type?: 'user' | 'member' | 'alumni' | 'advisor';
   email?: string;
   phone?: string;
   linkedin_profile?: string;
   graduation_year?: number;
   major?: string;
   is_primary_contact?: boolean;
+  is_pinned?: boolean;
   chapters?: {
     chapter_name: string;
     greek_organizations: { name: string };
@@ -128,7 +136,7 @@ interface WaitlistEntry {
 
 const AdminPageV4 = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'contacts' | 'waitlist'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'users' | 'waitlist'>('dashboard');
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -138,11 +146,12 @@ const AdminPageV4 = () => {
   const [greekOrgs, setGreekOrgs] = useState<GreekOrg[]>([]);
   const [universities, setUniversities] = useState<University[]>([]);
   const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [officers, setOfficers] = useState<Officer[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCSVImport, setShowCSVImport] = useState(false);
+  const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -171,7 +180,9 @@ const AdminPageV4 = () => {
     greek_percentage: '',
     website: '',
     logo_url: '',
-    logoFile: null as File | null
+    logoFile: null as File | null,
+    bars_nearby: '',
+    unlock_count: ''
   });
 
   const [chapterForm, setChapterForm] = useState({
@@ -191,10 +202,11 @@ const AdminPageV4 = () => {
     event_frequency: '20'
   });
 
-  const [officerForm, setOfficerForm] = useState({
+  const [userForm, setUserForm] = useState({
     chapter_id: '',
     name: '',
     position: 'President',
+    member_type: 'member' as 'user' | 'member' | 'alumni' | 'advisor',
     email: '',
     phone: '',
     linkedin_profile: '',
@@ -253,17 +265,17 @@ const AdminPageV4 = () => {
         setGreekOrgs(orgsData.data || []);
         setUniversities(unisData.data || []);
         setChapters(chaptersData.data || []);
-      } else if (activeTab === 'contacts') {
-        const [chaptersRes, officersRes] = await Promise.all([
+      } else if (activeTab === 'users') {
+        const [chaptersRes, usersRes] = await Promise.all([
           fetch(`${API_URL}/admin/chapters`, { headers: getAdminHeaders() }),
-          fetch(`${API_URL}/admin/officers`, { headers: getAdminHeaders() })
+          fetch(`${API_URL}/admin/users`, { headers: getAdminHeaders() })
         ]);
-        const [chaptersData, officersData] = await Promise.all([
+        const [chaptersData, usersData] = await Promise.all([
           chaptersRes.json(),
-          officersRes.json()
+          usersRes.json()
         ]);
         setChapters(chaptersData.data || []);
-        setOfficers(officersData.data || []);
+        setUsers(usersData.data || []);
       } else if (activeTab === 'waitlist') {
         const res = await fetch(`${API_URL}/admin/waitlist`, { headers: getAdminHeaders() });
         const data = await res.json();
@@ -397,8 +409,17 @@ const AdminPageV4 = () => {
       // Handle logo upload if file is present
       let logoUrl = universityForm.logo_url;
       if (universityForm.logoFile) {
-        const fileName = `${universityForm.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.png`;
-        logoUrl = await handleUploadImage(universityForm.logoFile, 'college-logos', fileName);
+        console.log('📤 Uploading logo...', universityForm.logoFile.name);
+        const fileExt = universityForm.logoFile.name.split('.').pop();
+        const fileName = `${universityForm.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${fileExt}`;
+        try {
+          logoUrl = await handleUploadImage(universityForm.logoFile, 'college-logos', fileName);
+          console.log('✅ Logo uploaded:', logoUrl);
+        } catch (uploadError: any) {
+          console.error('❌ Logo upload failed:', uploadError);
+          alert(`Logo upload failed: ${uploadError.message || 'Unknown error'}. The college will be saved without a logo.`);
+          logoUrl = null; // Continue without logo
+        }
       }
 
       const url = editingId
@@ -417,7 +438,9 @@ const AdminPageV4 = () => {
           student_count: universityForm.student_count ? parseInt(universityForm.student_count) : null,
           greek_percentage: universityForm.greek_percentage ? parseFloat(universityForm.greek_percentage) : null,
           website: universityForm.website || null,
-          logo_url: logoUrl || null
+          logo_url: logoUrl || null,
+          bars_nearby: universityForm.bars_nearby ? parseInt(universityForm.bars_nearby) : null,
+          unlock_count: universityForm.unlock_count ? parseInt(universityForm.unlock_count) : null
         })
       });
 
@@ -433,12 +456,18 @@ const AdminPageV4 = () => {
           greek_percentage: '',
           website: '',
           logo_url: '',
-          logoFile: null
+          logoFile: null,
+          bars_nearby: '',
+          unlock_count: ''
         });
         fetchData();
+      } else {
+        const errorData = await res.json();
+        alert(`Failed to save university: ${errorData.error || 'Unknown error'}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error:', error);
+      alert(`Error saving university: ${error.message || 'Unknown error'}`);
     }
   };
 
@@ -452,7 +481,9 @@ const AdminPageV4 = () => {
       greek_percentage: uni.greek_percentage?.toString() || '',
       website: uni.website || '',
       logo_url: uni.logo_url || '',
-      logoFile: null
+      logoFile: null,
+      bars_nearby: uni.bars_nearby?.toString() || '',
+      unlock_count: uni.unlock_count?.toString() || ''
     });
     setShowForm(true);
   };
@@ -583,13 +614,13 @@ const AdminPageV4 = () => {
     }
   };
 
-  // CRUD Operations for Officers
+  // CRUD Operations for Users
   const handleOfficerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const url = editingId
-        ? `${API_URL}/admin/officers/${editingId}`
-        : `${API_URL}/admin/officers`;
+        ? `${API_URL}/admin/users/${editingId}`
+        : `${API_URL}/admin/users`;
 
       const method = editingId ? 'PUT' : 'POST';
 
@@ -597,26 +628,28 @@ const AdminPageV4 = () => {
         method,
         headers: getAdminHeaders(),
         body: JSON.stringify({
-          chapter_id: officerForm.chapter_id,
-          name: officerForm.name,
-          position: officerForm.position,
-          email: officerForm.email || null,
-          phone: officerForm.phone || null,
-          linkedin_profile: officerForm.linkedin_profile || null,
-          graduation_year: officerForm.graduation_year ? parseInt(officerForm.graduation_year) : null,
-          major: officerForm.major || null,
-          is_primary_contact: officerForm.is_primary_contact
+          chapter_id: userForm.chapter_id,
+          name: userForm.name,
+          position: userForm.position,
+          member_type: userForm.member_type || 'member',
+          email: userForm.email || null,
+          phone: userForm.phone || null,
+          linkedin_profile: userForm.linkedin_profile || null,
+          graduation_year: userForm.graduation_year ? parseInt(userForm.graduation_year) : null,
+          major: userForm.major || null,
+          is_primary_contact: userForm.is_primary_contact
         })
       });
 
       if (res.ok) {
-        showSuccessMsg(editingId ? 'Officer updated successfully!' : 'Officer created successfully!');
+        showSuccessMsg(editingId ? 'User updated successfully!' : 'User created successfully!');
         setShowForm(false);
         setEditingId(null);
-        setOfficerForm({
+        setUserForm({
           chapter_id: '',
           name: '',
           position: 'President',
+          member_type: 'member' as 'officer' | 'member' | 'alumni' | 'advisor',
           email: '',
           phone: '',
           linkedin_profile: '',
@@ -631,27 +664,27 @@ const AdminPageV4 = () => {
     }
   };
 
-  const handleOfficerEdit = (officer: Officer) => {
-    setEditingId(officer.id);
-    setOfficerForm({
-      chapter_id: officer.chapter_id,
-      name: officer.name,
-      position: officer.position,
-      email: officer.email || '',
-      phone: officer.phone || '',
-      linkedin_profile: officer.linkedin_profile || '',
-      graduation_year: officer.graduation_year?.toString() || '',
-      major: officer.major || '',
-      is_primary_contact: officer.is_primary_contact || false
+  const handleUserEdit = (user: User) => {
+    setEditingId(user.id);
+    setUserForm({
+      chapter_id: user.chapter_id,
+      name: user.name,
+      position: user.position,
+      email: user.email || '',
+      phone: user.phone || '',
+      linkedin_profile: user.linkedin_profile || '',
+      graduation_year: user.graduation_year?.toString() || '',
+      major: user.major || '',
+      is_primary_contact: user.is_primary_contact || false
     });
     setShowForm(true);
   };
 
-  const handleOfficerDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this officer?')) return;
+  const handleUserDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      const res = await fetch(`${API_URL}/admin/officers/${id}`, {
+      const res = await fetch(`${API_URL}/admin/users/${id}`, {
         method: 'DELETE',
         headers: getAdminHeaders()
       });
@@ -666,7 +699,7 @@ const AdminPageV4 = () => {
   };
 
   // CSV Import Handler
-  const handleCSVImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -676,6 +709,9 @@ const AdminPageV4 = () => {
       const lines = text.split('\n').filter(line => line.trim());
       const headers = lines[0].split(',').map(h => h.trim());
 
+      let successCount = 0;
+      let errorCount = 0;
+
       for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',').map(v => v.trim());
         const row: Record<string, string> = {};
@@ -683,28 +719,104 @@ const AdminPageV4 = () => {
           row[header] = values[index] || '';
         });
 
-        // Import based on active tab
-        if (activeTab === 'colleges') {
-          await fetch(`${API_URL}/admin/universities`, {
-            method: 'POST',
-            headers: getAdminHeaders(),
-            body: JSON.stringify({
-              name: row.name || row.Name,
-              location: row.location || row.Location,
-              state: row.state || row.State,
-              student_count: parseInt(row.student_count || row['Student Count'] || '0'),
-              greek_percentage: parseFloat(row.greek_percentage || row['Greek %'] || '0'),
-              website: row.website || row.Website,
-              logo_url: row.logo_url || row['Logo URL']
-            })
-          });
+        try {
+          // Import based on active tab
+          if (activeTab === 'colleges') {
+            let logoUrl = row.logo_url || row['Logo URL'] || '';
+
+            // If logo_url is provided and it's a URL, download and upload it
+            if (logoUrl && logoUrl.startsWith('http')) {
+              try {
+                const response = await fetch(logoUrl);
+                const blob = await response.blob();
+                const fileName = `${(row.name || row.Name).toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${blob.type.split('/')[1]}`;
+
+                const reader = new FileReader();
+                const base64Promise = new Promise<string>((resolve) => {
+                  reader.onloadend = () => resolve(reader.result as string);
+                  reader.readAsDataURL(blob);
+                });
+                const base64Data = await base64Promise;
+
+                logoUrl = await handleUploadImage(blob as File, 'college-logos', fileName);
+              } catch (uploadError) {
+                console.error(`Failed to upload logo for ${row.name}:`, uploadError);
+                logoUrl = ''; // Continue without logo
+              }
+            }
+
+            await fetch(`${API_URL}/admin/universities`, {
+              method: 'POST',
+              headers: getAdminHeaders(),
+              body: JSON.stringify({
+                name: row.name || row.Name,
+                location: row.location || row.Location,
+                state: row.state || row.State,
+                student_count: parseInt(row.student_count || row['Student Count'] || '0'),
+                greek_percentage: parseFloat(row.greek_percentage || row['Greek %'] || '0'),
+                website: row.website || row.Website || '',
+                logo_url: logoUrl,
+                conference: row.conference || row.Conference || '',
+                bars_nearby: parseInt(row.bars_nearby || row['Bars Nearby'] || '0'),
+                unlock_count: parseInt(row.unlock_count || row['Unlock Count'] || '0')
+              })
+            });
+            successCount++;
+          } else if (activeTab === 'users') {
+            // Officer/Roster CSV import
+            const chapterName = row.chapter || row.Chapter;
+            const universityName = row.university || row.University || row.college || row.College;
+
+            // Need to look up chapter_id from chapter name and university
+            if (!chapterName || !universityName) {
+              console.error('Missing chapter or university name for user import');
+              errorCount++;
+              continue;
+            }
+
+            // First, find the chapter
+            const chaptersRes = await fetch(`${API_URL}/admin/chapters`, {
+              headers: getAdminHeaders()
+            });
+            const chaptersData = await chaptersRes.json();
+            const chapter = chaptersData.find((ch: any) =>
+              ch.chapter_name?.toLowerCase().includes(chapterName.toLowerCase()) &&
+              ch.universities?.name?.toLowerCase().includes(universityName.toLowerCase())
+            );
+
+            if (!chapter) {
+              console.error(`Could not find chapter: ${chapterName} at ${universityName}`);
+              errorCount++;
+              continue;
+            }
+
+            await fetch(`${API_URL}/admin/officers`, {
+              method: 'POST',
+              headers: getAdminHeaders(),
+              body: JSON.stringify({
+                chapter_id: chapter.id,
+                name: row.name || row.Name,
+                position: row.position || row.Position || 'Member',
+                member_type: (row.member_type || row['Member Type'] || row.type || 'member').toLowerCase(),
+                email: row.email || row.Email || '',
+                phone: row.phone || row.Phone || '',
+                linkedin_profile: row.linkedin || row.LinkedIn || row.linkedin_profile || '',
+                graduation_year: parseInt(row.graduation_year || row['Graduation Year'] || row.grad_year || '0') || undefined,
+                major: row.major || row.Major || '',
+                is_primary_contact: (row.is_primary || row['Primary Contact'] || '').toLowerCase() === 'true'
+              })
+            });
+            successCount++;
+          }
+        } catch (error) {
+          console.error(`Error importing row ${i}:`, error);
+          errorCount++;
         }
-        // Add similar logic for other tabs
       }
 
-      showSuccessMsg(`Imported ${lines.length - 1} records successfully!`);
+      showSuccessMsg(`CSV Import Complete!\n✅ Success: ${successCount}\n❌ Errors: ${errorCount}`);
       fetchData();
-      setShowCSVImport(false);
+      e.target.value = ''; // Reset file input
     };
     reader.readAsText(file);
   };
@@ -737,10 +849,39 @@ const AdminPageV4 = () => {
     org.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredUniversities = universities.filter(uni =>
-    uni.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    uni.state.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const BIG_10_SCHOOLS = [
+    'University of Illinois', 'Indiana University', 'University of Iowa', 'University of Maryland',
+    'University of Michigan', 'Michigan State University', 'University of Minnesota', 'University of Nebraska',
+    'Northwestern University', 'Ohio State University', 'Penn State University', 'Purdue University',
+    'Rutgers University', 'University of Wisconsin', 'UCLA', 'USC', 'University of Oregon', 'University of Washington'
+  ];
+
+  const filteredUniversities = universities
+    .filter(uni =>
+      uni.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      uni.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (uni.conference || '').toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (collegeOrderBy === 'name') {
+        return a.name.localeCompare(b.name);
+      } else if (collegeOrderBy === 'state') {
+        return a.state.localeCompare(b.state);
+      } else if (collegeOrderBy === 'chapters') {
+        return (b.chapter_count || 0) - (a.chapter_count || 0);
+      } else if (collegeOrderBy === 'big10') {
+        const aIsBig10 = BIG_10_SCHOOLS.some(school => a.name.includes(school));
+        const bIsBig10 = BIG_10_SCHOOLS.some(school => b.name.includes(school));
+        if (aIsBig10 && !bIsBig10) return -1;
+        if (!aIsBig10 && bIsBig10) return 1;
+        return a.name.localeCompare(b.name);
+      } else if (collegeOrderBy === 'conference') {
+        const aConf = a.conference || 'ZZZ';
+        const bConf = b.conference || 'ZZZ';
+        return aConf.localeCompare(bConf);
+      }
+      return 0;
+    });
 
   const filteredChapters = chapters.filter(ch =>
     ch.chapter_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -748,7 +889,7 @@ const AdminPageV4 = () => {
     ch.universities?.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredOfficers = officers.filter(off =>
+  const filteredUsers = users.filter(off =>
     off.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     off.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
     off.chapters?.chapter_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -819,44 +960,6 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('companies');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'companies'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Briefcase className="w-5 h-5" />
-            <span className="font-medium">Companies</span>
-            {companies.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{companies.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveTab('fraternities');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'fraternities'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Building2 className="w-5 h-5" />
-            <span className="font-medium">Fraternities</span>
-            {greekOrgs.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{greekOrgs.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
               setActiveTab('colleges');
               setShowForm(false);
               setEditingId(null);
@@ -895,20 +998,20 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('contacts');
+              setActiveTab('users');
               setShowForm(false);
               setEditingId(null);
             }}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'contacts'
+              activeTab === 'users'
                 ? 'bg-primary-600 text-white'
                 : 'text-gray-300 hover:bg-gray-800'
             }`}
           >
             <UserCheck className="w-5 h-5" />
-            <span className="font-medium">Officers</span>
-            {officers.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{officers.length}</span>
+            <span className="font-medium">Users</span>
+            {users.length > 0 && (
+              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{users.length}</span>
             )}
           </button>
 
@@ -928,6 +1031,25 @@ const AdminPageV4 = () => {
             <span className="font-medium">Waitlist</span>
             {waitlistEntries.length > 0 && (
               <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{waitlistEntries.length}</span>
+            )}
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('fraternities');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'fraternities'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Building2 className="w-5 h-5" />
+            <span className="font-medium">Fraternities</span>
+            {greekOrgs.length > 0 && (
+              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{greekOrgs.length}</span>
             )}
           </button>
         </nav>
@@ -960,7 +1082,7 @@ const AdminPageV4 = () => {
               {activeTab === 'fraternities' && 'Manage Greek organizations'}
               {activeTab === 'colleges' && 'Manage universities and colleges'}
               {activeTab === 'chapters' && 'Manage individual chapters'}
-              {activeTab === 'contacts' && 'Manage chapter officers and contacts'}
+              {activeTab === 'users' && 'Manage chapter users and contacts'}
               {activeTab === 'waitlist' && 'View and manage waitlist signups'}
             </p>
           </div>
@@ -975,41 +1097,183 @@ const AdminPageV4 = () => {
 
       {/* Dashboard Tab Content */}
       {activeTab === 'dashboard' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Companies</p>
-                <p className="text-3xl font-bold text-gray-900">{companies.length}</p>
+        <div className="space-y-6">
+          {/* Top Row - Revenue & Financial KPIs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-lg shadow-lg text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-green-100 uppercase font-medium">Total Revenue</p>
+                  <p className="text-3xl font-bold mt-1">
+                    ${companies.reduce((sum, c) => sum + (c.total_spent || 0), 0).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-green-100 mt-1">Credits spent</p>
+                </div>
+                <DollarSign className="w-12 h-12 text-green-200 opacity-80" />
               </div>
-              <Briefcase className="w-12 h-12 text-blue-500" />
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-lg shadow-lg text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-blue-100 uppercase font-medium">Active Credits</p>
+                  <p className="text-3xl font-bold mt-1">
+                    {companies.reduce((sum, c) => sum + (c.credits_balance || 0), 0).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-blue-100 mt-1">Total balance</p>
+                </div>
+                <CreditCard className="w-12 h-12 text-blue-200 opacity-80" />
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-lg shadow-lg text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-purple-100 uppercase font-medium">Total Unlocks</p>
+                  <p className="text-3xl font-bold mt-1">
+                    {companies.reduce((sum, c) => sum + (c.unlocks?.length || 0), 0).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-purple-100 mt-1">Chapter unlocks</p>
+                </div>
+                <Lock className="w-12 h-12 text-purple-200 opacity-80" />
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-lg shadow-lg text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-orange-100 uppercase font-medium">Avg Revenue/Company</p>
+                  <p className="text-3xl font-bold mt-1">
+                    ${companies.length > 0
+                      ? (companies.reduce((sum, c) => sum + (c.total_spent || 0), 0) / companies.length).toFixed(0)
+                      : '0'}
+                  </p>
+                  <p className="text-xs text-orange-100 mt-1">Per company</p>
+                </div>
+                <TrendingUp className="w-12 h-12 text-orange-200 opacity-80" />
+              </div>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Fraternities</p>
-                <p className="text-3xl font-bold text-gray-900">{greekOrgs.length}</p>
+
+          {/* Second Row - Core Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Companies</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{companies.length}</p>
+                  <p className="text-xs text-gray-500 mt-1">Registered accounts</p>
+                </div>
+                <Briefcase className="w-10 h-10 text-blue-500" />
               </div>
-              <Building2 className="w-12 h-12 text-purple-500" />
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Fraternities</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{greekOrgs.length}</p>
+                  <p className="text-xs text-gray-500 mt-1">Greek organizations</p>
+                </div>
+                <Building2 className="w-10 h-10 text-purple-500" />
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Colleges</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{universities.length}</p>
+                  <p className="text-xs text-gray-500 mt-1">Universities listed</p>
+                </div>
+                <GraduationCap className="w-10 h-10 text-green-500" />
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Chapters</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{chapters.length}</p>
+                  <p className="text-xs text-gray-500 mt-1">Active chapters</p>
+                </div>
+                <Users className="w-10 h-10 text-orange-500" />
+              </div>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Colleges</p>
-                <p className="text-3xl font-bold text-gray-900">{universities.length}</p>
+
+          {/* Third Row - Additional KPIs */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-indigo-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Users</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{users.length}</p>
+                  <p className="text-xs text-gray-500 mt-1">Chapter contacts</p>
+                </div>
+                <UserCheck className="w-10 h-10 text-indigo-500" />
               </div>
-              <GraduationCap className="w-12 h-12 text-green-500" />
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-pink-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Waitlist</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{waitlistEntries.length}</p>
+                  <p className="text-xs text-gray-500 mt-1">Pending signups</p>
+                </div>
+                <UserPlus className="w-10 h-10 text-pink-500" />
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-teal-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Active Companies</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">
+                    {companies.filter(c => (c.unlocks?.length || 0) > 0).length}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">With unlocks</p>
+                </div>
+                <BarChart3 className="w-10 h-10 text-teal-500" />
+              </div>
             </div>
           </div>
+
+          {/* Recent Activity Section */}
           <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Chapters</p>
-                <p className="text-3xl font-bold text-gray-900">{chapters.length}</p>
-              </div>
-              <Users className="w-12 h-12 text-orange-500" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Companies by Revenue</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Company</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Spent</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Credits Balance</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unlocks</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {companies
+                    .sort((a, b) => (b.total_spent || 0) - (a.total_spent || 0))
+                    .slice(0, 5)
+                    .map((company) => (
+                      <tr key={company.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-3 text-sm font-medium text-gray-900">{company.company_name}</td>
+                        <td className="px-4 py-3 text-sm text-gray-600">
+                          <span className="font-semibold text-green-600">{company.total_spent || 0}</span> credits
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-600">{company.credits_balance || 0} credits</td>
+                        <td className="px-4 py-3 text-sm text-gray-600">{company.unlocks?.length || 0}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              {companies.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No companies registered yet</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1078,7 +1342,7 @@ const AdminPageV4 = () => {
       )}
 
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'contacts' || activeTab === 'waitlist') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'users' || activeTab === 'waitlist') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
@@ -1092,6 +1356,22 @@ const AdminPageV4 = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            {activeTab === 'colleges' && (
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Order by:</label>
+                <select
+                  value={collegeOrderBy}
+                  onChange={(e) => setCollegeOrderBy(e.target.value as any)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white text-sm"
+                >
+                  <option value="name">Name (A-Z)</option>
+                  <option value="state">State</option>
+                  <option value="chapters">Most Chapters</option>
+                  <option value="big10">Big 10 Schools</option>
+                  <option value="conference">Conference</option>
+                </select>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               {activeTab !== 'waitlist' && (
                 <>
@@ -1386,6 +1666,26 @@ const AdminPageV4 = () => {
                       />
                     </div>
                     <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Bars Nearby</label>
+                      <input
+                        type="number"
+                        value={universityForm.bars_nearby}
+                        onChange={(e) => setUniversityForm({ ...universityForm, bars_nearby: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="e.g., 15"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Unlock Count</label>
+                      <input
+                        type="number"
+                        value={universityForm.unlock_count}
+                        onChange={(e) => setUniversityForm({ ...universityForm, unlock_count: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="e.g., 5"
+                      />
+                    </div>
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Website</label>
                       <input
                         type="url"
@@ -1399,22 +1699,178 @@ const AdminPageV4 = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Logo Upload</label>
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            setUniversityForm({ ...universityForm, logoFile: file });
+                            // Create preview URL
+                            const previewUrl = URL.createObjectURL(file);
+                            setUniversityForm({
+                              ...universityForm,
+                              logoFile: file,
+                              logo_url: previewUrl // Show preview immediately
+                            });
                           }
                         }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
                       />
-                      {universityForm.logo_url && (
-                        <div className="mt-2">
-                          <img src={universityForm.logo_url} alt="Logo" className="h-16 w-16 object-contain" />
+                      <p className="text-xs text-gray-500 mt-1">Accepts PNG, JPG, or SVG. Recommended size: 200x200px</p>
+                      {(universityForm.logo_url || universityForm.logoFile) && (
+                        <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                          <p className="text-xs font-medium text-gray-700 mb-2">Logo Preview:</p>
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={universityForm.logo_url}
+                              alt="Logo preview"
+                              className="h-20 w-20 object-contain border border-gray-300 rounded bg-white p-2"
+                            />
+                            {universityForm.logoFile && (
+                              <div className="text-xs text-gray-600">
+                                <p><strong>File:</strong> {universityForm.logoFile.name}</p>
+                                <p><strong>Size:</strong> {(universityForm.logoFile.size / 1024).toFixed(1)} KB</p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
                   </div>
+
+                  {/* Fraternities & Sororities Section */}
+                  {editingId && (
+                    <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <h4 className="text-md font-semibold text-gray-900 mb-4">Fraternities & Sororities at this College</h4>
+                      <div className="space-y-3">
+                        {/* List existing chapters */}
+                        <div className="mb-4">
+                          <p className="text-sm text-gray-600 mb-2">Current Greek Organizations:</p>
+                          <div className="max-h-40 overflow-y-auto space-y-1">
+                            {chapters
+                              .filter(ch => ch.university_id === editingId)
+                              .map(ch => (
+                                <div key={ch.id} className="flex items-center justify-between bg-white px-3 py-2 rounded border">
+                                  <div className="flex-1">
+                                    <span className="text-sm font-medium">{ch.greek_organizations?.name || 'Unknown'}</span>
+                                    {ch.chapter_name && <span className="text-xs text-gray-500 ml-2">({ch.chapter_name})</span>}
+                                    {ch.member_count && <span className="text-xs text-gray-500 ml-2">• {ch.member_count} members</span>}
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleChapterDelete(ch.id)}
+                                    className="text-red-600 hover:text-red-900 text-xs"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              ))}
+                            {chapters.filter(ch => ch.university_id === editingId).length === 0 && (
+                              <p className="text-sm text-gray-400 italic">No Greek organizations yet</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Add new organization */}
+                        <div className="border-t pt-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="text-sm font-medium text-gray-700">Add Greek Organizations:</p>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const bulkOrgs = greekOrgs.filter(org => !chapters.some(ch =>
+                                    ch.university_id === editingId && ch.greek_organization_id === org.id
+                                  ));
+                                  if (bulkOrgs.length === 0) {
+                                    alert('All organizations are already added to this college!');
+                                    return;
+                                  }
+                                  if (confirm(`Add all ${bulkOrgs.length} available Greek organizations to this college?`)) {
+                                    Promise.all(bulkOrgs.map(org =>
+                                      fetch(`${API_URL}/admin/chapters`, {
+                                        method: 'POST',
+                                        headers: getAdminHeaders(),
+                                        body: JSON.stringify({
+                                          greek_organization_id: org.id,
+                                          university_id: editingId,
+                                          chapter_name: '',
+                                          status: 'active'
+                                        })
+                                      })
+                                    )).then(() => {
+                                      showSuccessMsg(`Added ${bulkOrgs.length} Greek organizations!`);
+                                      fetchData();
+                                    });
+                                  }
+                                }}
+                                className="text-xs px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                              >
+                                Bulk Add All
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Multi-select list */}
+                          <div className="mb-3">
+                            <p className="text-xs text-gray-600 mb-2">Select multiple organizations to add (hold Ctrl/Cmd to select multiple):</p>
+                            <select
+                              multiple
+                              size={8}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 text-sm"
+                              id="bulk-select-orgs"
+                            >
+                              {greekOrgs
+                                .filter(org => !chapters.some(ch =>
+                                  ch.university_id === editingId && ch.greek_organization_id === org.id
+                                ))
+                                .map(org => (
+                                  <option key={org.id} value={org.id}>
+                                    {org.name} ({org.organization_type})
+                                  </option>
+                                ))}
+                            </select>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                const select = document.getElementById('bulk-select-orgs') as HTMLSelectElement;
+                                const selectedIds = Array.from(select.selectedOptions).map(opt => opt.value);
+                                if (selectedIds.length === 0) {
+                                  alert('Please select at least one organization');
+                                  return;
+                                }
+                                if (confirm(`Add ${selectedIds.length} selected Greek organization(s) to this college?`)) {
+                                  try {
+                                    await Promise.all(selectedIds.map(orgId =>
+                                      fetch(`${API_URL}/admin/chapters`, {
+                                        method: 'POST',
+                                        headers: getAdminHeaders(),
+                                        body: JSON.stringify({
+                                          greek_organization_id: orgId,
+                                          university_id: editingId,
+                                          chapter_name: '',
+                                          status: 'active'
+                                        })
+                                      })
+                                    ));
+                                    showSuccessMsg(`Added ${selectedIds.length} Greek organizations!`);
+                                    await fetchData();
+                                    select.selectedIndex = -1;
+                                  } catch (err) {
+                                    console.error('Error adding organizations:', err);
+                                  }
+                                }
+                              }}
+                              className="mt-2 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                            >
+                              Add Selected Organizations
+                            </button>
+                          </div>
+
+                          <p className="text-xs text-gray-500 mt-1">Tip: Select specific organizations above, or use "Bulk Add All" to add everything. Edit chapter details later in the Chapters tab.</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex justify-end space-x-3 mt-6">
                     <button
                       type="button"
@@ -1647,8 +2103,8 @@ const AdminPageV4 = () => {
             </>
           )}
 
-          {/* Officers Tab Content */}
-          {activeTab === 'contacts' && (
+          {/* Users Tab Content */}
+          {activeTab === 'users' && (
             <>
               {showForm && (
                 <form onSubmit={handleOfficerSubmit} className="mb-6 p-6 bg-gray-50 rounded-lg border-2 border-primary-200">
@@ -1658,8 +2114,8 @@ const AdminPageV4 = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Chapter *</label>
                       <select
                         required
-                        value={officerForm.chapter_id}
-                        onChange={(e) => setOfficerForm({ ...officerForm, chapter_id: e.target.value })}
+                        value={userForm.chapter_id}
+                        onChange={(e) => setUserForm({ ...userForm, chapter_id: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                       >
                         <option value="">Select chapter...</option>
@@ -1675,8 +2131,8 @@ const AdminPageV4 = () => {
                       <input
                         type="text"
                         required
-                        value={officerForm.name}
-                        onChange={(e) => setOfficerForm({ ...officerForm, name: e.target.value })}
+                        value={userForm.name}
+                        onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                         placeholder="e.g., John Smith"
                       />
@@ -1685,8 +2141,8 @@ const AdminPageV4 = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Position *</label>
                       <select
                         required
-                        value={officerForm.position}
-                        onChange={(e) => setOfficerForm({ ...officerForm, position: e.target.value })}
+                        value={userForm.position}
+                        onChange={(e) => setUserForm({ ...userForm, position: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                       >
                         <option value="President">President</option>
@@ -1701,8 +2157,8 @@ const AdminPageV4 = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                       <input
                         type="email"
-                        value={officerForm.email}
-                        onChange={(e) => setOfficerForm({ ...officerForm, email: e.target.value })}
+                        value={userForm.email}
+                        onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                         placeholder="email@university.edu"
                       />
@@ -1711,8 +2167,8 @@ const AdminPageV4 = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                       <input
                         type="tel"
-                        value={officerForm.phone}
-                        onChange={(e) => setOfficerForm({ ...officerForm, phone: e.target.value })}
+                        value={userForm.phone}
+                        onChange={(e) => setUserForm({ ...userForm, phone: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                         placeholder="(123) 456-7890"
                       />
@@ -1748,23 +2204,23 @@ const AdminPageV4 = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredOfficers.map((officer) => (
-                      <tr key={officer.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{officer.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{officer.position}</td>
+                    {filteredUsers.map((user) => (
+                      <tr key={user.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.position}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {officer.chapters?.universities.name} - {officer.chapters?.greek_organizations.name}
+                          {user.chapters?.universities.name} - {user.chapters?.greek_organizations.name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{officer.email || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.email || '-'}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
-                            onClick={() => handleOfficerEdit(officer)}
+                            onClick={() => handleUserEdit(user)}
                             className="text-primary-600 hover:text-primary-900 mr-3"
                           >
                             <Edit className="w-4 h-4 inline" />
                           </button>
                           <button
-                            onClick={() => handleOfficerDelete(officer.id)}
+                            onClick={() => handleUserDelete(user.id)}
                             className="text-red-600 hover:text-red-900"
                           >
                             <Trash2 className="w-4 h-4 inline" />
