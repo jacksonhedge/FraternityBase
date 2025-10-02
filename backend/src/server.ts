@@ -1105,13 +1105,14 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
     console.log('📍 Table: universities');
     console.log('📍 Query: SELECT * with chapter count, ORDER BY name ASC');
 
-    // Fetch universities with chapter count
+    // Fetch universities with chapter count, bars, and unlock count
     // TODO: Use supabaseAdmin once SUPABASE_SERVICE_ROLE_KEY is set in production
     const { data, error } = await supabase
       .from('universities')
       .select(`
         *,
-        chapters:chapters(count)
+        chapters:chapters(count),
+        unlock_history:unlock_history(count)
       `)
       .order('name', { ascending: true });
 
@@ -1126,14 +1127,17 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
         id: u.id,
         name: u.name,
         state: u.state,
-        chapters: u.chapters?.[0]?.count || 0
+        chapters: u.chapters?.[0]?.count || 0,
+        unlocks: u.unlock_history?.[0]?.count || 0
       })));
     }
 
-    // Transform the data to include chapter_count
+    // Transform the data to include chapter_count, bars_nearby, and unlock_count
     const transformedData = data?.map(uni => ({
       ...uni,
-      chapter_count: uni.chapters?.[0]?.count || 0
+      chapter_count: uni.chapters?.[0]?.count || 0,
+      bars_nearby: uni.bars_nearby || 0,
+      unlock_count: uni.unlock_history?.[0]?.count || 0
     })) || [];
 
     console.log(`✅ Sending ${transformedData.length} universities to frontend`);
