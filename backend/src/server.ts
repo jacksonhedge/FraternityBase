@@ -1100,8 +1100,14 @@ app.delete('/api/admin/greek-organizations/:id', requireAdmin, async (req, res) 
 // Universities
 app.get('/api/admin/universities', requireAdmin, async (req, res) => {
   try {
-    // Fetch universities with chapter count using admin client to bypass RLS
-    const { data, error } = await supabaseAdmin
+    console.log('\n🔍 === FETCHING UNIVERSITIES FROM DATABASE ===');
+    console.log('📍 Client: supabase (regular client - may be subject to RLS)');
+    console.log('📍 Table: universities');
+    console.log('📍 Query: SELECT * with chapter count, ORDER BY name ASC');
+
+    // Fetch universities with chapter count
+    // TODO: Use supabaseAdmin once SUPABASE_SERVICE_ROLE_KEY is set in production
+    const { data, error } = await supabase
       .from('universities')
       .select(`
         *,
@@ -1109,7 +1115,20 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
       `)
       .order('name', { ascending: true });
 
-    if (error) throw error;
+    if (error) {
+      console.error('❌ DATABASE ERROR:', error);
+      throw error;
+    }
+
+    console.log(`✅ Raw data received: ${data?.length || 0} universities`);
+    if (data && data.length > 0) {
+      console.log('📋 First 3 universities:', data.slice(0, 3).map(u => ({
+        id: u.id,
+        name: u.name,
+        state: u.state,
+        chapters: u.chapters?.[0]?.count || 0
+      })));
+    }
 
     // Transform the data to include chapter_count
     const transformedData = data?.map(uni => ({
@@ -1117,9 +1136,12 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
       chapter_count: uni.chapters?.[0]?.count || 0
     })) || [];
 
+    console.log(`✅ Sending ${transformedData.length} universities to frontend`);
+    console.log('=== END DATABASE FETCH ===\n');
+
     res.json({ success: true, data: transformedData });
   } catch (error: any) {
-    console.error('Error fetching universities:', error);
+    console.error('❌ Error fetching universities:', error);
     res.status(500).json({ error: error.message });
   }
 });
