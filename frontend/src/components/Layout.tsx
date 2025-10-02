@@ -40,20 +40,49 @@ const Layout = () => {
     navigate('/login');
   };
 
-  const navigation = [
-    { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null },
-    { name: 'My Chapters', href: '/app/my-chapters', icon: Unlock, badge: null },
-    { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW' },
-    { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null },
-    { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null },
-    { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null },
-    { name: 'Outreach Help', href: '/app/outreach', icon: MessageSquare, badge: null },
-    { name: 'Bars/Restaurants', href: '/app/bars', icon: Utensils, badge: 'SOON' },
-    { name: 'Buy Credits', href: '/app/credits', icon: Zap, badge: null },
-    { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null },
+  const navigationSections = [
+    {
+      items: [
+        { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null },
+        { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW' },
+      ]
+    },
+    {
+      title: 'Unlocked',
+      items: [
+        { name: 'My Unlocked', href: '/app/my-unlocked', icon: Unlock, badge: null },
+      ]
+    },
+    {
+      title: 'All Orgs',
+      items: [
+        { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null },
+        { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null },
+        { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null },
+      ]
+    },
+    {
+      title: 'Outreach Help',
+      items: [
+        { name: 'Request Intro', href: '/app/outreach?type=intro', icon: MessageSquare, badge: null },
+        { name: 'Request Sponsorship', href: '/app/outreach?type=sponsorship', icon: Handshake, badge: null },
+      ]
+    },
+    {
+      title: 'Bars/Restaurants',
+      items: [
+        { name: 'Browse Venues', href: '/app/bars', icon: Utensils, badge: 'SOON' },
+      ]
+    },
+    {
+      items: [
+        { name: 'Buy Credits', href: '/app/credits', icon: Zap, badge: null },
+        { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null },
+      ]
+    },
   ];
 
-  const isActive = (path: string) => location.pathname.startsWith(path);
+  const isActive = (path: string) => location.pathname.startsWith(path.split('?')[0]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -66,31 +95,48 @@ const Layout = () => {
               <h1 className="text-xl font-bold text-white">FraternityBase</h1>
             </div>
           </div>
-          <nav className="flex-1 px-2 py-4 space-y-1">
-            {navigation.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                    isActive(item.href)
-                      ? 'bg-primary-50 text-primary-700'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <Icon className="w-5 h-5 mr-3" />
-                    {item.name}
+          <nav className="flex-1 px-2 py-4 space-y-6 overflow-y-auto">
+            {navigationSections.map((section, sectionIndex) => (
+              <div key={sectionIndex}>
+                {section.title && (
+                  <div className="px-3 mb-3 mt-2">
+                    <h3 className="text-[11px] font-bold text-gray-900 uppercase tracking-widest">
+                      {section.title}
+                    </h3>
                   </div>
-                  {item.badge && (
-                    <span className="px-2 py-0.5 text-xs font-semibold text-white bg-green-500 rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
+                )}
+                <div className="space-y-1">
+                  {section.items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all ${
+                          isActive(item.href)
+                            ? 'bg-primary-600 text-white shadow-sm'
+                            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <Icon className="w-5 h-5 mr-3 flex-shrink-0" />
+                          <span>{item.name}</span>
+                        </div>
+                        {item.badge && (
+                          <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${
+                            item.badge === 'SOON'
+                              ? 'text-yellow-800 bg-yellow-200'
+                              : 'text-emerald-700 bg-emerald-100'
+                          }`}>
+                            {item.badge}
+                          </span>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </nav>
           <div className="px-4 py-4 border-t border-gray-200">
             <div className="flex items-center">
@@ -137,32 +183,49 @@ const Layout = () => {
               <div className="px-4 pb-4">
                 <h2 className="text-lg font-bold text-primary-600">Menu</h2>
               </div>
-              <div className="flex-1 px-2 space-y-1">
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md ${
-                        isActive(item.href)
-                          ? 'bg-primary-50 text-primary-700'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <Icon className="w-5 h-5 mr-3" />
-                        {item.name}
+              <div className="flex-1 px-2 space-y-6 overflow-y-auto">
+                {navigationSections.map((section, sectionIndex) => (
+                  <div key={sectionIndex}>
+                    {section.title && (
+                      <div className="px-3 mb-3 mt-2">
+                        <h3 className="text-[11px] font-bold text-gray-900 uppercase tracking-widest">
+                          {section.title}
+                        </h3>
                       </div>
-                      {item.badge && (
-                        <span className="px-2 py-0.5 text-xs font-semibold text-white bg-green-500 rounded-full">
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-                  );
-                })}
+                    )}
+                    <div className="space-y-1">
+                      {section.items.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.name}
+                            to={item.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all ${
+                              isActive(item.href)
+                                ? 'bg-primary-600 text-white shadow-sm'
+                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                            }`}
+                          >
+                            <div className="flex items-center">
+                              <Icon className="w-5 h-5 mr-3 flex-shrink-0" />
+                              <span>{item.name}</span>
+                            </div>
+                            {item.badge && (
+                              <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${
+                                item.badge === 'SOON'
+                                  ? 'text-yellow-800 bg-yellow-200'
+                                  : 'text-emerald-700 bg-emerald-100'
+                              }`}>
+                                {item.badge}
+                              </span>
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
               <div className="px-4 pt-4 border-t border-gray-200">
                 <button
