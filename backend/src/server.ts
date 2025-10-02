@@ -108,19 +108,22 @@ app.get('/api/credits/balance', async (req, res) => {
       return res.status(401).json({ error: 'Invalid token or user not found' });
     }
 
-    // Query the company's credit balance using the user's ID
+    // Query the new credits table
     const { data, error } = await supabase
-      .from('companies')
-      .select('credits_balance')
-      .eq('id', user.id)
+      .from('credits')
+      .select('balance, lifetime_total')
+      .eq('company_id', user.id)
       .single();
 
-    if (error) {
+    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
       console.error('Error fetching credits balance:', error);
       return res.status(500).json({ error: 'Failed to fetch balance' });
     }
 
-    res.json({ balance: data?.credits_balance || 0 });
+    res.json({
+      balance: data?.balance || 0,
+      lifetime: data?.lifetime_total || 0
+    });
   } catch (error: any) {
     console.error('Balance endpoint error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -198,43 +201,19 @@ app.post('/api/credits/webhook', async (req, res) => {
       });
 
       if (companyId && credits > 0) {
-        // Add credits to company balance
-        // Fetch current balance and update
-        const { data: company } = await supabase
-          .from('companies')
-          .select('credits_balance')
-          .eq('id', companyId)
-          .single();
+        // Use the add_credits function to atomically add credits and record transaction
+        const { data: result, error: addError } = await supabaseAdmin.rpc('add_credits', {
+          p_company_id: companyId,
+          p_amount: credits,
+          p_description: `Purchased ${CREDIT_PACKAGES[packageId]?.name || packageId} package`,
+          p_reference_id: session.payment_intent,
+          p_reference_type: 'stripe_payment'
+        });
 
-        const { error: updateError } = await supabase
-          .from('companies')
-          .update({
-            credits_balance: (company?.credits_balance || 0) + credits
-          })
-          .eq('id', companyId);
-
-        if (updateError) {
-          console.error('Error updating credits balance:', updateError);
-        }
-
-        // Record transaction
-        const { error: txError } = await supabase
-          .from('credit_transactions')
-          .insert({
-            company_id: companyId,
-            amount: credits,
-            transaction_type: 'purchase',
-            description: `Purchased ${CREDIT_PACKAGES[packageId]?.name || packageId}`,
-            stripe_payment_intent: session.payment_intent,
-            stripe_session_id: session.id,
-            amount_paid: session.amount_total / 100,
-            metadata: { packageId, session: session.id }
-          });
-
-        if (txError) {
-          console.error('Error recording transaction:', txError);
+        if (addError) {
+          console.error('Error adding credits:', addError);
         } else {
-          console.log(`✅ Added ${credits} credits to company ${companyId}`);
+          console.log(`✅ Added ${credits} credits to company ${companyId}. New balance: ${result.balance}`);
         }
       }
     }
@@ -243,6 +222,188 @@ app.post('/api/credits/webhook', async (req, res) => {
   } catch (error: any) {
     console.error('Webhook error:', error);
     res.status(400).send(`Webhook Error: ${error.message}`);
+  }
+});
+
+// Unlock endpoints
+app.post('/api/chapters/:id/unlock', async (req, res) => {
+  try {
+    const { id: chapterId } = req.params;
+    const { unlockType } = req.body;
+
+    // Validate unlock type
+    const validTypes = ['roster', 'emails', 'phones', 'officers', 'full'];
+    if (!unlockType || !validTypes.includes(unlockType)) {
+      return res.status(400).json({ error: 'Invalid unlock type' });
+    }
+
+    // Get the authorization token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Define credit costs for each unlock type
+    const creditCosts: Record<string, number> = {
+      roster: 10,
+      emails: 25,
+      phones: 25,
+      officers: 15,
+      full: 50
+    };
+
+    const cost = creditCosts[unlockType];
+
+    // Call spend_credits function
+    const { data: result, error: spendError } = await supabaseAdmin.rpc('spend_credits', {
+      p_company_id: user.id,
+      p_chapter_id: chapterId,
+      p_unlock_type: unlockType,
+      p_credits_cost: cost
+    });
+
+    if (spendError) {
+      console.error('Error spending credits:', spendError);
+      return res.status(500).json({ error: 'Failed to unlock chapter' });
+    }
+
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
+    }
+
+    res.json({
+      success: true,
+      balance: result.balance,
+      creditsSpent: result.credits_spent,
+      unlockType
+    });
+  } catch (error: any) {
+    console.error('Unlock endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/chapters/:id/unlock-status', async (req, res) => {
+  try {
+    const { id: chapterId } = req.params;
+
+    // Get the authorization token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Query unlocks for this chapter
+    const { data, error } = await supabase
+      .from('chapter_unlocks')
+      .select('unlock_type, unlocked_at, expires_at')
+      .eq('company_id', user.id)
+      .eq('chapter_id', chapterId)
+      .or('expires_at.is.null,expires_at.gt.' + new Date().toISOString());
+
+    if (error) {
+      console.error('Error fetching unlock status:', error);
+      return res.status(500).json({ error: 'Failed to fetch unlock status' });
+    }
+
+    const unlockedTypes = data?.map(u => u.unlock_type) || [];
+
+    res.json({
+      success: true,
+      unlocked: unlockedTypes
+    });
+  } catch (error: any) {
+    console.error('Unlock status endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/chapters/unlocked', async (req, res) => {
+  try {
+    // Get the authorization token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Query all unlocks for this user with chapter details
+    const { data, error } = await supabase
+      .from('chapter_unlocks')
+      .select(`
+        chapter_id,
+        unlock_type,
+        unlocked_at,
+        expires_at,
+        chapters (
+          id,
+          chapter_name,
+          member_count,
+          greek_organizations (
+            name,
+            abbreviation
+          ),
+          universities (
+            name,
+            state
+          )
+        )
+      `)
+      .eq('company_id', user.id)
+      .or('expires_at.is.null,expires_at.gt.' + new Date().toISOString());
+
+    if (error) {
+      console.error('Error fetching unlocked chapters:', error);
+      return res.status(500).json({ error: 'Failed to fetch unlocked chapters' });
+    }
+
+    // Group by chapter
+    const chaptersMap = new Map();
+    data?.forEach((unlock: any) => {
+      const chapterId = unlock.chapter_id;
+      if (!chaptersMap.has(chapterId)) {
+        chaptersMap.set(chapterId, {
+          id: chapterId,
+          name: unlock.chapters?.greek_organizations?.name || 'Unknown',
+          chapter: unlock.chapters?.chapter_name || '',
+          university: unlock.chapters?.universities?.name || 'Unknown University',
+          state: unlock.chapters?.universities?.state || '',
+          memberCount: unlock.chapters?.member_count || 0,
+          unlockedTypes: []
+        });
+      }
+      chaptersMap.get(chapterId).unlockedTypes.push(unlock.unlock_type);
+    });
+
+    const chapters = Array.from(chaptersMap.values());
+
+    res.json({
+      success: true,
+      data: chapters
+    });
+  } catch (error: any) {
+    console.error('Unlocked chapters endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
