@@ -601,11 +601,15 @@ const AdminPageV4 = () => {
 
   const handleRosterImport = async (chapterId: string, users: any[]) => {
     try {
+      console.log(`🚀 Starting roster import for chapter ${chapterId}`);
+      console.log(`📊 Total users to import: ${users.length}`);
+
       let successCount = 0;
       let errorCount = 0;
 
       for (const user of users) {
         try {
+          console.log(`📝 Importing: ${user.name} (${user.position || 'Member'})`);
           const response = await fetch(`${API_URL}/admin/officers`, {
             method: 'POST',
             headers: getAdminHeaders(),
@@ -617,18 +621,27 @@ const AdminPageV4 = () => {
 
           if (response.ok) {
             successCount++;
+            console.log(`✅ Successfully added: ${user.name}`);
           } else {
+            const errorData = await response.json();
             errorCount++;
+            console.error(`❌ Failed to add ${user.name}:`, errorData);
           }
         } catch (err) {
           errorCount++;
+          console.error(`❌ Error importing ${user.name}:`, err);
         }
       }
+
+      console.log(`\n🎉 ROSTER IMPORT COMPLETE!`);
+      console.log(`✅ Successfully imported: ${successCount} members`);
+      console.log(`❌ Failed imports: ${errorCount} members`);
+      console.log(`📈 Success rate: ${Math.round((successCount / users.length) * 100)}%\n`);
 
       showSuccessMsg(`Roster imported! ✅ ${successCount} members added, ❌ ${errorCount} errors`);
       fetchData();
     } catch (error: any) {
-      console.error('Error importing roster:', error);
+      console.error('❌ FATAL ERROR during roster import:', error);
       throw error;
     }
   };
