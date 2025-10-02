@@ -17,7 +17,13 @@ const supabase = createClient(
 // Initialize Supabase admin client (for file uploads and admin operations)
 const supabaseAdmin = createClient(
   process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '',
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
 );
 
 const app = express();
@@ -1105,14 +1111,14 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
     console.log('📍 Table: universities');
     console.log('📍 Query: SELECT * with chapter count, ORDER BY name ASC');
 
-    // Fetch universities with chapter count, bars, and unlock count
+    // Fetch universities with chapter count
     // TODO: Use supabaseAdmin once SUPABASE_SERVICE_ROLE_KEY is set in production
+    // TODO: Add unlock_history table relationship for unlock_count
     const { data, error } = await supabase
       .from('universities')
       .select(`
         *,
-        chapters:chapters(count),
-        unlock_history:unlock_history(count)
+        chapters:chapters(count)
       `)
       .order('name', { ascending: true });
 
@@ -1127,8 +1133,7 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
         id: u.id,
         name: u.name,
         state: u.state,
-        chapters: u.chapters?.[0]?.count || 0,
-        unlocks: u.unlock_history?.[0]?.count || 0
+        chapters: u.chapters?.[0]?.count || 0
       })));
     }
 
@@ -1137,7 +1142,7 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
       ...uni,
       chapter_count: uni.chapters?.[0]?.count || 0,
       bars_nearby: uni.bars_nearby || 0,
-      unlock_count: uni.unlock_history?.[0]?.count || 0
+      unlock_count: 0 // TODO: Add unlock_history table
     })) || [];
 
     console.log(`✅ Sending ${transformedData.length} universities to frontend`);
@@ -1152,7 +1157,7 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
 
 app.post('/api/admin/universities', requireAdmin, async (req, res) => {
   try {
-    const { name, location, state, student_count, greek_percentage, website, logo_url } = req.body;
+    const { name, location, state, student_count, greek_percentage, website, logo_url, bars_nearby, unlock_count } = req.body;
 
     const { data, error } = await supabase
       .from('universities')
@@ -1163,7 +1168,9 @@ app.post('/api/admin/universities', requireAdmin, async (req, res) => {
         student_count,
         greek_percentage,
         website,
-        logo_url
+        logo_url,
+        bars_nearby,
+        unlock_count
       })
       .select()
       .single();
@@ -1369,6 +1376,7 @@ app.post('/api/admin/officers', requireAdmin, async (req, res) => {
       chapter_id,
       name,
       position,
+      member_type,
       email,
       phone,
       linkedin_profile,
@@ -1383,6 +1391,7 @@ app.post('/api/admin/officers', requireAdmin, async (req, res) => {
         chapter_id,
         name,
         position,
+        member_type: member_type || 'member',
         email,
         phone,
         linkedin_profile,
@@ -1401,10 +1410,10 @@ app.post('/api/admin/officers', requireAdmin, async (req, res) => {
       .single();
 
     if (error) throw error;
-    console.log(`✅ Created officer: ${name} - ${position}`);
+    console.log(`✅ Created user: ${name} - ${position} (${member_type || 'member'})`);
     res.json({ success: true, data });
   } catch (error: any) {
-    console.error('Error creating officer:', error);
+    console.error('Error creating user:', error);
     res.status(500).json({ error: error.message });
   }
 });
