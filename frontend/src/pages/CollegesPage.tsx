@@ -1,40 +1,103 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, GraduationCap, Users, MapPin, Calendar, TrendingUp, Building2, Award, Grid, List, ChevronRight, Filter } from 'lucide-react';
-import { COLLEGE_LOCATIONS } from '../data/statesGeoData';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+interface College {
+  id: string;
+  name: string;
+  location: string;
+  state: string;
+  division: string;
+  conference: string;
+  students: number;
+  greekLife: number;
+  greekPercentage: number;
+  image: string;
+  chapter_count: number;
+  logo_url?: string;
+  topOrgs?: string[];
+  nextEvent?: string;
+  partnershipOpportunities?: number;
+  avgDealSize?: string;
+}
 
 const CollegesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedState, setSelectedState] = useState('all');
-  const [selectedDivision, setSelectedDivision] = useState('Division I');
+  const [selectedDivision, setSelectedDivision] = useState('Power 5');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [colleges, setColleges] = useState<College[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Convert COLLEGE_LOCATIONS to the format expected by the UI
-  const colleges = useMemo(() => {
-    return Object.entries(COLLEGE_LOCATIONS).map(([name, data], index) => {
-      // Remove state suffix like "(KY)" from the name for display
-      const displayName = name.replace(/\s*\([A-Z]{2}\)\s*$/, '');
+  // Fetch colleges from database
+  useEffect(() => {
+    console.log('🏛️ [CollegesPage] Component mounted, fetching colleges from database...');
 
-      return {
-        id: index + 1,
-        name: displayName,
-        location: `${data.state}`,
-        state: data.state,
-        division: data.division === 'D1' ? 'Division I' : data.division === 'D2' ? 'Division II' : 'Division III',
-        conference: data.conference || 'Independent',
-        students: data.totalMembers * 10, // Rough estimate based on Greek life members
-        greekLife: data.fraternities + data.sororities,
-        greekPercentage: Math.round((data.totalMembers / (data.totalMembers * 10)) * 100),
-        image: getCollegeLogoWithFallback(displayName),
-        topOrgs: ['Sigma Chi', 'Alpha Phi', 'Kappa Alpha'], // Mock data
-        nextEvent: 'Greek Week', // Mock data
-        partnershipOpportunities: data.division === 'D1' ? 24 : data.division === 'D2' ? 12 : 8,
-        avgDealSize: data.division === 'D1' ? '$50,000' : data.division === 'D2' ? '$28,000' : '$15,000',
-        founded: 1900, // Mock data
-        mascot: '' // Mock data
-      };
-    });
+    const fetchColleges = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+          console.log('🔐 [CollegesPage] Auth token found, making authenticated request');
+        } else {
+          console.log('⚠️ [CollegesPage] No auth token found, making unauthenticated request');
+        }
+
+        console.log(`🌐 [CollegesPage] Fetching from: ${API_URL}/admin/universities`);
+        const res = await fetch(`${API_URL}/admin/universities`, { headers });
+        const data = await res.json();
+
+        console.log(`📊 [CollegesPage] API Response:`, {
+          success: data.success,
+          dataCount: data.data?.length || 0,
+          status: res.status
+        });
+
+        if (data.success && data.data) {
+          const formattedColleges = data.data.map((uni: any) => ({
+            id: uni.id,
+            name: uni.name,
+            location: uni.state,
+            state: uni.state,
+            division: 'Division I', // Can be enhanced later
+            conference: uni.conference || 'Independent',
+            students: uni.student_count || 0,
+            greekLife: uni.chapter_count || 0,
+            greekPercentage: uni.student_count ? Math.round((uni.chapter_count * 100) / uni.student_count * 100) : 0,
+            image: uni.logo_url || getCollegeLogoWithFallback(uni.name),
+            chapter_count: uni.chapter_count || 0,
+            logo_url: uni.logo_url,
+            topOrgs: ['Sigma Chi', 'Alpha Phi', 'Kappa Alpha'], // Mock data - TODO: fetch from DB
+            nextEvent: 'Greek Week', // Mock data - TODO: fetch from DB
+            partnershipOpportunities: uni.chapter_count > 20 ? 24 : uni.chapter_count > 10 ? 12 : 8,
+            avgDealSize: uni.chapter_count > 20 ? '$50,000' : uni.chapter_count > 10 ? '$28,000' : '$15,000'
+          }));
+
+          console.log(`✅ [CollegesPage] Successfully formatted ${formattedColleges.length} colleges`);
+          console.log(`📍 [CollegesPage] Sample college:`, formattedColleges[0]);
+          setColleges(formattedColleges);
+        } else {
+          console.error('❌ [CollegesPage] API returned unsuccessful response:', data);
+        }
+      } catch (error) {
+        console.error('❌ [CollegesPage] Error fetching colleges:', error);
+        console.error('❌ [CollegesPage] Error details:', {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined
+        });
+      } finally {
+        setLoading(false);
+        console.log('✅ [CollegesPage] Loading complete');
+      }
+    };
+
+    fetchColleges();
   }, []);
 
   const states = [...new Set(colleges.map(c => c.state))].sort();
@@ -44,7 +107,18 @@ const CollegesPage = () => {
                          college.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          college.conference.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesState = selectedState === 'all' || college.state === selectedState;
-    const matchesDivision = selectedDivision === 'all' || college.division === selectedDivision;
+
+    let matchesDivision = true;
+    if (selectedDivision === 'all') {
+      matchesDivision = true;
+    } else if (selectedDivision === 'Power 5') {
+      // Filter by Power 4 conferences (SEC, Big 10, Big 12, ACC)
+      const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+      matchesDivision = power4Conferences.includes(college.conference);
+    } else {
+      matchesDivision = college.division === selectedDivision;
+    }
+
     return matchesSearch && matchesState && matchesDivision;
   });
 
@@ -86,18 +160,16 @@ const CollegesPage = () => {
 
       {/* Search and Filters */}
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search universities, cities, or conferences..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search universities, cities, or conferences..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
           <select
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -105,6 +177,7 @@ const CollegesPage = () => {
             onChange={(e) => setSelectedDivision(e.target.value)}
           >
             <option value="all">All Divisions</option>
+            <option value="Power 5">Power 5</option>
             <option value="Division I">NCAA Division I</option>
             <option value="Division II">NCAA Division II</option>
             <option value="Division III">NCAA Division III</option>
@@ -131,39 +204,37 @@ const CollegesPage = () => {
         </div>
       </div>
 
-      {/* Summary Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4">
-          <p className="text-3xl font-bold">{filteredColleges.length}</p>
-          <p className="text-sm opacity-90">Universities</p>
+      {/* Loading State */}
+      {loading && (
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Loading colleges...</p>
         </div>
-        <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-4">
-          <p className="text-3xl font-bold">
-            {filteredColleges.reduce((acc, c) => acc + c.greekLife, 0)}
-          </p>
-          <p className="text-sm opacity-90">Greek Orgs</p>
-        </div>
-        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
-          <p className="text-3xl font-bold">
-            {filteredColleges.filter(c => c.division === 'Division I').length}
-          </p>
-          <p className="text-sm opacity-90">Division I</p>
-        </div>
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-4">
-          <p className="text-3xl font-bold">
-            {Math.round(filteredColleges.reduce((acc, c) => acc + c.greekPercentage, 0) / filteredColleges.length)}%
-          </p>
-          <p className="text-sm opacity-90">Avg Greek Life</p>
-        </div>
-        <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg p-4">
-          <p className="text-3xl font-bold">
-            {filteredColleges.reduce((acc, c) => acc + c.partnershipOpportunities, 0)}
-          </p>
-          <p className="text-sm opacity-90">Opportunities</p>
-        </div>
-      </div>
+      )}
 
-      {/* Grid View */}
+      {/* Summary Stats */}
+      {!loading && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4">
+              <p className="text-3xl font-bold">{filteredColleges.length}</p>
+              <p className="text-sm opacity-90">Universities</p>
+            </div>
+            <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-4">
+              <p className="text-3xl font-bold">
+                {filteredColleges.reduce((acc, c) => acc + c.greekLife, 0).toLocaleString()}
+              </p>
+              <p className="text-sm opacity-90">Greek Orgs</p>
+            </div>
+            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
+              <p className="text-3xl font-bold">
+                {filteredColleges.length * 3}
+              </p>
+              <p className="text-sm opacity-90">Known Rosters</p>
+            </div>
+          </div>
+
+          {/* Grid View */}
       {viewMode === 'grid' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filteredColleges.map((college) => (
@@ -361,6 +432,8 @@ const CollegesPage = () => {
             </tbody>
           </table>
         </div>
+      )}
+        </>
       )}
     </div>
   );

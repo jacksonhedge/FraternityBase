@@ -132,6 +132,9 @@ const MapPageFullScreen = () => {
   const [hoveredCollege, setHoveredCollege] = useState<{ name: string; data: any } | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false); // Toggle between radar (dark) and logo (light) mode - default to light
   const [divisionFilter, setDivisionFilter] = useState<'all' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('power4');
+  const [collegeLogos, setCollegeLogos] = useState<Record<string, string>>({});
+  const [collegeChapters, setCollegeChapters] = useState<any[]>([]);
+  const [loadingChapters, setLoadingChapters] = useState(false);
   const mapRef = useRef<any>(null);
 
   const handleLogout = () => {
@@ -165,6 +168,47 @@ const MapPageFullScreen = () => {
       .then(response => response.json())
       .then(data => setStatesData(data))
       .catch(err => console.error('Error loading GeoJSON:', err));
+  }, []);
+
+  // Fetch college logos from database
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+    const fetchCollegeLogos = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(`${API_URL}/admin/universities`, { headers });
+        const data = await res.json();
+
+        if (data.data) {
+          // Create a map of college name to logo URL
+          const logoMap: Record<string, string> = {};
+          data.data.forEach((uni: any) => {
+            if (uni.logo_url) {
+              // Normalize the name to match COLLEGE_LOCATIONS format
+              const normalizedName = uni.name.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+              logoMap[normalizedName] = uni.logo_url;
+
+              // Also store with full name if it has state suffix
+              logoMap[uni.name] = uni.logo_url;
+            }
+          });
+          setCollegeLogos(logoMap);
+          console.log('✅ Loaded logos for', Object.keys(logoMap).length, 'colleges from database');
+        }
+      } catch (error) {
+        console.error('Error fetching college logos:', error);
+      }
+    };
+
+    fetchCollegeLogos();
   }, []);
 
   // Dynamic style for states based on light/dark mode
@@ -205,14 +249,14 @@ const MapPageFullScreen = () => {
         dashArray: '',
       };
     } else {
-      // Light mode: Clean, professional style
+      // Light mode: Clean, professional, high-contrast style
       if (isSelected && viewMode === 'state') {
         return {
           fillColor: '#DBEAFE',
           weight: 3,
           opacity: 1,
-          color: '#3B82F6',
-          fillOpacity: 0.5,
+          color: '#1D4ED8',
+          fillOpacity: 0.65,
           dashArray: '',
         };
       }
@@ -223,17 +267,17 @@ const MapPageFullScreen = () => {
           weight: 3,
           opacity: 1,
           color: '#2563EB',
-          fillOpacity: 0.6,
+          fillOpacity: 0.75,
           dashArray: '',
         };
       }
 
       return {
-        fillColor: '#EFF6FF',
-        weight: 2,
+        fillColor: '#F0F9FF',
+        weight: 2.5,
         opacity: 1,
-        color: '#93C5FD',
-        fillOpacity: 0.4,
+        color: '#60A5FA',
+        fillOpacity: 0.35,
         dashArray: '',
       };
     }
@@ -248,92 +292,251 @@ const MapPageFullScreen = () => {
     return entry ? entry[0] : null;
   };
 
-  // Handle state click
-  const handleStateClick = (feature: any) => {
-    console.log('📍 handleStateClick called for:', feature.properties.name);
+  // Helper function to get college logo - prioritizes database over hardcoded
+  const getCollegeLogo = (collegeName: string): string => {
+    // Normalize the name - remove state suffix
+    const normalizedName = collegeName.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+
+    // Check database logos first - try exact match
+    if (collegeLogos[collegeName]) {
+      return collegeLogos[collegeName];
+    }
+
+    if (collegeLogos[normalizedName]) {
+      return collegeLogos[normalizedName];
+    }
+
+    // Try common name variations
+    const cleanName = normalizedName
+      .replace(/^The\s+/i, '')  // Remove "The" prefix
+      .replace(/^University of\s+/i, '')  // Remove "University of" prefix
+      .trim();
+
+    // Search for partial matches in database
+    for (const [dbName, logoUrl] of Object.entries(collegeLogos)) {
+      const dbCleanName = dbName
+        .replace(/^The\s+/i, '')
+        .replace(/^University of\s+/i, '')
+        .replace(/\s*\([A-Z]{2}\)\s*$/, '')
+        .trim();
+
+      // Check if names match after cleaning
+      if (dbCleanName.toLowerCase() === cleanName.toLowerCase()) {
+        return logoUrl;
+      }
+
+      // Special handling for Penn State variations
+      const isPennStateVariation = (name: string) => {
+        const lower = name.toLowerCase();
+        return (lower.includes('penn') || lower.includes('pennsylvania')) &&
+               lower.includes('state') &&
+               lower.includes('university');
+      };
+
+      if (isPennStateVariation(cleanName) && isPennStateVariation(dbCleanName)) {
+        // Make sure it's not a satellite campus
+        const isSatellite = dbName.toLowerCase().includes(',') ||
+                          dbName.toLowerCase().includes(' at ') ||
+                          dbName.toLowerCase().includes('abington') ||
+                          dbName.toLowerCase().includes('altoona');
+
+        if (!isSatellite) {
+          return logoUrl;
+        }
+      }
+    }
+
+    // Fall back to hardcoded logos
+    return getCollegeLogoWithFallback(collegeName);
+  };
+
+  // Helper function to find college coordinates from COLLEGE_LOCATIONS with fuzzy matching
+  const getCollegeCoordinates = (collegeName: string, stateAbbr: string): { lat: number; lng: number } | null => {
+    // Normalize the college name
+    const normalizedName = collegeName.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+
+    // Try exact matches first
+    if (COLLEGE_LOCATIONS[collegeName]) {
+      return { lat: COLLEGE_LOCATIONS[collegeName].lat, lng: COLLEGE_LOCATIONS[collegeName].lng };
+    }
+
+    if (COLLEGE_LOCATIONS[`${collegeName} (${stateAbbr})`]) {
+      const loc = COLLEGE_LOCATIONS[`${collegeName} (${stateAbbr})`];
+      return { lat: loc.lat, lng: loc.lng };
+    }
+
+    if (COLLEGE_LOCATIONS[normalizedName]) {
+      return { lat: COLLEGE_LOCATIONS[normalizedName].lat, lng: COLLEGE_LOCATIONS[normalizedName].lng };
+    }
+
+    // Try fuzzy matching
+    const cleanName = normalizedName
+      .replace(/^The\s+/i, '')
+      .replace(/^University of\s+/i, '')
+      .trim();
+
+    // Special handling for Penn State variations
+    const isPennStateVariation = (name: string) => {
+      const lower = name.toLowerCase();
+      return (lower.includes('penn') || lower.includes('pennsylvania')) &&
+             lower.includes('state') &&
+             lower.includes('university');
+    };
+
+    for (const [locName, locData] of Object.entries(COLLEGE_LOCATIONS)) {
+      const locCleanName = locName
+        .replace(/^The\s+/i, '')
+        .replace(/^University of\s+/i, '')
+        .replace(/\s*\([A-Z]{2}\)\s*$/, '')
+        .trim();
+
+      // Check if names match after cleaning
+      if (locCleanName.toLowerCase() === cleanName.toLowerCase()) {
+        // Make sure it's the right state
+        if (locData.state === stateAbbr) {
+          return { lat: locData.lat, lng: locData.lng };
+        }
+      }
+
+      // Penn State special handling
+      if (isPennStateVariation(cleanName) && isPennStateVariation(locCleanName)) {
+        // Make sure it's not a satellite campus
+        const isSatellite = locName.toLowerCase().includes(',') ||
+                          locName.toLowerCase().includes(' at ') ||
+                          locName.toLowerCase().includes('abington') ||
+                          locName.toLowerCase().includes('altoona') ||
+                          locName.toLowerCase().includes('behrend') ||
+                          locName.toLowerCase().includes('berks') ||
+                          locName.toLowerCase().includes('brandywine') ||
+                          locName.toLowerCase().includes('harrisburg');
+
+        if (!isSatellite && locData.state === stateAbbr) {
+          return { lat: locData.lat, lng: locData.lng };
+        }
+      }
+    }
+
+    return null;
+  };
+
+  // Handle state click - fetch from database
+  const handleStateClick = async (feature: any) => {
+    console.log('==================================================');
+    console.log('🗺️ [MapPage - handleStateClick] State clicked:', feature.properties.name);
+    console.log('📍 [MapPage - handleStateClick] Current view mode:', viewMode);
     // Get state abbreviation from name since GeoJSON doesn't have abbr field
     const stateAbbr = getStateAbbr(feature.properties.name);
     if (!stateAbbr) {
-      console.log('❌ No state abbreviation found for:', feature.properties.name);
+      console.error('❌ [MapPage - handleStateClick] No state abbreviation found for:', feature.properties.name);
       return;
     }
-    console.log('✅ Found state abbreviation:', stateAbbr);
+    console.log('✅ [MapPage - handleStateClick] Found state abbreviation:', stateAbbr);
 
-    const collegesInState = Object.entries(COLLEGE_LOCATIONS)
-      .filter(([name, college]) => {
-        // First filter by state
-        if (college.state !== stateAbbr) return false;
+    try {
+      // Fetch colleges from database for this state
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
 
-        // Then filter by division
-        if (divisionFilter === 'all') return true;
+      console.log(`🌐 [MapPage - handleStateClick] Fetching colleges from: ${API_URL}/admin/universities`);
+      const res = await fetch(`${API_URL}/admin/universities`, { headers });
+      const data = await res.json();
+      console.log(`📊 [MapPage - handleStateClick] Received ${data.data?.length || 0} colleges from API`);
 
-        if (divisionFilter === 'mychapters') {
-          // TODO: Replace with actual unlocked chapters from user's account
-          // For now, return empty array (no unlocked chapters)
-          return false;
-        }
+      if (data.data) {
+        // Filter colleges by state
+        let collegesInState = data.data
+          .filter((uni: any) => uni.state === stateAbbr)
+          .map((uni: any) => {
+            const coords = getCollegeCoordinates(uni.name, stateAbbr);
+            return {
+              name: uni.name,
+              lat: coords?.lat || 0,
+              lng: coords?.lng || 0,
+              state: uni.state,
+              fraternities: uni.chapter_count || 0,
+              sororities: 0, // Database doesn't distinguish, total is in chapter_count
+              totalMembers: uni.chapter_count * 80 || 0, // Estimate
+              conference: uni.conference,
+              division: 'D1' // Assuming D1 for now
+            };
+          })
+          .filter((college: any) => college.lat !== 0 && college.lng !== 0); // Only keep colleges with valid coordinates
 
+        // Apply division filter
         if (divisionFilter === 'power4') {
-          const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC', 'PAC-12', 'PAC - 12'];
-          return power4Conferences.includes(college.conference || '');
+          const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+          collegesInState = collegesInState.filter((c: any) =>
+            power4Conferences.includes(c.conference || '')
+          );
         }
 
-        if (divisionFilter === 'd1') {
-          return college.division === 'D1';
-        }
+        const totalChapters = collegesInState.reduce(
+          (sum: number, c: any) => sum + c.fraternities + c.sororities, 0
+        );
+        const totalMembers = collegesInState.reduce(
+          (sum: number, c: any) => sum + c.totalMembers, 0
+        );
 
-        if (divisionFilter === 'd2') {
-          return college.division === 'D2';
-        }
+        setSelectedState({
+          name: feature.properties.name,
+          abbr: stateAbbr,
+          colleges: collegesInState,
+          totalChapters,
+          totalMembers
+        });
 
-        if (divisionFilter === 'd3') {
-          return college.division === 'D3';
-        }
+        console.log(`✅ [MapPage - handleStateClick] Loaded ${collegesInState.length} colleges for ${stateAbbr}`);
+        console.log(`📊 [MapPage - handleStateClick] Total chapters: ${totalChapters}, Total members: ${totalMembers}`);
+        console.log(`🎯 [MapPage - handleStateClick] Setting sidebar to show state view`);
+        console.log('==================================================');
+      }
+    } catch (error) {
+      console.error('❌ [MapPage - handleStateClick] Error fetching colleges:', error);
+      console.error('❌ [MapPage - handleStateClick] Error details:', error instanceof Error ? error.message : 'Unknown error');
+      // Fallback to hardcoded data
+      const collegesInState = Object.entries(COLLEGE_LOCATIONS)
+        .filter(([name, college]) => college.state === stateAbbr)
+        .map(([name, data]) => ({ name, ...data }));
 
-        return true;
-      })
-      .map(([name, data]) => ({ name, ...data }));
+      const totalChapters = collegesInState.reduce(
+        (sum, c) => sum + c.fraternities + c.sororities, 0
+      );
+      const totalMembers = collegesInState.reduce(
+        (sum, c) => sum + c.totalMembers, 0
+      );
 
-    const totalChapters = collegesInState.reduce(
-      (sum, c) => sum + c.fraternities + c.sororities, 0
-    );
-    const totalMembers = collegesInState.reduce(
-      (sum, c) => sum + c.totalMembers, 0
-    );
-
-    setSelectedState({
-      name: feature.properties.name,
-      abbr: stateAbbr,
-      colleges: collegesInState,
-      totalChapters,
-      totalMembers
-    });
+      setSelectedState({
+        name: feature.properties.name,
+        abbr: stateAbbr,
+        colleges: collegesInState,
+        totalChapters,
+        totalMembers
+      });
+    }
 
     setShowSidebar(true);
     setViewMode('state'); // Change to state view mode
 
-    // Zoom to state center with same zoom ratio as default USA view
+    // Zoom to state center
     setTimeout(() => {
       if (mapRef.current && STATE_COORDINATES[stateAbbr as keyof typeof STATE_COORDINATES]) {
         const stateCoords = STATE_COORDINATES[stateAbbr as keyof typeof STATE_COORDINATES];
         const map = mapRef.current;
 
         console.log('🎯 Zooming to state:', stateAbbr, stateCoords);
-        console.log('  - Found colleges:', collegesInState.length);
-        console.log('  - Total chapters:', totalChapters);
 
-        // Use zoom level 6.5 to get closer to the state while keeping nearby states visible
+        // Use zoom level 6.5 to get closer to the state
         map.setView([stateCoords.lat, stateCoords.lng], 6.5, {
           animate: true,
           duration: 0.5
         });
         console.log('✅ Zoom complete');
-      } else {
-        console.log('Map ref or state coordinates not available:', {
-          hasMapRef: !!mapRef.current,
-          stateAbbr,
-          hasCoords: !!STATE_COORDINATES[stateAbbr as keyof typeof STATE_COORDINATES]
-        });
       }
     }, 100);
   };
@@ -401,20 +604,73 @@ const MapPageFullScreen = () => {
   };
 
   // Handle college click - show fraternity list instead of zooming
-  const handleCollegeClick = (collegeName: string, collegeData: College) => {
-    console.log('🎓 COLLEGE CLICKED:', collegeName);
-    console.log('  - Conference:', collegeData.conference);
-    console.log('  - Division:', collegeData.division);
-    console.log('  - Fraternities:', collegeData.fraternities, '| Sororities:', collegeData.sororities);
+  const handleCollegeClick = async (collegeName: string, collegeData: College) => {
+    console.log('==================================================');
+    console.log('🎓 [MapPage - handleCollegeClick] College clicked:', collegeName);
+    console.log('📊 [MapPage - handleCollegeClick] College data:', {
+      conference: collegeData.conference,
+      division: collegeData.division,
+      fraternities: collegeData.fraternities,
+      sororities: collegeData.sororities
+    });
+
     setSelectedCollege({ name: collegeName, ...collegeData });
     setViewMode('campus'); // This will trigger the fraternity list view in the sidebar
     setShowInfo(false);
+    setLoadingChapters(true);
+    console.log('🎯 [MapPage - handleCollegeClick] View mode set to: campus');
 
-    // Zoom to college on map
-    if (mapRef.current) {
-      mapRef.current.setView([collegeData.lat, collegeData.lng], 10);
-      console.log('✅ Zoomed to college view');
+    // Fetch chapters for this college from database
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      console.log(`🌐 [MapPage - handleCollegeClick] Fetching chapters from: ${API_URL}/chapters`);
+      const res = await fetch(`${API_URL}/chapters`, { headers });
+      const data = await res.json();
+      console.log(`📊 [MapPage - handleCollegeClick] Received ${data.data?.length || 0} total chapters from API`);
+
+      if (data.success && data.data) {
+        // Filter chapters by university name
+        const chapters = data.data.filter((chapter: any) => {
+          const uniName = chapter.universities?.name || '';
+          // Match with or without state suffix
+          const cleanCollegeName = collegeName.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+          const cleanUniName = uniName.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+
+          return cleanUniName.toLowerCase() === cleanCollegeName.toLowerCase() ||
+                 cleanUniName.toLowerCase().includes(cleanCollegeName.toLowerCase()) ||
+                 cleanCollegeName.toLowerCase().includes(cleanUniName.toLowerCase());
+        });
+
+        console.log(`✅ [MapPage - handleCollegeClick] Filtered to ${chapters.length} chapters for ${collegeName}`);
+        if (chapters.length > 0) {
+          console.log(`📍 [MapPage - handleCollegeClick] Sample chapter:`, {
+            name: chapters[0].greek_organizations?.name,
+            type: chapters[0].greek_organizations?.organization_type,
+            members: chapters[0].member_count
+          });
+        }
+        console.log('==================================================');
+        setCollegeChapters(chapters);
+      }
+    } catch (error) {
+      console.error('❌ [MapPage - handleCollegeClick] Error fetching chapters:', error);
+      console.error('❌ [MapPage - handleCollegeClick] Error details:', error instanceof Error ? error.message : 'Unknown error');
+      console.log('==================================================');
+      setCollegeChapters([]);
+    } finally {
+      setLoadingChapters(false);
     }
+
+    // Don't zoom to college - keep the current view
+    // Removed zoom functionality to maintain state view
   };
 
   // Reset to USA view
@@ -843,13 +1099,13 @@ const MapPageFullScreen = () => {
               {viewMode === 'campus' && selectedCollege ? (
                 <div className="flex gap-4 text-sm">
                   <span className={isDarkMode ? 'text-cyan-300' : 'text-primary-100'}>
-                    {selectedCollege.fraternities} Fraternities
+                    {collegeChapters.filter(c => c.greek_organizations?.organization_type === 'fraternity').length} Fraternities
                   </span>
                   <span className={isDarkMode ? 'text-cyan-300' : 'text-primary-100'}>
-                    {selectedCollege.sororities} Sororities
+                    {collegeChapters.filter(c => c.greek_organizations?.organization_type === 'sorority').length} Sororities
                   </span>
                   <span className={isDarkMode ? 'text-cyan-300' : 'text-primary-100'}>
-                    {selectedCollege.totalMembers?.toLocaleString()} Members
+                    {collegeChapters.reduce((sum, c) => sum + (c.member_count || 0), 0).toLocaleString()} Members
                   </span>
                 </div>
               ) : (
@@ -874,24 +1130,92 @@ const MapPageFullScreen = () => {
                 <p className={`text-sm mb-4 ${isDarkMode ? 'text-cyan-300' : 'text-gray-600'}`}>
                   Fraternities and sororities at {selectedCollege.name}
                 </p>
-                {/* Placeholder fraternity list - we'll populate with real data */}
-                {Array.from({ length: selectedCollege.fraternities + selectedCollege.sororities }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`rounded-lg p-4 ${
-                      isDarkMode
-                        ? 'bg-gradient-to-br from-black/80 to-cyan-900/20 border border-cyan-500/30'
-                        : 'bg-white border border-primary-200'
-                    }`}
-                  >
-                    <h3 className={`font-bold mb-1 ${isDarkMode ? 'text-cyan-400' : 'text-primary-600'}`}>
-                      {i < selectedCollege.fraternities ? 'Fraternity ' : 'Sorority '} {i + 1}
-                    </h3>
-                    <p className={`text-sm ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>
-                      Click to view chapter details
-                    </p>
+
+                {loadingChapters ? (
+                  <div className={`text-center py-8 ${isDarkMode ? 'text-cyan-400' : 'text-gray-600'}`}>
+                    Loading chapters...
                   </div>
-                ))}
+                ) : collegeChapters.length === 0 ? (
+                  <div className={`text-center py-8 ${isDarkMode ? 'text-cyan-300' : 'text-gray-600'}`}>
+                    No chapters found for this college
+                  </div>
+                ) : (
+                  <>
+                    {/* Show only first 3 chapters for free tier */}
+                    {collegeChapters.slice(0, 3).map((chapter) => (
+                      <Link
+                        key={chapter.id}
+                        to={`/app/chapters/${chapter.id}`}
+                        className={`block rounded-lg p-4 transition-all group ${
+                          isDarkMode
+                            ? 'bg-gradient-to-br from-black/80 to-cyan-900/20 border border-cyan-500/30 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/30'
+                            : 'bg-white border border-primary-200 hover:border-primary-400 hover:shadow-lg hover:shadow-primary-500/20'
+                        }`}
+                      >
+                        <h3 className={`font-bold mb-1 ${
+                          isDarkMode
+                            ? 'text-cyan-400 group-hover:text-cyan-300'
+                            : 'text-primary-600 group-hover:text-primary-500'
+                        }`}>
+                          {chapter.greek_organizations?.name || 'Unknown Organization'}
+                          {chapter.greek_organizations?.greek_letters && (
+                            <span className={`ml-2 text-sm ${
+                              isDarkMode ? 'text-cyan-300/70' : 'text-gray-500'
+                            }`}>
+                              {chapter.greek_organizations.greek_letters}
+                            </span>
+                          )}
+                        </h3>
+                        <p className={`text-sm mb-1 ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>
+                          {chapter.chapter_name}
+                        </p>
+                        <div className={`flex gap-3 text-xs ${isDarkMode ? 'text-cyan-300/50' : 'text-gray-500'}`}>
+                          {chapter.member_count && (
+                            <span>👥 {chapter.member_count} members</span>
+                          )}
+                          <span className="capitalize">{chapter.greek_organizations?.organization_type || 'Chapter'}</span>
+                        </div>
+                      </Link>
+                    ))}
+
+                    {/* Locked overlay if there are more chapters */}
+                    {collegeChapters.length > 3 && (
+                      <div className={`relative rounded-lg p-6 overflow-hidden ${
+                        isDarkMode
+                          ? 'bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-yellow-500/50'
+                          : 'bg-gradient-to-br from-gray-100 to-gray-50 border-2 border-yellow-500/50'
+                      }`}>
+                        {/* Lock Icon */}
+                        <div className="flex flex-col items-center justify-center space-y-3">
+                          <div className={`p-4 rounded-full ${
+                            isDarkMode ? 'bg-yellow-500/20' : 'bg-yellow-500/10'
+                          }`}>
+                            <Lock className={`w-8 h-8 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
+                          </div>
+                          <div className="text-center">
+                            <h3 className={`text-lg font-bold mb-1 ${
+                              isDarkMode ? 'text-yellow-400' : 'text-gray-900'
+                            }`}>
+                              {collegeChapters.length - 3} More Chapters Locked
+                            </h3>
+                            <p className={`text-sm mb-4 ${
+                              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                              Unlock to view all {collegeChapters.length} chapters with full contact info
+                            </p>
+                            <Link
+                              to="/app/credits"
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all"
+                            >
+                              <Unlock className="w-4 h-4" />
+                              Unlock College
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             ) : (
               // Colleges List */}
@@ -908,7 +1232,7 @@ const MapPageFullScreen = () => {
                 >
                   <div className="flex items-start gap-3">
                     <img
-                      src={getCollegeLogoWithFallback(college.name)}
+                      src={getCollegeLogo(college.name)}
                       alt={college.name}
                       className="w-20 h-20 object-contain flex-shrink-0 rounded-lg"
                     />
@@ -986,7 +1310,7 @@ const MapPageFullScreen = () => {
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[1000] bg-black/95 backdrop-blur-md border-2 border-cyan-500 rounded-lg shadow-2xl shadow-cyan-500/50 p-4 min-w-[350px]">
           <div className="flex items-start gap-3">
             <img
-              src={getCollegeLogoWithFallback(hoveredCollege.name)}
+              src={getCollegeLogo(hoveredCollege.name)}
               alt={hoveredCollege.name}
               className="w-16 h-16 object-contain flex-shrink-0"
             />
@@ -1046,7 +1370,12 @@ const MapPageFullScreen = () => {
           [49.384358, -66.93457]
         ]}
         maxBoundsViscosity={1.0}
-        style={{ height: '100vh', width: '100%', backgroundColor: isDarkMode ? '#1F2937' : '#F3F4F6' }}
+        style={{
+          height: '100vh',
+          width: '100%',
+          backgroundColor: isDarkMode ? '#1F2937' : '#ffffff',
+          imageRendering: '-webkit-optimize-contrast'
+        }}
         whenReady={() => setMapReady(true)}
         zoomControl={false}
       >
@@ -1075,14 +1404,15 @@ const MapPageFullScreen = () => {
             if (divisionFilter === 'all') return true;
 
             if (divisionFilter === 'mychapters') {
-              // TODO: Replace with actual unlocked chapters from user's account
-              // For now, return false to show no markers
+              // Filter to show only unlocked colleges
+              // TODO: Replace with actual unlocked data from backend/Redux
+              // For now, return false to show no colleges (no unlocked yet)
               return false;
             }
 
             if (divisionFilter === 'power4') {
-              // Power 5: SEC, BIG 10, BIG 12, ACC, PAC-12
-              const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC', 'PAC-12', 'PAC - 12'];
+              // Power 4: SEC, BIG 10, BIG 12, ACC
+              const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
               return power4Conferences.includes(collegeData.conference || '');
             }
 
@@ -1118,7 +1448,7 @@ const MapPageFullScreen = () => {
                 className: 'logo-marker',
                 html: `
                   <div class="logo-container">
-                    <img src="${getCollegeLogoWithFallback(collegeName)}" alt="${collegeName}" class="college-logo" />
+                    <img src="${getCollegeLogo(collegeName)}" alt="${collegeName}" class="college-logo" />
                   </div>
                 `,
                 iconSize: [40, 40],
@@ -1158,7 +1488,7 @@ const MapPageFullScreen = () => {
                 className: 'logo-marker',
                 html: `
                   <div class="logo-container">
-                    <img src="${getCollegeLogoWithFallback(college.name)}" alt="${college.name}" class="college-logo" />
+                    <img src="${getCollegeLogo(college.name)}" alt="${college.name}" class="college-logo" />
                   </div>
                 `,
                 iconSize: [40, 40],
@@ -1217,7 +1547,31 @@ const MapPageFullScreen = () => {
           border-top-color: #00ffff !important;
         }
         .leaflet-container {
-          background: ${isDarkMode ? '#1F2937' : '#F3F4F6'} !important;
+          background: ${isDarkMode ? '#1F2937' : '#ffffff'} !important;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* High-quality tile rendering */}
+        .leaflet-tile-container {
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
+        }
+
+        .leaflet-tile {
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
+        }
+
+        /* Crisp SVG rendering for state boundaries */}
+        .leaflet-overlay-pane svg {
+          shape-rendering: geometricPrecision;
+        }
+
+        .leaflet-overlay-pane path {
+          vector-effect: non-scaling-stroke;
         }
 
         /* Logo marker styles for light mode */}
@@ -1228,30 +1582,43 @@ const MapPageFullScreen = () => {
 
         .logo-container {
           position: relative;
-          width: 40px;
-          height: 40px;
+          width: 50px;
+          height: 50px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: white;
+          background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
           border: 3px solid #4F46E5;
           border-radius: 50%;
-          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
-          transition: all 0.3s ease;
+          box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.05),
+            0 4px 8px rgba(79, 70, 229, 0.15),
+            0 8px 16px rgba(79, 70, 229, 0.1),
+            inset 0 1px 2px rgba(255, 255, 255, 0.8);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
+          backdrop-filter: blur(8px);
         }
 
         .logo-container:hover {
-          transform: scale(1.2);
-          box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+          transform: scale(1.25) translateY(-2px);
+          box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.08),
+            0 8px 16px rgba(79, 70, 229, 0.25),
+            0 16px 32px rgba(79, 70, 229, 0.2),
+            inset 0 1px 2px rgba(255, 255, 255, 0.9);
           border-color: #6366F1;
+          border-width: 4px;
         }
 
         .college-logo {
-          width: 30px;
-          height: 30px;
+          width: 38px;
+          height: 38px;
           object-fit: contain;
           border-radius: 50%;
+          filter: contrast(1.05) saturate(1.1) brightness(1.02);
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
         }
 
         /* Radar marker styles */

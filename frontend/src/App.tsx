@@ -37,6 +37,9 @@ import AdminPageV4 from './pages/AdminPageV4';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminAnalyticsDashboard from './pages/AdminAnalyticsDashboard';
 import MyChaptersPage from './pages/MyChaptersPage';
+import MyCollegesPage from './pages/MyCollegesPage';
+import MyBarsPage from './pages/MyBarsPage';
+import MyUnlockedPage from './pages/MyUnlockedPage';
 import OutreachPage from './pages/OutreachPage';
 import BarsPage from './pages/BarsPage';
 
@@ -69,7 +72,10 @@ function App() {
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Navigate to="/app/map" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="my-unlocked" element={<MyUnlockedPage />} />
             <Route path="my-chapters" element={<MyChaptersPage />} />
+            <Route path="my-colleges" element={<MyCollegesPage />} />
+            <Route path="my-bars" element={<MyBarsPage />} />
             <Route path="team" element={<TeamPage />} />
             <Route path="fraternities" element={<FraternitiesPage />} />
             <Route path="colleges" element={<CollegesPage />} />

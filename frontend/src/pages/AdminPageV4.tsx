@@ -152,6 +152,7 @@ const AdminPageV4 = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showCSVImport, setShowCSVImport] = useState(false);
   const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
+  const [collegeFilter, setCollegeFilter] = useState<string>('all');
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -914,11 +915,29 @@ const AdminPageV4 = () => {
   ];
 
   const filteredUniversities = universities
-    .filter(uni =>
-      uni.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      uni.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (uni.conference || '').toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter(uni => {
+      // Search filter
+      const matchesSearch = uni.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        uni.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (uni.conference || '').toLowerCase().includes(searchTerm.toLowerCase());
+
+      // Conference filter
+      let matchesFilter = true;
+      if (collegeFilter === 'power5') {
+        const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+        matchesFilter = power4Conferences.includes(uni.conference || '');
+      } else if (collegeFilter === 'sec') {
+        matchesFilter = uni.conference === 'SEC';
+      } else if (collegeFilter === 'big10') {
+        matchesFilter = uni.conference === 'BIG 10';
+      } else if (collegeFilter === 'big12') {
+        matchesFilter = uni.conference === 'BIG 12';
+      } else if (collegeFilter === 'acc') {
+        matchesFilter = uni.conference === 'ACC';
+      }
+
+      return matchesSearch && matchesFilter;
+    })
     .sort((a, b) => {
       if (collegeOrderBy === 'name') {
         return a.name.localeCompare(b.name);
@@ -1414,20 +1433,36 @@ const AdminPageV4 = () => {
               />
             </div>
             {activeTab === 'colleges' && (
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Order by:</label>
-                <select
-                  value={collegeOrderBy}
-                  onChange={(e) => setCollegeOrderBy(e.target.value as any)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white text-sm"
-                >
-                  <option value="name">Name (A-Z)</option>
-                  <option value="state">State</option>
-                  <option value="chapters">Most Chapters</option>
-                  <option value="big10">Big 10 Schools</option>
-                  <option value="conference">Conference</option>
-                </select>
-              </div>
+              <>
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Filter by:</label>
+                  <select
+                    value={collegeFilter}
+                    onChange={(e) => setCollegeFilter(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white text-sm"
+                  >
+                    <option value="all">All Colleges</option>
+                    <option value="power5">Power 5</option>
+                    <option value="sec">SEC</option>
+                    <option value="big10">Big 10</option>
+                    <option value="big12">Big 12</option>
+                    <option value="acc">ACC</option>
+                  </select>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Order by:</label>
+                  <select
+                    value={collegeOrderBy}
+                    onChange={(e) => setCollegeOrderBy(e.target.value as any)}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white text-sm"
+                  >
+                    <option value="name">Name (A-Z)</option>
+                    <option value="state">State</option>
+                    <option value="chapters">Most Chapters</option>
+                    <option value="conference">Conference</option>
+                  </select>
+                </div>
+              </>
             )}
             <div className="flex items-center gap-2">
               {activeTab !== 'waitlist' && (

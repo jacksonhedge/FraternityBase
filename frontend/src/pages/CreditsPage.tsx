@@ -12,6 +12,7 @@ interface CreditPackage {
   credits: number;
   price: number;
   priceId: string;
+  yearlyPriceId?: string;
   popular?: boolean;
   savings?: string;
   features: string[];
@@ -20,7 +21,7 @@ interface CreditPackage {
 const CREDIT_PACKAGES: CreditPackage[] = [
   {
     id: 'trial',
-    name: 'Trial Pack',
+    name: 'Free Trial',
     credits: 10,
     price: 0.99,
     priceId: import.meta.env.VITE_STRIPE_PRICE_TRIAL || 'price_trial',
@@ -35,7 +36,7 @@ const CREDIT_PACKAGES: CreditPackage[] = [
     id: 'starter',
     name: 'Starter Pack',
     credits: 100,
-    price: 59,
+    price: 89,
     priceId: import.meta.env.VITE_STRIPE_PRICE_STARTER || 'price_starter',
     features: [
       '100 credits',
@@ -48,7 +49,7 @@ const CREDIT_PACKAGES: CreditPackage[] = [
     id: 'popular',
     name: 'Popular Pack',
     credits: 500,
-    price: 275,
+    price: 339,
     priceId: import.meta.env.VITE_STRIPE_PRICE_POPULAR || 'price_1SCo7uGCEQehRVO2aeKPhB5D',
     popular: true,
     savings: 'Save 7%',
@@ -61,30 +62,14 @@ const CREDIT_PACKAGES: CreditPackage[] = [
     ]
   },
   {
-    id: 'professional',
-    name: 'Professional Pack',
-    credits: 1000,
-    price: 500,
-    priceId: import.meta.env.VITE_STRIPE_PRICE_PROFESSIONAL || 'price_1SCo8HGCEQehRVO2THIU6hiP',
-    savings: 'Save 15%',
-    features: [
-      '1,000 credits',
-      'Unlock 100 chapters',
-      'Full contact + export',
-      'Priority support',
-      'Team collaboration',
-      'Never expires'
-    ]
-  },
-  {
     id: 'enterprise',
-    name: 'Enterprise Pack',
+    name: 'Enterprise',
     credits: 5000,
-    price: 2000,
-    priceId: import.meta.env.VITE_STRIPE_PRICE_ENTERPRISE || 'price_1SCo8yGCEQehRVO2ItYM17aV',
-    savings: 'Save 32%',
+    price: 0,
+    priceId: import.meta.env.VITE_STRIPE_PRICE_ENTERPRISE || 'price_enterprise',
+    savings: 'Custom pricing',
     features: [
-      '5,000 credits',
+      '5,000+ credits',
       'Unlimited chapter unlocks',
       'Complete data access',
       'Dedicated support',
@@ -99,6 +84,7 @@ export default function CreditsPage() {
   const { user } = useSelector((state: RootState) => state.auth);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState<string | null>(null);
+  const [isYearly, setIsYearly] = useState(false);
 
   useEffect(() => {
     // Fetch current credit balance
@@ -179,6 +165,33 @@ export default function CreditsPage() {
               <div className="text-2xl font-bold text-blue-600">{balance.toLocaleString()} credits</div>
             </div>
           </div>
+
+          {/* Billing Toggle */}
+          <div className="flex items-center justify-center gap-3 mt-6">
+            <span className={`text-sm font-medium ${!isYearly ? 'text-gray-900' : 'text-gray-500'}`}>
+              Monthly
+            </span>
+            <button
+              onClick={() => setIsYearly(!isYearly)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                isYearly ? 'bg-blue-600' : 'bg-gray-300'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  isYearly ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+            <span className={`text-sm font-medium ${isYearly ? 'text-gray-900' : 'text-gray-500'}`}>
+              Yearly
+            </span>
+            {isYearly && (
+              <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                Save 12%
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Pricing Cards */}
@@ -206,18 +219,32 @@ export default function CreditsPage() {
                 {/* Pricing */}
                 <div className="mb-4">
                   {pkg.id === 'enterprise' ? (
-                    <div className="text-2xl font-bold text-gray-900">
-                      Talk to Sales
-                    </div>
+                    <>
+                      <div className="text-2xl font-bold text-gray-900">
+                        Contact Sales
+                      </div>
+                      {pkg.savings && (
+                        <div className="text-sm font-semibold text-blue-600 mt-1">
+                          {pkg.savings}
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <>
                       <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-bold text-gray-900">
-                          ${pkg.price}
+                          ${isYearly ? Math.round(pkg.price * 12 * 0.88) : pkg.price}
                         </span>
-                        <span className="text-sm text-gray-500">one-time</span>
+                        <span className="text-sm text-gray-500">
+                          /{isYearly ? 'year' : 'month'}
+                        </span>
                       </div>
-                      {pkg.savings && (
+                      {isYearly && (
+                        <div className="text-sm font-semibold text-green-600 mt-1">
+                          Save 12% (${Math.round(pkg.price * 12 * 0.12)}/year)
+                        </div>
+                      )}
+                      {!isYearly && pkg.savings && (
                         <div className="text-sm font-semibold text-green-600 mt-1">
                           {pkg.savings}
                         </div>
@@ -230,7 +257,7 @@ export default function CreditsPage() {
                 <div className="flex items-center gap-2 mb-4 py-3 px-4 bg-blue-50 rounded-lg">
                   <Award className="w-5 h-5 text-blue-600" />
                   <span className="font-bold text-blue-600">
-                    {pkg.credits.toLocaleString()} Credits
+                    {isYearly ? 'To Be Determined' : `${pkg.credits.toLocaleString()} Credits`}
                   </span>
                 </div>
 

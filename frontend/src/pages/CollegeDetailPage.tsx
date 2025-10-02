@@ -1,97 +1,176 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Users, Building2, MapPin, Calendar, TrendingUp, Award, Star, ExternalLink, ChevronRight, Mail, Phone } from 'lucide-react';
+import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 const CollegeDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'overview' | 'fraternities' | 'sororities' | 'events' | 'partnerships'>('overview');
+  const [college, setCollege] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Sample detailed college data
-  const college = {
-    id: 1,
-    name: 'University of Alabama',
-    location: 'Tuscaloosa, AL',
-    state: 'AL',
-    division: 'Division I',
-    conference: 'SEC',
-    students: 38563,
-    founded: 1831,
-    mascot: 'Crimson Tide',
-    greekLife: 68,
-    greekPercentage: 36,
-    image: 'https://ui-avatars.com/api/?name=UA&background=9e1b32&color=fff&size=400',
-    website: 'www.ua.edu',
-    greekWebsite: 'ofsl.sa.ua.edu',
-    greekContact: {
-      name: 'Dr. Matthew M. Levitt',
-      title: 'Director of Fraternity and Sorority Life',
-      email: 'mlevitt@ua.edu',
-      phone: '(205) 348-2693'
-    },
-    stats: {
-      totalMembers: 12450,
-      avgChapterSize: 183,
-      avgGPA: 3.42,
-      philanthropyRaised: '$2.3M',
-      communityHours: 145000
-    },
-    fraternities: [
-      { name: 'Alpha Tau Omega', founded: 1885, members: 195, house: 'Yes', gpa: 3.38 },
-      { name: 'Beta Theta Pi', founded: 1879, members: 178, house: 'Yes', gpa: 3.45 },
-      { name: 'Delta Chi', founded: 1889, members: 165, house: 'Yes', gpa: 3.35 },
-      { name: 'Delta Kappa Epsilon', founded: 1847, members: 182, house: 'Yes', gpa: 3.28 },
-      { name: 'Delta Tau Delta', founded: 1881, members: 172, house: 'Yes', gpa: 3.41 },
-      { name: 'Kappa Alpha Order', founded: 1883, members: 201, house: 'Yes', gpa: 3.33 },
-      { name: 'Kappa Sigma', founded: 1894, members: 189, house: 'Yes', gpa: 3.39 },
-      { name: 'Lambda Chi Alpha', founded: 1916, members: 176, house: 'Yes', gpa: 3.44 },
-      { name: 'Phi Delta Theta', founded: 1877, members: 188, house: 'Yes', gpa: 3.52 },
-      { name: 'Phi Gamma Delta', founded: 1855, members: 194, house: 'Yes', gpa: 3.37 },
-      { name: 'Phi Kappa Psi', founded: 1904, members: 167, house: 'Yes', gpa: 3.31 },
-      { name: 'Pi Kappa Alpha', founded: 1904, members: 205, house: 'Yes', gpa: 3.29 },
-      { name: 'Pi Kappa Phi', founded: 1904, members: 183, house: 'Yes', gpa: 3.36 },
-      { name: 'Sigma Alpha Epsilon', founded: 1856, members: 212, house: 'Yes', gpa: 3.34 },
-      { name: 'Sigma Chi', founded: 1876, members: 198, house: 'Yes', gpa: 3.48 },
-      { name: 'Sigma Nu', founded: 1874, members: 191, house: 'Yes', gpa: 3.40 },
-      { name: 'Sigma Phi Epsilon', founded: 1907, members: 186, house: 'Yes', gpa: 3.46 },
-      { name: 'Theta Chi', founded: 1885, members: 174, house: 'Yes', gpa: 3.35 },
-      { name: 'Zeta Beta Tau', founded: 1916, members: 168, house: 'Yes', gpa: 3.43 },
-      // NPHC Fraternities
-      { name: 'Alpha Phi Alpha', founded: 1974, members: 28, house: 'No', gpa: 3.25 },
-      { name: 'Kappa Alpha Psi', founded: 1976, members: 32, house: 'No', gpa: 3.22 },
-      { name: 'Omega Psi Phi', founded: 1975, members: 25, house: 'No', gpa: 3.18 },
-      { name: 'Phi Beta Sigma', founded: 1980, members: 22, house: 'No', gpa: 3.20 },
-    ],
-    sororities: [
-      { name: 'Alpha Chi Omega', founded: 1912, members: 425, house: 'Yes', gpa: 3.58 },
-      { name: 'Alpha Delta Pi', founded: 1904, members: 418, house: 'Yes', gpa: 3.62 },
-      { name: 'Alpha Gamma Delta', founded: 1922, members: 402, house: 'Yes', gpa: 3.55 },
-      { name: 'Alpha Omicron Pi', founded: 1924, members: 395, house: 'Yes', gpa: 3.51 },
-      { name: 'Alpha Phi', founded: 2011, members: 412, house: 'Yes', gpa: 3.59 },
-      { name: 'Chi Omega', founded: 1922, members: 428, house: 'Yes', gpa: 3.64 },
-      { name: 'Delta Delta Delta', founded: 1914, members: 435, house: 'Yes', gpa: 3.61 },
-      { name: 'Delta Gamma', founded: 1951, members: 421, house: 'Yes', gpa: 3.57 },
-      { name: 'Delta Zeta', founded: 1912, members: 408, house: 'Yes', gpa: 3.54 },
-      { name: 'Gamma Phi Beta', founded: 1960, members: 398, house: 'Yes', gpa: 3.52 },
-      { name: 'Kappa Alpha Theta', founded: 1914, members: 415, house: 'Yes', gpa: 3.60 },
-      { name: 'Kappa Delta', founded: 1903, members: 423, house: 'Yes', gpa: 3.56 },
-      { name: 'Kappa Kappa Gamma', founded: 1978, members: 430, house: 'Yes', gpa: 3.63 },
-      { name: 'Phi Mu', founded: 1960, members: 410, house: 'Yes', gpa: 3.58 },
-      { name: 'Pi Beta Phi', founded: 1946, members: 426, house: 'Yes', gpa: 3.65 },
-      { name: 'Zeta Tau Alpha', founded: 1929, members: 419, house: 'Yes', gpa: 3.59 },
-      // NPHC Sororities
-      { name: 'Alpha Kappa Alpha', founded: 1974, members: 45, house: 'No', gpa: 3.48 },
-      { name: 'Delta Sigma Theta', founded: 1974, members: 52, house: 'No', gpa: 3.45 },
-      { name: 'Zeta Phi Beta', founded: 1980, members: 28, house: 'No', gpa: 3.42 },
-      { name: 'Sigma Gamma Rho', founded: 1992, members: 24, house: 'No', gpa: 3.38 },
-    ],
-    upcomingEvents: [
-      { name: 'Greek Week', date: 'April 10-17', type: 'Competition' },
-      { name: 'Derby Days', date: 'March 20-25', type: 'Philanthropy' },
-      { name: 'Bid Day', date: 'August 20', type: 'Recruitment' },
-      { name: 'Homecoming', date: 'October 14', type: 'Alumni' },
-    ]
-  };
+  useEffect(() => {
+    console.log('==================================================');
+    console.log('🏛️ [CollegeDetailPage] Component mounted');
+    console.log('📍 [CollegeDetailPage] College ID from URL:', id);
+
+    const fetchCollege = async () => {
+      if (!id) {
+        console.error('❌ [CollegeDetailPage] No college ID provided');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        console.log(`🌐 [CollegeDetailPage] Fetching all colleges from: ${API_URL}/admin/universities`);
+        const res = await fetch(`${API_URL}/admin/universities`, { headers });
+        const data = await res.json();
+
+        console.log('📊 [CollegeDetailPage] API Response:', {
+          success: data.success,
+          totalCount: data.data?.length || 0
+        });
+
+        if (data.success && data.data) {
+          // Find the specific university by ID
+          const uni = data.data.find((u: any) => u.id === id);
+
+          if (!uni) {
+            console.error(`❌ [CollegeDetailPage] College with ID ${id} not found in database`);
+            console.log('==================================================');
+            setLoading(false);
+            return;
+          }
+          console.log('✅ [CollegeDetailPage] Loaded college:', uni.name);
+
+          // Fetch chapters for this college
+          const chaptersRes = await fetch(`${API_URL}/chapters`, { headers });
+          const chaptersData = await chaptersRes.json();
+
+          let fraternities: any[] = [];
+          let sororities: any[] = [];
+
+          if (chaptersData.success && chaptersData.data) {
+            const chapters = chaptersData.data.filter((ch: any) => {
+              const uniName = ch.universities?.name || '';
+              return uniName.toLowerCase().includes(uni.name.toLowerCase()) ||
+                     uni.name.toLowerCase().includes(uniName.toLowerCase());
+            });
+
+            fraternities = chapters.filter((ch: any) =>
+              ch.greek_organizations?.organization_type === 'fraternity'
+            );
+            sororities = chapters.filter((ch: any) =>
+              ch.greek_organizations?.organization_type === 'sorority'
+            );
+
+            console.log(`📊 [CollegeDetailPage] Found ${fraternities.length} fraternities, ${sororities.length} sororities`);
+          }
+
+          setCollege({
+            id: uni.id,
+            name: uni.name,
+            location: `${uni.state}`,
+            state: uni.state,
+            division: 'Division I',
+            conference: uni.conference || 'Independent',
+            students: uni.student_count || 30000,
+            founded: 1831,
+            mascot: '',
+            greekLife: uni.chapter_count || 0,
+            greekPercentage: uni.student_count ? Math.round((uni.chapter_count / uni.student_count) * 100) : 0,
+            image: uni.logo_url || getCollegeLogoWithFallback(uni.name),
+            website: '',
+            greekWebsite: '',
+            greekContact: {
+              name: 'Greek Life Office',
+              title: 'Director of Fraternity and Sorority Life',
+              email: '',
+              phone: ''
+            },
+            stats: {
+              totalMembers: fraternities.length + sororities.length > 0
+                ? fraternities.reduce((sum: number, f: any) => sum + (f.member_count || 0), 0) +
+                  sororities.reduce((sum: number, s: any) => sum + (s.member_count || 0), 0)
+                : 0,
+              avgChapterSize: fraternities.length + sororities.length > 0
+                ? Math.round((fraternities.reduce((sum: number, f: any) => sum + (f.member_count || 0), 0) +
+                  sororities.reduce((sum: number, s: any) => sum + (s.member_count || 0), 0)) / (fraternities.length + sororities.length))
+                : 0,
+              avgGPA: 3.42,
+              philanthropyRaised: '$2.3M',
+              communityHours: 145000
+            },
+            fraternities: fraternities.map((ch: any) => ({
+              name: ch.greek_organizations?.name || 'Unknown',
+              founded: ch.founded_date ? new Date(ch.founded_date).getFullYear() : 0,
+              members: ch.member_count || 0,
+              house: 'Unknown',
+              gpa: 3.4
+            })),
+            sororities: sororities.map((ch: any) => ({
+              name: ch.greek_organizations?.name || 'Unknown',
+              founded: ch.founded_date ? new Date(ch.founded_date).getFullYear() : 0,
+              members: ch.member_count || 0,
+              house: 'Unknown',
+              gpa: 3.5
+            })),
+            upcomingEvents: []
+          });
+
+          console.log('==================================================');
+        } else {
+          console.error('❌ [CollegeDetailPage] Failed to load college');
+        }
+      } catch (error) {
+        console.error('❌ [CollegeDetailPage] Error fetching college:', error);
+        console.error('❌ [CollegeDetailPage] Error details:', error instanceof Error ? error.message : 'Unknown error');
+        console.log('==================================================');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCollege();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Loading college details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!college) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">College not found</p>
+          <button
+            onClick={() => navigate('/app/colleges')}
+            className="mt-4 text-blue-600 hover:text-blue-700"
+          >
+            Back to Colleges
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
