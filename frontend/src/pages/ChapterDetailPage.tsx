@@ -110,6 +110,7 @@ const ChapterDetailPage = () => {
     instagram: '@sigmachi_psu',
     greekRank: 4.2,
     nationalRank: 15,
+    lastUpdated: '2025-09-15T10:30:00Z',
     yearData: {
       '2025-2026': {
         size: 145,
