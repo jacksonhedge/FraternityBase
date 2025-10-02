@@ -29,11 +29,32 @@ const ChapterDetailPage = () => {
   const [balance, setBalance] = useState(0);
   const [isUnlocking, setIsUnlocking] = useState(false);
 
+  // Chapter data from API
+  const [chapterData, setChapterData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (id && token) {
+      // Fetch actual chapter data
+      fetch(`${API_URL}/chapters/${id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log('Chapter data from API:', data);
+          if (data.success && data.data) {
+            setChapterData(data.data);
+          }
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Failed to fetch chapter data:', err);
+          setLoading(false);
+        });
+
       // Fetch unlock status for this chapter
       fetch(`${API_URL}/chapters/${id}/unlock-status`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -95,25 +116,50 @@ const ChapterDetailPage = () => {
 
   const isUnlocked = (unlockType: string) => unlockStatus.includes(unlockType);
 
-  // Mock data - would come from API based on ID
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-xl font-semibold text-gray-700">Loading chapter details...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if no chapter data
+  if (!chapterData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-xl font-semibold text-gray-700">Chapter not found</div>
+          <Link to="/app/map" className="text-primary-600 hover:underline mt-4 inline-block">
+            Back to Map
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Map API data to display format
   const chapter = {
-    id: 1,
-    fraternity: 'Sigma Chi',
-    university: 'Penn State',
-    state: 'PA',
-    chapterName: 'Beta Theta',
-    motto: 'In Hoc Signo Vinces',
-    colors: ['Blue', 'Old Gold'],
-    founded: 1888,
-    house: '420 E Fairmount Ave, State College, PA 16801',
-    website: 'sigmachipsu.org',
-    instagram: '@sigmachi_psu',
-    greekRank: 4.2,
-    nationalRank: 15,
-    lastUpdated: '2025-09-15T10:30:00Z',
+    id: chapterData.id,
+    fraternity: chapterData.greek_organizations?.name || 'Unknown Organization',
+    university: chapterData.universities?.name || 'Unknown University',
+    state: chapterData.universities?.state || chapterData.state || 'N/A',
+    chapterName: chapterData.chapter_name || 'Chapter',
+    motto: chapterData.greek_organizations?.motto || '',
+    colors: chapterData.greek_organizations?.colors || [],
+    founded: chapterData.charter_date ? new Date(chapterData.charter_date).getFullYear() : null,
+    house: chapterData.house_address || '',
+    website: chapterData.website || '',
+    instagram: chapterData.instagram_handle || '',
+    greekRank: 4.2, // TODO: Add to database
+    nationalRank: 15, // TODO: Add to database
+    lastUpdated: chapterData.updated_at || new Date().toISOString(),
     yearData: {
       '2025-2026': {
-        size: 145,
+        size: chapterData.member_count || 0,
         president: {
           name: 'Michael Thompson',
           emails: ['mthompson@psu.edu', 'michael.thompson@sigmachi.org'],
