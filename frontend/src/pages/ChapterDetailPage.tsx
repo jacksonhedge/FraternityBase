@@ -550,6 +550,16 @@ const ChapterDetailPage = () => {
               <p className="font-semibold">{chapter.house}</p>
             </div>
             <div>
+              <p className="text-sm text-gray-600">Last Updated</p>
+              <p className="font-semibold text-xs text-gray-500">
+                {chapter.lastUpdated ? new Date(chapter.lastUpdated).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                }) : 'Not available'}
+              </p>
+            </div>
+            <div>
               <p className="text-sm text-gray-600">Chapter Motto</p>
               <p className="font-semibold italic">"{chapter.motto}"</p>
             </div>

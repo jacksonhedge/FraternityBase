@@ -21,6 +21,7 @@ import {
   Lock,
   Mail
 } from 'lucide-react';
+import ChapterEditModal from '../components/ChapterEditModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -51,6 +52,7 @@ interface University {
   greek_percentage?: number;
   website?: string;
   logo_url?: string;
+  chapter_count?: number;
 }
 
 interface Chapter {
@@ -143,6 +145,8 @@ const AdminPageV4 = () => {
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiStatus, setAiStatus] = useState<{ connected: boolean; model: string } | null>(null);
+  const [editingChapter, setEditingChapter] = useState<Chapter | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // Form states
   const [fraternityForm, setFraternityForm] = useState({
@@ -528,24 +532,35 @@ const AdminPageV4 = () => {
   };
 
   const handleChapterEdit = (chapter: Chapter) => {
-    setEditingId(chapter.id);
-    setChapterForm({
-      greek_organization_id: chapter.greek_organization_id,
-      university_id: chapter.university_id,
-      chapter_name: chapter.chapter_name,
-      charter_date: chapter.charter_date || '',
-      member_count: chapter.member_count?.toString() || '',
-      status: chapter.status,
-      house_address: chapter.house_address || '',
-      instagram_handle: chapter.instagram_handle || '',
-      website: chapter.website || '',
-      contact_email: chapter.contact_email || '',
-      phone: chapter.phone || '',
-      engagement_score: chapter.engagement_score?.toString() || '75',
-      partnership_openness: chapter.partnership_openness || 'open',
-      event_frequency: chapter.event_frequency?.toString() || '20'
-    });
-    setShowForm(true);
+    setEditingChapter(chapter);
+    setShowEditModal(true);
+  };
+
+  const handleChapterSave = async (chapterId: string, updates: any) => {
+    try {
+      const response = await fetch(`${API_URL}/admin/chapters/${chapterId}`, {
+        method: 'PATCH',
+        headers: getAdminHeaders(),
+        body: JSON.stringify(updates)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.details || error.error || 'Failed to update chapter');
+      }
+
+      const result = await response.json();
+
+      // Update the local state
+      setChapters(chapters.map(ch =>
+        ch.id === chapterId ? { ...ch, ...result.data } : ch
+      ));
+
+      alert('Chapter updated successfully!');
+    } catch (error: any) {
+      console.error('Error updating chapter:', error);
+      throw error; // Re-throw so modal can handle it
+    }
   };
 
   const handleChapterDelete = async (id: string) => {
@@ -1428,6 +1443,7 @@ const AdminPageV4 = () => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">State</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapters</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Students</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Greek %</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -1453,6 +1469,13 @@ const AdminPageV4 = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-600">{uni.state}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            (uni.chapter_count || 0) > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                          }`}>
+                            {uni.chapter_count || 0} chapter{(uni.chapter_count || 0) !== 1 ? 's' : ''}
+                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {uni.student_count ? uni.student_count.toLocaleString() : '-'}
@@ -1795,6 +1818,19 @@ const AdminPageV4 = () => {
       )}
         </div>
       </div>
+
+      {/* Chapter Edit Modal */}
+      {editingChapter && (
+        <ChapterEditModal
+          chapter={editingChapter}
+          isOpen={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingChapter(null);
+          }}
+          onSave={handleChapterSave}
+        />
+      )}
     </div>
   );
 };
