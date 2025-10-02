@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { X, Save, Globe, Instagram, Linkedin, Twitter, MapPin, Building, Calendar, Users, Star } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { X, Save, Globe, Instagram, Linkedin, Twitter, MapPin, Building, Calendar, Users, Star, Upload } from 'lucide-react';
 
 interface ChapterEditModalProps {
   chapter: any;
@@ -8,9 +8,10 @@ interface ChapterEditModalProps {
   onSave: (chapterId: string, updates: any) => Promise<void>;
   chapterUsers?: any[];
   onTogglePinned?: (userId: string, isPinned: boolean) => Promise<void>;
+  onImportRoster?: (chapterId: string, users: any[]) => Promise<void>;
 }
 
-const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [], onTogglePinned }: ChapterEditModalProps) => {
+const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [], onTogglePinned, onImportRoster }: ChapterEditModalProps) => {
   const [activeTab, setActiveTab] = useState<'info' | 'roster'>('info');
   const [formData, setFormData] = useState({
     website: '',
@@ -31,6 +32,9 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
 
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
+  const [isImporting, setIsImporting] = useState(false);
+  const [importSuccess, setImportSuccess] = useState('');
+  const csvFileInputRef = useRef<HTMLInputElement>(null);
 
   // Key positions to pin
   const KEY_POSITIONS = [
@@ -81,6 +85,58 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !onImportRoster) return;
+
+    setIsImporting(true);
+    setError('');
+    setImportSuccess('');
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const text = event.target?.result as string;
+        const lines = text.split('\n').filter(line => line.trim());
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+
+        const users = [];
+        for (let i = 1; i < lines.length; i++) {
+          const values = lines[i].split(',').map(v => v.trim());
+          const row: Record<string, string> = {};
+          headers.forEach((header, index) => {
+            row[header] = values[index] || '';
+          });
+
+          // Map CSV columns to user object
+          users.push({
+            name: row.name || row.Name || '',
+            position: row.position || row.Position || row.title || row.Title || 'Member',
+            email: row.email || row.Email || '',
+            phone: row.phone || row.Phone || '',
+            linkedin_profile: row.linkedin || row.LinkedIn || row.linkedin_profile || '',
+            graduation_year: parseInt(row.graduation_year || row['Graduation Year'] || row.grad_year || '0') || undefined,
+            major: row.major || row.Major || '',
+            member_type: (row.member_type || row['Member Type'] || row.type || 'member').toLowerCase()
+          });
+        }
+
+        await onImportRoster(chapter.id, users);
+        setImportSuccess(`Successfully imported ${users.length} members!`);
+
+        // Reset file input
+        if (csvFileInputRef.current) {
+          csvFileInputRef.current.value = '';
+        }
+      } catch (err: any) {
+        setError(err.message || 'Failed to import CSV');
+      } finally {
+        setIsImporting(false);
+      }
+    };
+    reader.readAsText(file);
   };
 
   if (!isOpen) return null;
@@ -381,6 +437,49 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
           {/* Roster Tab */}
           {activeTab === 'roster' && (
             <div className="space-y-4">
+              {/* CSV Import Section */}
+              <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-700">Import Roster from CSV</h3>
+                  <p className="text-xs text-gray-500 mt-1">Upload a CSV file with columns: name, position, email, phone, linkedin, graduation_year, major, member_type</p>
+                </div>
+                <div>
+                  <input
+                    ref={csvFileInputRef}
+                    type="file"
+                    accept=".csv"
+                    onChange={handleCSVImport}
+                    className="hidden"
+                    id="roster-csv-upload"
+                  />
+                  <label
+                    htmlFor="roster-csv-upload"
+                    className={`inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors cursor-pointer ${
+                      isImporting ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    {isImporting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Importing...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4" />
+                        Import CSV
+                      </>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {/* Success/Error Messages */}
+              {importSuccess && (
+                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                  {importSuccess}
+                </div>
+              )}
+
               {/* Pinned Members */}
               {chapterUsers.filter(u => u.is_pinned).length > 0 && (
                 <div className="mb-6">

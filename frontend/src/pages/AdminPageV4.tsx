@@ -596,6 +596,40 @@ const AdminPageV4 = () => {
     }
   };
 
+  const handleRosterImport = async (chapterId: string, users: any[]) => {
+    try {
+      let successCount = 0;
+      let errorCount = 0;
+
+      for (const user of users) {
+        try {
+          const response = await fetch(`${API_URL}/admin/users`, {
+            method: 'POST',
+            headers: getAdminHeaders(),
+            body: JSON.stringify({
+              chapter_id: chapterId,
+              ...user
+            })
+          });
+
+          if (response.ok) {
+            successCount++;
+          } else {
+            errorCount++;
+          }
+        } catch (err) {
+          errorCount++;
+        }
+      }
+
+      showSuccessMsg(`Roster imported! ✅ ${successCount} members added, ❌ ${errorCount} errors`);
+      fetchData();
+    } catch (error: any) {
+      console.error('Error importing roster:', error);
+      throw error;
+    }
+  };
+
   const handleChapterDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this chapter?')) return;
 
@@ -2288,6 +2322,8 @@ const AdminPageV4 = () => {
             setEditingChapter(null);
           }}
           onSave={handleChapterSave}
+          chapterUsers={users.filter(u => u.chapter_id === editingChapter.id)}
+          onImportRoster={handleRosterImport}
         />
       )}
     </div>
