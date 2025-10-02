@@ -603,7 +603,7 @@ const AdminPageV4 = () => {
 
       for (const user of users) {
         try {
-          const response = await fetch(`${API_URL}/admin/users`, {
+          const response = await fetch(`${API_URL}/admin/officers`, {
             method: 'POST',
             headers: getAdminHeaders(),
             body: JSON.stringify({

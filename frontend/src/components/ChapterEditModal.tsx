@@ -117,9 +117,10 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
             email: row.email || row.Email || '',
             phone: row.phone || row.Phone || '',
             linkedin_profile: row.linkedin || row.LinkedIn || row.linkedin_profile || '',
-            graduation_year: parseInt(row.graduation_year || row['Graduation Year'] || row.grad_year || '0') || undefined,
+            graduation_year: parseInt(row.graduation_year || row['graduation year'] || row.grad_year || '0') || undefined,
             major: row.major || row.Major || '',
-            member_type: (row.member_type || row['Member Type'] || row.type || 'member').toLowerCase()
+            member_type: (row.member_type || row['member type'] || row.type || 'member').toLowerCase(),
+            is_primary_contact: (row.is_primary_contact || row.is_primary || row['is primary'] || 'false').toLowerCase() === 'true'
           });
         }
 

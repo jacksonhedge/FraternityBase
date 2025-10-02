@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OG Image Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+
+        .og-container {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative elements */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 80px;
+            max-width: 900px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 24px;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: white;
+            font-size: 72px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tagline {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            color: white;
+            font-size: 48px;
+            font-weight: 800;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 20px;
+            margin-top: 8px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .domain {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            opacity: 0.9;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="og-container">
+        <div class="bg-pattern"></div>
+
+        <div class="content">
+            <div class="logo">🧢</div>
+
+            <h1>FraternityBase</h1>
+
+            <div class="tagline">Find Your Fraternity Partner</div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Organizations</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">250+</div>
+                    <div class="stat-label">Universities</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1,000+</div>
+                    <div class="stat-label">Chapters</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="domain">fraternitybase.com</div>
+    </div>
+
+    <div style="margin: 40px; text-align: center; font-family: monospace;">
+        <h2>Instructions:</h2>
+        <ol style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.8;">
+            <li>Take a screenshot of the gradient box above (1200x630px)</li>
+            <li>Save it as 'og-image.png'</li>
+            <li>Replace the existing og-image.png in the public folder</li>
+            <li>Or use this command in terminal:</li>
+        </ol>
+        <pre style="background: #f5f5f5; padding: 20px; border-radius: 8px; max-width: 800px; margin: 20px auto; text-align: left;">
+# Open this page in your browser, then take a screenshot:
+open http://localhost:5173/og-image-generator.html
+
+# Or use a screenshot tool to capture exactly 1200x630px
+# centered on the gradient box above
+        </pre>
+
+        <p style="margin-top: 30px; color: #666;">
+            <strong>Alternative:</strong> Use a tool like <a href="https://www.screely.com/" target="_blank">Screely</a>
+            or open Chrome DevTools → Device Toolbar → Set to 1200x630px → Screenshot
+        </p>
+    </div>
+</body>
+</html>
