@@ -704,6 +704,79 @@ app.get('/api/chapters/:chapterId/unlock-status', async (req, res) => {
   }
 });
 
+// Admin endpoint to update chapter details
+app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
+  const { chapterId } = req.params;
+  const updateData = req.body;
+
+  try {
+    // Validate that we have a chapter ID
+    if (!chapterId) {
+      return res.status(400).json({ error: 'Chapter ID is required' });
+    }
+
+    // Allowed fields to update
+    const allowedFields = [
+      'website',
+      'twitter_handle',
+      'instagram_handle_official',
+      'linkedin_url',
+      'tiktok_handle',
+      'city',
+      'state_province',
+      'country',
+      'fraternity_province',
+      'house_address',
+      'member_count',
+      'founded_year',
+      'chapter_name',
+      'greek_letter_name',
+      'status'
+    ];
+
+    // Filter update data to only include allowed fields
+    const filteredData: any = {};
+    for (const field of allowedFields) {
+      if (updateData[field] !== undefined) {
+        filteredData[field] = updateData[field];
+      }
+    }
+
+    // Add last_updated_at timestamp
+    filteredData.last_updated_at = new Date().toISOString();
+
+    // Update the chapter
+    const { data, error } = await supabaseAdmin
+      .from('chapters')
+      .update(filteredData)
+      .eq('id', chapterId)
+      .select(`
+        *,
+        greek_organizations(id, name, greek_letters),
+        universities(id, name, location, state)
+      `)
+      .single();
+
+    if (error) {
+      console.error('Error updating chapter:', error);
+      return res.status(500).json({ error: 'Failed to update chapter', details: error.message });
+    }
+
+    if (!data) {
+      return res.status(404).json({ error: 'Chapter not found' });
+    }
+
+    res.json({
+      success: true,
+      message: 'Chapter updated successfully',
+      data
+    });
+  } catch (error: any) {
+    console.error('Chapter update error:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
+  }
+});
+
 // ===== ADMIN ANALYTICS ENDPOINTS =====
 
 // Get overall analytics (revenue, credits sold, users)
@@ -1027,13 +1100,24 @@ app.delete('/api/admin/greek-organizations/:id', requireAdmin, async (req, res) 
 // Universities
 app.get('/api/admin/universities', requireAdmin, async (req, res) => {
   try {
+    // Fetch universities with chapter count
     const { data, error } = await supabase
       .from('universities')
-      .select('*')
+      .select(`
+        *,
+        chapters:chapters(count)
+      `)
       .order('name', { ascending: true });
 
     if (error) throw error;
-    res.json({ success: true, data });
+
+    // Transform the data to include chapter_count
+    const transformedData = data?.map(uni => ({
+      ...uni,
+      chapter_count: uni.chapters?.[0]?.count || 0
+    })) || [];
+
+    res.json({ success: true, data: transformedData });
   } catch (error: any) {
     console.error('Error fetching universities:', error);
     res.status(500).json({ error: error.message });

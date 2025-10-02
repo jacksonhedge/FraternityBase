@@ -575,7 +575,7 @@ const ChaptersPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <img
-                            src={getCollegeLogoWithFallback(chapter.universities?.name || '')}
+                            src={chapter.universities?.logo_url || getCollegeLogoWithFallback(chapter.universities?.name || '')}
                             alt={chapter.universities?.name || ''}
                             className="w-10 h-10 rounded-lg object-contain"
                           />
@@ -629,7 +629,7 @@ const ChaptersPage = () => {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-3">
                   <img
-                    src={getCollegeLogoWithFallback(chapter.universities?.name || '')}
+                    src={chapter.universities?.logo_url || getCollegeLogoWithFallback(chapter.universities?.name || '')}
                     alt={chapter.universities?.name || ''}
                     className="w-14 h-14 object-contain flex-shrink-0"
                   />
@@ -673,10 +673,17 @@ const ChaptersPage = () => {
 
               {chapter.instagram_handle && (
                 <div className="mt-4 pt-4 border-t border-gray-200">
-                  <div className="flex items-center text-sm text-gray-500">
+                  <a
+                    href={`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline"
+                  >
                     <Instagram className="w-4 h-4 mr-2" />
-                    {chapter.instagram_handle}
-                  </div>
+                    {chapter.instagram_handle.startsWith('@') ? chapter.instagram_handle : `@${chapter.instagram_handle}`}
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </a>
                 </div>
               )}
             </Link>
