@@ -1401,9 +1401,16 @@ const MapPageFullScreen = () => {
           </>
         )}
 
-        {/* College markers - Radar (dark) or Logo (light) style */}
-        {viewMode === 'usa' && Object.entries(COLLEGE_LOCATIONS)
+        {/* College markers - Radar (dark) or Logo (light) style - Show in both USA and state view */}
+        {(viewMode === 'usa' || viewMode === 'state') && Object.entries(COLLEGE_LOCATIONS)
           .filter(([collegeName, collegeData]) => {
+            // Filter by state if in state view
+            if (viewMode === 'state' && selectedState) {
+              if (collegeData.state !== selectedState.abbr) {
+                return false;
+              }
+            }
+
             // Filter based on division
             if (divisionFilter === 'all') return true;
 
@@ -1473,45 +1480,6 @@ const MapPageFullScreen = () => {
           );
         })}
 
-        {/* State-specific college markers when zoomed into a state */}
-        {selectedState && viewMode === 'state' && selectedState.colleges.map((college) => {
-          const icon = isDarkMode
-            ? L.divIcon({
-                className: 'radar-marker',
-                html: `
-                  <div class="radar-container">
-                    <div class="radar-ping"></div>
-                    <div class="radar-ping radar-ping-2"></div>
-                    <div class="radar-dot"></div>
-                  </div>
-                `,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15]
-              })
-            : L.divIcon({
-                className: 'logo-marker',
-                html: `
-                  <div class="logo-container">
-                    <img src="${getCollegeLogo(college.name)}" alt="${college.name}" class="college-logo" />
-                  </div>
-                `,
-                iconSize: [40, 40],
-                iconAnchor: [20, 20]
-              });
-
-          return (
-            <Marker
-              key={college.name}
-              position={[college.lat, college.lng]}
-              icon={icon}
-              eventHandlers={{
-                click: () => handleCollegeClick(college.name, college),
-                mouseover: () => setHoveredCollege({ name: college.name, data: college }),
-                mouseout: () => setHoveredCollege(null),
-              }}
-            />
-          );
-        })}
 
         {/* Campus chapter markers */}
         {viewMode === 'campus' && campusChapters.map((chapter) => (
