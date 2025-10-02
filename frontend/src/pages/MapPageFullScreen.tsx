@@ -352,7 +352,7 @@ const MapPageFullScreen = () => {
 
   // Helper function to find college coordinates from COLLEGE_LOCATIONS with fuzzy matching
   const getCollegeCoordinates = (collegeName: string, stateAbbr: string): { lat: number; lng: number } | null => {
-    // Normalize the college name
+    // Normalize the college name - handle both en-dash (–) and hyphen (-)
     const normalizedName = collegeName.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
 
     // Try exact matches first
@@ -369,10 +369,12 @@ const MapPageFullScreen = () => {
       return { lat: COLLEGE_LOCATIONS[normalizedName].lat, lng: COLLEGE_LOCATIONS[normalizedName].lng };
     }
 
-    // Try fuzzy matching
+    // Try fuzzy matching - normalize dashes and spaces
     const cleanName = normalizedName
       .replace(/^The\s+/i, '')
       .replace(/^University of\s+/i, '')
+      .replace(/[–\-]/g, '') // Remove both en-dash and hyphen
+      .replace(/\s+/g, ' ') // Normalize spaces
       .trim();
 
     // Special handling for Penn State variations
@@ -388,6 +390,8 @@ const MapPageFullScreen = () => {
         .replace(/^The\s+/i, '')
         .replace(/^University of\s+/i, '')
         .replace(/\s*\([A-Z]{2}\)\s*$/, '')
+        .replace(/[–\-]/g, '') // Remove both en-dash and hyphen
+        .replace(/\s+/g, ' ') // Normalize spaces
         .trim();
 
       // Check if names match after cleaning
