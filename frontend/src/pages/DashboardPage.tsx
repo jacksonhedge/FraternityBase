@@ -31,6 +31,39 @@ const DashboardPage = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [purchasedCredits, setPurchasedCredits] = useState(0);
 
+  // Fetch real data from API
+  const [creditBalance, setCreditBalance] = useState(0);
+  const [lifetimeCredits, setLifetimeCredits] = useState(0);
+  const [unlockedChapters, setUnlockedChapters] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    // Fetch credit balance and unlocked chapters
+    if (token) {
+      Promise.all([
+        fetch(`${API_URL}/credits/balance`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }).then(res => res.json()),
+        fetch(`${API_URL}/chapters/unlocked`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }).then(res => res.json())
+      ])
+        .then(([creditsData, chaptersData]) => {
+          setCreditBalance(creditsData.balance || 0);
+          setLifetimeCredits(creditsData.lifetime || 0);
+          setUnlockedChapters(chaptersData.data || []);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Failed to fetch dashboard data:', err);
+          setLoading(false);
+        });
+    }
+  }, [token]);
+
   // Check for payment success
   useEffect(() => {
     const paymentStatus = searchParams.get('payment');
@@ -53,10 +86,6 @@ const DashboardPage = () => {
       }, 10000);
     }
   }, [searchParams, setSearchParams]);
-
-  // TODO: Fetch from API
-  const creditBalance = 1000; // Demo balance for testing
-  const lifetimeCredits = 1500;
 
   // Data Inventory Stats - What we have for sale
   const stats = [
@@ -157,32 +186,6 @@ const DashboardPage = () => {
     }
   ];
 
-  // Mock unlocked chapters (TODO: Fetch from API based on company_id)
-  const unlockedChapters = [
-    {
-      id: 'penn-state-sigma-chi',
-      name: 'Penn State Sigma Chi',
-      university: 'Pennsylvania State University',
-      members: 95,
-      grade: 'A',
-      unlockedAt: '2025-09-28',
-      expiresAt: '2026-03-28', // 6 months from unlock
-      accessLevel: 'full', // 'roster', 'emails', 'phones', 'full'
-      creditsSpent: 200
-    },
-    {
-      id: 'usc-sigma-chi',
-      name: 'USC Sigma Chi',
-      university: 'University of Southern California',
-      members: 85,
-      grade: 'A',
-      unlockedAt: '2025-09-20',
-      expiresAt: null, // Free demo = permanent
-      accessLevel: 'roster',
-      creditsSpent: 0
-    }
-  ];
-
   return (
     <div className="space-y-6">
       {/* SUCCESS MESSAGE */}
@@ -204,32 +207,29 @@ const DashboardPage = () => {
         </div>
       )}
 
-      {/* CREDIT BALANCE - Big and prominent */}
-      <div className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 rounded-2xl shadow-2xl p-8 text-white">
+      {/* CREDIT BALANCE - Compact */}
+      <div className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 rounded-lg shadow-lg p-4 text-white">
         <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <Coins className="w-8 h-8" />
-              <h2 className="text-lg font-medium opacity-90">Available Credits</h2>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Coins className="w-5 h-5" />
+              <span className="text-sm font-medium opacity-90">Available Credits</span>
             </div>
-            <div className="text-6xl font-bold tracking-tight mb-2">
+            <div className="text-3xl font-bold tracking-tight">
               {creditBalance.toLocaleString()}
             </div>
-            <p className="text-purple-200 text-sm">
-              {lifetimeCredits.toLocaleString()} lifetime credits purchased
-            </p>
+            {lifetimeCredits > 0 && (
+              <span className="text-purple-200 text-xs">
+                ({lifetimeCredits.toLocaleString()} lifetime)
+              </span>
+            )}
           </div>
-          <div className="text-right">
-            <Link
-              to="/dashboard/credits"
-              className="inline-block bg-white text-purple-700 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors shadow-lg"
-            >
-              Buy More Credits
-            </Link>
-            <p className="text-purple-200 text-xs mt-3">
-              Unlock chapters • Export data • Access contacts
-            </p>
-          </div>
+          <Link
+            to="/dashboard/credits"
+            className="inline-block bg-white text-purple-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-50 transition-colors shadow-lg"
+          >
+            Buy Credits
+          </Link>
         </div>
       </div>
 
