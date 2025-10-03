@@ -377,7 +377,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
         unlockType,
         creditsSpent: cost,
         chapterName: chapter?.chapter_name,
-        universityName: chapter?.universities?.name
+        universityName: (chapter?.universities as any)?.name
       }
     });
 
@@ -2213,6 +2213,110 @@ app.post('/api/admin/clean-duplicates', requireAdmin, async (req, res) => {
 // Configure multer for CSV file uploads (in-memory storage)
 const upload = multer({ storage: multer.memoryStorage() });
 
+// Claude CSV Processing endpoint
+app.post('/api/admin/process-csv-with-claude', requireAdmin, upload.single('csv'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'No CSV file uploaded' });
+    }
+
+    const csvContent = req.file.buffer.toString('utf-8');
+
+    // Get all chapters and universities for context
+    const { data: chapters } = await supabaseAdmin
+      .from('chapters')
+      .select(`
+        id,
+        chapter_name,
+        universities (id, name, state)
+      `);
+
+    const prompt = `You are a data processing assistant helping upload chapter roster data to a fraternity database.
+
+I'm providing you with:
+1. A CSV file with member roster data
+2. A list of existing chapters in the database
+
+Your task:
+1. Parse the CSV and identify what chapter this roster belongs to
+2. Match it to an existing chapter in the database (or indicate if you can't find a match)
+3. Clean and format the member data according to our schema
+4. Provide warnings about any data quality issues
+
+CSV Content:
+${csvContent}
+
+Existing Chapters in Database:
+${JSON.stringify(chapters, null, 2)}
+
+Member Data Schema:
+- name (required): Full name
+- position: Officer position or "Member"
+- email: Email address
+- phone: Phone number (format: (XXX) XXX-XXXX or XXX-XXX-XXXX)
+- linkedin: LinkedIn profile URL
+- graduation_year: Year as integer
+- major: Academic major
+- member_type: "member", "officer", "alumni", or "advisor"
+- is_primary_contact: boolean (true/false)
+
+Please respond ONLY with valid JSON in this exact format:
+{
+  "chapterId": "uuid-of-matched-chapter",
+  "chapterName": "Chapter Name",
+  "universityName": "University Name",
+  "members": [
+    {
+      "name": "John Doe",
+      "position": "President",
+      "email": "john@example.com",
+      "phone": "(555) 123-4567",
+      "linkedin": "",
+      "graduation_year": 2025,
+      "major": "Business",
+      "member_type": "officer",
+      "is_primary_contact": true
+    }
+  ],
+  "explanation": "Brief explanation of what you did (1-2 sentences)",
+  "warnings": ["Array of any warnings or data quality issues"],
+  "confidence": "high|medium|low"
+}`;
+
+    const message = await anthropic.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 8000,
+      messages: [{
+        role: 'user',
+        content: prompt
+      }]
+    });
+
+    const responseText = message.content[0].type === 'text' ? message.content[0].text : '';
+
+    // Extract JSON from response (handle markdown code blocks)
+    let jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
+    if (!jsonMatch) {
+      jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    }
+
+    if (!jsonMatch) {
+      throw new Error('Could not parse Claude response as JSON');
+    }
+
+    const processedData = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+
+    res.json({
+      success: true,
+      data: processedData
+    });
+
+  } catch (error: any) {
+    console.error('Error processing CSV with Claude:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Warm introduction request endpoint
 app.post('/api/chapters/:id/warm-intro-request', async (req, res) => {
   try {
@@ -2255,7 +2359,7 @@ app.post('/api/chapters/:id/warm-intro-request', async (req, res) => {
         proposal,
         preferredContact,
         chapterName: chapter?.chapter_name,
-        universityName: chapter?.universities?.name
+        universityName: (chapter?.universities as any)?.name
       }
     });
 
@@ -2322,7 +2426,7 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
       columns: true,
       skip_empty_lines: true,
       trim: true
-    });
+    }) as Array<Record<string, string>>;
 
     console.log(`📁 Uploading ${records.length} members for chapter: ${chapter.chapter_name}`);
 
@@ -2352,7 +2456,7 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
           graduation_year: record.graduation_year ? parseInt(record.graduation_year) : null,
           major: record.major?.trim() || null,
           member_type: record.member_type?.trim() || 'member',
-          is_primary_contact: record.is_primary_contact === 'true' || record.is_primary_contact === true,
+          is_primary_contact: record.is_primary_contact === 'true',
           updated_at: new Date().toISOString()
         };
 

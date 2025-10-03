@@ -1133,6 +1133,17 @@ const AdminPageV4 = () => {
             )}
           </button>
 
+          <a
+            href="/admin/csv-upload"
+            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 border-t border-gray-700 mt-2 pt-4"
+          >
+            <Upload className="w-5 h-5" />
+            <span className="font-medium">AI CSV Upload</span>
+            <span className="ml-auto px-2 py-0.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs rounded-full">
+              AI
+            </span>
+          </a>
+
           <button
             onClick={() => {
               setActiveTab('fraternities');
