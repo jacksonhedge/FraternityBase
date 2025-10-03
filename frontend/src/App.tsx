@@ -36,6 +36,7 @@ import AdminPageV3 from './pages/AdminPageV3';
 import AdminPageV4 from './pages/AdminPageV4';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminAnalyticsDashboard from './pages/AdminAnalyticsDashboard';
+import AdminCSVUploadPage from './pages/AdminCSVUploadPage';
 import MyChaptersPage from './pages/MyChaptersPage';
 import MyCollegesPage from './pages/MyCollegesPage';
 import MyBarsPage from './pages/MyBarsPage';
@@ -66,6 +67,7 @@ function App() {
           <Route path="/pending-approval" element={<PendingApprovalPage />} />
           <Route path="/admin-login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/csv-upload" element={<AdminRoute><AdminCSVUploadPage /></AdminRoute>} />
           <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />
 
           {/* Private Routes */}
