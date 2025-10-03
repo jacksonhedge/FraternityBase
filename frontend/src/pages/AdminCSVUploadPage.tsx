@@ -43,6 +43,7 @@ export default function AdminCSVUploadPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [userPrompt, setUserPrompt] = useState<string>('');
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -90,11 +91,14 @@ export default function AdminCSVUploadPage() {
     try {
       const formData = new FormData();
       formData.append('csv', selectedFile);
+      if (userPrompt.trim()) {
+        formData.append('prompt', userPrompt.trim());
+      }
 
       const response = await fetch(`${API_URL}/admin/process-csv-with-claude`, {
         method: 'POST',
         headers: {
-          'x-admin-token': getAdminHeaders().['x-admin-token']
+          'x-admin-token': getAdminHeaders()['x-admin-token']
         },
         body: formData
       });
@@ -125,7 +129,7 @@ export default function AdminCSVUploadPage() {
         {
           method: 'POST',
           headers: {
-            'x-admin-token': getAdminHeaders().['x-admin-token']
+            'x-admin-token': getAdminHeaders()['x-admin-token']
           },
           body: (() => {
             const formData = new FormData();
@@ -269,9 +273,9 @@ export default function AdminCSVUploadPage() {
             </div>
 
             {selectedFile && (
-              <div className="mt-6 bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+              <div className="mt-6 space-y-4">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-4">
                     <FileText className="w-8 h-8 text-blue-600" />
                     <div>
                       <p className="font-medium text-gray-900">{selectedFile.name}</p>
@@ -280,10 +284,27 @@ export default function AdminCSVUploadPage() {
                       </p>
                     </div>
                   </div>
+
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Additional Instructions (Optional)
+                    </label>
+                    <textarea
+                      value={userPrompt}
+                      onChange={(e) => setUserPrompt(e.target.value)}
+                      placeholder="e.g., 'This is for Sigma Chi at Florida State University' or 'Match to chapter with ID abc-123'"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      rows={3}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Help Claude understand what chapter this roster belongs to
+                    </p>
+                  </div>
+
                   <button
                     onClick={processWithClaude}
                     disabled={processing}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {processing ? (
                       <>

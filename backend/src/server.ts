@@ -2221,6 +2221,7 @@ app.post('/api/admin/process-csv-with-claude', requireAdmin, upload.single('csv'
     }
 
     const csvContent = req.file.buffer.toString('utf-8');
+    const userPrompt = req.body.prompt || '';
 
     // Get all chapters and universities for context
     const { data: chapters } = await supabaseAdmin
@@ -2232,6 +2233,8 @@ app.post('/api/admin/process-csv-with-claude', requireAdmin, upload.single('csv'
       `);
 
     const prompt = `You are a data processing assistant helping upload chapter roster data to a fraternity database.
+
+${userPrompt ? `IMPORTANT USER INSTRUCTIONS: ${userPrompt}\n` : ''}
 
 I'm providing you with:
 1. A CSV file with member roster data
