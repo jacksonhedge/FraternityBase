@@ -225,6 +225,53 @@ app.post('/api/credits/webhook', async (req, res) => {
   }
 });
 
+// Get single chapter by ID
+app.get('/api/chapters/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { data: chapter, error } = await supabase
+      .from('chapters')
+      .select(`
+        *,
+        greek_organizations (
+          id,
+          name,
+          abbreviation,
+          greek_letters,
+          organization_type,
+          founded_date,
+          colors,
+          motto,
+          philanthropy
+        ),
+        universities (
+          id,
+          name,
+          state,
+          city
+        )
+      `)
+      .eq('id', id)
+      .single();
+
+    if (error || !chapter) {
+      return res.status(404).json({
+        success: false,
+        error: 'Chapter not found'
+      });
+    }
+
+    res.json({ success: true, data: chapter });
+  } catch (error: any) {
+    console.error('Error fetching chapter:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
+
 // Unlock endpoints
 app.post('/api/chapters/:id/unlock', async (req, res) => {
   try {
