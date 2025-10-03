@@ -255,7 +255,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       basic_info: 5,      // Instagram & Website only
       roster: 25,         // Member names + emails + phones
       officers: 15,       // Officer names + emails + phones
-      warm_introduction: 35,  // Personal introduction service
+      warm_introduction: 100,  // Personal introduction service (~$50 value)
       full: 50            // Everything combined
     };
 
