@@ -16,7 +16,8 @@ import {
   ChevronDown,
   ExternalLink,
   Lock,
-  Unlock
+  Unlock,
+  Handshake
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
@@ -582,6 +583,139 @@ const ChapterDetailPage = () => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Warm Introduction Section */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <Handshake className="w-6 h-6 text-emerald-600" />
+            Personal Introduction
+          </h2>
+
+          {!isUnlocked('warm_introduction') ? (
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-lg p-6">
+              <div className="flex items-start gap-3">
+                <Lock className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 mb-2">🤝 Get a Personal Introduction</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Skip the cold outreach! We'll personally introduce you to the chapter's leadership team,
+                    leveraging our network and credibility to facilitate a warm connection. Perfect for
+                    partnerships, sponsorships, and collaboration opportunities.
+                  </p>
+                  <div className="bg-white/60 rounded-lg p-3 mb-4">
+                    <p className="text-xs font-medium text-gray-700 mb-2">What's included:</p>
+                    <ul className="text-xs text-gray-600 space-y-1">
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span>Personal email introduction from our team to chapter president</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span>Your company background and partnership proposal shared</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span>Follow-up coordination to ensure connection is made</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span>Higher response rate vs. cold email (~70% vs. ~10%)</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <button
+                    onClick={() => handleUnlock('warm_introduction', 100)}
+                    disabled={isUnlocking}
+                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isUnlocking ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Unlocking...
+                      </>
+                    ) : (
+                      <>
+                        <Handshake className="w-4 h-4" />
+                        Request Introduction for 100 Credits
+                      </>
+                    )}
+                  </button>
+                  <p className="text-xs text-gray-500 mt-2">
+                    ~$50 value • Significantly increases partnership success rate
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-2">
+                <Unlock className="w-5 h-5 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-900">Introduction unlocked! ✅</span>
+              </div>
+
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+                <h3 className="font-semibold text-gray-900 mb-3">📝 Introduction Request Form</h3>
+                <form className="space-y-4" onSubmit={(e) => {
+                  e.preventDefault();
+                  alert('Introduction request submitted! Our team will reach out to facilitate the connection within 24 hours.');
+                }}>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Your Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      placeholder="John Smith"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Your Email *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      placeholder="john@company.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Partnership Proposal *
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      placeholder="Briefly describe your partnership opportunity, what you're offering, and what you're looking for..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Preferred Contact Method
+                    </label>
+                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                      <option>Email</option>
+                      <option>Phone</option>
+                      <option>Both</option>
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                  >
+                    Submit Introduction Request
+                  </button>
+                </form>
+                <p className="text-xs text-gray-600 mt-4">
+                  💡 Our team typically responds within 24 hours to facilitate the introduction.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Chapter Info */}

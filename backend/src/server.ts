@@ -5,6 +5,8 @@ import { Resend } from 'resend';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
+import multer from 'multer';
+import { parse } from 'csv-parse/sync';
 
 dotenv.config();
 
@@ -214,6 +216,30 @@ app.post('/api/credits/webhook', async (req, res) => {
           console.error('Error adding credits:', addError);
         } else {
           console.log(`✅ Added ${credits} credits to company ${companyId}. New balance: ${result.balance}`);
+
+          // Get company info for logging
+          const { data: company } = await supabaseAdmin
+            .from('companies')
+            .select('company_name')
+            .eq('id', companyId)
+            .single();
+
+          // Log activity
+          await supabaseAdmin.rpc('log_admin_activity', {
+            p_event_type: 'purchase',
+            p_event_title: `${credits} credits purchased`,
+            p_event_description: `${company?.company_name || 'User'} purchased ${CREDIT_PACKAGES[packageId]?.name || packageId} package for $${session.amount_total / 100}`,
+            p_company_id: companyId,
+            p_company_name: company?.company_name,
+            p_reference_id: session.payment_intent,
+            p_reference_type: 'stripe_payment',
+            p_metadata: {
+              credits,
+              packageId,
+              amountPaid: session.amount_total / 100,
+              newBalance: result.balance
+            }
+          });
         }
       }
     }
@@ -324,6 +350,36 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     if (!result.success) {
       return res.status(400).json({ error: result.error });
     }
+
+    // Get chapter and company info for logging
+    const { data: chapter } = await supabaseAdmin
+      .from('chapters')
+      .select('chapter_name, universities(name)')
+      .eq('id', chapterId)
+      .single();
+
+    const { data: company } = await supabaseAdmin
+      .from('companies')
+      .select('company_name')
+      .eq('id', user.id)
+      .single();
+
+    // Log activity
+    await supabaseAdmin.rpc('log_admin_activity', {
+      p_event_type: 'unlock',
+      p_event_title: `${unlockType} unlocked: ${chapter?.chapter_name || 'Chapter'}`,
+      p_event_description: `${company?.company_name || 'User'} unlocked ${unlockType} for ${cost} credits`,
+      p_company_id: user.id,
+      p_company_name: company?.company_name,
+      p_reference_id: chapterId,
+      p_reference_type: 'chapter',
+      p_metadata: {
+        unlockType,
+        creditsSpent: cost,
+        chapterName: chapter?.chapter_name,
+        universityName: chapter?.universities?.name
+      }
+    });
 
     res.json({
       success: true,
@@ -633,6 +689,19 @@ app.post('/api/signup', async (req, res) => {
       user: newUser.email,
       adminEmailSent: adminNotification.success,
       userEmailSent: userConfirmation.success
+    });
+
+    // Log activity
+    await supabaseAdmin.rpc('log_admin_activity', {
+      p_event_type: 'new_client',
+      p_event_title: `New signup: ${companyName}`,
+      p_event_description: `${name} (${email}) signed up`,
+      p_company_name: companyName,
+      p_metadata: {
+        name,
+        email,
+        companyDescription
+      }
     });
 
     // Return success response
@@ -2141,6 +2210,241 @@ app.post('/api/admin/clean-duplicates', requireAdmin, async (req, res) => {
   }
 });
 
+// Configure multer for CSV file uploads (in-memory storage)
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Warm introduction request endpoint
+app.post('/api/chapters/:id/warm-intro-request', async (req, res) => {
+  try {
+    const { id: chapterId } = req.params;
+    const { name, email, companyName, proposal, preferredContact } = req.body;
+
+    // Get the authorization token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get chapter info
+    const { data: chapter } = await supabaseAdmin
+      .from('chapters')
+      .select('chapter_name, universities(name)')
+      .eq('id', chapterId)
+      .single();
+
+    // Log activity
+    await supabaseAdmin.rpc('log_admin_activity', {
+      p_event_type: 'warm_intro_request',
+      p_event_title: `Warm intro requested: ${chapter?.chapter_name || 'Chapter'}`,
+      p_event_description: `${companyName} requested introduction to ${chapter?.chapter_name}`,
+      p_company_id: user.id,
+      p_company_name: companyName,
+      p_reference_id: chapterId,
+      p_reference_type: 'chapter',
+      p_metadata: {
+        name,
+        email,
+        companyName,
+        proposal,
+        preferredContact,
+        chapterName: chapter?.chapter_name,
+        universityName: chapter?.universities?.name
+      }
+    });
+
+    res.json({ success: true, message: 'Warm introduction request received' });
+  } catch (error: any) {
+    console.error('Warm intro request error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin Activity Feed endpoint
+app.get('/api/admin/activity-feed', requireAdmin, async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 50;
+    const eventType = req.query.eventType as string;
+
+    let query = supabaseAdmin
+      .from('admin_activity_log')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (eventType && eventType !== 'all') {
+      query = query.eq('event_type', eventType);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('Error fetching activity feed:', error);
+      return res.status(500).json({ success: false, error: error.message });
+    }
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error in activity feed:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// CSV Upload endpoint for chapter rosters
+app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.single('csv'), async (req, res) => {
+  try {
+    const { chapterId } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'No CSV file uploaded' });
+    }
+
+    // Verify chapter exists
+    const { data: chapter, error: chapterError } = await supabaseAdmin
+      .from('chapters')
+      .select('id, chapter_name')
+      .eq('id', chapterId)
+      .single();
+
+    if (chapterError || !chapter) {
+      return res.status(404).json({ success: false, error: 'Chapter not found' });
+    }
+
+    // Parse CSV
+    const csvContent = req.file.buffer.toString('utf-8');
+    const records = parse(csvContent, {
+      columns: true,
+      skip_empty_lines: true,
+      trim: true
+    });
+
+    console.log(`📁 Uploading ${records.length} members for chapter: ${chapter.chapter_name}`);
+
+    let insertedCount = 0;
+    let updatedCount = 0;
+    let skippedCount = 0;
+    const errors: string[] = [];
+
+    // Process each record
+    for (const record of records) {
+      try {
+        // Validate required fields
+        if (!record.name || record.name.trim() === '') {
+          skippedCount++;
+          errors.push(`Skipped row: missing name`);
+          continue;
+        }
+
+        // Prepare member data
+        const memberData = {
+          chapter_id: chapterId,
+          name: record.name.trim(),
+          position: record.position?.trim() || null,
+          email: record.email?.trim() || null,
+          phone: record.phone?.trim() || null,
+          linkedin_url: record.linkedin?.trim() || null,
+          graduation_year: record.graduation_year ? parseInt(record.graduation_year) : null,
+          major: record.major?.trim() || null,
+          member_type: record.member_type?.trim() || 'member',
+          is_primary_contact: record.is_primary_contact === 'true' || record.is_primary_contact === true,
+          updated_at: new Date().toISOString()
+        };
+
+        // Upsert (insert or update if email already exists for this chapter)
+        if (memberData.email) {
+          // Check if member exists with this email in this chapter
+          const { data: existing } = await supabaseAdmin
+            .from('chapter_members')
+            .select('id')
+            .eq('chapter_id', chapterId)
+            .eq('email', memberData.email)
+            .single();
+
+          if (existing) {
+            // Update existing
+            const { error: updateError } = await supabaseAdmin
+              .from('chapter_members')
+              .update(memberData)
+              .eq('id', existing.id);
+
+            if (updateError) {
+              errors.push(`Error updating ${memberData.name}: ${updateError.message}`);
+              skippedCount++;
+            } else {
+              updatedCount++;
+            }
+          } else {
+            // Insert new
+            const { error: insertError } = await supabaseAdmin
+              .from('chapter_members')
+              .insert(memberData);
+
+            if (insertError) {
+              errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
+              skippedCount++;
+            } else {
+              insertedCount++;
+            }
+          }
+        } else {
+          // No email - just insert (can't check for duplicates)
+          const { error: insertError } = await supabaseAdmin
+            .from('chapter_members')
+            .insert(memberData);
+
+          if (insertError) {
+            errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
+            skippedCount++;
+          } else {
+            insertedCount++;
+          }
+        }
+      } catch (recordError: any) {
+        errors.push(`Error processing ${record.name}: ${recordError.message}`);
+        skippedCount++;
+      }
+    }
+
+    console.log(`✅ Roster upload complete: ${insertedCount} inserted, ${updatedCount} updated, ${skippedCount} skipped`);
+
+    // Log activity
+    await supabaseAdmin.rpc('log_admin_activity', {
+      p_event_type: 'admin_upload',
+      p_event_title: `Roster uploaded: ${chapter.chapter_name}`,
+      p_event_description: `${insertedCount} members inserted, ${updatedCount} updated`,
+      p_reference_id: chapterId,
+      p_reference_type: 'chapter',
+      p_metadata: {
+        totalRecords: records.length,
+        insertedCount,
+        updatedCount,
+        skippedCount
+      }
+    });
+
+    res.json({
+      success: true,
+      chapterId,
+      chapterName: chapter.chapter_name,
+      totalRecords: records.length,
+      insertedCount,
+      updatedCount,
+      skippedCount,
+      errors: errors.slice(0, 10) // Return first 10 errors only
+    });
+
+  } catch (error: any) {
+    console.error('Error uploading roster CSV:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Start server (only in development, not in Vercel serverless)
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
@@ -2158,6 +2462,7 @@ if (process.env.NODE_ENV !== 'production') {
     console.log(`  GET/POST/PUT/DELETE  /api/admin/greek-organizations`);
     console.log(`  GET/POST/PUT/DELETE  /api/admin/universities`);
     console.log(`  GET/POST/PUT/DELETE  /api/admin/chapters`);
+    console.log(`  POST                 /api/admin/chapters/:id/upload-roster 📁`);
     console.log(`  GET/POST/PUT/DELETE  /api/admin/officers`);
     console.log(`  POST                 /api/admin/upload-image`);
     console.log(`  GET                  /api/admin/ai-status 🤖`);

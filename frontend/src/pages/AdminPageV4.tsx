@@ -24,7 +24,12 @@ import {
   TrendingUp,
   CreditCard,
   UserPlus,
-  Star
+  Star,
+  Activity,
+  ShoppingCart,
+  Unlock,
+  Handshake,
+  FileUp
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 
@@ -134,6 +139,19 @@ interface WaitlistEntry {
   signup_date: string;
 }
 
+interface ActivityLogEntry {
+  id: string;
+  event_type: 'purchase' | 'new_client' | 'unlock' | 'warm_intro_request' | 'admin_upload';
+  event_title: string;
+  event_description: string;
+  company_id?: string;
+  company_name?: string;
+  reference_id?: string;
+  reference_type?: string;
+  metadata?: any;
+  created_at: string;
+}
+
 const AdminPageV4 = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'users' | 'waitlist'>('dashboard');
@@ -149,6 +167,8 @@ const AdminPageV4 = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
+  const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([]);
+  const [activityFilter, setActivityFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showCSVImport, setShowCSVImport] = useState(false);
   const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
@@ -240,6 +260,9 @@ const AdminPageV4 = () => {
     try {
       if (activeTab === 'dashboard') {
         // Fetch summary stats for dashboard
+        const activityRes = await fetch(`${API_URL}/admin/activity-feed?limit=20`, { headers: getAdminHeaders() });
+        const activityData = await activityRes.json();
+        setActivityLog(activityData.data || []);
       } else if (activeTab === 'companies') {
         const res = await fetch(`${API_URL}/admin/companies`, { headers: getAdminHeaders() });
         const data = await res.json();
@@ -1348,6 +1371,85 @@ const AdminPageV4 = () => {
               {companies.length === 0 && (
                 <div className="text-center py-8">
                   <p className="text-gray-500">No companies registered yet</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Recent Activity Feed */}
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-blue-600" />
+                Recent Activity
+              </h3>
+              <select
+                value={activityFilter}
+                onChange={(e) => setActivityFilter(e.target.value)}
+                className="px-3 py-1 border border-gray-300 rounded-lg text-sm"
+              >
+                <option value="all">All Events</option>
+                <option value="purchase">Purchases</option>
+                <option value="new_client">New Clients</option>
+                <option value="unlock">Unlocks</option>
+                <option value="warm_intro_request">Warm Intros</option>
+                <option value="admin_upload">Admin Uploads</option>
+              </select>
+            </div>
+            <div className="space-y-3">
+              {activityLog
+                .filter(log => activityFilter === 'all' || log.event_type === activityFilter)
+                .slice(0, 10)
+                .map((log) => {
+                  const getEventIcon = () => {
+                    switch (log.event_type) {
+                      case 'purchase': return <ShoppingCart className="w-5 h-5 text-green-600" />;
+                      case 'new_client': return <UserPlus className="w-5 h-5 text-blue-600" />;
+                      case 'unlock': return <Unlock className="w-5 h-5 text-purple-600" />;
+                      case 'warm_intro_request': return <Handshake className="w-5 h-5 text-orange-600" />;
+                      case 'admin_upload': return <FileUp className="w-5 h-5 text-teal-600" />;
+                      default: return <Activity className="w-5 h-5 text-gray-600" />;
+                    }
+                  };
+
+                  const getEventBadgeColor = () => {
+                    switch (log.event_type) {
+                      case 'purchase': return 'bg-green-100 text-green-800';
+                      case 'new_client': return 'bg-blue-100 text-blue-800';
+                      case 'unlock': return 'bg-purple-100 text-purple-800';
+                      case 'warm_intro_request': return 'bg-orange-100 text-orange-800';
+                      case 'admin_upload': return 'bg-teal-100 text-teal-800';
+                      default: return 'bg-gray-100 text-gray-800';
+                    }
+                  };
+
+                  return (
+                    <div key={log.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div className="mt-0.5">{getEventIcon()}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-sm font-semibold text-gray-900">{log.event_title}</p>
+                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${getEventBadgeColor()}`}>
+                            {log.event_type.replace('_', ' ')}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600">{log.event_description}</p>
+                        {log.company_name && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            <span className="font-medium">Company:</span> {log.company_name}
+                          </p>
+                        )}
+                        <p className="text-xs text-gray-400 mt-1">
+                          {new Date(log.created_at).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              {activityLog.length === 0 && (
+                <div className="text-center py-8">
+                  <Activity className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+                  <p className="text-gray-500">No recent activity</p>
                 </div>
               )}
             </div>
