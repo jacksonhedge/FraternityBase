@@ -41,9 +41,11 @@ const DashboardPage = () => {
   const [stats, setStats] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [topChapters, setTopChapters] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingComplete, setLoadingComplete] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
+  // Only show loading screen on initial app load, not on navigation
+  const hasSeenLoading = sessionStorage.getItem('hasSeenDashboardLoading') === 'true';
+  const [loading, setLoading] = useState(!hasSeenLoading);
+  const [loadingComplete, setLoadingComplete] = useState(hasSeenLoading);
+  const [showDashboard, setShowDashboard] = useState(hasSeenLoading);
   const [activityFeed, setActivityFeed] = useState<any[]>([]);
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
 
@@ -172,12 +174,14 @@ const DashboardPage = () => {
 
           setLoading(false);
           setLoadingComplete(true);
+          sessionStorage.setItem('hasSeenDashboardLoading', 'true');
           setTimeout(() => setShowDashboard(true), 800);
         })
         .catch(err => {
           console.error('Failed to fetch dashboard data:', err);
           setLoading(false);
           setLoadingComplete(true);
+          sessionStorage.setItem('hasSeenDashboardLoading', 'true');
           setTimeout(() => setShowDashboard(true), 800);
         });
     }
