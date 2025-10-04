@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Lock, AlertCircle, Shield } from 'lucide-react';
 
 const AdminLoginPage = () => {
@@ -102,8 +102,18 @@ const AdminLoginPage = () => {
             </p>
           </div>
 
+          {/* Forgot Password Link */}
+          <div className="mt-4 text-center">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-red-600 hover:text-red-700 transition-colors"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+
           {/* Back to Main Site */}
-          <div className="mt-6 text-center">
+          <div className="mt-4 text-center">
             <button
               onClick={() => navigate('/login')}
               className="text-sm text-gray-600 hover:text-gray-900 transition-colors"

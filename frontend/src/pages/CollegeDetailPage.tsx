@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Users, Building2, MapPin, Calendar, TrendingUp, Award, Star, ExternalLink, ChevronRight, Mail, Phone } from 'lucide-react';
+import { ArrowLeft, Users, Building2, MapPin, Calendar, TrendingUp, Award, Star, ExternalLink, ChevronRight, Mail, Phone, Info, UserPlus } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -78,6 +78,13 @@ const CollegeDetailPage = () => {
             console.log(`📊 [CollegeDetailPage] Found ${fraternities.length} fraternities, ${sororities.length} sororities`);
           }
 
+          // Calculate knowledge score (0-100) based on available data
+          const maleMembers = fraternities.reduce((sum: number, f: any) => sum + (f.member_count || 0), 0);
+          const femaleMembers = sororities.reduce((sum: number, s: any) => sum + (s.member_count || 0), 0);
+          const totalChapters = fraternities.length + sororities.length;
+          const chaptersWithData = [...fraternities, ...sororities].filter((ch: any) => ch.member_count > 0).length;
+          const knowledgeScore = totalChapters > 0 ? Math.round((chaptersWithData / totalChapters) * 100) : 0;
+
           setCollege({
             id: uni.id,
             name: uni.name,
@@ -100,19 +107,14 @@ const CollegeDetailPage = () => {
               phone: ''
             },
             stats: {
-              totalMembers: fraternities.length + sororities.length > 0
-                ? fraternities.reduce((sum: number, f: any) => sum + (f.member_count || 0), 0) +
-                  sororities.reduce((sum: number, s: any) => sum + (s.member_count || 0), 0)
-                : 0,
-              avgChapterSize: fraternities.length + sororities.length > 0
-                ? Math.round((fraternities.reduce((sum: number, f: any) => sum + (f.member_count || 0), 0) +
-                  sororities.reduce((sum: number, s: any) => sum + (s.member_count || 0), 0)) / (fraternities.length + sororities.length))
-                : 0,
-              avgGPA: 3.42,
-              philanthropyRaised: '$2.3M',
-              communityHours: 145000
+              fraternitiesCount: fraternities.length,
+              sororitiesCount: sororities.length,
+              maleMembers: maleMembers || 'N/A',
+              femaleMembers: femaleMembers || 'N/A',
+              knowledgeScore: knowledgeScore
             },
             fraternities: fraternities.map((ch: any) => ({
+              id: ch.id,
               name: ch.greek_organizations?.name || 'Unknown',
               founded: ch.founded_date ? new Date(ch.founded_date).getFullYear() : 0,
               members: ch.member_count || 0,
@@ -120,6 +122,7 @@ const CollegeDetailPage = () => {
               gpa: 3.4
             })),
             sororities: sororities.map((ch: any) => ({
+              id: ch.id,
               name: ch.greek_organizations?.name || 'Unknown',
               founded: ch.founded_date ? new Date(ch.founded_date).getFullYear() : 0,
               members: ch.member_count || 0,
@@ -232,14 +235,6 @@ const CollegeDetailPage = () => {
                   <p className="text-3xl font-bold">{college.greekLife}</p>
                   <p className="text-sm text-white/80">Greek Organizations</p>
                 </div>
-                <div>
-                  <p className="text-3xl font-bold">{college.greekPercentage}%</p>
-                  <p className="text-sm text-white/80">Greek Life Participation</p>
-                </div>
-                <div>
-                  <p className="text-3xl font-bold">{college.students.toLocaleString()}</p>
-                  <p className="text-sm text-white/80">Total Students</p>
-                </div>
               </div>
             </div>
           </div>
@@ -274,24 +269,33 @@ const CollegeDetailPage = () => {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="bg-white rounded-lg shadow-sm p-4">
-                <p className="text-2xl font-bold text-gray-900">{college.stats.totalMembers.toLocaleString()}</p>
-                <p className="text-sm text-gray-600">Total Greek Members</p>
+                <p className="text-2xl font-bold text-gray-900">{college.stats.fraternitiesCount}</p>
+                <p className="text-sm text-gray-600">Fraternities</p>
               </div>
               <div className="bg-white rounded-lg shadow-sm p-4">
-                <p className="text-2xl font-bold text-gray-900">{college.stats.avgChapterSize}</p>
-                <p className="text-sm text-gray-600">Avg Chapter Size</p>
+                <p className="text-2xl font-bold text-gray-900">{college.stats.sororitiesCount}</p>
+                <p className="text-sm text-gray-600">Sororities</p>
               </div>
               <div className="bg-white rounded-lg shadow-sm p-4">
-                <p className="text-2xl font-bold text-gray-900">{college.stats.avgGPA}</p>
-                <p className="text-sm text-gray-600">Greek Avg GPA</p>
+                <p className="text-2xl font-bold text-gray-900">{typeof college.stats.maleMembers === 'number' ? college.stats.maleMembers.toLocaleString() : college.stats.maleMembers}</p>
+                <p className="text-sm text-gray-600">Male Members</p>
               </div>
               <div className="bg-white rounded-lg shadow-sm p-4">
-                <p className="text-2xl font-bold text-gray-900">{college.stats.philanthropyRaised}</p>
-                <p className="text-sm text-gray-600">Philanthropy Raised</p>
+                <p className="text-2xl font-bold text-gray-900">{typeof college.stats.femaleMembers === 'number' ? college.stats.femaleMembers.toLocaleString() : college.stats.femaleMembers}</p>
+                <p className="text-sm text-gray-600">Female Members</p>
               </div>
-              <div className="bg-white rounded-lg shadow-sm p-4">
-                <p className="text-2xl font-bold text-gray-900">{college.stats.communityHours.toLocaleString()}</p>
-                <p className="text-sm text-gray-600">Service Hours</p>
+              <div className="bg-white rounded-lg shadow-sm p-4 relative group">
+                <p className="text-2xl font-bold text-gray-900">{college.stats.knowledgeScore}%</p>
+                <div className="flex items-center gap-1">
+                  <p className="text-sm text-gray-600">Knowledge Score</p>
+                  <Info className="w-4 h-4 text-gray-400 cursor-help" />
+                </div>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                  How much data and insights we have on this Greek life community
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                    <div className="border-4 border-transparent border-t-gray-900"></div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -365,13 +369,16 @@ const CollegeDetailPage = () => {
                       .map((frat, index) => (
                       <tr key={index} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
+                          <div
+                            className="flex items-center cursor-pointer"
+                            onClick={() => navigate(`/app/chapters/${frat.id}`)}
+                          >
                             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
                               <span className="text-blue-600 font-bold text-sm">
                                 {frat.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
                               </span>
                             </div>
-                            <div className="text-sm font-medium text-gray-900">{frat.name}</div>
+                            <div className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">{frat.name}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -451,13 +458,16 @@ const CollegeDetailPage = () => {
                       .map((sorority, index) => (
                       <tr key={index} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
+                          <div
+                            className="flex items-center cursor-pointer"
+                            onClick={() => navigate(`/app/chapters/${sorority.id}`)}
+                          >
                             <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3">
                               <span className="text-pink-600 font-bold text-sm">
                                 {sorority.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
                               </span>
                             </div>
-                            <div className="text-sm font-medium text-gray-900">{sorority.name}</div>
+                            <div className="text-sm font-medium text-gray-900 hover:text-pink-600 transition-colors">{sorority.name}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

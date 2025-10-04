@@ -32,6 +32,7 @@ const ChapterDetailPage = () => {
 
   // Chapter data from API
   const [chapterData, setChapterData] = useState<any>(null);
+  const [members, setMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -55,6 +56,19 @@ const ChapterDetailPage = () => {
           console.error('Failed to fetch chapter data:', err);
           setLoading(false);
         });
+
+      // Fetch chapter members
+      fetch(`${API_URL}/chapters/${id}/members`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log('Chapter members from API:', data);
+          if (data.success && data.data) {
+            setMembers(data.data);
+          }
+        })
+        .catch(err => console.error('Failed to fetch chapter members:', err));
 
       // Fetch unlock status for this chapter
       fetch(`${API_URL}/chapters/${id}/unlock-status`, {
@@ -142,6 +156,22 @@ const ChapterDetailPage = () => {
     );
   }
 
+  // Helper to find member by position
+  const findOfficer = (positionName: string) => {
+    const member = members.find(m =>
+      m.position?.toLowerCase().includes(positionName.toLowerCase())
+    );
+    if (!member) return null;
+    return {
+      name: member.name,
+      emails: member.email ? [member.email] : [],
+      email: member.email,
+      phone: member.phone,
+      major: member.major || '',
+      year: member.graduation_year ? `Class of ${member.graduation_year}` : ''
+    };
+  };
+
   // Map API data to display format
   const chapter = {
     id: chapterData.id,
@@ -161,65 +191,15 @@ const ChapterDetailPage = () => {
     yearData: {
       '2025-2026': {
         size: chapterData.member_count || 0,
-        president: {
-          name: 'Michael Thompson',
-          emails: ['mthompson@psu.edu', 'michael.thompson@sigmachi.org'],
-          phone: '(814) 555-0123',
-          major: 'Business Administration',
-          year: 'Senior'
-        },
-        vicePresident: {
-          name: 'James Wilson',
-          emails: ['jwilson@psu.edu'],
-          phone: '(814) 555-0124',
-          major: 'Finance',
-          year: 'Junior'
-        },
-        rushChair: {
-          name: 'Connor Mitchell',
-          emails: ['cmitchell@psu.edu', 'rush@sigmachipsu.org', 'connor.mitchell@gmail.com'],
-          phone: '(814) 555-0125',
-          major: 'Marketing',
-          year: 'Junior'
-        },
-        treasurer: {
-          name: 'David Chen',
-          emails: ['dchen@psu.edu', 'treasurer@sigmachipsu.org'],
-          phone: '(814) 555-0126',
-          major: 'Accounting',
-          year: 'Senior'
-        },
-        socialChair: {
-          name: 'Ryan Cooper',
-          emails: ['rcooper@psu.edu', 'social@sigmachipsu.org'],
-          phone: '(814) 555-0127',
-          major: 'Communications',
-          year: 'Sophomore'
-        },
-        philanthropyChair: {
-          name: 'Alex Martinez',
-          emails: ['amartinez@psu.edu'],
-          phone: '(814) 555-0128',
-          major: 'Psychology',
-          year: 'Junior'
-        },
-        currentBrands: [
-          { name: 'Nike', type: 'Apparel Partner', value: '$25,000', duration: '2 years' },
-          { name: 'Chipotle', type: 'Food Sponsor', value: '$10,000', duration: '1 year' },
-          { name: 'Red Bull', type: 'Event Partner', value: '$15,000', duration: '6 months' },
-          { name: 'State Farm', type: 'Insurance Partner', value: '$20,000', duration: '3 years' }
-        ],
-        events: [
-          { name: 'Derby Days', date: 'September 2025', attendance: 500, raised: '$35,000' },
-          { name: 'Winter Formal', date: 'December 2025', attendance: 200 },
-          { name: 'Spring Philanthropy Week', date: 'March 2026', attendance: 800, raised: '$50,000' }
-        ],
-        philanthropies: {
-          primary: 'Huntsman Cancer Institute',
-          raised: '$85,000',
-          hours: 2400,
-          events: 12
-        },
+        president: findOfficer('president'),
+        vicePresident: findOfficer('vice president') || findOfficer('vp'),
+        rushChair: findOfficer('rush'),
+        treasurer: findOfficer('treasurer'),
+        socialChair: findOfficer('social'),
+        philanthropyChair: findOfficer('philanthropy'),
+        // currentBrands removed - was hardcoded dummy data
+        // events removed - was hardcoded dummy data (Derby Days, Winter Formal, Spring Philanthropy Week)
+        // philanthropies removed - was hardcoded dummy data (Huntsman Cancer Institute on all chapters)
         gpa: {
           chapter: 3.42,
           newMember: 3.38,
@@ -254,17 +234,8 @@ const ChapterDetailPage = () => {
           major: 'Communications',
           year: 'Junior'
         },
-        currentBrands: [
-          { name: 'Nike', type: 'Apparel Partner', value: '$20,000', duration: '1 year' },
-          { name: 'Buffalo Wild Wings', type: 'Food Sponsor', value: '$8,000', duration: '1 year' },
-          { name: 'Monster Energy', type: 'Event Partner', value: '$12,000', duration: '1 year' }
-        ],
-        philanthropies: {
-          primary: 'Huntsman Cancer Institute',
-          raised: '$72,000',
-          hours: 2100,
-          events: 10
-        },
+        // currentBrands removed - was hardcoded dummy data
+        // philanthropies removed - was hardcoded dummy data (Huntsman Cancer Institute on all chapters)
         gpa: {
           chapter: 3.38,
           newMember: 3.35,
@@ -280,12 +251,7 @@ const ChapterDetailPage = () => {
           major: 'Political Science',
           year: 'Senior (Graduated)'
         },
-        philanthropies: {
-          primary: 'Huntsman Cancer Institute',
-          raised: '$68,000',
-          hours: 1950,
-          events: 9
-        },
+        // philanthropies removed - was hardcoded dummy data (Huntsman Cancer Institute on all chapters)
         gpa: {
           chapter: 3.35,
           newMember: 3.32,
@@ -297,6 +263,9 @@ const ChapterDetailPage = () => {
 
   const currentYearData = chapter.yearData[selectedYear];
   const years = Object.keys(chapter.yearData).sort().reverse();
+
+  // Check if chapter has complete data (house address, officers, etc.)
+  const hasCompleteData = chapter.house && chapter.house.trim() !== '' && currentYearData.president;
 
   return (
     <div className="space-y-6">
@@ -368,28 +337,8 @@ const ChapterDetailPage = () => {
             <TrendingUp className="w-8 h-8 text-green-500" />
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-2xl font-bold text-gray-900">
-                {currentYearData.philanthropies?.raised || 'N/A'}
-              </p>
-              <p className="text-sm text-gray-600">Raised</p>
-            </div>
-            <DollarSign className="w-8 h-8 text-purple-500" />
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-2xl font-bold text-gray-900">
-                {currentYearData.currentBrands?.length || 0}
-              </p>
-              <p className="text-sm text-gray-600">Partners</p>
-            </div>
-            <Building className="w-8 h-8 text-blue-500" />
-          </div>
-        </div>
+        {/* Raised stat card removed - was showing hardcoded philanthropy dummy data */}
+        {/* Partners stat card removed - was showing dummy data */}
       </div>
 
       {/* Main Content Grid */}
@@ -719,16 +668,29 @@ const ChapterDetailPage = () => {
         </div>
 
         {/* Chapter Info */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6 relative">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Chapter Info</h2>
-          <div className="space-y-4">
+
+          {!hasCompleteData && (
+            <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-lg flex items-center justify-center z-10">
+              <div className="text-center p-6">
+                <Lock className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Coming Soon</h3>
+                <p className="text-sm text-gray-600">
+                  Detailed chapter information is being added
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className={`space-y-4 ${!hasCompleteData ? 'blur-sm pointer-events-none' : ''}`}>
             <div>
               <p className="text-sm text-gray-600">Founded</p>
-              <p className="font-semibold">{chapter.founded}</p>
+              <p className="font-semibold">{chapter.founded || 'N/A'}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">House Address</p>
-              <p className="font-semibold">{chapter.house}</p>
+              <p className="font-semibold">{chapter.house || 'N/A'}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Last Updated</p>
@@ -742,89 +704,56 @@ const ChapterDetailPage = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">Chapter Motto</p>
-              <p className="font-semibold italic">"{chapter.motto}"</p>
+              <p className="font-semibold italic">"{chapter.motto || 'N/A'}"</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Chapter Colors</p>
               <div className="flex items-center space-x-2 mt-1">
-                {chapter.colors.map(color => (
+                {chapter.colors && chapter.colors.length > 0 ? chapter.colors.map(color => (
                   <span key={color} className="px-2 py-1 bg-gray-100 rounded text-sm">
                     {color}
                   </span>
-                ))}
+                )) : <span className="text-sm text-gray-500">N/A</span>}
               </div>
             </div>
-            <div className="pt-4 space-y-2">
-              <a
-                href={`https://${chapter.website}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-primary-600 hover:text-primary-700"
-              >
-                <Globe className="w-4 h-4 mr-2" />
-                {chapter.website}
-                <ExternalLink className="w-3 h-3 ml-1" />
-              </a>
-              <a
-                href={`https://instagram.com/${chapter.instagram.replace('@', '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-primary-600 hover:text-primary-700"
-              >
-                <Instagram className="w-4 h-4 mr-2" />
-                {chapter.instagram}
-                <ExternalLink className="w-3 h-3 ml-1" />
-              </a>
-            </div>
+            {(chapter.website || chapter.instagram) && (
+              <div className="pt-4 space-y-2">
+                {chapter.website && (
+                  <a
+                    href={`https://${chapter.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-primary-600 hover:text-primary-700"
+                  >
+                    <Globe className="w-4 h-4 mr-2" />
+                    {chapter.website}
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </a>
+                )}
+                {chapter.instagram && (
+                  <a
+                    href={`https://instagram.com/${chapter.instagram.replace('@', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-primary-600 hover:text-primary-700"
+                  >
+                    <Instagram className="w-4 h-4 mr-2" />
+                    {chapter.instagram}
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Brand Partnerships */}
-      {currentYearData.currentBrands && currentYearData.currentBrands.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Current Brand Partnerships</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {currentYearData.currentBrands.map((brand, index) => (
-              <div key={index} className="border rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900">{brand.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">{brand.type}</p>
-                <p className="text-lg font-bold text-primary-600 mt-2">{brand.value}</p>
-                <p className="text-xs text-gray-500">Duration: {brand.duration}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Brand Partnerships section removed - was displaying fake hardcoded data */}
 
-      {/* Philanthropy & Academic Performance */}
+      {/* Philanthropy section removed - was displaying hardcoded dummy data */}
+
+      {/* Academic Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Philanthropy */}
-        {currentYearData.philanthropies && (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Philanthropy</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Primary Charity</span>
-                <span className="font-semibold">{currentYearData.philanthropies.primary}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Money Raised</span>
-                <span className="font-semibold text-green-600">{currentYearData.philanthropies.raised}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Service Hours</span>
-                <span className="font-semibold">{currentYearData.philanthropies.hours?.toLocaleString() || 'N/A'}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Events Held</span>
-                <span className="font-semibold">{currentYearData.philanthropies.events || 'N/A'}</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Academic Performance */}
         {currentYearData.gpa && (
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Academic Performance</h2>
@@ -853,34 +782,7 @@ const ChapterDetailPage = () => {
         )}
       </div>
 
-      {/* Events */}
-      {currentYearData.events && currentYearData.events.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Major Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {currentYearData.events.map((event, index) => (
-              <div key={index} className="border rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900">{event.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  <Calendar className="w-4 h-4 inline mr-1" />
-                  {event.date}
-                </p>
-                {event.attendance && (
-                  <p className="text-sm text-gray-600 mt-1">
-                    <Users className="w-4 h-4 inline mr-1" />
-                    {event.attendance} attendees
-                  </p>
-                )}
-                {event.raised && (
-                  <p className="text-sm font-semibold text-green-600 mt-1">
-                    Raised {event.raised}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Major Events section removed - was displaying hardcoded dummy data (Derby Days, Winter Formal, Spring Philanthropy Week) */}
 
       {/* Financial Information */}
       {currentYearData.budget && (

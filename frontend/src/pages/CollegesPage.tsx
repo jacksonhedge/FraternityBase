@@ -73,10 +73,12 @@ const CollegesPage = () => {
             image: uni.logo_url || getCollegeLogoWithFallback(uni.name),
             chapter_count: uni.chapter_count || 0,
             logo_url: uni.logo_url,
-            topOrgs: ['Sigma Chi', 'Alpha Phi', 'Kappa Alpha'], // Mock data - TODO: fetch from DB
-            nextEvent: 'Greek Week', // Mock data - TODO: fetch from DB
-            partnershipOpportunities: uni.chapter_count > 20 ? 24 : uni.chapter_count > 10 ? 12 : 8,
-            avgDealSize: uni.chapter_count > 20 ? '$50,000' : uni.chapter_count > 10 ? '$28,000' : '$15,000'
+            // Removed hardcoded dummy data:
+            // - topOrgs: was always ['Sigma Chi', 'Alpha Phi', 'Kappa Alpha']
+            // - nextEvent: was always 'Greek Week'
+            // - avgDealSize: was always fake ($15k, $28k, or $50k)
+            // These fields should either come from real data or not be displayed
+            partnershipOpportunities: uni.chapter_count // Just show chapter count as opportunities
           }));
 
           console.log(`✅ [CollegesPage] Successfully formatted ${formattedColleges.length} colleges`);
@@ -285,37 +287,11 @@ const CollegesPage = () => {
                     </div>
                     <p className="text-lg font-semibold text-gray-900">{college.greekPercentage}%</p>
                   </div>
-                  <div>
-                    <div className="flex items-center text-gray-600">
-                      <TrendingUp className="w-4 h-4 mr-1" />
-                      <span className="text-sm">Avg Deal</span>
-                    </div>
-                    <p className="text-lg font-semibold text-green-600">{college.avgDealSize}</p>
-                  </div>
+                  {/* Avg Deal removed - was hardcoded dummy data */}
                 </div>
 
-                {/* Top Organizations */}
-                <div className="mb-4">
-                  <p className="text-sm text-gray-600 mb-2">Top Organizations:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {college.topOrgs.map((org, index) => (
-                      <span key={index} className="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full">
-                        {org}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Next Event */}
-                <div className="bg-gray-50 rounded-lg p-3 mb-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-gray-600">Next Event:</span>
-                    </div>
-                    <span className="text-sm font-medium text-gray-900">{college.nextEvent}</span>
-                  </div>
-                </div>
+                {/* Top Organizations - removed, was hardcoded dummy data */}
+                {/* Next Event - removed, was hardcoded dummy data */}
 
                 {/* Actions */}
                 <div className="flex items-center justify-between">

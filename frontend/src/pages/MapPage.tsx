@@ -182,6 +182,8 @@ const MapPage = () => {
   const [selectedChapter, setSelectedChapter] = useState<any>(null);
   const mapRef = useRef<L.Map | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<'big10' | 'mychapters' | 'd1' | 'd2' | 'd3' | 'power5'>('big10');
+  const [showLockOverlay, setShowLockOverlay] = useState(false);
 
   // Load GeoJSON data
   useEffect(() => {
@@ -453,19 +455,121 @@ const MapPage = () => {
 
       {/* Map Container */}
       <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="absolute top-4 left-4 z-[1000] flex gap-2">
+        {/* Filter Buttons */}
+        <div className="absolute top-4 left-4 z-[1000] flex gap-2 flex-wrap max-w-2xl">
           <button
-            onClick={() => setShowColleges(!showColleges)}
+            onClick={() => setActiveFilter('big10')}
             className={`px-4 py-2 rounded-lg shadow-lg transition-colors ${
-              showColleges
+              activeFilter === 'big10'
                 ? 'bg-primary-600 text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
-            <GraduationCap className="w-5 h-5 inline mr-2" />
-            {showColleges ? 'Hide' : 'Show'} Colleges
+            Big 10
+          </button>
+          <button
+            onClick={() => {
+              setActiveFilter('mychapters');
+              setShowLockOverlay(true);
+            }}
+            className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
+              activeFilter === 'mychapters'
+                ? 'bg-primary-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            My Chapters
+          </button>
+          <button
+            onClick={() => {
+              setActiveFilter('d1');
+              setShowLockOverlay(true);
+            }}
+            className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
+              activeFilter === 'd1'
+                ? 'bg-primary-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            All D1
+          </button>
+          <button
+            onClick={() => {
+              setActiveFilter('d2');
+              setShowLockOverlay(true);
+            }}
+            className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
+              activeFilter === 'd2'
+                ? 'bg-primary-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            All D2
+          </button>
+          <button
+            onClick={() => {
+              setActiveFilter('d3');
+              setShowLockOverlay(true);
+            }}
+            className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
+              activeFilter === 'd3'
+                ? 'bg-primary-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            All D3
+          </button>
+          <button
+            onClick={() => {
+              setActiveFilter('power5');
+              setShowLockOverlay(true);
+            }}
+            className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
+              activeFilter === 'power5'
+                ? 'bg-primary-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <Lock className="w-4 h-4 inline mr-1" />
+            Power 5
           </button>
         </div>
+
+        {/* Lock Overlay */}
+        {showLockOverlay && activeFilter !== 'big10' && (
+          <div className="absolute inset-0 z-[999] bg-black bg-opacity-60 flex items-center justify-center">
+            <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 text-center">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-primary-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Unlock {activeFilter === 'power5' ? 'Power 5' : activeFilter === 'mychapters' ? 'My Chapters' : `All ${activeFilter.toUpperCase()}`}</h3>
+              <p className="text-gray-600 mb-6">
+                This filter requires an unlock. Add credits to your account to access this view.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => {
+                    setShowLockOverlay(false);
+                    setActiveFilter('big10');
+                  }}
+                  className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // Navigate to billing/credits page
+                    window.location.href = '/app/credits';
+                  }}
+                  className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
+                >
+                  <Coins className="w-4 h-4" />
+                  Add Credits
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <MapContainer
           center={[37.5, -98.5795]}

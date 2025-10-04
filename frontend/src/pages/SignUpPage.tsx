@@ -1,30 +1,47 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Building2, Mail, User, FileText, ArrowRight, Check } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { Building2, Mail, User, FileText, ArrowRight, Check, Lock } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { loginSuccess } from '../store/slices/authSlice';
 import Navbar from '../components/Navbar';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    password: '',
     companyName: '',
     companyDescription: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
     }
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
     }
 
     if (!formData.companyName.trim()) {
@@ -51,67 +68,159 @@ const SignUpPage = () => {
     setIsLoading(true);
 
     try {
-      // Call the backend API
-      const response = await fetch('http://localhost:3001/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
+      // 1. Create Supabase auth user
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        console.log('Signup successful:', result);
-
-        // Create user object for session
-        const newUser = {
-          id: result.data.id,
-          ...formData,
-          signupDate: new Date().toISOString(),
-          status: result.data.status,
-          verifiedAt: null,
-          verifiedBy: null
-        };
-
-        // Store current user session
-        localStorage.setItem('currentUser', JSON.stringify(newUser));
-
-        // Also store in pendingUsers for admin dashboard to work
-        const existingUsers = JSON.parse(localStorage.getItem('pendingUsers') || '[]');
-        existingUsers.push(newUser);
-        localStorage.setItem('pendingUsers', JSON.stringify(existingUsers));
-
-        // Navigate to pending approval page
-        navigate('/pending-approval');
-      } else {
-        // Handle error
-        console.error('Signup failed:', result.error);
-        alert('Signup failed. Please try again.');
+      if (signUpError) {
+        console.error('Signup error:', signUpError);
+        setErrors({ email: signUpError.message });
         setIsLoading(false);
+        return;
+      }
+
+      if (!authData.user) {
+        setErrors({ email: 'Failed to create account. Please try again.' });
+        setIsLoading(false);
+        return;
+      }
+
+      // 2. Create company
+      const { data: company, error: companyError } = await supabase
+        .from('companies')
+        .insert({
+          name: formData.companyName,
+          description: formData.companyDescription,
+        })
+        .select()
+        .single();
+
+      if (companyError || !company) {
+        console.error('Company creation error:', companyError);
+        setErrors({ companyName: 'Failed to create company. Please try again.' });
+        setIsLoading(false);
+        return;
+      }
+
+      // 3. Create user_profile
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .insert({
+          user_id: authData.user.id,
+          company_id: company.id,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          role: 'admin', // First user is admin
+          subscription_tier: 'free_trial',
+          trial_lookups_used: 0,
+          trial_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+        });
+
+      if (profileError) {
+        console.error('Profile creation error:', profileError);
+        setErrors({ email: 'Failed to create user profile. Please try again.' });
+        setIsLoading(false);
+        return;
+      }
+
+      // 4. Initialize account balance (with $50 starting balance)
+      const { error: balanceError } = await supabase
+        .from('account_balance')
+        .insert({
+          company_id: company.id,
+          balance_dollars: 50.00,
+          lifetime_spent_dollars: 0.00,
+          lifetime_added_dollars: 50.00,
+        });
+
+      if (balanceError) {
+        console.error('Balance initialization error:', balanceError);
+        // Don't fail signup if balance init fails - can be fixed later
+      }
+
+      // 5. Auto-unlock a five-star chapter as a welcome gift (disabled for now)
+      // TODO: Re-enable once chapter_unlocks table is properly configured
+      // try {
+      //   const { data: fiveStarChapters, error: chapterError } = await supabase
+      //     .from('chapters')
+      //     .select('id, chapter_name, universities(name)')
+      //     .eq('five_star_rating', true)
+      //     .limit(10);
+      //
+      //   if (!chapterError && fiveStarChapters && fiveStarChapters.length > 0) {
+      //     const randomChapter = fiveStarChapters[Math.floor(Math.random() * fiveStarChapters.length)];
+      //
+      //     await supabase
+      //       .from('chapter_unlocks')
+      //       .insert({
+      //         company_id: company.id,
+      //         chapter_id: randomChapter.id,
+      //         unlock_type: 'full_contacts',
+      //         credits_spent: 0,
+      //       });
+      //
+      //     console.log(`🎁 Welcome gift: Unlocked ${randomChapter.chapter_name} for free!`);
+      //   }
+      // } catch (error) {
+      //   console.error('Failed to unlock five-star chapter:', error);
+      // }
+
+      // 6. Auto-login after successful signup
+      console.log('Auth data from signup:', authData);
+
+      // Check if we have a session
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      console.log('Session data:', sessionData, 'Session error:', sessionError);
+
+      if (sessionData?.session || authData.session) {
+        const session = sessionData?.session || authData.session;
+
+        // Store token
+        localStorage.setItem('token', session.access_token);
+
+        // Get the profile and company status
+        const { data: profile, error: profileError } = await supabase
+          .from('user_profiles')
+          .select('*, companies(name, approval_status)')
+          .eq('user_id', authData.user.id)
+          .single();
+
+        console.log('Profile data:', profile, 'Profile error:', profileError);
+
+        if (profile) {
+          // Dispatch to Redux
+          dispatch(loginSuccess({
+            user: {
+              id: authData.user.id,
+              email: authData.user.email || '',
+              firstName: profile.first_name || '',
+              lastName: profile.last_name || '',
+              role: profile.role || 'user',
+              companyId: profile.company_id,
+              companyName: profile.companies?.name
+            },
+            token: session.access_token
+          }));
+
+          console.log('Signup successful! Auto-logged in, redirecting to dashboard...');
+          navigate('/app/dashboard');
+        } else {
+          console.log('Profile not found, redirecting to login...');
+          navigate('/login');
+        }
+      } else {
+        // No session - email confirmation may be required
+        console.log('No session available. Email confirmation may be required.');
+        alert('Account created! Please check your email to confirm your account, then log in.');
+        navigate('/login');
       }
     } catch (error) {
-      console.error('Network error:', error);
-
-      // Fallback to localStorage if backend is not available
-      console.log('Backend unavailable, using localStorage fallback');
-
-      const newUser = {
-        id: Date.now().toString(),
-        ...formData,
-        signupDate: new Date().toISOString(),
-        status: 'pending',
-        verifiedAt: null,
-        verifiedBy: null
-      };
-
-      const existingUsers = JSON.parse(localStorage.getItem('pendingUsers') || '[]');
-      existingUsers.push(newUser);
-      localStorage.setItem('pendingUsers', JSON.stringify(existingUsers));
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-
-      navigate('/pending-approval');
+      console.error('Unexpected signup error:', error);
+      setErrors({ email: 'An unexpected error occurred. Please try again.' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -138,14 +247,11 @@ const SignUpPage = () => {
         <div className="max-w-md mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-block bg-yellow-100 text-yellow-800 text-sm font-semibold px-4 py-2 rounded-full mb-4">
-              🚀 Coming Soon
-            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Join the Waitlist
+              Create Your Account
             </h1>
             <p className="text-gray-600">
-              Registration is temporarily closed. Join our waitlist for early access!
+              Get started with 10 free chapter unlocks
             </p>
           </div>
 
@@ -167,32 +273,53 @@ const SignUpPage = () => {
           </div>
 
           {/* Sign Up Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 opacity-60 pointer-events-none">
-            <div className="bg-gray-100 border border-gray-300 text-gray-700 px-4 py-3 rounded-md text-sm text-center mb-6">
-              Registration is temporarily closed while we prepare for launch
-            </div>
+          <div className="bg-white rounded-2xl shadow-lg p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Field */}
+              {/* First Name Field */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Name
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                  First Name
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
                     type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleChange}
-                    placeholder="John Smith"
+                    placeholder="John"
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.name ? 'border-red-300' : 'border-gray-300'
+                      errors.firstName ? 'border-red-300' : 'border-gray-300'
                     }`}
                   />
                 </div>
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                {errors.firstName && (
+                  <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+                )}
+              </div>
+
+              {/* Last Name Field */}
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Last Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    placeholder="Smith"
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.lastName ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                  />
+                </div>
+                {errors.lastName && (
+                  <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
                 )}
               </div>
 
@@ -217,6 +344,37 @@ const SignUpPage = () => {
                 </div>
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
+              </div>
+
+              {/* Password Field */}
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                    className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.password ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? '🙈' : '👁️'}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                 )}
               </div>
 
@@ -270,11 +428,21 @@ const SignUpPage = () => {
 
               {/* Submit Button */}
               <button
-                type="button"
-                disabled
-                className="w-full bg-gray-400 text-white py-3 px-6 rounded-lg font-medium cursor-not-allowed flex items-center justify-center gap-2"
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
               >
-                Registration Closed
+                {isLoading ? (
+                  <>
+                    <span className="animate-spin">⏳</span>
+                    Creating your account...
+                  </>
+                ) : (
+                  <>
+                    Create Account
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
               </button>
 
               {/* Terms */}
@@ -289,16 +457,6 @@ const SignUpPage = () => {
                 </Link>
               </p>
             </form>
-          </div>
-
-          {/* Waitlist CTA */}
-          <div className="mt-6 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors shadow-lg"
-            >
-              Join Our Waitlist Instead →
-            </Link>
           </div>
 
           {/* Already have account */}

@@ -10,6 +10,8 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import SignUpPage from './pages/SignUpPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import BrowsePage from './pages/BrowsePage';
 import AboutPage from './pages/AboutPage';
 import PendingApprovalPage from './pages/PendingApprovalPage';
@@ -41,6 +43,7 @@ import MyChaptersPage from './pages/MyChaptersPage';
 import MyCollegesPage from './pages/MyCollegesPage';
 import MyBarsPage from './pages/MyBarsPage';
 import MyUnlockedPage from './pages/MyUnlockedPage';
+import MyAmbassadorsPage from './pages/MyAmbassadorsPage';
 import OutreachPage from './pages/OutreachPage';
 import BarsPage from './pages/BarsPage';
 
@@ -61,6 +64,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/browse" element={<BrowsePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/pricing" element={<PricingPage />} />
@@ -76,6 +81,7 @@ function App() {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="my-unlocked" element={<MyUnlockedPage />} />
             <Route path="my-chapters" element={<MyChaptersPage />} />
+            <Route path="my-ambassadors" element={<MyAmbassadorsPage />} />
             <Route path="my-colleges" element={<MyCollegesPage />} />
             <Route path="my-bars" element={<MyBarsPage />} />
             <Route path="team" element={<TeamPage />} />
