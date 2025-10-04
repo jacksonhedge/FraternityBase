@@ -16,7 +16,7 @@ import {
   Mail
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { RootState } from '../store';
+import { RootState } from '../store/store';
 import CreditsPage from './CreditsPage';
 
 interface TeamMember {
@@ -67,7 +67,7 @@ const TeamPage = () => {
           .order('member_number', { ascending: true });
 
         if (error) throw error;
-        setTeamMembers(data || []);
+        setTeamMembers((data || []) as unknown as TeamMember[]);
       } catch (error) {
         console.error('Error fetching team members:', error);
       } finally {
