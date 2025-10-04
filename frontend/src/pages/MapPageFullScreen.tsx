@@ -95,6 +95,7 @@ const StateLabels = ({ statesData }: { statesData: any }) => {
 };
 
 interface College {
+  id?: string;
   name: string;
   lat: number;
   lng: number;
@@ -131,8 +132,10 @@ const MapPageFullScreen = () => {
   const [showNavMenu, setShowNavMenu] = useState(false);
   const [hoveredCollege, setHoveredCollege] = useState<{ name: string; data: any } | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false); // Toggle between radar (dark) and logo (light) mode - default to light
-  const [divisionFilter, setDivisionFilter] = useState<'all' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('power4');
+  const [divisionFilter, setDivisionFilter] = useState<'all' | 'big10' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('big10');
+  const [showLockOverlay, setShowLockOverlay] = useState(false);
   const [collegeLogos, setCollegeLogos] = useState<Record<string, string>>({});
+  const [universities, setUniversities] = useState<any[]>([]); // Store all universities from database with IDs
   const [collegeChapters, setCollegeChapters] = useState<any[]>([]);
   const [loadingChapters, setLoadingChapters] = useState(false);
   const mapRef = useRef<any>(null);
@@ -188,6 +191,9 @@ const MapPageFullScreen = () => {
         const data = await res.json();
 
         if (data.data) {
+          // Store full university data
+          setUniversities(data.data);
+
           // Create a map of college name to logo URL
           const logoMap: Record<string, string> = {};
           data.data.forEach((uni: any) => {
@@ -201,7 +207,7 @@ const MapPageFullScreen = () => {
             }
           });
           setCollegeLogos(logoMap);
-          console.log('✅ Loaded logos for', Object.keys(logoMap).length, 'colleges from database');
+          console.log('✅ Loaded', data.data.length, 'universities from database');
         }
       } catch (error) {
         console.error('Error fetching college logos:', error);
@@ -439,10 +445,26 @@ const MapPageFullScreen = () => {
     // Use hardcoded data to match what's actually shown on the map
     let collegesInState = Object.entries(COLLEGE_LOCATIONS)
       .filter(([name, college]) => college.state === stateAbbr)
-      .map(([name, data]) => ({ name, ...data }));
+      .map(([name, data]) => {
+        // Find matching university ID from database
+        const normalizedName = name.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+        const uni = universities.find(u => {
+          const uniNormalizedName = u.name.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+          return uniNormalizedName.toLowerCase() === normalizedName.toLowerCase() ||
+                 u.name.toLowerCase() === name.toLowerCase();
+        });
+
+        return {
+          id: uni?.id,
+          name,
+          ...data
+        };
+      });
 
     // Apply division filter to match map markers
-    if (divisionFilter === 'power4') {
+    if (divisionFilter === 'big10') {
+      collegesInState = collegesInState.filter((c: any) => c.conference === 'BIG 10');
+    } else if (divisionFilter === 'power4') {
       const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
       collegesInState = collegesInState.filter((c: any) =>
         power4Conferences.includes(c.conference || '')
@@ -455,6 +477,8 @@ const MapPageFullScreen = () => {
       collegesInState = collegesInState.filter((c: any) => c.division === 'D3');
     } else if (divisionFilter === 'mychapters') {
       collegesInState = []; // No colleges shown in mychapters filter yet
+    } else if (divisionFilter === 'all') {
+      // Show all colleges - no filter applied
     }
 
     const totalChapters = collegesInState.reduce(
@@ -615,13 +639,138 @@ const MapPageFullScreen = () => {
           });
         }
         console.log('==================================================');
-        setCollegeChapters(chapters);
+
+        // If no chapters found from API, use mock data for Big 10 schools
+        if (chapters.length === 0 && collegeData.conference === 'BIG 10') {
+          console.log('📝 [MapPage - handleCollegeClick] No API data, using mock chapters for Big 10 school');
+          const mockChapters = [
+            {
+              id: 'mock-1',
+              greek_organizations: {
+                name: 'Sigma Chi',
+                organization_type: 'fraternity'
+              },
+              member_count: 85,
+              unlocked: true
+            },
+            {
+              id: 'mock-2',
+              greek_organizations: {
+                name: 'Alpha Tau Omega',
+                organization_type: 'fraternity'
+              },
+              member_count: 78,
+              unlocked: false
+            },
+            {
+              id: 'mock-3',
+              greek_organizations: {
+                name: 'Pi Kappa Alpha',
+                organization_type: 'fraternity'
+              },
+              member_count: 92,
+              unlocked: false
+            },
+            {
+              id: 'mock-4',
+              greek_organizations: {
+                name: 'Beta Theta Pi',
+                organization_type: 'fraternity'
+              },
+              member_count: 68,
+              unlocked: false
+            },
+            {
+              id: 'mock-5',
+              greek_organizations: {
+                name: 'Phi Delta Theta',
+                organization_type: 'fraternity'
+              },
+              member_count: 75,
+              unlocked: false
+            },
+            {
+              id: 'mock-6',
+              greek_organizations: {
+                name: 'Kappa Sigma',
+                organization_type: 'fraternity'
+              },
+              member_count: 81,
+              unlocked: false
+            }
+          ];
+          setCollegeChapters(mockChapters);
+        } else {
+          setCollegeChapters(chapters);
+        }
       }
     } catch (error) {
       console.error('❌ [MapPage - handleCollegeClick] Error fetching chapters:', error);
       console.error('❌ [MapPage - handleCollegeClick] Error details:', error instanceof Error ? error.message : 'Unknown error');
       console.log('==================================================');
-      setCollegeChapters([]);
+
+      // Use mock data for Big 10 schools even on error
+      if (collegeData.conference === 'BIG 10') {
+        const mockChapters = [
+          {
+            id: 'mock-1',
+            greek_organizations: {
+              name: 'Sigma Chi',
+              organization_type: 'fraternity'
+            },
+            member_count: 85,
+            unlocked: true
+          },
+          {
+            id: 'mock-2',
+            greek_organizations: {
+              name: 'Alpha Tau Omega',
+              organization_type: 'fraternity'
+            },
+            member_count: 78,
+            unlocked: false
+          },
+          {
+            id: 'mock-3',
+            greek_organizations: {
+              name: 'Pi Kappa Alpha',
+              organization_type: 'fraternity'
+            },
+            member_count: 92,
+            unlocked: false
+          },
+          {
+            id: 'mock-4',
+            greek_organizations: {
+              name: 'Beta Theta Pi',
+              organization_type: 'fraternity'
+            },
+            member_count: 68,
+            unlocked: false
+          },
+          {
+            id: 'mock-5',
+            greek_organizations: {
+              name: 'Phi Delta Theta',
+              organization_type: 'fraternity'
+            },
+            member_count: 75,
+            unlocked: false
+          },
+          {
+            id: 'mock-6',
+            greek_organizations: {
+              name: 'Kappa Sigma',
+              organization_type: 'fraternity'
+            },
+            member_count: 81,
+            unlocked: false
+          }
+        ];
+        setCollegeChapters(mockChapters);
+      } else {
+        setCollegeChapters([]);
+      }
     } finally {
       setLoadingChapters(false);
     }
@@ -713,8 +862,8 @@ const MapPageFullScreen = () => {
 
       {/* Light/Dark Mode Toggle Switch & Reset Button */}
       <div className="absolute top-4 left-20 z-[1001] flex items-center gap-3 bg-white rounded-lg shadow-lg p-2">
-        <span className={`text-sm font-medium transition-colors ${!isDarkMode ? 'text-yellow-500' : 'text-gray-400'}`}>
-          ☀️ Light
+        <span className={`text-xl transition-colors ${!isDarkMode ? 'text-yellow-500' : 'text-gray-400'}`}>
+          ☀️
         </span>
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
@@ -729,8 +878,8 @@ const MapPageFullScreen = () => {
             }`}
           />
         </button>
-        <span className={`text-sm font-medium transition-colors ${isDarkMode ? 'text-blue-400' : 'text-gray-400'}`}>
-          🌙 Dark
+        <span className={`text-xl transition-colors ${isDarkMode ? 'text-blue-400' : 'text-gray-400'}`}>
+          🌙
         </span>
 
         {/* Divider */}
@@ -758,7 +907,20 @@ const MapPageFullScreen = () => {
       {/* Division Filter Buttons */}
       <div className="absolute top-4 right-4 z-[1001] flex flex-wrap items-center justify-end gap-2 bg-white rounded-lg shadow-lg p-2 max-w-md">
         <button
-          onClick={() => setDivisionFilter('mychapters')}
+          onClick={() => setDivisionFilter('big10')}
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
+            divisionFilter === 'big10'
+              ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Big 10
+        </button>
+        <button
+          onClick={() => {
+            setDivisionFilter('mychapters');
+            setShowLockOverlay(true);
+          }}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'mychapters'
               ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-md'
@@ -768,17 +930,24 @@ const MapPageFullScreen = () => {
           My Chapters
         </button>
         <button
-          onClick={() => setDivisionFilter('power4')}
+          onClick={() => {
+            setDivisionFilter('power4');
+            setShowLockOverlay(true);
+          }}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'power4'
               ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
+          <Lock className="w-3 h-3 inline mr-1" />
           Power 5
         </button>
         <button
-          onClick={() => setDivisionFilter('d1')}
+          onClick={() => {
+            setDivisionFilter('d1');
+            setShowLockOverlay(true);
+          }}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd1'
               ? 'bg-blue-600 text-white shadow-md'
@@ -788,7 +957,10 @@ const MapPageFullScreen = () => {
           All D1
         </button>
         <button
-          onClick={() => setDivisionFilter('d2')}
+          onClick={() => {
+            setDivisionFilter('d2');
+            setShowLockOverlay(true);
+          }}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd2'
               ? 'bg-green-600 text-white shadow-md'
@@ -798,7 +970,10 @@ const MapPageFullScreen = () => {
           All D2
         </button>
         <button
-          onClick={() => setDivisionFilter('d3')}
+          onClick={() => {
+            setDivisionFilter('d3');
+            setShowLockOverlay(true);
+          }}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd3'
               ? 'bg-orange-600 text-white shadow-md'
@@ -808,7 +983,10 @@ const MapPageFullScreen = () => {
           All D3
         </button>
         <button
-          onClick={() => setDivisionFilter('all')}
+          onClick={() => {
+            setDivisionFilter('all');
+            setShowLockOverlay(true);
+          }}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'all'
               ? 'bg-gray-800 text-white shadow-md'
@@ -818,6 +996,80 @@ const MapPageFullScreen = () => {
           All
         </button>
       </div>
+
+      {/* Lock Overlay */}
+      {showLockOverlay && divisionFilter !== 'big10' && (
+        <div className="absolute inset-0 z-[1002] bg-black bg-opacity-60 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 text-center">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-blue-600" />
+            </div>
+            {divisionFilter === 'mychapters' ? (
+              <>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Subscribe to Interactive Map
+                </h3>
+                <p className="text-gray-600 mb-2">
+                  Access "My Chapters" and personalized features with a subscription.
+                </p>
+                <p className="text-2xl font-bold text-blue-600 mb-6">
+                  $19.99/month
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => {
+                      setShowLockOverlay(false);
+                      setDivisionFilter('big10');
+                    }}
+                    className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      window.location.href = '/app/credits';
+                    }}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
+                    Subscribe Now
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Subscribe to Access {divisionFilter === 'power4' ? 'Power 5' : divisionFilter === 'all' ? 'All Schools' : `All ${divisionFilter.toUpperCase()}`}
+                </h3>
+                <p className="text-gray-600 mb-2">
+                  This filter requires a subscription to unlock.
+                </p>
+                <p className="text-2xl font-bold text-blue-600 mb-6">
+                  $19.99/month
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => {
+                      setShowLockOverlay(false);
+                      setDivisionFilter('big10');
+                    }}
+                    className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      window.location.href = '/app/credits';
+                    }}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
+                    Subscribe Now
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Navigation Menu (Collapsible Left) */}
       {showNavMenu && (
@@ -969,49 +1221,10 @@ const MapPageFullScreen = () => {
               <Minus className="w-5 h-5" />
             </button>
 
-            <h1 className={`text-2xl font-bold flex items-center gap-2 mb-2 ${isDarkMode ? 'text-cyan-400' : 'text-gray-900'}`}>
+            <h1 className={`text-2xl font-bold flex items-center gap-2 ${isDarkMode ? 'text-cyan-400' : 'text-gray-900'}`}>
               <MapPin className="w-6 h-6" />
               Fraternity Map
             </h1>
-            <p className={`text-sm mb-4 ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>
-              Explore Greek life across America with real-time data
-            </p>
-
-            {/* Statistics */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className={`rounded-lg p-3 ${
-                isDarkMode
-                  ? 'bg-gradient-to-br from-cyan-900/50 to-blue-900/50 border border-cyan-500/30'
-                  : 'bg-gradient-to-br from-blue-50 to-primary-50 border border-primary-200'
-              }`}>
-                <p className={`text-3xl font-bold ${isDarkMode ? 'text-cyan-400' : 'text-primary-600'}`}>{stats.states}</p>
-                <p className={`text-xs ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>States</p>
-              </div>
-              <div className={`rounded-lg p-3 ${
-                isDarkMode
-                  ? 'bg-gradient-to-br from-cyan-900/50 to-blue-900/50 border border-cyan-500/30'
-                  : 'bg-gradient-to-br from-blue-50 to-primary-50 border border-primary-200'
-              }`}>
-                <p className={`text-3xl font-bold ${isDarkMode ? 'text-cyan-400' : 'text-primary-600'}`}>{stats.colleges}</p>
-                <p className={`text-xs ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>Colleges</p>
-              </div>
-              <div className={`rounded-lg p-3 ${
-                isDarkMode
-                  ? 'bg-gradient-to-br from-cyan-900/50 to-blue-900/50 border border-cyan-500/30'
-                  : 'bg-gradient-to-br from-blue-50 to-primary-50 border border-primary-200'
-              }`}>
-                <p className={`text-3xl font-bold ${isDarkMode ? 'text-cyan-400' : 'text-primary-600'}`}>{stats.chapters.toLocaleString()}</p>
-                <p className={`text-xs ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>Chapters</p>
-              </div>
-              <div className={`rounded-lg p-3 ${
-                isDarkMode
-                  ? 'bg-gradient-to-br from-cyan-900/50 to-blue-900/50 border border-cyan-500/30'
-                  : 'bg-gradient-to-br from-blue-50 to-primary-50 border border-primary-200'
-              }`}>
-                <p className={`text-3xl font-bold ${isDarkMode ? 'text-cyan-400' : 'text-primary-600'}`}>{stats.members.toLocaleString()}</p>
-                <p className={`text-xs ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>Members</p>
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -1098,77 +1311,87 @@ const MapPageFullScreen = () => {
                   </div>
                 ) : (
                   <>
-                    {/* Show only first 3 chapters for free tier */}
-                    {collegeChapters.slice(0, 3).map((chapter) => (
-                      <Link
-                        key={chapter.id}
-                        to={`/app/chapters/${chapter.id}`}
-                        className={`block rounded-lg p-4 transition-all group ${
-                          isDarkMode
-                            ? 'bg-gradient-to-br from-black/80 to-cyan-900/20 border border-cyan-500/30 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/30'
-                            : 'bg-white border border-primary-200 hover:border-primary-400 hover:shadow-lg hover:shadow-primary-500/20'
-                        }`}
-                      >
-                        <h3 className={`font-bold mb-1 ${
-                          isDarkMode
-                            ? 'text-cyan-400 group-hover:text-cyan-300'
-                            : 'text-primary-600 group-hover:text-primary-500'
-                        }`}>
-                          {chapter.greek_organizations?.name || 'Unknown Organization'}
-                          {chapter.greek_organizations?.greek_letters && (
-                            <span className={`ml-2 text-sm ${
-                              isDarkMode ? 'text-cyan-300/70' : 'text-gray-500'
-                            }`}>
-                              {chapter.greek_organizations.greek_letters}
-                            </span>
-                          )}
-                        </h3>
-                        <p className={`text-sm mb-1 ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>
-                          {chapter.chapter_name}
-                        </p>
-                        <div className={`flex gap-3 text-xs ${isDarkMode ? 'text-cyan-300/50' : 'text-gray-500'}`}>
-                          {chapter.member_count && (
-                            <span>👥 {chapter.member_count} members</span>
-                          )}
-                          <span className="capitalize">{chapter.greek_organizations?.organization_type || 'Chapter'}</span>
-                        </div>
-                      </Link>
-                    ))}
+                    {/* Show unlocked chapters and locked chapters separately */}
+                    {collegeChapters.map((chapter, index) => {
+                      const isUnlocked = chapter.unlocked === true;
 
-                    {/* Locked overlay if there are more chapters */}
-                    {collegeChapters.length > 3 && (
-                      <div className={`relative rounded-lg p-6 overflow-hidden ${
-                        isDarkMode
-                          ? 'bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-yellow-500/50'
-                          : 'bg-gradient-to-br from-gray-100 to-gray-50 border-2 border-yellow-500/50'
-                      }`}>
-                        {/* Lock Icon */}
-                        <div className="flex flex-col items-center justify-center space-y-3">
-                          <div className={`p-4 rounded-full ${
-                            isDarkMode ? 'bg-yellow-500/20' : 'bg-yellow-500/10'
-                          }`}>
-                            <Lock className={`w-8 h-8 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
-                          </div>
-                          <div className="text-center">
-                            <h3 className={`text-lg font-bold mb-1 ${
-                              isDarkMode ? 'text-yellow-400' : 'text-gray-900'
+                      if (isUnlocked) {
+                        // Unlocked chapter - full display
+                        return (
+                          <Link
+                            key={chapter.id}
+                            to={`/app/chapters/${chapter.id}`}
+                            className={`block rounded-lg p-4 transition-all group ${
+                              isDarkMode
+                                ? 'bg-gradient-to-br from-black/80 to-cyan-900/20 border border-cyan-500/30 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/30'
+                                : 'bg-white border border-primary-200 hover:border-primary-400 hover:shadow-lg hover:shadow-primary-500/20'
+                            }`}
+                          >
+                            <h3 className={`font-bold mb-1 ${
+                              isDarkMode
+                                ? 'text-cyan-400 group-hover:text-cyan-300'
+                                : 'text-primary-600 group-hover:text-primary-500'
                             }`}>
-                              {collegeChapters.length - 3} More Chapters Locked
+                              {chapter.greek_organizations?.name || 'Unknown Organization'}
+                              {chapter.greek_organizations?.greek_letters && (
+                                <span className={`ml-2 text-sm ${
+                                  isDarkMode ? 'text-cyan-300/70' : 'text-gray-500'
+                                }`}>
+                                  {chapter.greek_organizations.greek_letters}
+                                </span>
+                              )}
                             </h3>
-                            <p className={`text-sm mb-4 ${
-                              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
-                              Unlock to view all {collegeChapters.length} chapters with full contact info
+                            <p className={`text-sm mb-1 ${isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'}`}>
+                              {chapter.chapter_name}
                             </p>
-                            <Link
-                              to="/app/credits"
-                              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all"
-                            >
-                              <Unlock className="w-4 h-4" />
-                              Unlock College
-                            </Link>
+                            <div className={`flex gap-3 text-xs ${isDarkMode ? 'text-cyan-300/50' : 'text-gray-500'}`}>
+                              {chapter.member_count && (
+                                <span>👥 {chapter.member_count} members</span>
+                              )}
+                              <span className="capitalize">{chapter.greek_organizations?.organization_type || 'Chapter'}</span>
+                            </div>
+                          </Link>
+                        );
+                      } else {
+                        // Locked chapter - blurred display with lock icon
+                        return (
+                          <div
+                            key={chapter.id}
+                            className={`relative rounded-lg p-4 overflow-hidden ${
+                              isDarkMode
+                                ? 'bg-gradient-to-br from-black/50 to-gray-900/50 border border-gray-600/30'
+                                : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-300'
+                            }`}
+                          >
+                            <div className="filter blur-sm pointer-events-none">
+                              <h3 className={`font-bold mb-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                                {chapter.greek_organizations?.name || 'Unknown Organization'}
+                              </h3>
+                              <p className={`text-sm mb-1 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+                                Chapter Information
+                              </p>
+                              <div className={`flex gap-3 text-xs ${isDarkMode ? 'text-gray-700' : 'text-gray-400'}`}>
+                                <span>👥 {chapter.member_count} members</span>
+                              </div>
+                            </div>
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                              <Lock className={`w-6 h-6 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
+                            </div>
                           </div>
-                        </div>
+                        );
+                      }
+                    })}
+
+                    {/* Unlock button if there are locked chapters */}
+                    {collegeChapters.some(c => !c.unlocked) && (
+                      <div className="mt-4 text-center">
+                        <Link
+                          to="/app/credits"
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all shadow-lg"
+                        >
+                          <Unlock className="w-5 h-5" />
+                          Unlock All Chapters
+                        </Link>
                       </div>
                     )}
                   </>
@@ -1201,13 +1424,25 @@ const MapPageFullScreen = () => {
                       }`}>
                         {college.name}
                       </h3>
-                      <div className={`flex gap-3 text-xs ${
-                        isDarkMode ? 'text-cyan-300/70' : 'text-gray-600'
-                      }`}>
-                        <span>🏛️ {college.fraternities} Frats</span>
-                        <span>👥 {college.sororities} Sororities</span>
-                        <span>📊 {college.totalMembers.toLocaleString()} Total</span>
-                      </div>
+                      {college.id ? (
+                        <Link
+                          to={`/app/colleges/${college.id}`}
+                          className={`inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-md transition-colors ${
+                            isDarkMode
+                              ? 'text-cyan-400 bg-cyan-900/30 hover:bg-cyan-900/50'
+                              : 'text-primary-600 bg-primary-50 hover:bg-primary-100'
+                          }`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          👉 See Fraternities
+                        </Link>
+                      ) : (
+                        <span className={`inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-md opacity-50 ${
+                          isDarkMode ? 'text-cyan-400' : 'text-gray-500'
+                        }`}>
+                          No data available
+                        </span>
+                      )}
                     </div>
                   </div>
                 </button>
@@ -1275,12 +1510,8 @@ const MapPageFullScreen = () => {
               <div className="font-bold text-lg text-cyan-400 mb-2">
                 {hoveredCollege.name}
               </div>
-              <div className="flex gap-4 text-sm text-cyan-300/90">
-                <span>🏛️ {hoveredCollege.data.fraternities} Frats</span>
-                <span>•</span>
-                <span>{hoveredCollege.data.sororities} Sororities</span>
-                <span>•</span>
-                <span>👥 {hoveredCollege.data.totalMembers.toLocaleString()} Members</span>
+              <div className="text-sm text-cyan-300/90">
+                Click to view fraternities →
               </div>
             </div>
           </div>
@@ -1355,7 +1586,7 @@ const MapPageFullScreen = () => {
         )}
 
         {/* College markers - Radar (dark) or Logo (light) style - Show in both USA and state view */}
-        {(viewMode === 'usa' || viewMode === 'state') && Object.entries(COLLEGE_LOCATIONS)
+        {!showLockOverlay && (viewMode === 'usa' || viewMode === 'state') && Object.entries(COLLEGE_LOCATIONS)
           .filter(([collegeName, collegeData]) => {
             // Filter by state if in state view
             if (viewMode === 'state' && selectedState) {
@@ -1366,6 +1597,10 @@ const MapPageFullScreen = () => {
 
             // Filter based on division
             if (divisionFilter === 'all') return true;
+
+            if (divisionFilter === 'big10') {
+              return collegeData.conference === 'BIG 10';
+            }
 
             if (divisionFilter === 'mychapters') {
               // Filter to show only unlocked colleges

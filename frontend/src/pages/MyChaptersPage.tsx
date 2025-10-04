@@ -53,43 +53,51 @@ const MyChaptersPage = () => {
 
   const fetchUnlockedData = async () => {
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/my-unlocks');
-      // const data = await response.json();
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
 
-      // Mock data for now
-      setUnlockedChapters([
-        {
-          id: '1',
-          chapter_name: 'Alpha Zeta Chapter',
-          greek_organization: 'Sigma Chi',
-          university: 'Penn State University',
-          state: 'PA',
-          member_count: 142,
-          unlocked_at: '2025-01-15',
-          credits_spent: 50
-        },
-        // Add more mock data
-      ]);
+      if (!token) {
+        console.error('No authentication token found');
+        setLoading(false);
+        return;
+      }
 
-      setUnlockedUsers([
-        {
-          id: '1',
-          name: 'John Smith',
-          position: 'President',
-          email: 'john@example.com',
-          phone: '555-1234',
-          linkedin_profile: 'linkedin.com/in/johnsmith',
-          graduation_year: 2025,
-          major: 'Business',
-          chapter_name: 'Alpha Zeta Chapter',
-          greek_organization: 'Sigma Chi',
-          university: 'Penn State University'
-        },
-        // Add more mock data
-      ]);
+      const response = await fetch(`${API_URL}/chapters/unlocked`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch unlocked chapters');
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        // Transform backend data to match our component interface
+        const transformedChapters = result.data.map((chapter: any) => ({
+          id: chapter.id,
+          chapter_name: chapter.chapter,
+          greek_organization: chapter.name,
+          university: chapter.university,
+          state: chapter.state,
+          member_count: chapter.memberCount,
+          unlocked_at: new Date().toISOString(), // Backend doesn't return this yet
+          credits_spent: 0 // Backend doesn't return this yet
+        }));
+
+        setUnlockedChapters(transformedChapters);
+      } else {
+        setUnlockedChapters([]);
+      }
+
+      // For now, set unlocked users to empty until we have a backend endpoint
+      setUnlockedUsers([]);
     } catch (error) {
       console.error('Error fetching unlocked data:', error);
+      setUnlockedChapters([]);
+      setUnlockedUsers([]);
     } finally {
       setLoading(false);
     }
@@ -108,6 +116,24 @@ const MyChaptersPage = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
+
+  // Show empty state if no chapters unlocked
+  if (!loading && unlockedChapters.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <Lock className="w-20 h-20 text-gray-300 mb-6" />
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">You have not unlocked any chapters yet</h1>
+        <p className="text-gray-600 mb-8">Start unlocking chapters to access member data and insights</p>
+        <Link
+          to="/app/chapters"
+          className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+        >
+          <Lock className="w-5 h-5" />
+          Browse Chapters
+        </Link>
       </div>
     );
   }
@@ -187,54 +213,41 @@ const MyChaptersPage = () => {
           <h2 className="text-xl font-semibold text-gray-900">Unlocked Chapters</h2>
         </div>
         <div className="p-6">
-          {unlockedChapters.length === 0 ? (
-            <div className="text-center py-12">
-              <Lock className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-600">No chapters unlocked yet</p>
-              <Link
-                to="/app/chapters"
-                className="inline-block mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {unlockedChapters.map((chapter) => (
+              <div
+                key={chapter.id}
+                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => setSelectedChapter(chapter.chapter_name)}
               >
-                Browse Chapters
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {unlockedChapters.map((chapter) => (
-                <div
-                  key={chapter.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => setSelectedChapter(chapter.chapter_name)}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{chapter.greek_organization}</h3>
-                      <p className="text-sm text-gray-600">{chapter.chapter_name}</p>
-                    </div>
-                    <Unlock className="w-5 h-5 text-green-600" />
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{chapter.greek_organization}</h3>
+                    <p className="text-sm text-gray-600">{chapter.chapter_name}</p>
                   </div>
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <Building2 className="w-4 h-4" />
-                      {chapter.university}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
-                      {chapter.state}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4" />
-                      {chapter.member_count} members
-                    </div>
+                  <Unlock className="w-5 h-5 text-green-600" />
+                </div>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4" />
+                    {chapter.university}
                   </div>
-                  <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
-                    <span>Unlocked {new Date(chapter.unlocked_at).toLocaleDateString()}</span>
-                    <span>{chapter.credits_spent} credits</span>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    {chapter.state}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    {chapter.member_count} members
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+                <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+                  <span>Unlocked {new Date(chapter.unlocked_at).toLocaleDateString()}</span>
+                  <span>{chapter.credits_spent} credits</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

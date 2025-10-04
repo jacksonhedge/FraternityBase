@@ -1,5 +1,5 @@
-// import { useSelector } from 'react-redux';
-// import { RootState } from '../store/store';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
@@ -23,27 +23,67 @@ import {
   X
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+import ApprovalPendingOverlay from '../components/ApprovalPendingOverlay';
+import { supabase } from '../lib/supabase';
 
 const DashboardPage = () => {
-  // const { user } = useSelector((state: RootState) => state.auth);
-  const user = { firstName: 'Demo', lastName: 'User' };
+  const { user } = useSelector((state: RootState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [purchasedCredits, setPurchasedCredits] = useState(0);
 
   // Fetch real data from API
-  const [creditBalance, setCreditBalance] = useState(0);
-  const [lifetimeCredits, setLifetimeCredits] = useState(0);
+  const [accountBalance, setAccountBalance] = useState(0);
+  const [lifetimeSpent, setLifetimeSpent] = useState(0);
+  const [lifetimeAdded, setLifetimeAdded] = useState(0);
   const [unlockedChapters, setUnlockedChapters] = useState<any[]>([]);
   const [stats, setStats] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [topChapters, setTopChapters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activityFeed, setActivityFeed] = useState<any[]>([]);
+  const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
+
+  // Hardcoded Big 10 Sigma Chi examples for tickertape
+  const big10Examples = [
+    { universityName: 'Penn State University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '1', insertedCount: undefined },
+    { universityName: 'Ohio State University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '2', insertedCount: undefined },
+    { universityName: 'University of Michigan', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '3', insertedCount: undefined },
+    { universityName: 'University of Wisconsin', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '4', insertedCount: undefined },
+    { universityName: 'Northwestern University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '5', insertedCount: undefined },
+    { universityName: 'Purdue University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '6', insertedCount: undefined },
+    { universityName: 'University of Illinois', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '7', insertedCount: undefined },
+    { universityName: 'Indiana University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '8', insertedCount: undefined },
+    { universityName: 'University of Minnesota', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '9', insertedCount: undefined },
+    { universityName: 'University of Iowa', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '10', insertedCount: undefined },
+    { universityName: 'Michigan State University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '11', insertedCount: undefined },
+    { universityName: 'University of Nebraska', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '12', insertedCount: undefined },
+    { universityName: 'University of Maryland', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '13', insertedCount: undefined },
+    { universityName: 'Rutgers University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '14', insertedCount: undefined },
+  ].map(item => ({ ...item, metadata: item }));
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
   const token = localStorage.getItem('token');
 
   useEffect(() => {
+    // Fetch approval status first
+    const checkApprovalStatus = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('companies(approval_status)')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profile?.companies?.approval_status) {
+          setApprovalStatus(profile.companies.approval_status);
+        }
+      }
+    };
+
+    checkApprovalStatus();
+
     // Fetch all dashboard data
     if (token) {
       Promise.all([
@@ -58,12 +98,15 @@ const DashboardPage = () => {
         }).then(res => res.json()),
         fetch(`${API_URL}/admin/universities`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        }).then(res => res.json())
+        }).then(res => res.json()),
+        fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json())
       ])
-        .then(([creditsData, chaptersData, allChaptersData, universitiesData]) => {
-          setCreditBalance(creditsData.balance || 0);
-          setLifetimeCredits(creditsData.lifetime || 0);
+        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData]) => {
+          setAccountBalance(creditsData.balance || 0);
+          setLifetimeSpent(creditsData.lifetimeSpent || 0);
+          setLifetimeAdded(creditsData.lifetimeAdded || 0);
           setUnlockedChapters(chaptersData.data || []);
+          setActivityFeed(activityData.data || []);
 
           // Calculate real stats from API data
           const chapters = allChaptersData.data || [];
@@ -105,20 +148,24 @@ const DashboardPage = () => {
           // Recent activities - for now empty until we track this
           setRecentActivities([]);
 
-          // Top chapters - show random chapters from database
-          const randomChapters = chapters
-            .filter((c: any) => c.member_count > 0)
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 3)
-            .map((c: any) => ({
-              id: c.id,
-              name: `${c.universities?.name || 'Unknown'} ${c.greek_organizations?.name || 'Chapter'}`,
-              university: c.universities?.name || 'Unknown University',
-              members: c.member_count || 0,
-              grade: 'A',
-              status: '100 credits'
-            }));
-          setTopChapters(randomChapters);
+          // Featured chapters - hardcoded examples
+          const featuredChapters = [
+            {
+              id: '1',
+              name: 'University of Alabama Delta Delta Delta',
+              university: 'University of Alabama',
+              members: 102,
+              grade: 'A'
+            },
+            {
+              id: '2',
+              name: 'Clemson University Sigma Chi',
+              university: 'Clemson University',
+              members: 85,
+              grade: 'A'
+            }
+          ];
+          setTopChapters(featuredChapters);
 
           setLoading(false);
         })
@@ -173,146 +220,51 @@ const DashboardPage = () => {
         </div>
       )}
 
-      {/* CREDIT BALANCE - Compact */}
-      <div className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 rounded-lg shadow-lg p-4 text-white">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Coins className="w-5 h-5" />
-              <span className="text-sm font-medium opacity-90">Available Credits</span>
-            </div>
-            <div className="text-3xl font-bold tracking-tight">
-              {creditBalance.toLocaleString()}
-            </div>
-            {lifetimeCredits > 0 && (
-              <span className="text-purple-200 text-xs">
-                ({lifetimeCredits.toLocaleString()} lifetime)
-              </span>
-            )}
+      {/* RECENT ACTIVITY TICKERTAPE */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg overflow-hidden">
+        <div className="relative h-12 flex items-center">
+          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-blue-600 to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-purple-600 to-transparent z-10" />
+          <div className="flex items-center gap-8 animate-scroll whitespace-nowrap px-4">
+            {[...big10Examples, ...big10Examples].map((activity, index) => (
+              <div key={`${activity.id}-${index}`} className="flex items-center gap-3 text-white">
+                <div className="flex items-center gap-2">
+                  <img
+                    src={getCollegeLogoWithFallback(activity.metadata?.universityName || '')}
+                    alt={activity.metadata?.universityName || ''}
+                    className="w-8 h-8 object-contain bg-white rounded-full p-1"
+                  />
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">{activity.metadata?.greekOrgName || 'Chapter'}</span>
+                    <span className="opacity-75">at</span>
+                    <span className="font-medium">{activity.metadata?.universityName || 'University'}</span>
+                  </div>
+                </div>
+                {activity.event_type === 'new_chapter' && (
+                  <span className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium">
+                    🆕 New Chapter
+                  </span>
+                )}
+                {activity.event_type === 'admin_upload' && activity.metadata?.insertedCount && (
+                  <span className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium">
+                    📋 {activity.metadata.insertedCount} members added
+                  </span>
+                )}
+                <span className="text-white/50">•</span>
+              </div>
+            ))}
           </div>
-          <Link
-            to="/dashboard/credits"
-            className="inline-block bg-white text-purple-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-50 transition-colors shadow-lg"
-          >
-            Buy Credits
-          </Link>
         </div>
       </div>
 
-      {/* MY UNLOCKED CHAPTERS - Quick access to purchased data */}
-      {unlockedChapters.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm border-2 border-green-200">
-          <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Unlock className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900">My Unlocked Chapters</h2>
-                  <p className="text-sm text-gray-600">
-                    {unlockedChapters.length} chapter{unlockedChapters.length !== 1 ? 's' : ''} • Access expires 6 months after unlock
-                  </p>
-                </div>
-              </div>
-              <Link
-                to="/app/chapters"
-                className="text-sm text-green-700 font-medium hover:text-green-800"
-              >
-                Browse More →
-              </Link>
-            </div>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {unlockedChapters.map((chapter) => {
-                const daysUntilExpiry = chapter.expiresAt
-                  ? Math.ceil((new Date(chapter.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-                  : null;
-
-                return (
-                  <Link
-                    key={chapter.id}
-                    to={`/app/chapters/${chapter.id}`}
-                    className="block border-2 border-green-200 hover:border-green-400 rounded-lg p-4 bg-gradient-to-br from-white to-green-50 transition-all hover:shadow-md"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="font-bold text-gray-900 text-lg">{chapter.name}</h3>
-                        <p className="text-sm text-gray-600">{chapter.university}</p>
-                      </div>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">
-                        Grade {chapter.grade}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                      <span className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {chapter.members} members
-                      </span>
-                      {daysUntilExpiry && (
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {daysUntilExpiry} days left
-                        </span>
-                      )}
-                      {!daysUntilExpiry && (
-                        <span className="flex items-center gap-1 text-green-600">
-                          <CheckCircle className="w-4 h-4" />
-                          Permanent access
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        chapter.accessLevel === 'full'
-                          ? 'bg-purple-100 text-purple-700'
-                          : 'bg-blue-100 text-blue-700'
-                      }`}>
-                        {chapter.accessLevel === 'full' && '✓ Full Access (Names + Emails + Phones)'}
-                        {chapter.accessLevel === 'roster' && '✓ Roster Only (Names)'}
-                        {chapter.accessLevel === 'emails' && '✓ Roster + Emails'}
-                        {chapter.accessLevel === 'phones' && '✓ Roster + Phones'}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                      <span className="text-xs text-gray-500">
-                        Unlocked {new Date(chapter.unlockedAt).toLocaleDateString()}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <button className="p-2 hover:bg-green-100 rounded transition-colors" title="Download CSV">
-                          <Download className="w-4 h-4 text-gray-600" />
-                        </button>
-                        {chapter.accessLevel !== 'roster' && (
-                          <>
-                            {(chapter.accessLevel === 'emails' || chapter.accessLevel === 'full') && (
-                              <Mail className="w-4 h-4 text-green-600" />
-                            )}
-                            {(chapter.accessLevel === 'phones' || chapter.accessLevel === 'full') && (
-                              <Phone className="w-4 h-4 text-green-600" />
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h1 className="text-2xl font-bold text-gray-900">
-          Welcome back, {user?.firstName}!
+          {user?.company?.name ? `Welcome back, ${user.company.name}!` : 'Welcome Back!'}
         </h1>
         <p className="text-gray-600 mt-1">
-          Browse 240 Sigma Chi chapters • 18,500+ verified contacts • Unlock with credits
+          Here's your dashboard overview
         </p>
       </div>
 
@@ -403,7 +355,7 @@ const DashboardPage = () => {
 
         {/* Top Chapters to Unlock - Only show if there are chapters */}
         {topChapters.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="bg-white rounded-lg shadow-sm relative">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center">
               <Target className="w-5 h-5 mr-2 text-primary-600" />
@@ -434,13 +386,6 @@ const DashboardPage = () => {
                         </div>
                       </div>
                     </div>
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full flex-shrink-0 ${
-                      chapter.status === 'Free Demo'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-purple-100 text-purple-700'
-                    }`}>
-                      {chapter.status}
-                    </span>
                   </div>
                 </div>
               ))}
@@ -449,44 +394,135 @@ const DashboardPage = () => {
               Browse all chapters →
             </Link>
           </div>
+          {approvalStatus === 'pending' && <ApprovalPendingOverlay />}
         </div>
         )}
-      </div>
 
-      {/* Credit Usage Chart Placeholder */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <TrendingUp className="w-5 h-5 mr-2 text-primary-600" />
-          Credit Usage Overview
-        </h2>
-        <div className="h-64 flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg">
-          <div className="text-center">
-            <p className="text-gray-600 mb-2">Credit usage analytics coming soon</p>
-            <p className="text-sm text-gray-500">Track spending patterns across chapters and features</p>
+        {/* Newly Added Section */}
+        <div className="bg-white rounded-lg shadow-sm">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+              <CheckCircle className="w-5 h-5 mr-2 text-green-600" />
+              Newly Added
+            </h2>
+          </div>
+          <div className={`p-6 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
+            <div className="space-y-4">
+              {/* New School Example */}
+              <div className="border-l-4 border-green-500 pl-4 hover:bg-gray-50 transition-colors">
+                <div className="flex items-start gap-3">
+                  <img
+                    src={getCollegeLogoWithFallback('Lehigh University')}
+                    alt="Lehigh University"
+                    className="w-12 h-12 object-contain flex-shrink-0"
+                  />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-900">Lehigh University</h4>
+                    <p className="text-sm text-gray-600">New school added to database</p>
+                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
+                      🏫 New School
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* New Chapter Example */}
+              <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
+                <div className="flex items-start gap-3">
+                  <img
+                    src={getCollegeLogoWithFallback('Penn State University')}
+                    alt="Penn State University"
+                    className="w-12 h-12 object-contain flex-shrink-0"
+                  />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-900">Penn State SAE</h4>
+                    <p className="text-sm text-gray-600">Penn State University</p>
+                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                      🆕 New Chapter
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* New Roster Example */}
+              <div className="border-l-4 border-purple-500 pl-4 hover:bg-gray-50 transition-colors">
+                <div className="flex items-start gap-3">
+                  <img
+                    src={getCollegeLogoWithFallback('Purdue University')}
+                    alt="Purdue University"
+                    className="w-12 h-12 object-contain flex-shrink-0"
+                  />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-900">Purdue Sigma Chi Roster</h4>
+                    <p className="text-sm text-gray-600">Purdue University • 94 members</p>
+                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">
+                      📋 Updated Roster
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-lg shadow-sm p-6 text-white">
-        <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link to="/app/chapters" className="block bg-white/10 hover:bg-white/20 rounded-lg p-4 text-center transition-colors">
-            <Users className="w-6 h-6 mx-auto mb-2" />
-            <span className="text-sm">Browse 240 Chapters</span>
-          </Link>
-          <Link to="/dashboard/credits" className="block bg-white/10 hover:bg-white/20 rounded-lg p-4 text-center transition-colors">
-            <Coins className="w-6 h-6 mx-auto mb-2" />
-            <span className="text-sm">Buy Credits</span>
-          </Link>
-          <button className="bg-white/10 hover:bg-white/20 rounded-lg p-4 text-center transition-colors">
-            <DollarSign className="w-6 h-6 mx-auto mb-2" />
-            <span className="text-sm">My Unlocked Data</span>
-          </button>
-          <button className="bg-white/10 hover:bg-white/20 rounded-lg p-4 text-center transition-colors">
-            <Target className="w-6 h-6 mx-auto mb-2" />
-            <span className="text-sm">View Transactions</span>
-          </button>
+      {/* Coming Soon */}
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <Clock className="w-5 h-5 mr-2 text-blue-600" />
+          Coming Soon
+        </h2>
+        <div className={`space-y-4 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
+          <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
+            <div className="flex items-start gap-3">
+              <img
+                src={getCollegeLogoWithFallback('University of Texas')}
+                alt="University of Texas"
+                className="w-12 h-12 object-contain flex-shrink-0"
+              />
+              <div className="flex-1">
+                <h4 className="font-medium text-gray-900">University of Texas</h4>
+                <p className="text-sm text-gray-600">New chapters being added</p>
+                <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                  🔜 Coming Soon
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
+            <div className="flex items-start gap-3">
+              <img
+                src={getCollegeLogoWithFallback('University of Pittsburgh')}
+                alt="University of Pittsburgh"
+                className="w-12 h-12 object-contain flex-shrink-0"
+              />
+              <div className="flex-1">
+                <h4 className="font-medium text-gray-900">University of Pittsburgh</h4>
+                <p className="text-sm text-gray-600">New chapters being added</p>
+                <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                  🔜 Coming Soon
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
+            <div className="flex items-start gap-3">
+              <img
+                src={getCollegeLogoWithFallback('Stanford University')}
+                alt="Stanford University"
+                className="w-12 h-12 object-contain flex-shrink-0"
+              />
+              <div className="flex-1">
+                <h4 className="font-medium text-gray-900">Stanford University</h4>
+                <p className="text-sm text-gray-600">New chapters being added</p>
+                <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                  🔜 Coming Soon
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

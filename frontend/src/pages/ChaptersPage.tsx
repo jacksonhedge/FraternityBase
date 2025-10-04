@@ -330,91 +330,10 @@ const ChaptersPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* MY UNLOCKED CHAPTERS */}
-      {unlockedChapters.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm border-2 border-green-200">
-          <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Unlock className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900">My Unlocked Chapters</h2>
-                  <p className="text-sm text-gray-600">
-                    {unlockedChapters.length} chapter{unlockedChapters.length !== 1 ? 's' : ''} with active access
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {unlockedChapters.map((chapter) => {
-                const daysUntilExpiry = chapter.expiresAt
-                  ? Math.ceil((new Date(chapter.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-                  : null;
-
-                return (
-                  <Link
-                    key={chapter.id}
-                    to={`/app/chapters/${chapter.id}`}
-                    className="block border-2 border-green-200 hover:border-green-400 rounded-lg p-4 bg-gradient-to-br from-white to-green-50 transition-all hover:shadow-md"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-start gap-3 flex-1">
-                        <img
-                          src={getCollegeLogoWithFallback(chapter.university)}
-                          alt={chapter.university}
-                          className="w-12 h-12 object-contain flex-shrink-0"
-                        />
-                        <div>
-                          <h3 className="font-bold text-gray-900">{chapter.name}</h3>
-                          <p className="text-sm text-gray-600">{chapter.university}</p>
-                        </div>
-                      </div>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">
-                        {chapter.grade}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                      <span className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {chapter.members}
-                      </span>
-                      {daysUntilExpiry && (
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {daysUntilExpiry}d
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-2 text-xs">
-                      {chapter.accessLevel === 'full' && (
-                        <>
-                          <Mail className="w-4 h-4 text-green-600" />
-                          <Phone className="w-4 h-4 text-green-600" />
-                        </>
-                      )}
-                      <button className="ml-auto p-1 hover:bg-green-100 rounded">
-                        <Download className="w-4 h-4 text-gray-600" />
-                      </button>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Browse All Chapters</h1>
-          <p className="text-gray-600 mt-2">240 Sigma Chi chapters • 18,500+ members • Unlock with credits</p>
         </div>
         <div className="flex items-center gap-3">
           {/* View Toggle */}

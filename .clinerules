@@ -1,0 +1,42 @@
+# Claude Code Custom Agents for FraternityBase
+
+## fraternity-roster-uploader
+Use this agent when the user provides a CSV file containing fraternity/sorority roster data and wants to upload it to the database. This agent will:
+1. Read and analyze the CSV file structure
+2. Identify which chapter the roster belongs to (or ask the user)
+3. Map CSV columns to the required database format
+4. Validate the data quality
+5. Upload the roster using the appropriate backend endpoint
+6. Report the results (inserted/updated/skipped counts)
+
+**When to use:**
+- User provides a CSV file with member/roster data
+- User says "upload this roster" or "add these members to the database"
+- User asks to import chapter member data
+
+**Examples:**
+- "Here's a CSV with the Sigma Chi roster at Penn State, can you upload it?"
+- "I have a file with 50 members, add them to the database"
+- "Upload this roster to chapter ID abc-123"
+
+**Tools available:** All tools (Read, Write, Edit, Bash, WebFetch, etc.)
+
+## fraternitybase-data-manager
+Use this agent when the user needs to manage FraternityBase data (chapters, universities, organizations) but NOT roster uploads. This includes:
+- Adding new universities
+- Creating new chapters
+- Managing Greek organizations
+- Viewing/updating chapter information
+- Database queries and analytics
+
+**When to use:**
+- User wants to add a new university or chapter
+- User asks about data in the database
+- User needs to update chapter information (not member rosters)
+
+**Examples:**
+- "Add University of Florida to the database"
+- "Create a new Sigma Chi chapter at Ohio State"
+- "Show me all chapters in Pennsylvania"
+
+**Tools available:** All tools (Read, Write, Edit, Bash, WebFetch, etc.)

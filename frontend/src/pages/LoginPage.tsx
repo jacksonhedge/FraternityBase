@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-// import { useLoginMutation } from '../store/api/apiSlice';
+import { supabase } from '../lib/supabase';
 import { loginSuccess, loginFailure } from '../store/slices/authSlice';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
@@ -33,45 +33,74 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     setError(null);
+    setIsLoading(true);
 
-    // Hardcoded login for Jackson
-    if (data.email === 'jacksonfitzgerald25@gmail.com' && data.password === '12345Hedgesp!') {
-      const jacksonUser = {
+    try {
+      // Authenticate with Supabase
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (authError) {
+        console.error('Login error:', authError);
+        setError(authError.message || 'Invalid email or password');
+        setIsLoading(false);
+        return;
+      }
+
+      if (!authData.user || !authData.session) {
+        setError('Login failed. Please try again.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Get user profile from database
+      const { data: profile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('*, companies(name, approval_status)')
+        .eq('user_id', authData.user.id)
+        .single();
+
+      if (profileError) {
+        console.error('Profile fetch error:', profileError);
+        setError('Failed to load user profile');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if company is rejected
+      if (profile?.companies?.approval_status === 'rejected') {
+        setError('Your company application was not approved. Please contact support.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Dispatch to Redux with real user data
+      dispatch(loginSuccess({
         user: {
-          id: '1',
-          email: 'jacksonfitzgerald25@gmail.com',
-          firstName: 'Jackson',
-          lastName: 'Fitzgerald',
-          role: 'admin' as 'admin'
+          id: authData.user.id,
+          email: authData.user.email || '',
+          firstName: profile?.first_name || '',
+          lastName: profile?.last_name || '',
+          role: profile?.role || 'user',
+          companyId: profile?.company_id,
+          companyName: profile?.companies?.name
         },
-        token: 'jackson-token-' + Date.now()
-      };
+        token: authData.session.access_token
+      }));
 
-      dispatch(loginSuccess(jacksonUser));
+      // Store token in localStorage for API calls
+      localStorage.setItem('token', authData.session.access_token);
+
+      // Navigate to dashboard
       navigate('/app/dashboard');
-      return;
+    } catch (error: any) {
+      console.error('Unexpected login error:', error);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-
-    // Demo login - bypass API for testing
-    if (data.email && data.password) {
-      const demoUser = {
-        user: {
-          id: '1',
-          email: data.email,
-          firstName: data.email.split('@')[0],
-          lastName: 'User',
-          role: 'admin' as 'admin'
-        },
-        token: 'demo-token-' + Date.now()
-      };
-
-      dispatch(loginSuccess(demoUser));
-      navigate('/app/dashboard');
-      return;
-    }
-
-    // If we get here, invalid credentials
-    setError('Invalid email or password. Please try again.');
   };
 
   return (
@@ -85,7 +114,7 @@ const LoginPage = () => {
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
           <p className="mt-2 text-sm text-gray-600">
             Or{' '}
-            <Link to="/register" className="font-medium text-primary-600 hover:text-primary-500">
+            <Link to="/signup" className="font-medium text-primary-600 hover:text-primary-500">
               create a new account
             </Link>
           </p>
@@ -159,9 +188,9 @@ const LoginPage = () => {
                 </div>
 
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
+                  <Link to="/forgot-password" className="font-medium text-primary-600 hover:text-primary-500">
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
               </div>
 
