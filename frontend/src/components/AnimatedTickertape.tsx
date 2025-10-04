@@ -1,0 +1,133 @@
+import { useEffect, useRef, useState } from 'react';
+import { animate } from 'animejs';
+import { DURATIONS, shouldAnimate } from '../animations/constants';
+import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+
+interface Activity {
+  id: string;
+  event_type: string;
+  metadata?: {
+    universityName?: string;
+    greekOrgName?: string;
+    insertedCount?: number;
+  };
+}
+
+interface AnimatedTickertapeProps {
+  activities: Activity[];
+}
+
+const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
+  const tickertapeRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<any | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!tickertapeRef.current || !shouldAnimate()) return;
+
+    const tickertape = tickertapeRef.current;
+    const totalWidth = tickertape.scrollWidth / 2; // Divide by 2 because we duplicate content
+
+    // Create infinite scroll animation
+    animationRef.current = animate(tickertape, {
+      translateX: [-totalWidth, 0],
+      duration: DURATIONS.tickertape,
+      ease: 'linear',
+      loop: true,
+    });
+
+    return () => {
+      if (animationRef.current) {
+        animationRef.current.pause();
+      }
+    };
+  }, [activities]);
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+    if (animationRef.current) {
+      animationRef.current.pause();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
+    if (animationRef.current) {
+      animationRef.current.play();
+    }
+  };
+
+  const handleItemHover = (index: number) => {
+    setHoveredItem(index);
+  };
+
+  const handleItemLeave = () => {
+    setHoveredItem(null);
+  };
+
+  // Duplicate activities for seamless loop
+  const duplicatedActivities = [...activities, ...activities];
+
+  return (
+    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg overflow-hidden">
+      <div
+        className="relative h-12 flex items-center"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Gradient fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-blue-600 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-purple-600 to-transparent z-10 pointer-events-none" />
+
+        {/* Scrolling content */}
+        <div
+          ref={tickertapeRef}
+          className="flex items-center gap-8 whitespace-nowrap px-4"
+          style={{ willChange: shouldAnimate() ? 'transform' : 'auto' }}
+        >
+          {duplicatedActivities.map((activity, index) => (
+            <div
+              key={`${activity.id}-${index}`}
+              className="flex items-center gap-3 text-white transition-all duration-200"
+              style={{
+                transform: hoveredItem === index ? 'scale(1.05)' : 'scale(1)',
+              }}
+              onMouseEnter={() => handleItemHover(index)}
+              onMouseLeave={handleItemLeave}
+            >
+              <div className="flex items-center gap-2">
+                <img
+                  src={getCollegeLogoWithFallback(activity.metadata?.universityName || '')}
+                  alt={activity.metadata?.universityName || ''}
+                  className="w-8 h-8 object-contain bg-white rounded-full p-1 transition-transform duration-200"
+                  style={{
+                    transform: hoveredItem === index ? 'scale(1.1)' : 'scale(1)',
+                  }}
+                />
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold">{activity.metadata?.greekOrgName || 'Chapter'}</span>
+                  <span className="opacity-75">at</span>
+                  <span className="font-medium">{activity.metadata?.universityName || 'University'}</span>
+                </div>
+              </div>
+              {activity.event_type === 'new_chapter' && (
+                <span className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium">
+                  🆕 New Chapter
+                </span>
+              )}
+              {activity.event_type === 'admin_upload' && activity.metadata?.insertedCount && (
+                <span className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium">
+                  📋 {activity.metadata.insertedCount} members added
+                </span>
+              )}
+              <span className="text-white/50">•</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AnimatedTickertape;

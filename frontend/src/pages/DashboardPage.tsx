@@ -25,6 +25,8 @@ import {
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 import ApprovalPendingOverlay from '../components/ApprovalPendingOverlay';
 import LoadingScreen from '../components/LoadingScreen';
+import AnimatedTickertape from '../components/AnimatedTickertape';
+import { useCardStagger } from '../animations/useCardStagger';
 import { supabase } from '../lib/supabase';
 
 const DashboardPage = () => {
@@ -32,6 +34,9 @@ const DashboardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [purchasedCredits, setPurchasedCredits] = useState(0);
+
+  // Animation hooks
+  const statsContainerRef = useCardStagger([]);
 
   // Fetch real data from API
   const [accountBalance, setAccountBalance] = useState(0);
@@ -236,42 +241,8 @@ const DashboardPage = () => {
         </div>
       )}
 
-      {/* RECENT ACTIVITY TICKERTAPE */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg overflow-hidden">
-        <div className="relative h-12 flex items-center">
-          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-blue-600 to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-purple-600 to-transparent z-10" />
-          <div className="flex items-center gap-8 animate-scroll whitespace-nowrap px-4">
-            {[...big10Examples, ...big10Examples].map((activity, index) => (
-              <div key={`${activity.id}-${index}`} className="flex items-center gap-3 text-white">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={getCollegeLogoWithFallback(activity.metadata?.universityName || '')}
-                    alt={activity.metadata?.universityName || ''}
-                    className="w-8 h-8 object-contain bg-white rounded-full p-1"
-                  />
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">{activity.metadata?.greekOrgName || 'Chapter'}</span>
-                    <span className="opacity-75">at</span>
-                    <span className="font-medium">{activity.metadata?.universityName || 'University'}</span>
-                  </div>
-                </div>
-                {activity.event_type === 'new_chapter' && (
-                  <span className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium">
-                    🆕 New Chapter
-                  </span>
-                )}
-                {activity.event_type === 'admin_upload' && activity.metadata?.insertedCount && (
-                  <span className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium">
-                    📋 {activity.metadata.insertedCount} members added
-                  </span>
-                )}
-                <span className="text-white/50">•</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* RECENT ACTIVITY TICKERTAPE - Enhanced with Anime.js */}
+      <AnimatedTickertape activities={big10Examples} />
 
 
       {/* Header */}
@@ -285,11 +256,11 @@ const DashboardPage = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div ref={statsContainerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-white rounded-lg shadow-sm p-6">
+            <div key={index} data-animate-card className="bg-white rounded-lg shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className={`w-12 h-12 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}>
                   <Icon className={`w-6 h-6 text-${stat.color}-600`} />

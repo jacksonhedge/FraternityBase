@@ -31,19 +31,19 @@
   }
 
   .btn-primary {
-    @apply btn text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-500;
+    @apply btn text-white bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 hover:scale-105 active:scale-95;
   }
 
   .btn-secondary {
-    @apply btn text-primary-700 bg-primary-100 hover:bg-primary-200 focus:ring-primary-500;
+    @apply btn text-primary-700 bg-primary-100 hover:bg-primary-200 focus:ring-primary-500 hover:scale-105 active:scale-95;
   }
 
   .btn-outline {
-    @apply btn border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-primary-500;
+    @apply btn border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-primary-500 hover:scale-105 active:scale-95;
   }
 
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    @apply bg-white rounded-lg shadow-md p-6 transition-all duration-200 hover:shadow-lg;
   }
 
   .input {
@@ -99,4 +99,49 @@
 
 .animate-scroll:hover {
   animation-play-state: paused;
+}
+
+/* Micro-interactions for better UX */
+@media (prefers-reduced-motion: no-preference) {
+  /* Smooth button interactions */
+  button,
+  a[role="button"],
+  [class*="btn"] {
+    @apply transition-all duration-200;
+  }
+
+  button:hover:not(:disabled),
+  a[role="button"]:hover,
+  [class*="btn"]:hover:not(:disabled) {
+    @apply transform translate-y-[-1px];
+  }
+
+  button:active:not(:disabled),
+  a[role="button"]:active,
+  [class*="btn"]:active:not(:disabled) {
+    @apply transform translate-y-[1px];
+  }
+
+  /* Card hover effects */
+  .card,
+  [class*="card-"],
+  [class*="bg-white rounded"] {
+    @apply transition-all duration-200;
+  }
+
+  /* Smooth link hover */
+  a:not([class*="btn"]) {
+    @apply transition-colors duration-200;
+  }
+
+  /* Icon button hover */
+  [class*="icon"],
+  svg {
+    @apply transition-transform duration-200;
+  }
+
+  button:hover svg,
+  a:hover svg {
+    @apply transform scale-110;
+  }
 }

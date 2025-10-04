@@ -1,4 +1,5 @@
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import AnimatedOutlet from './AnimatedOutlet';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
 import { logout } from '../store/slices/authSlice';
@@ -398,9 +399,9 @@ const Layout = () => {
             </div>
           </header>
 
-          {/* Page content */}
+          {/* Page content with animated transitions */}
           <main className="flex-1 p-4 md:p-6">
-            <Outlet />
+            <AnimatedOutlet />
           </main>
         </div>
       </div>
