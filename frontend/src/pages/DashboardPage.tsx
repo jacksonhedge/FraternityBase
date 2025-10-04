@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 import ApprovalPendingOverlay from '../components/ApprovalPendingOverlay';
+import LoadingScreen from '../components/LoadingScreen';
 import { supabase } from '../lib/supabase';
 
 const DashboardPage = () => {
@@ -198,6 +199,11 @@ const DashboardPage = () => {
       }, 10000);
     }
   }, [searchParams, setSearchParams]);
+
+  // Show loading screen while data is being fetched
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="space-y-6">
