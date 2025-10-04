@@ -10,6 +10,8 @@ interface User {
     id: string;
     name: string;
   };
+  companyId?: string;
+  companyName?: string;
   role: 'admin' | 'user' | 'viewer';
 }
 
