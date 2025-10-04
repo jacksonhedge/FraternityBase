@@ -42,6 +42,8 @@ const DashboardPage = () => {
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [topChapters, setTopChapters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingComplete, setLoadingComplete] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
   const [activityFeed, setActivityFeed] = useState<any[]>([]);
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
 
@@ -90,17 +92,17 @@ const DashboardPage = () => {
       Promise.all([
         fetch(`${API_URL}/credits/balance`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        }).then(res => res.json()),
+        }).then(res => res.json()).catch(() => ({ balance: 0, lifetimeSpent: 0, lifetimeAdded: 0 })),
         fetch(`${API_URL}/chapters/unlocked`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        }).then(res => res.json()),
+        }).then(res => res.ok ? res.json() : { data: [] }).catch(() => ({ data: [] })),
         fetch(`${API_URL}/chapters`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        }).then(res => res.json()),
+        }).then(res => res.json()).catch(() => ({ data: [] })),
         fetch(`${API_URL}/admin/universities`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        }).then(res => res.json()),
-        fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json())
+        }).then(res => res.json()).catch(() => ({ data: [] })),
+        fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json()).catch(() => ({ data: [] }))
       ])
         .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData]) => {
           setAccountBalance(creditsData.balance || 0);
@@ -169,10 +171,14 @@ const DashboardPage = () => {
           setTopChapters(featuredChapters);
 
           setLoading(false);
+          setLoadingComplete(true);
+          setTimeout(() => setShowDashboard(true), 800);
         })
         .catch(err => {
           console.error('Failed to fetch dashboard data:', err);
           setLoading(false);
+          setLoadingComplete(true);
+          setTimeout(() => setShowDashboard(true), 800);
         });
     }
   }, [token]);
@@ -201,8 +207,8 @@ const DashboardPage = () => {
   }, [searchParams, setSearchParams]);
 
   // Show loading screen while data is being fetched
-  if (loading) {
-    return <LoadingScreen />;
+  if (loading || !showDashboard) {
+    return <LoadingScreen isComplete={loadingComplete} />;
   }
 
   return (

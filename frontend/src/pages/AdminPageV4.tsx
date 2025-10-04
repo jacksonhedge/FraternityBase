@@ -32,6 +32,7 @@ import {
   FileUp
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
+import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -154,7 +155,10 @@ interface ActivityLogEntry {
 
 const AdminPageV4 = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'users' | 'waitlist'>('dashboard');
+  const [activeTab, setActiveTab] = useState<
+    'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'users' | 'waitlist' |
+    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics'
+  >('dashboard');
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -444,7 +448,11 @@ const AdminPageV4 = () => {
       if (universityForm.logoFile) {
         console.log('📤 Uploading logo...', universityForm.logoFile.name);
         const fileExt = universityForm.logoFile.name.split('.').pop();
-        const fileName = `${universityForm.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${fileExt}`;
+        // Sanitize filename: remove all non-alphanumeric characters except hyphens and underscores
+        const sanitizedName = universityForm.name.toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')  // Replace non-alphanumeric with hyphens
+          .replace(/^-+|-+$/g, '');      // Remove leading/trailing hyphens
+        const fileName = `${sanitizedName}-${Date.now()}.${fileExt}`;
         try {
           logoUrl = await handleUploadImage(universityForm.logoFile, 'college-logos', fileName);
           console.log('✅ Logo uploaded:', logoUrl);
@@ -810,7 +818,11 @@ const AdminPageV4 = () => {
               try {
                 const response = await fetch(logoUrl);
                 const blob = await response.blob();
-                const fileName = `${(row.name || row.Name).toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${blob.type.split('/')[1]}`;
+                // Sanitize filename: remove all non-alphanumeric characters except hyphens and underscores
+                const sanitizedName = (row.name || row.Name).toLowerCase()
+                  .replace(/[^a-z0-9]+/g, '-')  // Replace non-alphanumeric with hyphens
+                  .replace(/^-+|-+$/g, '');      // Remove leading/trailing hyphens
+                const fileName = `${sanitizedName}-${Date.now()}.${blob.type.split('/')[1]}`;
 
                 const reader = new FileReader();
                 const base64Promise = new Promise<string>((resolve) => {
@@ -1162,6 +1174,91 @@ const AdminPageV4 = () => {
               <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{greekOrgs.length}</span>
             )}
           </button>
+
+          {/* Divider - Business Analytics Section */}
+          <div className="border-t border-gray-700 my-2 pt-2">
+            <p className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Business Analytics</p>
+          </div>
+
+          <button
+            onClick={() => {
+              setActiveTab('payments');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'payments'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <DollarSign className="w-5 h-5" />
+            <span className="font-medium">Payments & Revenue</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('unlocks');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'unlocks'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Unlock className="w-5 h-5" />
+            <span className="font-medium">Chapter Unlocks</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('credits');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'credits'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <CreditCard className="w-5 h-5" />
+            <span className="font-medium">Credits & Pricing</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('intelligence');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'intelligence'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <TrendingUp className="w-5 h-5" />
+            <span className="font-medium">Company Intelligence</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('analytics');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'analytics'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <BarChart3 className="w-5 h-5" />
+            <span className="font-medium">Business Analytics</span>
+          </button>
         </nav>
 
         {/* Bottom Section */}
@@ -1194,6 +1291,11 @@ const AdminPageV4 = () => {
               {activeTab === 'chapters' && 'Manage individual chapters'}
               {activeTab === 'users' && 'Manage chapter users and contacts'}
               {activeTab === 'waitlist' && 'View and manage waitlist signups'}
+              {activeTab === 'payments' && 'Track revenue, transactions, and financial analytics'}
+              {activeTab === 'unlocks' && 'Analyze chapter unlock trends and popular content'}
+              {activeTab === 'credits' && 'Monitor credit usage and pricing performance'}
+              {activeTab === 'intelligence' && 'Deep dive into company behavior and health metrics'}
+              {activeTab === 'analytics' && 'Business intelligence and growth analytics'}
             </p>
           </div>
 
@@ -2511,6 +2613,45 @@ const AdminPageV4 = () => {
                   No waitlist entries yet
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Payments & Revenue Tab */}
+          {activeTab === 'payments' && <PaymentsRevenueTab />}
+
+          {/* Chapter Unlocks Tab - Coming Soon */}
+          {activeTab === 'unlocks' && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+              <Unlock className="w-16 h-16 text-yellow-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Chapter Unlocks Analytics</h3>
+              <p className="text-gray-600">Coming soon - Track popular chapters, unlock trends, and content analytics</p>
+            </div>
+          )}
+
+          {/* Credits & Pricing Tab - Coming Soon */}
+          {activeTab === 'credits' && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+              <CreditCard className="w-16 h-16 text-yellow-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Credits & Pricing Analytics</h3>
+              <p className="text-gray-600">Coming soon - Monitor credit usage, pricing performance, and revenue per credit</p>
+            </div>
+          )}
+
+          {/* Company Intelligence Tab - Coming Soon */}
+          {activeTab === 'intelligence' && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+              <TrendingUp className="w-16 h-16 text-yellow-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Company Intelligence</h3>
+              <p className="text-gray-600">Coming soon - Deep dive into customer behavior, health metrics, and LTV analysis</p>
+            </div>
+          )}
+
+          {/* Business Analytics Tab - Coming Soon */}
+          {activeTab === 'analytics' && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+              <BarChart3 className="w-16 h-16 text-yellow-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Business Analytics</h3>
+              <p className="text-gray-600">Coming soon - Growth metrics, engagement analytics, and business intelligence dashboards</p>
             </div>
           )}
         </div>

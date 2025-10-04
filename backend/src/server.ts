@@ -360,6 +360,94 @@ app.post('/api/credits/webhook', async (req, res) => {
   }
 });
 
+// Get unlocked chapters for a company
+app.get('/api/chapters/unlocked', async (req, res) => {
+  try {
+    // Get the authorization token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's company_id from user_profiles
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('company_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      console.error('Profile fetch error:', profileError);
+      return res.status(404).json({ error: 'User profile not found' });
+    }
+
+    // Query all unlocks for this company with chapter details
+    const { data, error } = await supabase
+      .from('chapter_unlocks')
+      .select(`
+        chapter_id,
+        unlock_type,
+        unlocked_at,
+        expires_at,
+        chapters (
+          id,
+          chapter_name,
+          member_count,
+          greek_organizations (
+            name,
+            abbreviation
+          ),
+          universities (
+            name,
+            state
+          )
+        )
+      `)
+      .eq('company_id', profile.company_id)
+      .or('expires_at.is.null,expires_at.gt.' + new Date().toISOString());
+
+    if (error) {
+      console.error('Error fetching unlocked chapters:', error);
+      return res.status(500).json({ error: 'Failed to fetch unlocked chapters' });
+    }
+
+    // Group by chapter
+    const chaptersMap = new Map();
+    data?.forEach((unlock: any) => {
+      const chapterId = unlock.chapter_id;
+      if (!chaptersMap.has(chapterId)) {
+        chaptersMap.set(chapterId, {
+          id: chapterId,
+          name: unlock.chapters?.greek_organizations?.name || 'Unknown',
+          chapter: unlock.chapters?.chapter_name || '',
+          university: unlock.chapters?.universities?.name || 'Unknown University',
+          state: unlock.chapters?.universities?.state || '',
+          memberCount: unlock.chapters?.member_count || 0,
+          unlockedTypes: []
+        });
+      }
+      chaptersMap.get(chapterId).unlockedTypes.push(unlock.unlock_type);
+    });
+
+    const chapters = Array.from(chaptersMap.values());
+
+    res.json({
+      success: true,
+      data: chapters
+    });
+  } catch (error: any) {
+    console.error('Unlocked chapters endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Get single chapter by ID
 app.get('/api/chapters/:id', async (req, res) => {
   try {
@@ -631,92 +719,6 @@ app.get('/api/chapters/:id/unlock-status', async (req, res) => {
   }
 });
 
-app.get('/api/chapters/unlocked', async (req, res) => {
-  try {
-    // Get the authorization token
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Missing or invalid authorization token' });
-    }
-
-    const token = authHeader.substring(7);
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-
-    if (authError || !user) {
-      return res.status(401).json({ error: 'Invalid token or user not found' });
-    }
-
-    // Get user's company_id from user_profiles
-    const { data: profile, error: profileError } = await supabase
-      .from('user_profiles')
-      .select('company_id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (profileError || !profile?.company_id) {
-      console.error('Profile fetch error:', profileError);
-      return res.status(404).json({ error: 'User profile not found' });
-    }
-
-    // Query all unlocks for this company with chapter details
-    const { data, error } = await supabase
-      .from('chapter_unlocks')
-      .select(`
-        chapter_id,
-        unlock_type,
-        unlocked_at,
-        expires_at,
-        chapters (
-          id,
-          chapter_name,
-          member_count,
-          greek_organizations (
-            name,
-            abbreviation
-          ),
-          universities (
-            name,
-            state
-          )
-        )
-      `)
-      .eq('company_id', profile.company_id)
-      .or('expires_at.is.null,expires_at.gt.' + new Date().toISOString());
-
-    if (error) {
-      console.error('Error fetching unlocked chapters:', error);
-      return res.status(500).json({ error: 'Failed to fetch unlocked chapters' });
-    }
-
-    // Group by chapter
-    const chaptersMap = new Map();
-    data?.forEach((unlock: any) => {
-      const chapterId = unlock.chapter_id;
-      if (!chaptersMap.has(chapterId)) {
-        chaptersMap.set(chapterId, {
-          id: chapterId,
-          name: unlock.chapters?.greek_organizations?.name || 'Unknown',
-          chapter: unlock.chapters?.chapter_name || '',
-          university: unlock.chapters?.universities?.name || 'Unknown University',
-          state: unlock.chapters?.universities?.state || '',
-          memberCount: unlock.chapters?.member_count || 0,
-          unlockedTypes: []
-        });
-      }
-      chaptersMap.get(chapterId).unlockedTypes.push(unlock.unlock_type);
-    });
-
-    const chapters = Array.from(chaptersMap.values());
-
-    res.json({
-      success: true,
-      data: chapters
-    });
-  } catch (error: any) {
-    console.error('Unlocked chapters endpoint error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 // Store signups (in production, use a database)
 const signups: any[] = [];
@@ -1371,6 +1373,282 @@ app.get('/api/admin/analytics/top-companies', requireAdmin, async (req, res) => 
   }
 });
 
+// ===== ADMIN REVENUE & PAYMENT ANALYTICS ENDPOINTS =====
+
+// Get revenue summary statistics
+app.get('/api/admin/revenue/summary', requireAdmin, async (req, res) => {
+  try {
+    const { dateRange } = req.query; // 7, 30, 90, 365, or 'all'
+
+    let dateFilter = '';
+    if (dateRange && dateRange !== 'all') {
+      const daysAgo = parseInt(dateRange as string);
+      dateFilter = `created_at >= NOW() - INTERVAL '${daysAgo} days'`;
+    }
+
+    // Get all transactions
+    let query = supabase
+      .from('balance_transactions')
+      .select('amount, type, created_at, stripe_payment_intent_id');
+
+    if (dateFilter) {
+      const daysAgo = parseInt(dateRange as string);
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - daysAgo);
+      query = query.gte('created_at', cutoffDate.toISOString());
+    }
+
+    const { data: transactions, error } = await query;
+
+    if (error) throw error;
+
+    // Calculate total revenue
+    const totalRevenue = transactions?.reduce((sum, tx) => {
+      // Only count positive amounts (purchases, not deductions)
+      return tx.amount > 0 ? sum + tx.amount : sum;
+    }, 0) || 0;
+
+    // Calculate this month's revenue
+    const now = new Date();
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const thisMonthRevenue = transactions?.filter(tx =>
+      new Date(tx.created_at) >= firstDayOfMonth && tx.amount > 0
+    ).reduce((sum, tx) => sum + tx.amount, 0) || 0;
+
+    // Calculate last month's revenue for percentage change
+    const firstDayOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastDayOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    const lastMonthRevenue = transactions?.filter(tx => {
+      const txDate = new Date(tx.created_at);
+      return txDate >= firstDayOfLastMonth && txDate <= lastDayOfLastMonth && tx.amount > 0;
+    }).reduce((sum, tx) => sum + tx.amount, 0) || 0;
+
+    const monthlyGrowth = lastMonthRevenue > 0
+      ? ((thisMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100
+      : 0;
+
+    // Calculate average transaction
+    const positiveTransactions = transactions?.filter(tx => tx.amount > 0) || [];
+    const averageTransaction = positiveTransactions.length > 0
+      ? totalRevenue / positiveTransactions.length
+      : 0;
+
+    // Count failed payments (transactions without payment intent ID or $0 amount)
+    const failedPayments = transactions?.filter(tx =>
+      !tx.stripe_payment_intent_id && tx.amount === 0
+    ).length || 0;
+
+    res.json({
+      success: true,
+      stats: {
+        totalRevenue: Math.round(totalRevenue),
+        monthlyRevenue: Math.round(thisMonthRevenue),
+        monthlyGrowth: Math.round(monthlyGrowth * 10) / 10,
+        averageTransaction: Math.round(averageTransaction),
+        failedPayments,
+        transactionCount: positiveTransactions.length
+      }
+    });
+  } catch (error: any) {
+    console.error('Revenue summary error:', error);
+    res.status(500).json({ error: 'Failed to fetch revenue summary' });
+  }
+});
+
+// Get detailed transaction history with company and user info
+app.get('/api/admin/revenue/transactions', requireAdmin, async (req, res) => {
+  try {
+    const { dateRange, limit = '100' } = req.query;
+
+    let query = supabase
+      .from('balance_transactions')
+      .select(`
+        id,
+        amount,
+        type,
+        description,
+        stripe_payment_intent_id,
+        stripe_customer_id,
+        created_at,
+        company_id,
+        companies!inner (
+          id,
+          company_name,
+          email
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(parseInt(limit as string));
+
+    if (dateRange && dateRange !== 'all') {
+      const daysAgo = parseInt(dateRange as string);
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - daysAgo);
+      query = query.gte('created_at', cutoffDate.toISOString());
+    }
+
+    const { data: transactions, error } = await query;
+
+    if (error) throw error;
+
+    // For each transaction, try to get the user who made it
+    const enrichedTransactions = await Promise.all(
+      (transactions || []).map(async (tx) => {
+        // Try to find the user from the company who made this transaction
+        // by checking team_members for the company
+        const { data: teamMembers } = await supabase
+          .from('team_members')
+          .select(`
+            user_id,
+            user_profiles!inner (
+              first_name,
+              last_name,
+              email
+            )
+          `)
+          .eq('company_id', tx.company_id)
+          .eq('member_number', 1) // Get the primary member
+          .single();
+
+        return {
+          id: tx.id,
+          company_name: tx.companies.company_name,
+          company_email: tx.companies.email,
+          amount: tx.amount,
+          type: tx.type,
+          description: tx.description,
+          status: tx.stripe_payment_intent_id ? 'completed' : 'pending',
+          payment_method: tx.stripe_customer_id ? 'stripe' : 'manual',
+          confirmation_id: tx.stripe_payment_intent_id,
+          created_at: tx.created_at,
+          user_name: teamMembers?.user_profiles
+            ? `${teamMembers.user_profiles.first_name} ${teamMembers.user_profiles.last_name}`
+            : 'Unknown',
+          user_email: teamMembers?.user_profiles?.email || tx.companies.email
+        };
+      })
+    );
+
+    res.json({
+      success: true,
+      transactions: enrichedTransactions
+    });
+  } catch (error: any) {
+    console.error('Transactions fetch error:', error);
+    res.status(500).json({ error: 'Failed to fetch transactions' });
+  }
+});
+
+// Get revenue breakdown by company
+app.get('/api/admin/revenue/by-company', requireAdmin, async (req, res) => {
+  try {
+    const { data: transactions, error } = await supabase
+      .from('balance_transactions')
+      .select(`
+        amount,
+        company_id,
+        companies!inner (
+          company_name,
+          email
+        )
+      `)
+      .gt('amount', 0);
+
+    if (error) throw error;
+
+    // Group by company
+    const companyRevenue: Record<string, {
+      company_name: string;
+      email: string;
+      total: number;
+      count: number;
+    }> = {};
+
+    transactions?.forEach(tx => {
+      if (!companyRevenue[tx.company_id]) {
+        companyRevenue[tx.company_id] = {
+          company_name: tx.companies.company_name,
+          email: tx.companies.email,
+          total: 0,
+          count: 0
+        };
+      }
+      companyRevenue[tx.company_id].total += tx.amount;
+      companyRevenue[tx.company_id].count += 1;
+    });
+
+    // Convert to array and sort by revenue
+    const sortedCompanies = Object.entries(companyRevenue)
+      .map(([companyId, data]) => ({
+        company_id: companyId,
+        ...data,
+        average: Math.round(data.total / data.count)
+      }))
+      .sort((a, b) => b.total - a.total);
+
+    res.json({
+      success: true,
+      companies: sortedCompanies
+    });
+  } catch (error: any) {
+    console.error('Revenue by company error:', error);
+    res.status(500).json({ error: 'Failed to fetch revenue by company' });
+  }
+});
+
+// Get revenue breakdown by time period
+app.get('/api/admin/revenue/by-time', requireAdmin, async (req, res) => {
+  try {
+    const { period = 'day', days = '30' } = req.query; // period: 'day', 'week', 'month'
+
+    const daysAgo = parseInt(days as string);
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysAgo);
+
+    const { data: transactions, error } = await supabase
+      .from('balance_transactions')
+      .select('amount, created_at')
+      .gte('created_at', cutoffDate.toISOString())
+      .gt('amount', 0)
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+
+    // Group by time period
+    const periodMap: Record<string, number> = {};
+
+    transactions?.forEach(tx => {
+      const date = new Date(tx.created_at);
+      let key: string;
+
+      if (period === 'day') {
+        key = date.toISOString().split('T')[0]; // YYYY-MM-DD
+      } else if (period === 'week') {
+        const weekStart = new Date(date);
+        weekStart.setDate(date.getDate() - date.getDay());
+        key = weekStart.toISOString().split('T')[0];
+      } else { // month
+        key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      }
+
+      periodMap[key] = (periodMap[key] || 0) + tx.amount;
+    });
+
+    const chartData = Object.entries(periodMap).map(([date, revenue]) => ({
+      date,
+      revenue: Math.round(revenue)
+    }));
+
+    res.json({
+      success: true,
+      data: chartData
+    });
+  } catch (error: any) {
+    console.error('Revenue by time error:', error);
+    res.status(500).json({ error: 'Failed to fetch revenue by time' });
+  }
+});
+
 // ===== ADMIN DATA MANAGEMENT ENDPOINTS =====
 
 // Companies/Partners - View all registered companies with their unlock history
@@ -1884,19 +2162,54 @@ app.post('/api/admin/upload-image', requireAdmin, async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields: file, bucket, path' });
     }
 
+    console.log(`📤 Uploading image to bucket: ${bucket}, path: ${path}`);
+
+    // Check if bucket exists, create if it doesn't
+    const { data: buckets, error: listError } = await supabaseAdmin.storage.listBuckets();
+    if (listError) {
+      console.error('❌ Error listing buckets:', listError);
+      throw listError;
+    }
+
+    const bucketExists = buckets.some((b: any) => b.name === bucket);
+    if (!bucketExists) {
+      console.log(`📦 Creating bucket: ${bucket}`);
+      const { error: createError } = await supabaseAdmin.storage.createBucket(bucket, {
+        public: true,
+        fileSizeLimit: 5242880 // 5MB
+      });
+      if (createError) {
+        console.error('❌ Error creating bucket:', createError);
+        throw createError;
+      }
+      console.log(`✅ Bucket created: ${bucket}`);
+    }
+
     // Convert base64 to buffer
     const base64Data = file.split(',')[1];
+    if (!base64Data) {
+      throw new Error('Invalid base64 file data');
+    }
     const buffer = Buffer.from(base64Data, 'base64');
+
+    // Extract content type from base64 string
+    const contentTypeMatch = file.match(/data:([^;]+);/);
+    const contentType = contentTypeMatch ? contentTypeMatch[1] : 'application/octet-stream';
+
+    console.log(`📁 File size: ${buffer.length} bytes, type: ${contentType}`);
 
     // Use admin client for file uploads
     const { data, error } = await supabaseAdmin.storage
       .from(bucket)
       .upload(path, buffer, {
-        contentType: file.split(';')[0].split(':')[1],
+        contentType,
         upsert: true
       });
 
-    if (error) throw error;
+    if (error) {
+      console.error('❌ Upload error:', error);
+      throw error;
+    }
 
     // Get public URL
     const { data: { publicUrl } } = supabaseAdmin.storage
@@ -1906,8 +2219,12 @@ app.post('/api/admin/upload-image', requireAdmin, async (req, res) => {
     console.log(`✅ Uploaded image: ${path} → ${publicUrl}`);
     res.json({ success: true, url: publicUrl, data });
   } catch (error: any) {
-    console.error('Error uploading image:', error);
-    res.status(500).json({ error: error.message });
+    console.error('❌ Error uploading image:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Upload failed',
+      details: error
+    });
   }
 });
 

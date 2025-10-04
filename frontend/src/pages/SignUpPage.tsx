@@ -125,7 +125,23 @@ const SignUpPage = () => {
         return;
       }
 
-      // 4. Initialize account balance (with $50 starting balance)
+      // 4. Create team member #1 (the founder/admin)
+      const { error: teamMemberError } = await supabase
+        .from('team_members')
+        .insert({
+          company_id: company.id,
+          user_id: authData.user.id,
+          member_number: 1,
+          role: 'admin',
+          status: 'active',
+        });
+
+      if (teamMemberError) {
+        console.error('Team member creation error:', teamMemberError);
+        // Don't fail signup if team member creation fails
+      }
+
+      // 5. Initialize account balance (with $50 starting balance)
       const { error: balanceError } = await supabase
         .from('account_balance')
         .insert({
@@ -140,7 +156,7 @@ const SignUpPage = () => {
         // Don't fail signup if balance init fails - can be fixed later
       }
 
-      // 5. Auto-unlock a five-star chapter as a welcome gift (disabled for now)
+      // 6. Auto-unlock a five-star chapter as a welcome gift (disabled for now)
       // TODO: Re-enable once chapter_unlocks table is properly configured
       // try {
       //   const { data: fiveStarChapters, error: chapterError } = await supabase
@@ -167,7 +183,7 @@ const SignUpPage = () => {
       //   console.error('Failed to unlock five-star chapter:', error);
       // }
 
-      // 6. Auto-login after successful signup
+      // 7. Auto-login after successful signup
       console.log('Auth data from signup:', authData);
 
       // Check if we have a session

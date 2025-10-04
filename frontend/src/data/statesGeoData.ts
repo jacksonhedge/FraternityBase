@@ -202,7 +202,7 @@ export const COLLEGE_LOCATIONS = {
   "University of California, Berkeley (CA)": { lat: 36.733, lng: -118.9623, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
   "University of California, Davis (CA)": { lat: 35.4026, lng: -119.1939, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
   "University of California, Irvine (CA)": { lat: 35.4145, lng: -120.229, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
-  "University of California, Los Angeles (CA)": { lat: 36.9971, lng: -119.9728, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
+  "University of California, Los Angeles (CA)": { lat: 36.9971, lng: -119.9728, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "BIG 10", division: "D1" },
   "University of California, Riverside (CA)": { lat: 35.1362, lng: -119.167, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
   "University of California, San Diego (CA)": { lat: 37.0115, lng: -119.5517, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
   "University of California, Santa Barbara (CA)": { lat: 36.8194, lng: -118.7313, state: "CA", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },

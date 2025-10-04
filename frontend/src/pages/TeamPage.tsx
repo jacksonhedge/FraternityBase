@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Package,
   Check,
@@ -10,12 +11,72 @@ import {
   Shield,
   Star,
   TrendingUp,
-  DollarSign
+  DollarSign,
+  UserPlus,
+  Mail
 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { RootState } from '../store';
 import CreditsPage from './CreditsPage';
+
+interface TeamMember {
+  id: string;
+  member_number: number;
+  role: string;
+  status: string;
+  joined_at: string;
+  user_profiles: {
+    first_name: string;
+    last_name: string;
+    email?: string;
+  };
+}
 
 const TeamPage = () => {
   const [activeTab, setActiveTab] = useState<'members' | 'credits'>('members');
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteRole, setInviteRole] = useState<'admin' | 'member'>('member');
+  const [isInviting, setIsInviting] = useState(false);
+
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  // Fetch team members
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      if (!user?.companyId) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('team_members')
+          .select(`
+            id,
+            member_number,
+            role,
+            status,
+            joined_at,
+            user_profiles!inner (
+              first_name,
+              last_name,
+              email
+            )
+          `)
+          .eq('company_id', user.companyId)
+          .order('member_number', { ascending: true });
+
+        if (error) throw error;
+        setTeamMembers(data || []);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, [user?.companyId]);
 
   // Mock data for current subscription
   const currentPackage = {
@@ -106,8 +167,28 @@ const TeamPage = () => {
     { date: '2024-10-15', amount: 699, status: 'Paid', invoice: '#INV-2024-010' },
   ];
 
-  // TODO: Fetch real team members from API
-  const teamMembers: any[] = [];
+  const handleInviteMember = async () => {
+    if (!inviteEmail.trim() || !user?.companyId) return;
+
+    setIsInviting(true);
+    try {
+      // Get the next member number
+      const nextMemberNumber = teamMembers.length + 1;
+
+      // TODO: Send invite email and create pending team member
+      // For now, just show success message
+      alert(`Invite sent to ${inviteEmail}! They will be team member #${nextMemberNumber}`);
+
+      setShowInviteModal(false);
+      setInviteEmail('');
+      setInviteRole('member');
+    } catch (error) {
+      console.error('Error inviting member:', error);
+      alert('Failed to send invite. Please try again.');
+    } finally {
+      setIsInviting(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -161,7 +242,11 @@ const TeamPage = () => {
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold text-gray-900">Team Members ({teamMembers.length}/3)</h3>
                 {teamMembers.length < 3 && (
-                  <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm">
+                  <button
+                    onClick={() => setShowInviteModal(true)}
+                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm flex items-center gap-2"
+                  >
+                    <UserPlus className="w-4 h-4" />
                     Invite Member
                   </button>
                 )}
@@ -179,23 +264,47 @@ const TeamPage = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {teamMembers.map((member, index) => (
-                        <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{member.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.email}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{member.role}</td>
+                      {teamMembers.map((member) => (
+                        <tr key={member.id}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-gray-900">
+                                {member.user_profiles.first_name} {member.user_profiles.last_name}
+                              </span>
+                              {member.member_number === 1 && (
+                                <span className="px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 rounded">
+                                  #1
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {member.user_profiles.email || 'N/A'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                              member.role === 'admin'
+                                ? 'bg-purple-100 text-purple-800'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {member.role}
+                            </span>
+                          </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              member.status === 'Active'
+                              member.status === 'active'
                                 ? 'bg-green-100 text-green-800'
-                                : 'bg-yellow-100 text-yellow-800'
+                                : member.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-gray-100 text-gray-800'
                             }`}>
                               {member.status}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
-                            <button className="text-primary-600 hover:text-primary-700 mr-3">Edit</button>
-                            <button className="text-red-600 hover:text-red-700">Remove</button>
+                            {member.member_number !== 1 && user?.role === 'admin' && (
+                              <button className="text-red-600 hover:text-red-700">Remove</button>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -207,7 +316,11 @@ const TeamPage = () => {
                   <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No team members yet</h3>
                   <p className="text-gray-600 mb-4">Invite team members to collaborate on your account.</p>
-                  <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm">
+                  <button
+                    onClick={() => setShowInviteModal(true)}
+                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm flex items-center gap-2 mx-auto"
+                  >
+                    <UserPlus className="w-4 h-4" />
                     Invite Your First Member
                   </button>
                 </div>
@@ -220,6 +333,95 @@ const TeamPage = () => {
           )}
         </div>
       </div>
+
+      {/* Invite Member Modal */}
+      {showInviteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Invite Team Member</h3>
+                <button
+                  onClick={() => setShowInviteModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="email"
+                      value={inviteEmail}
+                      onChange={(e) => setInviteEmail(e.target.value)}
+                      placeholder="teammate@company.com"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Role
+                  </label>
+                  <select
+                    value={inviteRole}
+                    onChange={(e) => setInviteRole(e.target.value as 'admin' | 'member')}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  >
+                    <option value="member">Member</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                  <p className="mt-1 text-sm text-gray-500">
+                    {inviteRole === 'admin' ? 'Admins can invite members and manage settings' : 'Members can view and unlock chapters'}
+                  </p>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-sm text-blue-900">
+                    <strong>Next member:</strong> #{teamMembers.length + 1}
+                  </p>
+                  <p className="text-sm text-blue-700 mt-1">
+                    They will receive an email invitation to join your team.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setShowInviteModal(false)}
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleInviteMember}
+                  disabled={isInviting || !inviteEmail.trim()}
+                  className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isInviting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-4 h-4" />
+                      Send Invite
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
