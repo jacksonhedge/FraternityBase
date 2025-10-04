@@ -38,10 +38,10 @@ const PendingApprovalPage = () => {
         setUserName(`${profile.first_name} ${profile.last_name}`);
 
         if (profile.companies) {
-          setCompanyName(profile.companies.name);
+          setCompanyName((profile.companies as any).name);
 
           // If approved, redirect to dashboard
-          if (profile.companies.approval_status === 'approved') {
+          if ((profile.companies as any).approval_status === 'approved') {
             navigate('/app/dashboard');
           }
         }
@@ -59,7 +59,6 @@ const PendingApprovalPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
 
       <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
@@ -93,7 +92,7 @@ const PendingApprovalPage = () => {
                 <div className="flex items-start gap-3">
                   <Mail className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-gray-700">
-                    You'll receive an email at <span className="font-medium">{currentUser.email}</span> once approved
+                    You'll receive an email at <span className="font-medium">{userEmail}</span> once approved
                   </p>
                 </div>
                 <div className="flex items-start gap-3">

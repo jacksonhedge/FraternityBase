@@ -57,8 +57,8 @@ const Layout = () => {
           .eq('user_id', user.id)
           .single();
 
-        if (profile?.companies?.approval_status) {
-          setApprovalStatus(profile.companies.approval_status);
+        if ((profile?.companies as any)?.approval_status) {
+          setApprovalStatus((profile.companies as any).approval_status);
         }
       }
     };
