@@ -1633,7 +1633,7 @@ const AdminPageV4 = () => {
       )}
 
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'users' || activeTab === 'waitlist') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
