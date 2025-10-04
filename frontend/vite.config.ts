@@ -6,5 +6,10 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ['animejs']
+  },
+  build: {
+    commonjsOptions: {
+      include: [/animejs/, /node_modules/]
+    }
   }
 })

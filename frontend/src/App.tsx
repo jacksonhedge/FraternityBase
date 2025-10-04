@@ -1,9 +1,12 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
+import { useEffect, useRef } from 'react';
+import { animate, set } from 'animejs';
+import { DURATIONS, EASINGS, shouldAnimate } from './animations/constants';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -47,20 +50,40 @@ import MyAmbassadorsPage from './pages/MyAmbassadorsPage';
 import OutreachPage from './pages/OutreachPage';
 import BarsPage from './pages/BarsPage';
 
-function App() {
-  console.log('🧢 FraternityBase App loaded - Routes available: /, /signup, /pricing, /login - v3');
+// Animated wrapper for all routes
+function AnimatedRoutes() {
+  const location = useLocation();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const previousLocation = useRef(location.pathname);
 
-  // Add a loading check
-  if (!store) {
-    return <div style={{ padding: '20px', background: '#000', color: '#fff' }}>Loading Store...</div>;
-  }
+  useEffect(() => {
+    if (!containerRef.current || !shouldAnimate()) return;
+    if (previousLocation.current === location.pathname) return;
+
+    const container = containerRef.current;
+
+    // Set initial state
+    set(container, {
+      opacity: 0,
+      translateY: 20,
+    });
+
+    // Animate in
+    animate(container, {
+      opacity: [0, 1],
+      translateY: [20, 0],
+      duration: DURATIONS.normal,
+      ease: EASINGS.easeOut,
+    });
+
+    previousLocation.current = location.pathname;
+  }, [location.pathname]);
 
   return (
-    <Provider store={store}>
-      <Router>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
+    <div ref={containerRef} style={{ willChange: shouldAnimate() ? 'transform, opacity' : 'auto' }}>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/signup" element={<SignUpPage />} />
@@ -103,6 +126,22 @@ function App() {
             <Route path="credits" element={<CreditsPage />} />
           </Route>
         </Routes>
+      </div>
+    );
+}
+
+function App() {
+  console.log('🧢 FraternityBase App loaded - Routes available: /, /signup, /pricing, /login - v3');
+
+  // Add a loading check
+  if (!store) {
+    return <div style={{ padding: '20px', background: '#000', color: '#fff' }}>Loading Store...</div>;
+  }
+
+  return (
+    <Provider store={store}>
+      <Router>
+        <AnimatedRoutes />
       </Router>
     </Provider>
   );
