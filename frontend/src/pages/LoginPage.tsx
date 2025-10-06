@@ -76,6 +76,9 @@ const LoginPage = () => {
         return;
       }
 
+      // Store token in localStorage for API calls
+      localStorage.setItem('token', authData.session.access_token);
+
       // Dispatch to Redux with real user data
       dispatch(loginSuccess({
         user: {
@@ -90,11 +93,10 @@ const LoginPage = () => {
         token: authData.session.access_token
       }));
 
-      // Store token in localStorage for API calls
-      localStorage.setItem('token', authData.session.access_token);
-
-      // Navigate to dashboard
-      navigate('/app/dashboard');
+      // Wait a tick for Redux state to update before navigating
+      setTimeout(() => {
+        navigate('/app/dashboard');
+      }, 0);
     } catch (error: any) {
       console.error('Unexpected login error:', error);
       setError('An unexpected error occurred. Please try again.');
