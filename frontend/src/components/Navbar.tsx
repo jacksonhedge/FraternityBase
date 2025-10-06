@@ -15,7 +15,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand */}
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-3xl">🧢</span>
+            <img src="/cap-logo.svg" alt="FraternityBase" className="w-10 h-10" />
             <div className="flex flex-col -space-y-1">
               <span className="text-2xl font-bold text-blue-600" style={{ fontFamily: 'cursive', letterSpacing: '-0.5px' }}>Fraternity</span>
               <span className="text-2xl font-bold text-blue-600 pl-8" style={{ fontFamily: 'cursive', letterSpacing: '-0.5px' }}>Base</span>

@@ -7,6 +7,8 @@ import AdminRoute from './components/AdminRoute';
 import { useEffect, useRef } from 'react';
 import { animate, set } from 'animejs';
 import { DURATIONS, EASINGS, shouldAnimate } from './animations/constants';
+import { useActivityTracking } from './hooks/useActivityTracking';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -49,12 +51,33 @@ import MyUnlockedPage from './pages/MyUnlockedPage';
 import MyAmbassadorsPage from './pages/MyAmbassadorsPage';
 import OutreachPage from './pages/OutreachPage';
 import BarsPage from './pages/BarsPage';
+import ProductRoadmapPage from './pages/ProductRoadmapPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const previousLocation = useRef(location.pathname);
+
+  // Initialize activity tracking (logs page views automatically)
+  const { trackClick } = useActivityTracking();
+
+  // Global click tracking
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      // Only track specific elements with data-track attribute or important elements
+      const trackableElement = target.closest('[data-track], button, a, [role="button"]');
+
+      if (trackableElement && trackableElement instanceof HTMLElement) {
+        trackClick(trackableElement);
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [trackClick]);
 
   useEffect(() => {
     if (!containerRef.current || !shouldAnimate()) return;
@@ -124,6 +147,7 @@ function AnimatedRoutes() {
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="credits" element={<CreditsPage />} />
+            <Route path="roadmap" element={<ProductRoadmapPage />} />
           </Route>
         </Routes>
       </div>
@@ -139,11 +163,13 @@ function App() {
   }
 
   return (
-    <Provider store={store}>
-      <Router>
-        <AnimatedRoutes />
-      </Router>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <Router>
+          <AnimatedRoutes />
+        </Router>
+      </Provider>
+    </ErrorBoundary>
   );
 }
 

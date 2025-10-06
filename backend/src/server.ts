@@ -8,6 +8,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import multer from 'multer';
 import { parse } from 'csv-parse/sync';
 import creditsRouter from './routes/credits';
+import activityTrackingRouter from './routes/activityTracking';
 
 dotenv.config();
 
@@ -61,6 +62,11 @@ app.use(cors({
   ],
   credentials: true
 }));
+
+// Stripe webhook needs raw body for signature verification
+app.use('/api/credits/webhook', express.raw({ type: 'application/json' }));
+
+// JSON parsing for all other routes
 app.use(express.json());
 
 // Credits balance endpoint - must come BEFORE router mount to override deprecated endpoint
@@ -208,6 +214,7 @@ app.get('/api/user/profile', async (req, res) => {
 
 // Mount credits router
 app.use('/api/credits', creditsRouter);
+app.use('/api/activity', activityTrackingRouter);
 
 // Admin authentication middleware (temporarily disabled for debugging)
 const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -289,14 +296,20 @@ app.post('/api/credits/checkout', async (req, res) => {
 });
 
 app.post('/api/credits/webhook', async (req, res) => {
+  console.log('🎣 Webhook received from Stripe');
   const sig = req.headers['stripe-signature'];
-  if (!sig) return res.status(400).send('No signature');
+  if (!sig) {
+    console.log('❌ No Stripe signature found');
+    return res.status(400).send('No signature');
+  }
 
   try {
     const s = getStripe();
     if (!s) throw new Error('Stripe not initialized');
 
+    // req.body is a Buffer when using express.raw()
     const event = s.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET || '');
+    console.log(`📦 Stripe event received: ${event.type}`);
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as any;
@@ -402,7 +415,7 @@ app.get('/api/chapters/unlocked', async (req, res) => {
           member_count,
           greek_organizations (
             name,
-            abbreviation
+            greek_letters
           ),
           universities (
             name,
@@ -1661,9 +1674,10 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
 
     if (error) throw error;
 
-    // For each company, fetch their unlock history
+    // For each company, fetch their unlock history and user email
     const companiesWithUnlocks = await Promise.all(
       (companies || []).map(async (company) => {
+        // Get unlocks
         const { data: unlocks } = await supabase
           .from('chapter_unlocks')
           .select(`
@@ -1677,8 +1691,24 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
           .eq('company_id', company.id)
           .order('unlocked_at', { ascending: false });
 
+        // Get user email from user_profiles
+        const { data: userProfile } = await supabase
+          .from('user_profiles')
+          .select('user_id')
+          .eq('company_id', company.id)
+          .limit(1)
+          .single();
+
+        let email = null;
+        if (userProfile) {
+          const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(userProfile.user_id);
+          email = authUser?.user?.email || null;
+        }
+
         return {
           ...company,
+          company_name: company.name, // Map 'name' to 'company_name' for frontend
+          email: email,
           unlocks: unlocks || [],
           total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0
         };
@@ -1688,6 +1718,125 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
     res.json({ success: true, data: companiesWithUnlocks });
   } catch (error: any) {
     console.error('Error fetching companies:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get detailed company information with users (admin only)
+app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Get company details
+    const { data: company, error: companyError } = await supabase
+      .from('companies')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (companyError || !company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    // Get all users for this company (up to 3)
+    const { data: userProfiles, error: profilesError } = await supabase
+      .from('user_profiles')
+      .select('user_id, role, created_at')
+      .eq('company_id', id)
+      .limit(3);
+
+    // Fetch user emails from auth
+    const users = await Promise.all(
+      (userProfiles || []).map(async (profile) => {
+        const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(profile.user_id);
+        return {
+          user_id: profile.user_id,
+          email: authUser?.user?.email || null,
+          role: profile.role || 'member',
+          created_at: profile.created_at
+        };
+      })
+    );
+
+    // Get unlock history
+    const { data: unlocks } = await supabase
+      .from('chapter_unlocks')
+      .select(`
+        *,
+        chapters(
+          chapter_name,
+          greek_organizations(name),
+          universities(name, state)
+        )
+      `)
+      .eq('company_id', id)
+      .order('unlocked_at', { ascending: false });
+
+    // Get balance transaction history
+    const { data: transactions } = await supabase
+      .from('balance_transactions')
+      .select('*')
+      .eq('company_id', id)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    res.json({
+      success: true,
+      data: {
+        ...company,
+        company_name: company.name,
+        users: users || [],
+        unlocks: unlocks || [],
+        transactions: transactions || [],
+        total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0
+      }
+    });
+  } catch (error: any) {
+    console.error('Error fetching company details:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Add credits to a company (admin only)
+app.post('/api/admin/companies/:id/add-credits', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { credits } = req.body;
+
+    if (!credits || isNaN(credits) || credits <= 0) {
+      return res.status(400).json({ error: 'Invalid credit amount' });
+    }
+
+    // Get current company
+    const { data: company, error: fetchError } = await supabase
+      .from('companies')
+      .select('name, credits_balance')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    // Add credits using the stored procedure
+    const { data, error } = await supabase.rpc('add_credits', {
+      p_company_id: id,
+      p_amount: credits,
+      p_description: `Admin added ${credits} credits`,
+      p_reference_id: `admin_add_${Date.now()}`,
+      p_reference_type: 'admin_credit'
+    });
+
+    if (error) throw error;
+
+    console.log(`✅ Admin added ${credits} credits to ${company.company_name} (${id})`);
+    res.json({
+      success: true,
+      message: `Added ${credits} credits to ${company.company_name}`,
+      new_balance: (company.credits_balance || 0) + credits
+    });
+  } catch (error: any) {
+    console.error('Error adding credits:', error);
     res.status(500).json({ error: error.message });
   }
 });
