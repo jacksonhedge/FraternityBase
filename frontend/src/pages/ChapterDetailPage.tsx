@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../store/store';
 import {
   ArrowLeft,
   Users,
@@ -23,6 +25,7 @@ import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const ChapterDetailPage = () => {
   const { id } = useParams();
+  const { user } = useSelector((state: RootState) => state.auth);
   const [selectedYear, setSelectedYear] = useState('2025-2026');
 
   // Credit unlock system
@@ -34,6 +37,16 @@ const ChapterDetailPage = () => {
   const [chapterData, setChapterData] = useState<any>(null);
   const [members, setMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Introduction request form
+  const [introFormData, setIntroFormData] = useState({
+    name: user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : '',
+    email: user?.email || '',
+    message: '',
+    preferredContactMethod: 'Email'
+  });
+  const [isSubmittingIntro, setIsSubmittingIntro] = useState(false);
+  const [introSubmitted, setIntroSubmitted] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
   const token = localStorage.getItem('token');
@@ -605,60 +618,119 @@ const ChapterDetailPage = () => {
 
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-3">📝 Introduction Request Form</h3>
-                <form className="space-y-4" onSubmit={(e) => {
-                  e.preventDefault();
-                  alert('Introduction request submitted! Our team will reach out to facilitate the connection within 24 hours.');
-                }}>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Your Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      placeholder="John Smith"
-                    />
+                {introSubmitted ? (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                    <div className="text-green-600 text-4xl mb-3">✅</div>
+                    <h4 className="font-semibold text-green-900 mb-2">Request Submitted!</h4>
+                    <p className="text-sm text-green-800">
+                      Our team will reach out to facilitate the connection within 24-48 hours.
+                    </p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Your Email *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      placeholder="john@company.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Partnership Proposal *
-                    </label>
-                    <textarea
-                      required
-                      rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      placeholder="Briefly describe your partnership opportunity, what you're offering, and what you're looking for..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Preferred Contact Method
-                    </label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                      <option>Email</option>
-                      <option>Phone</option>
-                      <option>Both</option>
-                    </select>
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Submit Introduction Request
-                  </button>
-                </form>
+                ) : (
+                  <form className="space-y-4" onSubmit={async (e) => {
+                    e.preventDefault();
+                    if (!user?.companyId || !id) return;
+
+                    setIsSubmittingIntro(true);
+                    try {
+                      const response = await fetch(`${API_URL}/credits/warm-intro/request`, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                          companyId: user.companyId,
+                          chapterId: id,
+                          message: introFormData.message,
+                          preferredContactMethod: introFormData.preferredContactMethod,
+                          urgency: 'normal'
+                        })
+                      });
+
+                      const data = await response.json();
+
+                      if (!response.ok) {
+                        if (response.status === 402) {
+                          alert(`Insufficient balance. You need $${data.required} but only have $${data.available}.`);
+                        } else {
+                          alert(data.error || 'Failed to submit request');
+                        }
+                        return;
+                      }
+
+                      // Success!
+                      setIntroSubmitted(true);
+                      setBalance(balance - 59.99); // Update local balance
+                    } catch (error) {
+                      console.error('Error submitting intro request:', error);
+                      alert('Failed to submit request. Please try again.');
+                    } finally {
+                      setIsSubmittingIntro(false);
+                    }
+                  }}>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Your Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={introFormData.name}
+                        onChange={(e) => setIntroFormData({...introFormData, name: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="John Smith"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Your Email *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={introFormData.email}
+                        onChange={(e) => setIntroFormData({...introFormData, email: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="john@company.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Partnership Proposal *
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        value={introFormData.message}
+                        onChange={(e) => setIntroFormData({...introFormData, message: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="Briefly describe your partnership opportunity, what you're offering, and what you're looking for..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Preferred Contact Method
+                      </label>
+                      <select
+                        value={introFormData.preferredContactMethod}
+                        onChange={(e) => setIntroFormData({...introFormData, preferredContactMethod: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      >
+                        <option>Email</option>
+                        <option>Phone</option>
+                        <option>Both</option>
+                      </select>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingIntro}
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmittingIntro ? 'Submitting...' : 'Submit Introduction Request'}
+                    </button>
+                  </form>
+                )}
                 <p className="text-xs text-gray-600 mt-4">
                   💡 Our team typically responds within 24 hours to facilitate the introduction.
                 </p>
