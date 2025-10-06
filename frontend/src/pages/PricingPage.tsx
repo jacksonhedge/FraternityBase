@@ -19,83 +19,82 @@ const PricingPage = () => {
 
   const pricingTiers = [
     {
-      id: 'free',
-      name: 'Free',
+      id: 'trial',
+      name: '3-Day Trial',
       price: 0,
-      description: 'Get started with basic features',
+      description: 'Try FraternityBase risk-free',
       icon: Zap,
-      color: 'from-gray-500 to-gray-600',
-      bgColor: 'from-gray-50 to-gray-100',
+      color: 'from-green-500 to-green-600',
+      bgColor: 'from-green-50 to-green-100',
       features: [
-        '1 Chapter (1 credit)',
-        'Basic organization info',
-        'Limited search filters',
-        'Community support',
-        '14-day trial period'
+        '1 Premium chapter unlocked',
+        'Full platform access',
+        'Browse all 5,000+ chapters',
+        'Advanced search filters',
+        '3 days to explore'
       ],
       limitations: [
-        'No scheduling with orgs'
+        'Limited to 1 unlocked chapter'
       ],
-      buttonText: 'Start Free',
-      buttonStyle: 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200'
+      buttonText: 'Start Free Trial',
+      buttonStyle: 'border-2 border-green-500 text-green-700 hover:bg-green-50 hover:border-green-600 transition-all duration-200'
     },
     {
-      id: 'basic',
-      name: 'Basic',
-      price: billingPeriod === 'monthly' ? 99 : 79,
-      description: 'Perfect for small businesses',
+      id: 'monthly',
+      name: 'Monthly Subscription',
+      price: 29.99,
+      description: 'Full platform access',
       icon: Rocket,
       color: 'from-blue-500 to-blue-600',
       bgColor: 'from-blue-50 to-blue-100',
       features: [
-        '10 Chapters (10 credits/month)',
-        'Schedule with 3 organizations',
-        'Full organization profiles',
-        'Advanced search filters',
-        'Contact information',
-        'Export to CSV'
+        'Unlimited platform access',
+        'Browse all 5,000+ chapters',
+        'Advanced search & filters',
+        'Export data to CSV',
+        'Email support',
+        'Purchase credits as needed'
       ],
       limitations: [
-        'No API access'
+        'Credits sold separately'
       ],
-      buttonText: 'Get Basic',
-      buttonStyle: 'border-2 border-blue-500 text-blue-600 hover:bg-blue-50 hover:border-blue-600 transition-all duration-200'
+      highlighted: true,
+      buttonText: 'Subscribe Now',
+      buttonStyle: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 border-transparent shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
     },
     {
-      id: 'pro',
-      name: 'Pro',
-      price: billingPeriod === 'monthly' ? 699 : 559,
-      description: 'For growing companies',
+      id: 'credits',
+      name: 'Add-On Credits',
+      price: 'Pay as you go',
+      description: 'Unlock individual chapters',
       icon: Crown,
       color: 'from-purple-500 to-purple-600',
       bgColor: 'from-purple-50 to-purple-100',
       features: [
-        '100 Chapters (100 credits/month)',
-        'Schedule with 50 organizations',
-        'Full contact information',
-        'API access (5000 calls/month)',
-        'Advanced analytics & insights',
-        'Priority email & chat support',
-        'Export to Excel, CSV & PDF'
+        'Chapter Unlock: $9.99',
+        'Warm Introduction: $59.99',
+        'Ambassador Referral: $99.99',
+        'Buy credits anytime',
+        'No monthly commitment',
+        'Credits never expire'
       ],
       limitations: [],
-      highlighted: true,
-      buttonText: 'Get Pro',
-      buttonStyle: 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 border-transparent shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+      buttonText: 'Buy Credits',
+      buttonStyle: 'border-2 border-purple-500 text-purple-600 hover:bg-purple-50 hover:border-purple-600 transition-all duration-200'
     },
     {
       id: 'enterprise',
       name: 'Enterprise',
-      price: 'Talk to Sales',
+      price: 'Custom Pricing',
       description: 'For large organizations',
       icon: Building2,
       color: 'from-gray-700 to-gray-800',
       bgColor: 'from-gray-50 to-gray-100',
       features: [
-        'Unlimited Chapters (unlimited credits)',
-        'Unlimited scheduling with orgs',
-        'Unlimited API calls',
-        'Custom integrations & webhooks',
+        'Unlimited chapter unlocks',
+        'Unlimited warm intros',
+        'API access',
+        'Custom integrations',
         'Dedicated account manager',
         'Custom onboarding & training'
       ],

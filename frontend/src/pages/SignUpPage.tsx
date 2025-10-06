@@ -115,7 +115,7 @@ const SignUpPage = () => {
           role: 'admin', // First user is admin
           subscription_tier: 'free_trial',
           trial_lookups_used: 0,
-          trial_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+          trial_expires_at: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
         });
 
       if (profileError) {
@@ -141,14 +141,14 @@ const SignUpPage = () => {
         // Don't fail signup if team member creation fails
       }
 
-      // 5. Initialize account balance (with $50 starting balance)
+      // 5. Initialize account balance (starts at $0 - must purchase credits)
       const { error: balanceError } = await supabase
         .from('account_balance')
         .insert({
           company_id: company.id,
-          balance_dollars: 50.00,
+          balance_dollars: 0.00,
           lifetime_spent_dollars: 0.00,
-          lifetime_added_dollars: 50.00,
+          lifetime_added_dollars: 0.00,
         });
 
       if (balanceError) {
@@ -156,32 +156,32 @@ const SignUpPage = () => {
         // Don't fail signup if balance init fails - can be fixed later
       }
 
-      // 6. Auto-unlock a five-star chapter as a welcome gift (disabled for now)
-      // TODO: Re-enable once chapter_unlocks table is properly configured
-      // try {
-      //   const { data: fiveStarChapters, error: chapterError } = await supabase
-      //     .from('chapters')
-      //     .select('id, chapter_name, universities(name)')
-      //     .eq('five_star_rating', true)
-      //     .limit(10);
-      //
-      //   if (!chapterError && fiveStarChapters && fiveStarChapters.length > 0) {
-      //     const randomChapter = fiveStarChapters[Math.floor(Math.random() * fiveStarChapters.length)];
-      //
-      //     await supabase
-      //       .from('chapter_unlocks')
-      //       .insert({
-      //         company_id: company.id,
-      //         chapter_id: randomChapter.id,
-      //         unlock_type: 'full_contacts',
-      //         credits_spent: 0,
-      //       });
-      //
-      //     console.log(`🎁 Welcome gift: Unlocked ${randomChapter.chapter_name} for free!`);
-      //   }
-      // } catch (error) {
-      //   console.error('Failed to unlock five-star chapter:', error);
-      // }
+      // 6. Auto-unlock a random five-star chapter as part of 3-day trial
+      try {
+        const { data: fiveStarChapters, error: chapterError } = await supabase
+          .from('chapters')
+          .select('id, chapter_name, universities(name)')
+          .eq('five_star_rating', true)
+          .limit(50);
+
+        if (!chapterError && fiveStarChapters && fiveStarChapters.length > 0) {
+          const randomChapter = fiveStarChapters[Math.floor(Math.random() * fiveStarChapters.length)];
+
+          await supabase
+            .from('chapter_unlocks')
+            .insert({
+              company_id: company.id,
+              chapter_id: randomChapter.id,
+              unlock_type: 'full_contacts',
+              credits_spent: 0,
+            });
+
+          console.log('Auto-unlocked trial chapter:', randomChapter.chapter_name);
+        }
+      } catch (unlockError) {
+        console.error('Failed to auto-unlock chapter:', unlockError);
+        // Don't fail signup if auto-unlock fails
+      }
 
       // 7. Auto-login after successful signup
       console.log('Auth data from signup:', authData);
