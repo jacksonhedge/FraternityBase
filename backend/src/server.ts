@@ -9,6 +9,7 @@ import multer from 'multer';
 import { parse } from 'csv-parse/sync';
 import creditsRouter from './routes/credits';
 import activityTrackingRouter from './routes/activityTracking';
+import CreditNotificationService from './services/CreditNotificationService';
 
 dotenv.config();
 
@@ -49,6 +50,27 @@ function getStripe() {
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
 });
+
+// Initialize Credit Notification Service
+let creditNotificationService: CreditNotificationService | null = null;
+function getCreditNotificationService(): CreditNotificationService | null {
+  if (!creditNotificationService && process.env.RESEND_API_KEY) {
+    try {
+      creditNotificationService = new CreditNotificationService(
+        process.env.RESEND_API_KEY,
+        process.env.SUPABASE_URL || '',
+        process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+        process.env.CREDITS_FROM_EMAIL || 'credits@fraternitybase.com',
+        process.env.ADMIN_EMAIL || 'admin@fraternitybase.com'
+      );
+      console.log('✅ Credit Notification Service initialized');
+    } catch (error) {
+      console.error('❌ Failed to initialize Credit Notification Service:', error);
+      return null;
+    }
+  }
+  return creditNotificationService;
+}
 
 // Middleware
 app.use(cors({
@@ -1523,10 +1545,13 @@ app.get('/api/admin/revenue/transactions', requireAdmin, async (req, res) => {
           .eq('member_number', 1) // Get the primary member
           .single();
 
+        const companies = tx.companies as any;
+          const userProfiles = teamMembers?.user_profiles as any;
+
         return {
           id: tx.id,
-          company_name: tx.companies.company_name,
-          company_email: tx.companies.email,
+          company_name: companies.company_name,
+          company_email: companies.email,
           amount: tx.amount,
           type: tx.type,
           description: tx.description,
@@ -1534,10 +1559,10 @@ app.get('/api/admin/revenue/transactions', requireAdmin, async (req, res) => {
           payment_method: tx.stripe_customer_id ? 'stripe' : 'manual',
           confirmation_id: tx.stripe_payment_intent_id,
           created_at: tx.created_at,
-          user_name: teamMembers?.user_profiles
-            ? `${teamMembers.user_profiles.first_name} ${teamMembers.user_profiles.last_name}`
+          user_name: userProfiles
+            ? `${userProfiles.first_name} ${userProfiles.last_name}`
             : 'Unknown',
-          user_email: teamMembers?.user_profiles?.email || tx.companies.email
+          user_email: userProfiles?.email || companies.email
         };
       })
     );
@@ -1578,10 +1603,11 @@ app.get('/api/admin/revenue/by-company', requireAdmin, async (req, res) => {
     }> = {};
 
     transactions?.forEach(tx => {
+      const companies = tx.companies as any;
       if (!companyRevenue[tx.company_id]) {
         companyRevenue[tx.company_id] = {
-          company_name: tx.companies.company_name,
-          email: tx.companies.email,
+          company_name: companies.company_name,
+          email: companies.email,
           total: 0,
           count: 0
         };
@@ -1705,12 +1731,20 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
           email = authUser?.user?.email || null;
         }
 
+        // Get account balance
+        const { data: accountBalance } = await supabaseAdmin
+          .from('account_balance')
+          .select('balance_dollars')
+          .eq('company_id', company.id)
+          .single();
+
         return {
           ...company,
           company_name: company.name, // Map 'name' to 'company_name' for frontend
           email: email,
           unlocks: unlocks || [],
-          total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0
+          total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0,
+          credits_balance: accountBalance?.balance_dollars || 0
         };
       })
     );
@@ -1780,6 +1814,17 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
       .order('created_at', { ascending: false })
       .limit(20);
 
+    // Get account balance (use admin client to bypass RLS)
+    const { data: accountBalance, error: balanceError } = await supabaseAdmin
+      .from('account_balance')
+      .select('balance_dollars, lifetime_spent_dollars, lifetime_added_dollars')
+      .eq('company_id', id)
+      .single();
+
+    console.log('💰 Account balance query for company:', id);
+    console.log('💰 Balance data:', accountBalance);
+    console.log('💰 Balance error:', balanceError);
+
     res.json({
       success: true,
       data: {
@@ -1788,7 +1833,10 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
         users: users || [],
         unlocks: unlocks || [],
         transactions: transactions || [],
-        total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0
+        total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0,
+        credits_balance: accountBalance?.balance_dollars || 0,
+        lifetime_spent: accountBalance?.lifetime_spent_dollars || 0,
+        lifetime_added: accountBalance?.lifetime_added_dollars || 0
       }
     });
   } catch (error: any) {
@@ -1807,10 +1855,10 @@ app.post('/api/admin/companies/:id/add-credits', requireAdmin, async (req, res) 
       return res.status(400).json({ error: 'Invalid credit amount' });
     }
 
-    // Get current company
+    // Get current company and balance BEFORE adding credits
     const { data: company, error: fetchError } = await supabase
       .from('companies')
-      .select('name, credits_balance')
+      .select('name')
       .eq('id', id)
       .single();
 
@@ -1818,25 +1866,91 @@ app.post('/api/admin/companies/:id/add-credits', requireAdmin, async (req, res) 
       return res.status(404).json({ error: 'Company not found' });
     }
 
+    // Get balance before
+    const { data: balanceBefore } = await supabaseAdmin
+      .from('account_balance')
+      .select('balance_dollars')
+      .eq('company_id', id)
+      .single();
+
+    const balanceBeforeAmount = balanceBefore?.balance_dollars || 0;
+
     // Add credits using the stored procedure
-    const { data, error } = await supabase.rpc('add_credits', {
+    const { data, error } = await supabase.rpc('add_balance', {
       p_company_id: id,
       p_amount: credits,
-      p_description: `Admin added ${credits} credits`,
-      p_reference_id: `admin_add_${Date.now()}`,
-      p_reference_type: 'admin_credit'
+      p_transaction_type: 'manual_add',
+      p_description: `Admin added $${credits}`,
+      p_stripe_payment_intent_id: null
     });
 
     if (error) throw error;
 
-    console.log(`✅ Admin added ${credits} credits to ${company.company_name} (${id})`);
+    const balanceAfterAmount = balanceBeforeAmount + credits;
+
+    // Get admin user info
+    const adminUser = (req as any).user;
+    const { data: adminProfile } = await supabase
+      .from('user_profiles')
+      .select('first_name, last_name, email')
+      .eq('user_id', adminUser?.id)
+      .single();
+
+    // Send notification emails
+    const notificationService = getCreditNotificationService();
+    if (notificationService) {
+      notificationService.notifyCreditAdded({
+        companyId: id,
+        companyName: company.name,
+        amount: credits,
+        balanceBefore: balanceBeforeAmount,
+        balanceAfter: balanceAfterAmount,
+        transactionType: 'admin_manual_add',
+        adminEmail: adminProfile?.email,
+        adminName: adminProfile ? `${adminProfile.first_name} ${adminProfile.last_name || ''}`.trim() : undefined,
+        description: `Admin manually added credits`
+      }).catch(err => console.error('Failed to send credit notification:', err));
+    }
+
+    console.log(`✅ Admin added ${credits} credits to ${company.name} (${id})`);
     res.json({
       success: true,
-      message: `Added ${credits} credits to ${company.company_name}`,
-      new_balance: (company.credits_balance || 0) + credits
+      message: `Added ${credits} credits to ${company.name}`,
+      new_balance: balanceAfterAmount
     });
   } catch (error: any) {
     console.error('Error adding credits:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update company status (admin only)
+app.patch('/api/admin/companies/:id/status', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { approval_status } = req.body;
+
+    if (!['pending', 'approved', 'rejected'].includes(approval_status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+
+    const { data, error } = await supabase
+      .from('companies')
+      .update({ approval_status })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Updated company ${id} status to ${approval_status}`);
+    res.json({
+      success: true,
+      message: `Status updated to ${approval_status}`,
+      data
+    });
+  } catch (error: any) {
+    console.error('Error updating company status:', error);
     res.status(500).json({ error: error.message });
   }
 });

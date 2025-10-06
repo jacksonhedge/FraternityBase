@@ -2,12 +2,15 @@ import { Router } from 'express';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { PRICING } from '../config/pricing';
+import CreditNotificationService from '../services/CreditNotificationService';
 
 const router = Router();
 
 // Lazy initialization - these will be created when first accessed
 let stripe: Stripe;
 let supabase: ReturnType<typeof createClient>;
+let supabaseAdmin: ReturnType<typeof createClient>;
+let creditNotificationService: CreditNotificationService | null = null;
 
 function getStripe() {
   if (!stripe) {
@@ -19,7 +22,7 @@ function getStripe() {
   return stripe;
 }
 
-function getSupabase() {
+function getSupabase(): any {
   if (!supabase) {
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
       throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY are required');
@@ -30,6 +33,43 @@ function getSupabase() {
     );
   }
   return supabase;
+}
+
+function getSupabaseAdmin(): any {
+  if (!supabaseAdmin) {
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+    }
+    supabaseAdmin = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+  }
+  return supabaseAdmin;
+}
+
+function getCreditNotificationService(): CreditNotificationService | null {
+  if (!creditNotificationService && process.env.RESEND_API_KEY) {
+    try {
+      creditNotificationService = new CreditNotificationService(
+        process.env.RESEND_API_KEY,
+        process.env.SUPABASE_URL || '',
+        process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+        process.env.CREDITS_FROM_EMAIL || 'credits@fraternitybase.com',
+        process.env.ADMIN_EMAIL || 'admin@fraternitybase.com'
+      );
+    } catch (error) {
+      console.error('Failed to initialize Credit Notification Service:', error);
+      return null;
+    }
+  }
+  return creditNotificationService;
 }
 
 // Note: GET /balance is now handled directly in server.ts before this router is mounted
@@ -187,6 +227,8 @@ router.post('/auto-reload/trigger', async (req, res) => {
     });
 
     if (paymentIntent.status === 'succeeded') {
+      const balanceBeforeAmount = account.balance_dollars;
+
       // Add balance
       const { data: transactionId, error: balanceError } = await getSupabase().rpc('add_balance', {
         p_company_id: companyId,
@@ -201,11 +243,39 @@ router.post('/auto-reload/trigger', async (req, res) => {
         return res.status(500).json({ error: 'Payment succeeded but failed to add balance' });
       }
 
+      const balanceAfterAmount = balanceBeforeAmount + account.auto_reload_amount;
+
       // Update last auto-reload timestamp
       await getSupabase()
         .from('account_balance')
         .update({ last_auto_reload_at: new Date().toISOString() })
         .eq('company_id', companyId);
+
+      // Get company name
+      const { data: company } = await getSupabase()
+        .from('companies')
+        .select('name')
+        .eq('id', companyId)
+        .single();
+
+      // Send notification emails
+      const notificationService = getCreditNotificationService();
+      if (notificationService && company) {
+        notificationService.notifyCreditAdded({
+          companyId,
+          companyName: company.name,
+          amount: account.auto_reload_amount,
+          balanceBefore: balanceBeforeAmount,
+          balanceAfter: balanceAfterAmount,
+          transactionType: 'auto_reload',
+          stripePaymentIntentId: paymentIntent.id,
+          description: `Auto-reload triggered due to low balance`,
+          metadata: {
+            threshold: account.auto_reload_threshold,
+            auto_reload_amount: account.auto_reload_amount
+          }
+        }).catch(err => console.error('Failed to send credit notification:', err));
+      }
 
       res.json({
         message: 'Auto-reload successful',
@@ -323,6 +393,15 @@ router.post('/webhook', async (req, res) => {
       }
 
       try {
+        // Get balance before
+        const { data: balanceBefore } = await getSupabaseAdmin()
+          .from('account_balance')
+          .select('balance_dollars')
+          .eq('company_id', companyId)
+          .single();
+
+        const balanceBeforeAmount = balanceBefore?.balance_dollars || 0;
+
         // Call the add_balance SQL function
         const { data, error } = await getSupabase().rpc('add_balance', {
           p_company_id: companyId,
@@ -338,6 +417,32 @@ router.post('/webhook', async (req, res) => {
           console.error('❌ Failed to add balance:', error);
         } else {
           console.log('✅ Balance added successfully. Transaction ID:', data);
+
+          const balanceAfterAmount = balanceBeforeAmount + amountDollars;
+
+          // Get company name
+          const { data: company } = await getSupabase()
+            .from('companies')
+            .select('name')
+            .eq('id', companyId)
+            .single();
+
+          // Send notification emails
+          const notificationService = getCreditNotificationService();
+          if (notificationService && company) {
+            notificationService.notifyCreditAdded({
+              companyId,
+              companyName: company.name,
+              amount: amountDollars,
+              balanceBefore: balanceBeforeAmount,
+              balanceAfter: balanceAfterAmount,
+              transactionType: 'stripe_purchase',
+              stripePaymentIntentId: typeof session.payment_intent === 'string'
+                ? session.payment_intent
+                : session.payment_intent?.id || undefined,
+              description: `Stripe payment processed`
+            }).catch(err => console.error('Failed to send credit notification:', err));
+          }
 
           // If payment method was saved, update the account_balance record
           if (session.setup_intent || session.payment_intent) {
@@ -502,16 +607,18 @@ router.post('/ambassador/request', async (req, res) => {
       return res.status(404).json({ error: 'Account not found' });
     }
 
-    if (account.balance_dollars < PRICING.AMBASSADOR_REFERRAL) {
+    const accountBalance = account as { balance_dollars: number };
+
+    if (accountBalance.balance_dollars < PRICING.AMBASSADOR_REFERRAL) {
       return res.status(402).json({
         error: 'Insufficient balance',
         required: PRICING.AMBASSADOR_REFERRAL,
-        available: account.balance_dollars
+        available: accountBalance.balance_dollars
       });
     }
 
     // Deduct balance
-    const { data: transactionId, error: deductError } = await getSupabase().rpc('deduct_balance', {
+    const { data: transactionId, error: deductError } = await (getSupabase().rpc as any)('deduct_balance', {
       p_company_id: companyId,
       p_amount: PRICING.AMBASSADOR_REFERRAL,
       p_transaction_type: 'ambassador_referral',
@@ -536,7 +643,7 @@ router.post('/ambassador/request', async (req, res) => {
         amount_paid: PRICING.AMBASSADOR_REFERRAL,
         transaction_id: transactionId,
         status: 'pending'
-      })
+      } as any)
       .select()
       .single();
 
@@ -545,9 +652,11 @@ router.post('/ambassador/request', async (req, res) => {
       return res.status(500).json({ error: 'Failed to create request' });
     }
 
+    const requestData = request as any;
+
     res.json({
       success: true,
-      requestId: request.id,
+      requestId: requestData.id,
       amountPaid: PRICING.AMBASSADOR_REFERRAL,
       status: 'pending',
       message: 'Ambassador referral request submitted. Our team will match you with an ambassador within 48-72 hours.'
