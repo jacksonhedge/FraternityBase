@@ -12,10 +12,9 @@ import { logActivity, logClick, logPageView } from '../utils/activityTracker';
 export const useActivityTracking = () => {
   const location = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { profile } = useSelector((state: RootState) => state.auth);
 
   const userId = user?.id;
-  const companyId = profile?.company_id;
+  const companyId = user?.companyId;
 
   // Log page views
   useEffect(() => {

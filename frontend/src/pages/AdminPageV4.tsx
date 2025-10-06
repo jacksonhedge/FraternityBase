@@ -120,6 +120,7 @@ interface Company {
   unlocks?: ChapterUnlock[];
   approval_status?: 'pending' | 'approved' | 'rejected';
   subscription_tier?: string;
+  description?: string;
 }
 
 interface ChapterUnlock {
