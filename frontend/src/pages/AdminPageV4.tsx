@@ -352,7 +352,9 @@ const AdminPageV4 = () => {
     try {
       const res = await fetch(`${API_URL}/admin/companies/${companyId}`, { headers: getAdminHeaders() });
       const data = await res.json();
+      console.log('Fetched company details:', data);
       if (data.success) {
+        console.log('Credits balance from API:', data.data.credits_balance);
         setSelectedCompany(data.data);
         setShowCompanyDetail(true);
       }
@@ -1550,7 +1552,7 @@ const AdminPageV4 = () => {
                         <td className="px-4 py-3 text-sm text-gray-600">
                           <span className="font-semibold text-green-600">{company.total_spent || 0}</span> credits
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-600">{company.credits_balance || 0} credits</td>
+                        <td className="px-4 py-3 text-sm text-gray-600">${(company.credits_balance || 0).toFixed(2)}</td>
                         <td className="px-4 py-3 text-sm text-gray-600">{company.unlocks?.length || 0}</td>
                       </tr>
                     ))}
@@ -1687,7 +1689,7 @@ const AdminPageV4 = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
-                        {company.credits_balance} credits
+                        ${(company.credits_balance || 0).toFixed(2)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -1776,19 +1778,49 @@ const AdminPageV4 = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-xs text-gray-500 uppercase mb-1">Status</p>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                    selectedCompany.approval_status === 'approved'
-                      ? 'bg-green-100 text-green-700'
-                      : selectedCompany.approval_status === 'pending'
-                      ? 'bg-yellow-100 text-yellow-700'
-                      : 'bg-red-100 text-red-700'
-                  }`}>
-                    {selectedCompany.approval_status || 'approved'}
-                  </span>
+                  <select
+                    value={selectedCompany.approval_status || 'approved'}
+                    onChange={async (e) => {
+                      const newStatus = e.target.value as 'pending' | 'approved' | 'rejected';
+                      try {
+                        const response = await fetch(`${API_URL}/admin/companies/${selectedCompany.id}/status`, {
+                          method: 'PATCH',
+                          headers: getAdminHeaders(),
+                          body: JSON.stringify({ approval_status: newStatus })
+                        });
+
+                        if (!response.ok) {
+                          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                          throw new Error(errorData.error || `HTTP ${response.status}`);
+                        }
+
+                        // Update local state
+                        setCompanies(companies.map(c =>
+                          c.id === selectedCompany.id ? { ...c, approval_status: newStatus } : c
+                        ));
+                        setSelectedCompany({ ...selectedCompany, approval_status: newStatus });
+                      } catch (error: any) {
+                        console.error('Error updating status:', error);
+                        const errorMsg = error.message || error.toString() || 'Unknown error';
+                        alert(`Failed to update status: ${errorMsg}`);
+                      }
+                    }}
+                    className={`px-3 py-1 text-sm font-medium rounded-md border-2 ${
+                      (selectedCompany.approval_status || 'approved') === 'approved'
+                        ? 'bg-green-50 text-green-700 border-green-200'
+                        : (selectedCompany.approval_status || 'approved') === 'pending'
+                        ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                        : 'bg-red-50 text-red-700 border-red-200'
+                    }`}
+                  >
+                    <option value="pending">pending</option>
+                    <option value="approved">approved</option>
+                    <option value="rejected">rejected</option>
+                  </select>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-xs text-gray-500 uppercase mb-1">Credits Balance</p>
-                  <p className="text-lg font-semibold text-gray-900">{selectedCompany.credits_balance}</p>
+                  <p className="text-lg font-semibold text-gray-900">${(selectedCompany.credits_balance || 0).toFixed(2)}</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-xs text-gray-500 uppercase mb-1">Total Spent</p>
@@ -1900,6 +1932,23 @@ const AdminPageV4 = () => {
               </button>
               <button
                 onClick={async () => {
+                  try {
+                    // Save button just closes the modal since changes are saved immediately via the dropdown
+                    alert('Changes saved successfully');
+                    setShowCompanyDetail(false);
+                  } catch (error) {
+                    alert('Error saving changes');
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Save
+              </button>
+              <button
+                onClick={async () => {
                   const amount = prompt('How many credits to add?');
                   if (!amount || isNaN(parseInt(amount))) return;
 
@@ -1910,14 +1959,20 @@ const AdminPageV4 = () => {
                       body: JSON.stringify({ credits: parseInt(amount) })
                     });
 
+                    const result = await response.json();
+                    console.log('Add credits response:', result);
+
                     if (response.ok) {
                       alert(`Successfully added ${amount} credits`);
-                      fetchCompanyDetails(selectedCompany.id); // Refresh
-                      fetchData(); // Refresh list
+                      console.log('Refreshing company details...');
+                      await fetchCompanyDetails(selectedCompany.id); // Refresh
+                      await fetchData(); // Refresh list
+                      console.log('Refresh complete. New balance:', selectedCompany.credits_balance);
                     } else {
-                      alert('Failed to add credits');
+                      alert(`Failed to add credits: ${result.error || 'Unknown error'}`);
                     }
                   } catch (error) {
+                    console.error('Error adding credits:', error);
                     alert('Error adding credits');
                   }
                 }}
