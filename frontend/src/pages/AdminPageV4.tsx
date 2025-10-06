@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
+import ActivityLogsTab from '../components/admin/ActivityLogsTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -117,6 +118,8 @@ interface Company {
   created_at: string;
   total_spent?: number;
   unlocks?: ChapterUnlock[];
+  approval_status?: 'pending' | 'approved' | 'rejected';
+  subscription_tier?: string;
 }
 
 interface ChapterUnlock {
@@ -153,11 +156,31 @@ interface ActivityLogEntry {
   created_at: string;
 }
 
+interface CompanyUser {
+  user_id: string;
+  email: string;
+  role: string;
+  created_at: string;
+}
+
+interface BalanceTransaction {
+  id: string;
+  amount: number;
+  description: string;
+  reference_type: string;
+  created_at: string;
+}
+
+interface CompanyDetail extends Company {
+  users: CompanyUser[];
+  transactions: BalanceTransaction[];
+}
+
 const AdminPageV4 = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<
     'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'users' | 'waitlist' |
-    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics'
+    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity'
   >('dashboard');
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -178,6 +201,8 @@ const AdminPageV4 = () => {
   const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
   const [collegeFilter, setCollegeFilter] = useState<string>('all');
   const [aiPrompt, setAiPrompt] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState<CompanyDetail | null>(null);
+  const [showCompanyDetail, setShowCompanyDetail] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiStatus, setAiStatus] = useState<{ connected: boolean; model: string } | null>(null);
@@ -320,6 +345,20 @@ const AdminPageV4 = () => {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  };
+
+  const fetchCompanyDetails = async (companyId: string) => {
+    try {
+      const res = await fetch(`${API_URL}/admin/companies/${companyId}`, { headers: getAdminHeaders() });
+      const data = await res.json();
+      if (data.success) {
+        setSelectedCompany(data.data);
+        setShowCompanyDetail(true);
+      }
+    } catch (error) {
+      console.error('Error fetching company details:', error);
+      alert('Failed to load company details');
     }
   };
 
@@ -1071,6 +1110,25 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
+              setActiveTab('companies');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'companies'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <UserPlus className="w-5 h-5" />
+            <span className="font-medium">Users & Accounts</span>
+            {companies.length > 0 && (
+              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{companies.length}</span>
+            )}
+          </button>
+
+          <button
+            onClick={() => {
               setActiveTab('colleges');
               setShowForm(false);
               setEditingId(null);
@@ -1259,6 +1317,22 @@ const AdminPageV4 = () => {
             <BarChart3 className="w-5 h-5" />
             <span className="font-medium">Business Analytics</span>
           </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('activity');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'activity'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Activity className="w-5 h-5" />
+            <span className="font-medium">User Activity</span>
+          </button>
         </nav>
 
         {/* Bottom Section */}
@@ -1285,7 +1359,7 @@ const AdminPageV4 = () => {
             <h2 className="text-3xl font-bold text-gray-900 capitalize">{activeTab}</h2>
             <p className="text-gray-600 mt-1">
               {activeTab === 'dashboard' && 'Overview of system statistics'}
-              {activeTab === 'companies' && 'Manage registered companies and their unlock history'}
+              {activeTab === 'companies' && 'Manage all user accounts, credits, approval status, and unlock history'}
               {activeTab === 'fraternities' && 'Manage Greek organizations'}
               {activeTab === 'colleges' && 'Manage universities and colleges'}
               {activeTab === 'chapters' && 'Manage individual chapters'}
@@ -1296,6 +1370,7 @@ const AdminPageV4 = () => {
               {activeTab === 'credits' && 'Monitor credit usage and pricing performance'}
               {activeTab === 'intelligence' && 'Deep dive into company behavior and health metrics'}
               {activeTab === 'analytics' && 'Business intelligence and growth analytics'}
+              {activeTab === 'activity' && 'Track user clicks and interaction analytics'}
             </p>
           </div>
 
@@ -1577,25 +1652,41 @@ const AdminPageV4 = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Credits Balance</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unlocks</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {companies.map((company) => (
-                  <tr key={company.id} className="hover:bg-gray-50">
+                  <tr key={company.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => fetchCompanyDetails(company.id)}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{company.company_name}</div>
+                      <div className="flex items-center gap-2">
+                        <Eye className="w-4 h-4 text-gray-400" />
+                        <div className="text-sm font-medium text-gray-900">{company.company_name}</div>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-600">{company.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        company.approval_status === 'approved'
+                          ? 'bg-green-100 text-green-700'
+                          : company.approval_status === 'pending'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-red-100 text-red-700'
+                      }`}>
+                        {company.approval_status || 'approved'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
                         {company.credits_balance} credits
                       </span>
                     </td>
@@ -1611,12 +1702,41 @@ const AdminPageV4 = () => {
                         }}
                         className="flex items-center space-x-1 text-blue-600 hover:text-blue-800"
                       >
-                        <Lock className="w-4 h-4" />
+                        <Unlock className="w-4 h-4" />
                         <span className="text-sm font-medium">{company.unlocks?.length || 0}</span>
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                       {new Date(company.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={async () => {
+                          const amount = prompt('How many credits to add?');
+                          if (!amount || isNaN(parseInt(amount))) return;
+
+                          try {
+                            const response = await fetch(`${API_URL}/admin/companies/${company.id}/add-credits`, {
+                              method: 'POST',
+                              headers: getAdminHeaders(),
+                              body: JSON.stringify({ credits: parseInt(amount) })
+                            });
+
+                            if (response.ok) {
+                              alert(`Successfully added ${amount} credits to ${company.company_name}`);
+                              fetchData();
+                            } else {
+                              alert('Failed to add credits');
+                            }
+                          } catch (error) {
+                            alert('Error adding credits');
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add Credits
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -1632,8 +1752,187 @@ const AdminPageV4 = () => {
         </div>
       )}
 
+      {/* Company Detail Modal */}
+      {showCompanyDetail && selectedCompany && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">{selectedCompany.company_name}</h2>
+                <p className="text-sm text-gray-500 mt-1">{selectedCompany.email}</p>
+              </div>
+              <button
+                onClick={() => setShowCompanyDetail(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-6">
+              {/* Company Overview */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-xs text-gray-500 uppercase mb-1">Status</p>
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    selectedCompany.approval_status === 'approved'
+                      ? 'bg-green-100 text-green-700'
+                      : selectedCompany.approval_status === 'pending'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}>
+                    {selectedCompany.approval_status || 'approved'}
+                  </span>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-xs text-gray-500 uppercase mb-1">Credits Balance</p>
+                  <p className="text-lg font-semibold text-gray-900">{selectedCompany.credits_balance}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-xs text-gray-500 uppercase mb-1">Total Spent</p>
+                  <p className="text-lg font-semibold text-gray-900">{selectedCompany.total_spent || 0}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-xs text-gray-500 uppercase mb-1">Unlocks</p>
+                  <p className="text-lg font-semibold text-gray-900">{selectedCompany.unlocks?.length || 0}</p>
+                </div>
+              </div>
+
+              {/* Users Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  Team Members ({selectedCompany.users?.length || 0}/3)
+                </h3>
+                {selectedCompany.users && selectedCompany.users.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedCompany.users.map((user, idx) => (
+                      <div key={user.user_id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span className="text-blue-600 font-medium">{user.email[0].toUpperCase()}</span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{user.email}</p>
+                            <p className="text-xs text-gray-500">{user.role || 'Member'} · Joined {new Date(user.created_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">No team members yet</p>
+                )}
+              </div>
+
+              {/* Unlock History */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <Unlock className="w-5 h-5" />
+                  Unlock History
+                </h3>
+                {selectedCompany.unlocks && selectedCompany.unlocks.length > 0 ? (
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {selectedCompany.unlocks.map((unlock) => (
+                      <div key={unlock.id} className="p-3 bg-gray-50 rounded-lg">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-medium text-gray-900">
+                              {unlock.chapters?.universities?.name} - {unlock.chapters?.greek_organizations?.name}
+                            </p>
+                            <p className="text-sm text-gray-600">{unlock.chapters?.chapter_name}</p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {unlock.unlock_type} · {unlock.credits_spent} credits · {new Date(unlock.unlocked_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">No unlocks yet</p>
+                )}
+              </div>
+
+              {/* Transaction History */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <CreditCard className="w-5 h-5" />
+                  Recent Transactions
+                </h3>
+                {selectedCompany.transactions && selectedCompany.transactions.length > 0 ? (
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {selectedCompany.transactions.map((tx) => (
+                      <div key={tx.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="font-medium text-gray-900">{tx.description}</p>
+                          <p className="text-xs text-gray-500">{new Date(tx.created_at).toLocaleString()}</p>
+                        </div>
+                        <span className={`font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {tx.amount > 0 ? '+' : ''}{tx.amount}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">No transactions yet</p>
+                )}
+              </div>
+
+              {/* Company Info */}
+              {selectedCompany.description && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
+                  <p className="text-gray-600 text-sm">{selectedCompany.description}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="sticky bottom-0 bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+              <button
+                onClick={() => setShowCompanyDetail(false)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={async () => {
+                  const amount = prompt('How many credits to add?');
+                  if (!amount || isNaN(parseInt(amount))) return;
+
+                  try {
+                    const response = await fetch(`${API_URL}/admin/companies/${selectedCompany.id}/add-credits`, {
+                      method: 'POST',
+                      headers: getAdminHeaders(),
+                      body: JSON.stringify({ credits: parseInt(amount) })
+                    });
+
+                    if (response.ok) {
+                      alert(`Successfully added ${amount} credits`);
+                      fetchCompanyDetails(selectedCompany.id); // Refresh
+                      fetchData(); // Refresh list
+                    } else {
+                      alert('Failed to add credits');
+                    }
+                  } catch (error) {
+                    alert('Error adding credits');
+                  }
+                }}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Credits
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
@@ -2654,6 +2953,9 @@ const AdminPageV4 = () => {
               <p className="text-gray-600">Coming soon - Growth metrics, engagement analytics, and business intelligence dashboards</p>
             </div>
           )}
+
+          {/* User Activity Tab */}
+          {activeTab === 'activity' && <ActivityLogsTab />}
         </div>
       )}
         </div>

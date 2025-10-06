@@ -32,6 +32,7 @@ import {
   MessageCircle,
   CreditCard,
   ChevronDown,
+  Rocket,
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
@@ -104,6 +105,8 @@ const Layout = () => {
         { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null },
         { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null },
         { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null },
+        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: null },
+        { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' } },
       ]
     },
     {
@@ -123,6 +126,11 @@ const Layout = () => {
       items: [
         { name: 'Billing', href: '/app/credits', icon: CreditCard, badge: null, alwaysAccessible: true },
         { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null, alwaysAccessible: true },
+      ]
+    },
+    {
+      items: [
+        { name: 'Product Roadmap', href: '/app/roadmap', icon: Rocket, badge: null, alwaysAccessible: true },
       ]
     },
   ];
@@ -196,7 +204,7 @@ const Layout = () => {
                               ? 'text-yellow-800 bg-yellow-200'
                               : 'text-emerald-700 bg-emerald-100'
                           }`}>
-                            {item.badge}
+                            {typeof item.badge === 'object' ? item.badge.text : item.badge}
                           </span>
                         )}
                         {item.badge && isSidebarCollapsed && (

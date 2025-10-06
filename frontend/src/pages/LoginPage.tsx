@@ -141,7 +141,7 @@ const LoginPage = () => {
                   placeholder="you@company.com"
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{String(errors.email.message)}</p>
                 )}
               </div>
 
@@ -170,7 +170,7 @@ const LoginPage = () => {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{String(errors.password.message)}</p>
                 )}
               </div>
 
