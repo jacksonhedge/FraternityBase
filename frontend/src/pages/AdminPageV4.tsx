@@ -88,6 +88,7 @@ interface Chapter {
   partnership_openness?: string;
   event_frequency?: number;
   grade?: number;
+  is_favorite?: boolean;
   greek_organizations?: { name: string };
   universities?: { name: string; state: string };
 }
@@ -254,7 +255,8 @@ const AdminPageV4 = () => {
     engagement_score: '75',
     partnership_openness: 'open',
     event_frequency: '20',
-    grade: ''
+    grade: '',
+    is_favorite: false
   });
 
   const [userForm, setUserForm] = useState({
@@ -621,7 +623,8 @@ const AdminPageV4 = () => {
           engagement_score: chapterForm.engagement_score ? parseInt(chapterForm.engagement_score) : null,
           partnership_openness: chapterForm.partnership_openness,
           event_frequency: chapterForm.event_frequency ? parseInt(chapterForm.event_frequency) : null,
-          grade: chapterForm.grade ? parseFloat(chapterForm.grade) : null
+          grade: chapterForm.grade ? parseFloat(chapterForm.grade) : null,
+          is_favorite: chapterForm.is_favorite
         })
       });
 
@@ -644,7 +647,8 @@ const AdminPageV4 = () => {
           engagement_score: '75',
           partnership_openness: 'open',
           event_frequency: '20',
-          grade: ''
+          grade: '',
+          is_favorite: false
         });
         fetchData();
       }
@@ -747,6 +751,25 @@ const AdminPageV4 = () => {
       }
     } catch (error) {
       console.error('Error:', error);
+    }
+  };
+
+  const handleToggleFavorite = async (chapterId: string, currentStatus: boolean) => {
+    try {
+      const response = await fetch(`${API_URL}/admin/chapters/${chapterId}`, {
+        method: 'PATCH',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ is_favorite: !currentStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to toggle favorite');
+      }
+
+      showSuccessMsg(currentStatus ? 'Removed from favorites' : 'Added to favorites');
+      fetchData();
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
     }
   };
 
@@ -2785,6 +2808,19 @@ const AdminPageV4 = () => {
                         <option value="3.0">3.0 - Social Links Only</option>
                       </select>
                     </div>
+                    <div className="flex items-center gap-3 pt-6">
+                      <input
+                        type="checkbox"
+                        id="is_favorite"
+                        checked={chapterForm.is_favorite}
+                        onChange={(e) => setChapterForm({ ...chapterForm, is_favorite: e.target.checked })}
+                        className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                      />
+                      <label htmlFor="is_favorite" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                        <Star className="w-4 h-4 text-yellow-500" />
+                        Mark as Favorite (for auto-assignment on signup)
+                      </label>
+                    </div>
                   </div>
                   <div className="flex justify-end space-x-3 mt-6">
                     <button
@@ -2903,6 +2939,16 @@ const AdminPageV4 = () => {
                           })()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleFavorite(ch.id, ch.is_favorite || false);
+                            }}
+                            className={`mr-3 ${ch.is_favorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}
+                            title={ch.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                          >
+                            <Star className={`w-4 h-4 inline ${ch.is_favorite ? 'fill-yellow-500' : ''}`} />
+                          </button>
                           <button
                             onClick={() => handleChapterEdit(ch)}
                             className="text-primary-600 hover:text-primary-900 mr-3"
