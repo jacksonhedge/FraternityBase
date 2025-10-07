@@ -50,38 +50,37 @@ const TeamPage = () => {
 
   const { user } = useSelector((state: RootState) => state.auth);
 
-  // Fetch company info
+  // Fetch company info from backend API
   useEffect(() => {
     const fetchCompanyInfo = async () => {
-      if (!user?.companyId) return;
-
       try {
-        const { data, error } = await supabase
-          .from('companies')
-          .select('id, company_name, created_at')
-          .eq('id', user.companyId)
-          .single();
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const token = localStorage.getItem('token');
+        if (!token) return;
 
-        if (error) throw error;
-
-        // Also get subscription tier from account_balance
-        const { data: balanceData } = await supabase
-          .from('account_balance')
-          .select('subscription_tier')
-          .eq('company_id', user.companyId)
-          .single();
-
-        setCompanyInfo({
-          ...data,
-          subscription_tier: balanceData?.subscription_tier || 'Free'
+        const response = await fetch(`${API_URL}/account/balance`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCompanyInfo({
+            id: data.companyId,
+            company_name: data.companyName,
+            created_at: data.companyCreatedAt,
+            subscription_tier: data.subscriptionTier || 'Free'
+          });
+        }
       } catch (error) {
         console.error('Error fetching company info:', error);
       }
     };
 
     fetchCompanyInfo();
-  }, [user?.companyId]);
+  }, []);
 
   // Fetch team members
   useEffect(() => {
