@@ -40,8 +40,8 @@ const PricingPage = () => {
       buttonStyle: 'border-2 border-green-500 text-green-700 hover:bg-green-50 hover:border-green-600 transition-all duration-200'
     },
     {
-      id: 'monthly',
-      name: 'Monthly Subscription',
+      id: 'team',
+      name: 'Team',
       price: 29.99,
       description: 'Full platform access',
       icon: Rocket,
@@ -63,8 +63,8 @@ const PricingPage = () => {
       buttonStyle: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 border-transparent shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
     },
     {
-      id: 'credits',
-      name: 'Add-On Credits',
+      id: 'billing',
+      name: 'Billing',
       price: 'Pay as you go',
       description: 'Unlock individual chapters',
       icon: Crown,
