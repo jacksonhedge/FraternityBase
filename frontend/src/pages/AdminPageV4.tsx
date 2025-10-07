@@ -1982,19 +1982,51 @@ const AdminPageV4 = () => {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  Team Members ({selectedCompany.users?.length || 0}/3)
+                  Team Members ({selectedCompany.users?.length || 0})
                 </h3>
                 {selectedCompany.users && selectedCompany.users.length > 0 ? (
                   <div className="space-y-2">
                     {selectedCompany.users.map((user, idx) => (
-                      <div key={user.user_id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={user.user_id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <span className="text-blue-600 font-medium">{user.email[0].toUpperCase()}</span>
+                          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span className="text-blue-600 font-semibold text-lg">
+                              {user.first_name ? user.first_name[0].toUpperCase() : user.email[0].toUpperCase()}
+                            </span>
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{user.email}</p>
-                            <p className="text-xs text-gray-500">{user.role || 'Member'} · Joined {new Date(user.created_at).toLocaleDateString()}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-semibold text-gray-900">
+                                {user.first_name && user.last_name
+                                  ? `${user.first_name} ${user.last_name}`
+                                  : user.email}
+                              </p>
+                              <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
+                                #{user.member_number}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600">{user.email}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+                                user.role === 'owner'
+                                  ? 'bg-purple-100 text-purple-700'
+                                  : user.role === 'admin'
+                                  ? 'bg-green-100 text-green-700'
+                                  : 'bg-gray-100 text-gray-700'
+                              }`}>
+                                {user.role || 'member'}
+                              </span>
+                              <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+                                user.status === 'active'
+                                  ? 'bg-green-100 text-green-700'
+                                  : 'bg-gray-100 text-gray-700'
+                              }`}>
+                                {user.status || 'active'}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                · Joined {new Date(user.joined_at || user.created_at).toLocaleDateString()}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>

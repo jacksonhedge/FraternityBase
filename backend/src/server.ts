@@ -1956,22 +1956,36 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
       return res.status(404).json({ error: 'Company not found' });
     }
 
-    // Get all users for this company (up to 3)
-    const { data: userProfiles, error: profilesError } = await supabase
-      .from('user_profiles')
-      .select('user_id, role, created_at')
+    // Get all team members for this company
+    const { data: teamMembers, error: teamError } = await supabaseAdmin
+      .from('team_members')
+      .select('id, member_number, role, status, joined_at, user_id')
       .eq('company_id', id)
-      .limit(3);
+      .order('member_number', { ascending: true });
 
-    // Fetch user emails from auth
+    // Fetch user details (name and email) for each team member
     const users = await Promise.all(
-      (userProfiles || []).map(async (profile) => {
-        const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(profile.user_id);
+      (teamMembers || []).map(async (member) => {
+        // Get user profile for name
+        const { data: userProfile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('first_name, last_name')
+          .eq('user_id', member.user_id)
+          .single();
+
+        // Get email from auth
+        const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(member.user_id);
+
         return {
-          user_id: profile.user_id,
+          user_id: member.user_id,
           email: authUser?.user?.email || null,
-          role: profile.role || 'member',
-          created_at: profile.created_at
+          first_name: userProfile?.first_name || null,
+          last_name: userProfile?.last_name || null,
+          member_number: member.member_number,
+          role: member.role,
+          status: member.status,
+          joined_at: member.joined_at,
+          created_at: member.joined_at
         };
       })
     );
