@@ -320,7 +320,7 @@ const TeamPage = () => {
                   </div>
                 </div>
               ) : companyInfo ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Company Name */}
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
                     <div className="flex items-start justify-between mb-2">
@@ -331,6 +331,19 @@ const TeamPage = () => {
                     </div>
                     <p className="text-2xl font-bold text-gray-900 mt-2">
                       {companyInfo.company_name || 'Not Available'}
+                    </p>
+                  </div>
+
+                  {/* Account Email */}
+                  <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 rounded-xl p-6">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Mail className="w-5 h-5 text-indigo-600" />
+                        <h3 className="text-sm font-medium text-gray-600">Account Email</h3>
+                      </div>
+                    </div>
+                    <p className="text-lg font-semibold text-gray-900 mt-2 break-all">
+                      {user?.email || 'Not Available'}
                     </p>
                   </div>
 
