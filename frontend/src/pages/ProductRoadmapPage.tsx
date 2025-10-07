@@ -185,7 +185,6 @@ const ProductRoadmapPage = () => {
     description: '',
     status: 'planned',
     quarter: '',
-    category: '',
     icon: 'Rocket'
   });
 
@@ -318,7 +317,6 @@ const ProductRoadmapPage = () => {
         description: '',
         status: 'planned',
         quarter: '',
-        category: '',
         icon: 'Rocket'
       });
     } catch (error) {
@@ -636,16 +634,6 @@ const ProductRoadmapPage = () => {
                     <option value="on-hold">On Hold</option>
                   </select>
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                <input
-                  type="text"
-                  value={newItem.category}
-                  onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="e.g., Analytics, Platform, etc."
-                />
               </div>
               <div className="flex gap-3 pt-4">
                 <button

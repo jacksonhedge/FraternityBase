@@ -186,7 +186,7 @@ const AdminPageV4 = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<
     'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
-    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity'
+    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap'
   >('dashboard');
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -1408,10 +1408,7 @@ const AdminPageV4 = () => {
           </button>
 
           <button
-            onClick={() => {
-              setActiveTab('roadmap');
-              setCurrentSection('main');
-            }}
+            onClick={() => setActiveTab('roadmap')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
               activeTab === 'roadmap'
                 ? 'bg-primary-600 text-white'
