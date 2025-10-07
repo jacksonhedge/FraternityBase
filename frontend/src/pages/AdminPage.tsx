@@ -81,7 +81,9 @@ const AdminPage = () => {
     addressLine2: '',
     city: '',
     state: '',
-    zipCode: ''
+    zipCode: '',
+    headerImage: null as File | null,
+    headerImagePreview: null as string | null
   });
 
   // Contact form state
@@ -182,7 +184,9 @@ const AdminPage = () => {
       addressLine2: '',
       city: '',
       state: '',
-      zipCode: ''
+      zipCode: '',
+      headerImage: null,
+      headerImagePreview: null
     });
   };
 
@@ -331,7 +335,7 @@ const AdminPage = () => {
               }`}
             >
               <UserCheck className="w-4 h-4 inline mr-2" />
-              Contacts
+              Members Database
             </button>
           </nav>
         </div>
@@ -343,7 +347,7 @@ const AdminPage = () => {
               {activeTab === 'fraternities' && 'Manage Fraternities'}
               {activeTab === 'colleges' && 'Manage Colleges'}
               {activeTab === 'chapters' && 'Manage Chapters'}
-              {activeTab === 'contacts' && 'Manage Contacts'}
+              {activeTab === 'contacts' && 'Manage Members Database'}
             </h3>
             <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
               <button
@@ -876,6 +880,22 @@ const AdminPage = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Header Background Image */}
+                <div className="md:col-span-2">
+                  <ImageUploader
+                    label="Header Background Image (Like Twitter Banner)"
+                    currentImage={chapterData.headerImagePreview || undefined}
+                    onImageChange={(file, preview) => setChapterData({
+                      ...chapterData,
+                      headerImage: file,
+                      headerImagePreview: preview
+                    })}
+                  />
+                  <p className="mt-2 text-sm text-gray-500">
+                    Recommended size: 1500x500px. This will appear as a banner on the chapter's profile page.
+                  </p>
                 </div>
               </div>
 

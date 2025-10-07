@@ -1,42 +1,79 @@
 /**
  * Pricing Configuration
- * All prices in USD
+ * Credits-based system with dollar values for purchases
  */
 
 export const PRICING = {
-  // Chapter access
-  CHAPTER_UNLOCK: 19.99,
+  // Chapter access (in credits)
+  CHAPTER_UNLOCK: 10, // Standard chapter unlock
+  FIVE_STAR_UNLOCK: 30, // 5-star chapter unlock
 
-  // Premium services (request-based)
-  WARM_INTRO: 59.99,
-  AMBASSADOR_REFERRAL: 99.99,
+  // Premium services (in credits)
+  WARM_INTRO: 200,
+  AMBASSADOR_REFERRAL: 330,
+  VENUE_CONNECTION: 160,
 
-  // Top-up presets
-  TOP_UP_PRESETS: [25, 50, 100, 250, 500],
+  // Subscription credits
+  MONTHLY_SUBSCRIPTION_GRANT: 100, // Monthly credits for subscribers
+  ENTERPRISE_SUBSCRIPTION_GRANT: 500, // Enterprise tier monthly credits
 
-  // Auto-reload defaults
-  DEFAULT_AUTO_RELOAD_THRESHOLD: 10.00,
-  DEFAULT_AUTO_RELOAD_AMOUNT: 50.00,
+  // Credit purchase options (credits and dollar prices)
+  CREDIT_PACKAGES: [
+    { credits: 100, price: 29.99, label: 'Starter Pack' },
+    { credits: 500, price: 139.99, label: 'Value Pack (7% bonus)' },
+    { credits: 1000, price: 249.99, label: 'Pro Pack (17% bonus)' }
+  ],
+
+  // Dollar values for services (for analytics tracking)
+  DOLLAR_VALUES: {
+    FIVE_STAR_UNLOCK: 9.99,
+    CHAPTER_UNLOCK: 2.99,
+    WARM_INTRO: 59.99,
+    AMBASSADOR_REFERRAL: 99.99,
+    VENUE_CONNECTION: 49.99,
+  },
+
+  // Top-up presets (in credits)
+  TOP_UP_PRESETS: [100, 200, 500, 1000],
 
   // Free trial
-  FREE_TRIAL_BALANCE: 50.00, // $50 = 2-3 chapter unlocks
+  FREE_TRIAL_CREDITS: 0, // Trial users start with 0 credits
 
-  // Minimum amounts
-  MIN_TOP_UP: 10.00,
-  MIN_AUTO_RELOAD_THRESHOLD: 5.00,
-  MIN_AUTO_RELOAD_AMOUNT: 25.00,
+  // Minimum amounts (in credits)
+  MIN_CREDIT_PURCHASE: 100,
 } as const;
 
-export type ServiceType = 'chapter_unlock' | 'warm_intro' | 'ambassador_referral';
+export type ServiceType = 'chapter_unlock' | 'five_star_unlock' | 'warm_intro' | 'ambassador_referral' | 'venue_connection';
 
-export function getServicePrice(serviceType: ServiceType): number {
+export function getServiceCredits(serviceType: ServiceType): number {
   switch (serviceType) {
     case 'chapter_unlock':
       return PRICING.CHAPTER_UNLOCK;
+    case 'five_star_unlock':
+      return PRICING.FIVE_STAR_UNLOCK;
     case 'warm_intro':
       return PRICING.WARM_INTRO;
     case 'ambassador_referral':
       return PRICING.AMBASSADOR_REFERRAL;
+    case 'venue_connection':
+      return PRICING.VENUE_CONNECTION;
+    default:
+      throw new Error(`Unknown service type: ${serviceType}`);
+  }
+}
+
+export function getServiceDollarValue(serviceType: ServiceType): number {
+  switch (serviceType) {
+    case 'chapter_unlock':
+      return PRICING.DOLLAR_VALUES.CHAPTER_UNLOCK;
+    case 'five_star_unlock':
+      return PRICING.DOLLAR_VALUES.FIVE_STAR_UNLOCK;
+    case 'warm_intro':
+      return PRICING.DOLLAR_VALUES.WARM_INTRO;
+    case 'ambassador_referral':
+      return PRICING.DOLLAR_VALUES.AMBASSADOR_REFERRAL;
+    case 'venue_connection':
+      return PRICING.DOLLAR_VALUES.VENUE_CONNECTION;
     default:
       throw new Error(`Unknown service type: ${serviceType}`);
   }
@@ -47,4 +84,8 @@ export function formatCurrency(amount: number): string {
     style: 'currency',
     currency: 'USD',
   }).format(amount);
+}
+
+export function formatCredits(credits: number): string {
+  return `${credits} credit${credits !== 1 ? 's' : ''}`;
 }

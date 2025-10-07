@@ -11,7 +11,9 @@ import {
   TrendingUp,
   Users,
   DollarSign,
-  MessageSquare
+  MessageSquare,
+  Code,
+  Lock
 } from 'lucide-react';
 
 type RoadmapTab = 'features' | 'data';
@@ -31,6 +33,15 @@ const ProductRoadmapPage = () => {
   const [activeTab, setActiveTab] = useState<RoadmapTab>('features');
 
   const featureRoadmap: RoadmapItem[] = [
+    {
+      id: 'api',
+      title: 'FraternityBase API',
+      description: 'Full REST API access to our entire database of 5,000+ chapters, universities, and contacts. Programmatically search, filter, and integrate our data into your CRM, marketing automation, or custom tools. Enterprise Plan only - pricing TBD.',
+      status: 'planned',
+      quarter: 'Q2 2026',
+      category: 'Enterprise',
+      icon: Code,
+    },
     {
       id: '1',
       title: 'User Activity Tracking',
@@ -201,28 +212,19 @@ const ProductRoadmapPage = () => {
                   return (
                     <div
                       key={item.id}
-                      className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                      className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
                     >
-                      <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="p-2 bg-blue-50 rounded-lg">
                             <Icon className="w-5 h-5 text-blue-600" />
                           </div>
-                          <div>
-                            <h4 className="font-semibold text-gray-900">{item.title}</h4>
-                            {item.quarter && (
-                              <p className="text-xs text-gray-500">{item.quarter}</p>
-                            )}
-                          </div>
+                          <h4 className="font-semibold text-gray-900">{item.title}</h4>
                         </div>
-                        {getStatusBadge(item.status)}
+                        {item.quarter && (
+                          <span className="text-sm font-medium text-gray-600">{item.quarter}</span>
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">{item.description}</p>
-                      {item.category && (
-                        <span className="inline-block px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded">
-                          {item.category}
-                        </span>
-                      )}
                     </div>
                   );
                 })}

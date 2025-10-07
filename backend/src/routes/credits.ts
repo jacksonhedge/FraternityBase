@@ -74,6 +74,201 @@ function getCreditNotificationService(): CreditNotificationService | null {
 
 // Note: GET /balance is now handled directly in server.ts before this router is mounted
 
+// Create Stripe checkout for credit purchase
+router.post('/purchase', async (req, res) => {
+  try {
+    const { credits, companyId } = req.body;
+
+    if (!credits || !companyId) {
+      return res.status(400).json({ error: 'Credits amount and company ID required' });
+    }
+
+    // Find the matching credit package
+    const creditPackage = PRICING.CREDIT_PACKAGES.find(pkg => pkg.credits === credits);
+    if (!creditPackage) {
+      return res.status(400).json({ error: 'Invalid credit package' });
+    }
+
+    const stripe = getStripe();
+    const supabase = getSupabaseAdmin();
+
+    // Get company info
+    const { data: company } = await supabase
+      .from('companies')
+      .select('name, id')
+      .eq('id', companyId)
+      .single();
+
+    // Create Stripe checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          unit_amount: Math.round(creditPackage.price * 100),
+          product_data: {
+            name: `${creditPackage.credits} Credits - ${creditPackage.label}`,
+            description: `Add ${creditPackage.credits} credits to your FraternityBase account`,
+          },
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `${process.env.FRONTEND_URL}/dashboard?payment=success&credits=${credits}`,
+      cancel_url: `${process.env.FRONTEND_URL}/pricing?payment=cancelled`,
+      metadata: {
+        type: 'credit_purchase',
+        company_id: companyId,
+        company_name: company?.name || 'Unknown',
+        credits: credits.toString(),
+      },
+    });
+
+    res.json({ url: session.url });
+  } catch (error: any) {
+    console.error('Error creating checkout session:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Create Stripe subscription checkout
+router.post('/subscribe', async (req, res) => {
+  try {
+    const { tier, companyId } = req.body;
+
+    if (!['monthly', 'enterprise'].includes(tier) || !companyId) {
+      return res.status(400).json({ error: 'Valid tier and company ID required' });
+    }
+
+    const stripe = getStripe();
+    const supabase = getSupabaseAdmin();
+
+    // Get company info
+    const { data: company } = await supabase
+      .from('companies')
+      .select('name, id')
+      .eq('id', companyId)
+      .single();
+
+    // Define subscription prices
+    const subscriptionPrices = {
+      monthly: {
+        priceId: process.env.STRIPE_PRICE_MONTHLY || 'price_monthly',
+        amount: 29.99,
+        credits: 100,
+        name: 'Monthly Subscription'
+      },
+      enterprise: {
+        priceId: process.env.STRIPE_PRICE_ENTERPRISE || 'price_enterprise',
+        amount: 299.99,
+        credits: 800,
+        name: 'Enterprise Subscription'
+      }
+    };
+
+    const subInfo = subscriptionPrices[tier as 'monthly' | 'enterprise'];
+
+    // Create Stripe checkout session for subscription
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price: subInfo.priceId,
+        quantity: 1,
+      }],
+      mode: 'subscription',
+      success_url: `${process.env.FRONTEND_URL}/dashboard?subscription=success&tier=${tier}`,
+      cancel_url: `${process.env.FRONTEND_URL}/pricing?subscription=cancelled`,
+      metadata: {
+        type: 'subscription',
+        company_id: companyId,
+        company_name: company?.name || 'Unknown',
+        tier,
+      },
+    });
+
+    res.json({ url: session.url });
+  } catch (error: any) {
+    console.error('Error creating subscription checkout:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Stripe webhook handler
+router.post('/webhook', async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!sig || !webhookSecret) {
+    return res.status(400).send('Webhook signature missing');
+  }
+
+  try {
+    const stripe = getStripe();
+    const event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    const supabase = getSupabaseAdmin();
+
+    console.log('🔔 Stripe webhook received:', event.type);
+
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object as any;
+        const metadata = session.metadata;
+
+        if (metadata.type === 'credit_purchase') {
+          // Add credits to account
+          const credits = parseInt(metadata.credits);
+          const dollarAmount = session.amount_total / 100;
+
+          await supabase.rpc('add_credits', {
+            p_company_id: metadata.company_id,
+            p_credits: credits,
+            p_dollars: dollarAmount,
+            p_transaction_type: 'credit_purchase',
+            p_description: `Purchased ${credits} credits`,
+            p_stripe_payment_intent_id: session.payment_intent
+          });
+
+          console.log(`✅ Added ${credits} credits to ${metadata.company_name}`);
+        } else if (metadata.type === 'subscription') {
+          // Update subscription tier
+          await supabase
+            .from('account_balance')
+            .update({ subscription_tier: metadata.tier })
+            .eq('company_id', metadata.company_id);
+
+          // Grant initial monthly credits
+          await supabase.rpc('grant_monthly_credits', {
+            p_company_id: metadata.company_id
+          });
+
+          console.log(`✅ Activated ${metadata.tier} subscription for ${metadata.company_name}`);
+        }
+        break;
+      }
+
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as any;
+        // Downgrade to trial when subscription cancelled
+        // Note: You'll need to store customer_id in metadata to match this
+        console.log('⚠️ Subscription cancelled:', subscription.id);
+        break;
+      }
+
+      case 'invoice.payment_succeeded': {
+        const invoice = event.data.object as any;
+        // Handle successful recurring payment
+        console.log('✅ Recurring payment succeeded:', invoice.id);
+        break;
+      }
+    }
+
+    res.json({ received: true });
+  } catch (error: any) {
+    console.error('❌ Webhook error:', error);
+    res.status(400).send(`Webhook Error: ${error.message}`);
+  }
+});
+
 // Get transaction history
 router.get('/transactions', async (req, res) => {
   try {
@@ -129,15 +324,15 @@ router.post('/auto-reload/settings', async (req, res) => {
     return res.status(400).json({ error: 'Company ID required' });
   }
 
-  if (threshold !== undefined && threshold < PRICING.MIN_AUTO_RELOAD_THRESHOLD) {
+  if (threshold !== undefined && threshold < 5.00) {
     return res.status(400).json({
-      error: `Threshold must be at least $${PRICING.MIN_AUTO_RELOAD_THRESHOLD}`
+      error: `Threshold must be at least $5.00`
     });
   }
 
-  if (amount !== undefined && amount < PRICING.MIN_AUTO_RELOAD_AMOUNT) {
+  if (amount !== undefined && amount < 25.00) {
     return res.status(400).json({
-      error: `Auto-reload amount must be at least $${PRICING.MIN_AUTO_RELOAD_AMOUNT}`
+      error: `Auto-reload amount must be at least $25.00`
     });
   }
 
@@ -304,9 +499,9 @@ router.post('/checkout', async (req, res) => {
   const { amount, companyId, userEmail, savePaymentMethod = false } = req.body;
 
   // Validate amount
-  if (!amount || typeof amount !== 'number' || amount < PRICING.MIN_TOP_UP) {
+  if (!amount || typeof amount !== 'number' || amount < 10.00) {
     return res.status(400).json({
-      error: `Invalid amount. Minimum top-up is $${PRICING.MIN_TOP_UP}`
+      error: `Invalid amount. Minimum top-up is $10.00`
     });
   }
 
@@ -493,7 +688,7 @@ router.post('/warm-intro/request', async (req, res) => {
     // Check balance
     const { data: account, error: accountError } = await getSupabase()
       .from('account_balance')
-      .select('balance_dollars')
+      .select('balance_credits')
       .eq('company_id', companyId)
       .single();
 
@@ -501,18 +696,19 @@ router.post('/warm-intro/request', async (req, res) => {
       return res.status(404).json({ error: 'Account not found' });
     }
 
-    if (account.balance_dollars < PRICING.WARM_INTRO) {
+    if (account.balance_credits < PRICING.WARM_INTRO) {
       return res.status(402).json({
-        error: 'Insufficient balance',
+        error: 'Insufficient credits',
         required: PRICING.WARM_INTRO,
-        available: account.balance_dollars
+        available: account.balance_credits
       });
     }
 
-    // Deduct balance
-    const { data: transactionId, error: deductError } = await getSupabase().rpc('deduct_balance', {
+    // Deduct credits
+    const { data: transactionId, error: deductError } = await getSupabase().rpc('deduct_credits', {
       p_company_id: companyId,
-      p_amount: PRICING.WARM_INTRO,
+      p_credits: PRICING.WARM_INTRO,
+      p_dollars: PRICING.DOLLAR_VALUES.WARM_INTRO,
       p_transaction_type: 'warm_intro',
       p_description: `Warm introduction request for chapter`,
       p_chapter_id: chapterId
@@ -599,7 +795,7 @@ router.post('/ambassador/request', async (req, res) => {
     // Check balance
     const { data: account, error: accountError } = await getSupabase()
       .from('account_balance')
-      .select('balance_dollars')
+      .select('balance_credits')
       .eq('company_id', companyId)
       .single();
 
@@ -607,20 +803,21 @@ router.post('/ambassador/request', async (req, res) => {
       return res.status(404).json({ error: 'Account not found' });
     }
 
-    const accountBalance = account as { balance_dollars: number };
+    const accountBalance = account as { balance_credits: number };
 
-    if (accountBalance.balance_dollars < PRICING.AMBASSADOR_REFERRAL) {
+    if (accountBalance.balance_credits < PRICING.AMBASSADOR_REFERRAL) {
       return res.status(402).json({
-        error: 'Insufficient balance',
+        error: 'Insufficient credits',
         required: PRICING.AMBASSADOR_REFERRAL,
-        available: accountBalance.balance_dollars
+        available: accountBalance.balance_credits
       });
     }
 
-    // Deduct balance
-    const { data: transactionId, error: deductError } = await (getSupabase().rpc as any)('deduct_balance', {
+    // Deduct credits
+    const { data: transactionId, error: deductError } = await (getSupabase().rpc as any)('deduct_credits', {
       p_company_id: companyId,
-      p_amount: PRICING.AMBASSADOR_REFERRAL,
+      p_credits: PRICING.AMBASSADOR_REFERRAL,
+      p_dollars: PRICING.DOLLAR_VALUES.AMBASSADOR_REFERRAL,
       p_transaction_type: 'ambassador_referral',
       p_description: `Ambassador referral request for chapter`,
       p_chapter_id: chapterId

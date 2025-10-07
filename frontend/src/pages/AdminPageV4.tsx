@@ -1072,6 +1072,14 @@ const AdminPageV4 = () => {
       ch.universities?.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
+      // First, sort by favorite status (favorites first)
+      const aFav = a.is_favorite || false;
+      const bFav = b.is_favorite || false;
+      if (aFav !== bFav) {
+        return bFav ? 1 : -1; // Favorites come first
+      }
+
+      // Then sort by selected order
       if (chapterOrderBy === 'grade') {
         return (b.grade || 0) - (a.grade || 0); // Sort descending (5.0 first)
       } else if (chapterOrderBy === 'name') {
