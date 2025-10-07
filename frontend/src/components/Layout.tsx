@@ -120,38 +120,38 @@ const Layout = () => {
   const navigationSections = [
     {
       items: [
-        { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null },
+        { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null, requiresTeamPlan: true },
         { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW', alwaysAccessible: true },
       ]
     },
     {
       title: 'My Chapters',
       items: [
-        { name: 'My Chapters', href: '/app/my-unlocked', icon: Unlock, badge: null },
-        { name: 'My Ambassadors', href: '/app/my-ambassadors', icon: Briefcase, badge: 'SOON' },
+        { name: 'My Chapters', href: '/app/my-unlocked', icon: Unlock, badge: null, requiresTeamPlan: true },
+        { name: 'My Ambassadors', href: '/app/my-ambassadors', icon: Briefcase, badge: 'SOON', requiresTeamPlan: true },
       ]
     },
     {
       title: 'All Orgs',
       items: [
-        { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null },
-        { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null },
-        { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null },
-        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: null },
-        { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' } },
+        { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null, requiresTeamPlan: true },
+        { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null, requiresTeamPlan: true },
+        { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null, requiresTeamPlan: true },
+        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: null, requiresTeamPlan: true },
+        { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' }, requiresTeamPlan: true },
       ]
     },
     {
       title: 'Outreach Help',
       items: [
-        { name: 'Request Intro', href: '/app/outreach?type=intro', icon: MessageSquare, badge: null },
-        { name: 'Request Sponsorship', href: '/app/outreach?type=sponsorship', icon: Handshake, badge: null },
+        { name: 'Request Intro', href: '/app/outreach?type=intro', icon: MessageSquare, badge: null, requiresTeamPlan: true },
+        { name: 'Request Sponsorship', href: '/app/outreach?type=sponsorship', icon: Handshake, badge: null, requiresTeamPlan: true },
       ]
     },
     {
       title: 'Bars/Restaurants',
       items: [
-        { name: 'Browse Venues', href: '/app/bars', icon: Utensils, badge: 'SOON' },
+        { name: 'Browse Venues', href: '/app/bars', icon: Utensils, badge: 'SOON', requiresTeamPlan: true },
       ]
     },
     {
@@ -204,11 +204,16 @@ const Layout = () => {
                     const Icon = item.icon;
                     const isPendingAndLocked = approvalStatus === 'pending' && item.href !== '/app/dashboard' && !item.alwaysAccessible;
 
-                    return isPendingAndLocked ? (
+                    // Check if item is locked based on subscription tier
+                    const isFreePlan = subscriptionTier?.toLowerCase() === 'free';
+                    const isTeamOrHigher = ['team', 'monthly', 'enterprise'].includes(subscriptionTier?.toLowerCase());
+                    const isLockedByTier = isFreePlan && item.requiresTeamPlan && !item.alwaysAccessible;
+
+                    return (isPendingAndLocked || isLockedByTier) ? (
                       <div
                         key={item.name}
                         className={`flex items-center ${isSidebarCollapsed ? 'justify-center px-3' : 'justify-between px-3'} py-2.5 text-sm font-medium rounded-lg opacity-50 cursor-not-allowed`}
-                        title={isSidebarCollapsed ? `${item.name} (Pending Approval)` : 'Pending Approval'}
+                        title={isSidebarCollapsed ? `${item.name} (${isPendingAndLocked ? 'Pending Approval' : 'Upgrade Required'})` : (isPendingAndLocked ? 'Pending Approval' : 'Upgrade to Team Plan')}
                       >
                         <div className="flex items-center">
                           <Icon className={`w-5 h-5 flex-shrink-0 ${!isSidebarCollapsed ? 'mr-3' : ''}`} />
@@ -324,7 +329,11 @@ const Layout = () => {
                         const Icon = item.icon;
                         const isPendingAndLocked = approvalStatus === 'pending' && item.href !== '/app/dashboard' && !item.alwaysAccessible;
 
-                        return isPendingAndLocked ? (
+                        // Check if item is locked based on subscription tier
+                        const isFreePlan = subscriptionTier?.toLowerCase() === 'free';
+                        const isLockedByTier = isFreePlan && item.requiresTeamPlan && !item.alwaysAccessible;
+
+                        return (isPendingAndLocked || isLockedByTier) ? (
                           <div
                             key={item.name}
                             className="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg opacity-50 cursor-not-allowed"
@@ -356,7 +365,7 @@ const Layout = () => {
                                   ? 'text-yellow-800 bg-yellow-200'
                                   : 'text-emerald-700 bg-emerald-100'
                               }`}>
-                                {item.badge}
+                                {typeof item.badge === 'object' ? item.badge.text : item.badge}
                               </span>
                             )}
                           </Link>
