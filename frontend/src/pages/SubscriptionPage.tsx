@@ -154,13 +154,13 @@ const SubscriptionPage = () => {
         </div>
 
         {/* Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start max-w-6xl mx-auto mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start max-w-6xl mx-auto mb-6 mt-8">
           {pricingTiers.map((tier) => {
             const Icon = tier.icon;
             return (
               <div
                 key={tier.id}
-                className={`relative bg-white rounded-2xl shadow-lg border transition-all duration-300 hover:shadow-xl overflow-hidden ${
+                className={`relative bg-white rounded-2xl shadow-lg border transition-all duration-300 hover:shadow-xl ${
                   tier.highlighted
                     ? 'border-blue-300 shadow-blue-100'
                     : tier.isCurrent
@@ -169,16 +169,16 @@ const SubscriptionPage = () => {
                 }`}
               >
                 {tier.highlighted && !tier.isCurrent && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
                       Recommended
                     </div>
                   </div>
                 )}
 
                 {tier.isCurrent && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="bg-gradient-to-r from-green-600 to-green-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="bg-gradient-to-r from-green-600 to-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1 whitespace-nowrap">
                       <Check className="w-3 h-3" />
                       Current Plan
                     </div>
