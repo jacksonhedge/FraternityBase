@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 
 type RoadmapTab = 'features' | 'data';
-type Status = 'shipped' | 'in-progress' | 'planned';
+type Status = 'completed' | 'in-progress' | 'planned' | 'on-hold';
 
 interface RoadmapItem {
   id: string;
@@ -30,8 +30,10 @@ interface RoadmapItem {
   description: string;
   status: Status;
   quarter?: string;
-  category?: string;
+  category: 'features' | 'data';
   icon?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const initialFeatureRoadmap: RoadmapItem[] = [
@@ -41,16 +43,16 @@ const initialFeatureRoadmap: RoadmapItem[] = [
     description: 'Full REST API access to our entire database of 5,000+ chapters, universities, and contacts. Programmatically search, filter, and integrate our data into your CRM, marketing automation, or custom tools. Enterprise Plan only - pricing TBD.',
     status: 'planned',
     quarter: 'Q2 2026',
-    category: 'Enterprise',
+    category: 'features',
     icon: 'Code',
   },
   {
     id: '1',
     title: 'User Activity Tracking',
     description: 'Track which companies are clicking through chapters, colleges, and features for better insights',
-    status: 'shipped',
+    status: 'completed',
     quarter: 'Q4 2025',
-    category: 'Analytics',
+    category: 'features',
     icon: 'TrendingUp',
   },
   {
@@ -59,7 +61,7 @@ const initialFeatureRoadmap: RoadmapItem[] = [
     description: 'Connect with student ambassadors at target chapters for authentic intros and partnerships',
     status: 'in-progress',
     quarter: 'Q1 2026',
-    category: 'Networking',
+    category: 'features',
     icon: 'Users',
   },
   {
@@ -68,7 +70,7 @@ const initialFeatureRoadmap: RoadmapItem[] = [
     description: 'Filter chapters by size, engagement score, location, and custom criteria',
     status: 'in-progress',
     quarter: 'Q1 2026',
-    category: 'Core Features',
+    category: 'features',
     icon: 'Target',
   },
   {
@@ -77,16 +79,16 @@ const initialFeatureRoadmap: RoadmapItem[] = [
     description: 'Request personalized introductions to chapter leadership through our network',
     status: 'planned',
     quarter: 'Q1 2026',
-    category: 'Outreach',
+    category: 'features',
     icon: 'MessageSquare',
   },
   {
     id: '5',
     title: 'Pricing & Credits System',
     description: 'Flexible credit-based pricing for unlocking chapters and premium features',
-    status: 'shipped',
+    status: 'completed',
     quarter: 'Q4 2025',
-    category: 'Platform',
+    category: 'features',
     icon: 'DollarSign',
   },
   {
@@ -95,7 +97,7 @@ const initialFeatureRoadmap: RoadmapItem[] = [
     description: 'AI-powered scoring to identify the most active and engaged chapters',
     status: 'planned',
     quarter: 'Q2 2026',
-    category: 'Analytics',
+    category: 'features',
     icon: 'Zap',
   },
   {
@@ -104,7 +106,7 @@ const initialFeatureRoadmap: RoadmapItem[] = [
     description: 'Comprehensive admin panel for managing users, companies, data, and platform analytics',
     status: 'in-progress',
     quarter: 'Q1 2026',
-    category: 'Platform',
+    category: 'features',
     icon: 'Target',
   },
 ];
@@ -114,9 +116,9 @@ const initialDataRoadmap: RoadmapItem[] = [
     id: 'd1',
     title: 'Complete SEC Coverage',
     description: 'All fraternities and sororities at SEC schools (Alabama, LSU, Georgia, Tennessee, etc.)',
-    status: 'shipped',
+    status: 'completed',
     quarter: 'Q4 2025',
-    category: 'Conference',
+    category: 'data',
     icon: 'CheckCircle2',
   },
   {
@@ -125,7 +127,7 @@ const initialDataRoadmap: RoadmapItem[] = [
     description: 'Adding chapters from Michigan, Ohio State, Penn State, and other Big Ten schools',
     status: 'in-progress',
     quarter: 'Q1 2026',
-    category: 'Conference',
+    category: 'data',
     icon: 'Clock',
   },
   {
@@ -134,7 +136,7 @@ const initialDataRoadmap: RoadmapItem[] = [
     description: 'Expanding to ACC (Clemson, UNC, Duke) and Big 12 (Texas, Oklahoma) schools',
     status: 'planned',
     quarter: 'Q1 2026',
-    category: 'Conference',
+    category: 'data',
     icon: 'MapPin',
   },
   {
@@ -143,7 +145,7 @@ const initialDataRoadmap: RoadmapItem[] = [
     description: 'Stanford, Northwestern, Vanderbilt, USC, and other elite private schools',
     status: 'planned',
     quarter: 'Q2 2026',
-    category: 'School Type',
+    category: 'data',
     icon: 'Globe2',
   },
   {
@@ -152,7 +154,7 @@ const initialDataRoadmap: RoadmapItem[] = [
     description: 'Major state universities across all 50 states',
     status: 'planned',
     quarter: 'Q2 2026',
-    category: 'Geographic',
+    category: 'data',
     icon: 'Database',
   },
   {
@@ -161,7 +163,7 @@ const initialDataRoadmap: RoadmapItem[] = [
     description: 'Adding Divine Nine and other historically Black Greek organizations',
     status: 'planned',
     quarter: 'Q2 2026',
-    category: 'Organization Type',
+    category: 'data',
     icon: 'Users',
   },
 ];
@@ -192,91 +194,146 @@ const ProductRoadmapPage = () => {
     const adminToken = sessionStorage.getItem('adminToken');
     setIsAdmin(!!adminToken);
 
-    // Load from localStorage if available
-    const savedFeatures = localStorage.getItem('roadmap_features');
-    const savedData = localStorage.getItem('roadmap_data');
-
-    if (savedFeatures) setFeatureRoadmap(JSON.parse(savedFeatures));
-    if (savedData) setDataRoadmap(JSON.parse(savedData));
+    // Fetch roadmap items from backend
+    fetchRoadmapItems();
   }, []);
 
-  const saveToLocalStorage = (features: RoadmapItem[], data: RoadmapItem[]) => {
-    localStorage.setItem('roadmap_features', JSON.stringify(features));
-    localStorage.setItem('roadmap_data', JSON.stringify(data));
+  const fetchRoadmapItems = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/roadmap`);
+      if (!response.ok) throw new Error('Failed to fetch roadmap items');
+
+      const items: RoadmapItem[] = await response.json();
+
+      // Separate items by category
+      const features = items.filter(item => item.category === 'features');
+      const data = items.filter(item => item.category === 'data');
+
+      // Only update if we got items, otherwise keep the default data
+      if (features.length > 0) setFeatureRoadmap(features);
+      if (data.length > 0) setDataRoadmap(data);
+    } catch (error) {
+      console.error('Error fetching roadmap items:', error);
+      // Keep using the initial/default data on error
+    }
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (!editingItem) return;
 
-    if (activeTab === 'features') {
-      const updated = featureRoadmap.map(item =>
-        item.id === editingItem.id ? editingItem : item
-      );
-      setFeatureRoadmap(updated);
-      saveToLocalStorage(updated, dataRoadmap);
-    } else {
-      const updated = dataRoadmap.map(item =>
-        item.id === editingItem.id ? editingItem : item
-      );
-      setDataRoadmap(updated);
-      saveToLocalStorage(featureRoadmap, updated);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/roadmap/${editingItem.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: editingItem.title,
+          description: editingItem.description,
+          status: editingItem.status,
+          quarter: editingItem.quarter,
+          category: editingItem.category,
+          icon: editingItem.icon
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to update roadmap item');
+
+      const updatedItem = await response.json();
+
+      // Update local state
+      if (activeTab === 'features') {
+        const updated = featureRoadmap.map(item =>
+          item.id === editingItem.id ? updatedItem : item
+        );
+        setFeatureRoadmap(updated);
+      } else {
+        const updated = dataRoadmap.map(item =>
+          item.id === editingItem.id ? updatedItem : item
+        );
+        setDataRoadmap(updated);
+      }
+      setEditingItem(null);
+    } catch (error) {
+      console.error('Error updating roadmap item:', error);
+      alert('Failed to update item. Please try again.');
     }
-    setEditingItem(null);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
 
-    if (activeTab === 'features') {
-      const updated = featureRoadmap.filter(item => item.id !== id);
-      setFeatureRoadmap(updated);
-      saveToLocalStorage(updated, dataRoadmap);
-    } else {
-      const updated = dataRoadmap.filter(item => item.id !== id);
-      setDataRoadmap(updated);
-      saveToLocalStorage(featureRoadmap, updated);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/roadmap/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete roadmap item');
+
+      // Update local state
+      if (activeTab === 'features') {
+        const updated = featureRoadmap.filter(item => item.id !== id);
+        setFeatureRoadmap(updated);
+      } else {
+        const updated = dataRoadmap.filter(item => item.id !== id);
+        setDataRoadmap(updated);
+      }
+    } catch (error) {
+      console.error('Error deleting roadmap item:', error);
+      alert('Failed to delete item. Please try again.');
     }
   };
 
-  const handleAddItem = () => {
-    const item: RoadmapItem = {
-      id: Date.now().toString(),
-      title: newItem.title || '',
-      description: newItem.description || '',
-      status: newItem.status || 'planned',
-      quarter: newItem.quarter,
-      category: newItem.category,
-      icon: newItem.icon || 'Rocket'
-    };
+  const handleAddItem = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/roadmap`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: newItem.title || '',
+          description: newItem.description || '',
+          status: newItem.status || 'planned',
+          quarter: newItem.quarter,
+          category: activeTab, // Use current tab as category
+          icon: newItem.icon || 'Rocket'
+        }),
+      });
 
-    if (activeTab === 'features') {
-      const updated = [...featureRoadmap, item];
-      setFeatureRoadmap(updated);
-      saveToLocalStorage(updated, dataRoadmap);
-    } else {
-      const updated = [...dataRoadmap, item];
-      setDataRoadmap(updated);
-      saveToLocalStorage(featureRoadmap, updated);
+      if (!response.ok) throw new Error('Failed to create roadmap item');
+
+      const createdItem = await response.json();
+
+      // Update local state
+      if (activeTab === 'features') {
+        setFeatureRoadmap([...featureRoadmap, createdItem]);
+      } else {
+        setDataRoadmap([...dataRoadmap, createdItem]);
+      }
+
+      setShowAddModal(false);
+      setNewItem({
+        title: '',
+        description: '',
+        status: 'planned',
+        quarter: '',
+        category: '',
+        icon: 'Rocket'
+      });
+    } catch (error) {
+      console.error('Error creating roadmap item:', error);
+      alert('Failed to create item. Please try again.');
     }
-
-    setShowAddModal(false);
-    setNewItem({
-      title: '',
-      description: '',
-      status: 'planned',
-      quarter: '',
-      category: '',
-      icon: 'Rocket'
-    });
   };
 
   const getStatusBadge = (status: Status) => {
     switch (status) {
-      case 'shipped':
+      case 'completed':
         return (
           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
             <CheckCircle2 className="w-3 h-3 mr-1" />
-            Shipped
+            Completed
           </span>
         );
       case 'in-progress':
@@ -293,14 +350,22 @@ const ProductRoadmapPage = () => {
             Planned
           </span>
         );
+      case 'on-hold':
+        return (
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+            <Lock className="w-3 h-3 mr-1" />
+            On Hold
+          </span>
+        );
     }
   };
 
   const renderRoadmapSection = (items: RoadmapItem[], title: string) => {
     const sections = [
-      { status: 'shipped' as Status, title: 'Recently Shipped' },
+      { status: 'completed' as Status, title: 'Recently Completed' },
       { status: 'in-progress' as Status, title: 'In Progress' },
       { status: 'planned' as Status, title: 'Planned' },
+      { status: 'on-hold' as Status, title: 'On Hold' },
     ];
 
     return (
@@ -353,7 +418,8 @@ const ProductRoadmapPage = () => {
                             >
                               <option value="planned">Planned</option>
                               <option value="in-progress">In Progress</option>
-                              <option value="shipped">Shipped</option>
+                              <option value="completed">Completed</option>
+                              <option value="on-hold">On Hold</option>
                             </select>
                           </div>
                           <div className="flex gap-2">
@@ -566,7 +632,8 @@ const ProductRoadmapPage = () => {
                   >
                     <option value="planned">Planned</option>
                     <option value="in-progress">In Progress</option>
-                    <option value="shipped">Shipped</option>
+                    <option value="completed">Completed</option>
+                    <option value="on-hold">On Hold</option>
                   </select>
                 </div>
               </div>
