@@ -619,6 +619,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     // Determine credits cost based on greek_rank (rating out of 5.0)
     // Higher rank = more expensive (better chapters cost more)
     const rank = chapterData.greek_rank || 0;
+    const is5Star = rank >= 5.0;
     let credits = 20; // Default for low-ranked chapters
     let dollarValue = 5.99;
 
