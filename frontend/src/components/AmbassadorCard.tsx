@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, GraduationCap, Users, Briefcase, Unlock, MessageCircle, Award } from 'lucide-react';
+import { User, GraduationCap, Users, Briefcase, Unlock, MessageCircle, Award, Instagram } from 'lucide-react';
 
 interface AmbassadorCardProps {
   id: string;
@@ -16,6 +16,7 @@ interface AmbassadorCardProps {
   previousBrands?: string[];
   openToWork: boolean;
   linkedinProfile?: string;
+  instagramProfile?: string;
   isUnlocked: boolean;
   subscriptionTier: string;
   onUnlock: (ambassadorId: string) => Promise<void>;
@@ -37,6 +38,7 @@ const AmbassadorCard = ({
   previousBrands = [],
   openToWork,
   linkedinProfile,
+  instagramProfile,
   isUnlocked,
   subscriptionTier,
   onUnlock,
@@ -155,20 +157,37 @@ const AmbassadorCard = ({
         )}
       </div>
 
-      {/* LinkedIn (only show if unlocked) */}
-      {isUnlocked && linkedinProfile && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <a
-            href={linkedinProfile}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-blue-700 hover:text-blue-900 font-medium flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-            </svg>
-            View LinkedIn Profile
-          </a>
+      {/* Social Media Links (only show if unlocked) */}
+      {isUnlocked && (linkedinProfile || instagramProfile) && (
+        <div className="mb-4 space-y-2">
+          {linkedinProfile && (
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <a
+                href={linkedinProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-blue-700 hover:text-blue-900 font-medium flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                View LinkedIn Profile
+              </a>
+            </div>
+          )}
+          {instagramProfile && (
+            <div className="p-3 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+              <a
+                href={`https://instagram.com/${instagramProfile.replace('@', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-purple-700 hover:text-purple-900 font-medium flex items-center gap-2"
+              >
+                <Instagram className="w-4 h-4" />
+                Follow on Instagram ({instagramProfile})
+              </a>
+            </div>
+          )}
         </div>
       )}
 
@@ -219,7 +238,7 @@ const AmbassadorCard = ({
 
         {!isUnlocked && (
           <p className="text-xs text-center text-gray-500 mt-2">
-            Unlock profile to request introductions and view LinkedIn
+            Unlock profile to request introductions and view social media
           </p>
         )}
       </div>

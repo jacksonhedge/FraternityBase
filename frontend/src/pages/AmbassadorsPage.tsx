@@ -369,6 +369,19 @@ const AmbassadorsPage = () => {
                         </a>
                       </div>
                     )}
+                    {ambassador.instagram && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Instagram className="w-4 h-4" />
+                        <a
+                          href={`https://instagram.com/${ambassador.instagram.replace('@', '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-primary-600"
+                        >
+                          {ambassador.instagram}
+                        </a>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="flex gap-2">
