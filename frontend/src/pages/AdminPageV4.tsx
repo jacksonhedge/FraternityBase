@@ -1404,6 +1404,16 @@ const AdminPageV4 = () => {
             <Activity className="w-5 h-5" />
             <span className="font-medium">User Activity</span>
           </button>
+
+          <a
+            href="/app/roadmap"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
+          >
+            <Rocket className="w-5 h-5" />
+            <span className="font-medium">Product Roadmap</span>
+          </a>
         </nav>
 
         {/* Bottom Section */}
