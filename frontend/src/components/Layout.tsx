@@ -47,6 +47,8 @@ const Layout = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('Free');
+  const [credits, setCredits] = useState<number>(0);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,6 +68,36 @@ const Layout = () => {
     };
 
     checkApprovalStatus();
+  }, []);
+
+  // Fetch subscription tier and credits
+  useEffect(() => {
+    const fetchAccountBalance = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${API_URL}/credits/balance`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSubscriptionTier(data.subscription_tier || 'Free');
+          setCredits(data.balance_credits || 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch account balance:', error);
+      }
+    };
+
+    fetchAccountBalance();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchAccountBalance, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   // Close dropdown when clicking outside
@@ -140,11 +172,11 @@ const Layout = () => {
   return (
     <div className="min-h-screen bg-green-50">
       {/* Sidebar for desktop */}
-      <div className={`hidden md:flex md:flex-col md:fixed md:inset-y-0 transition-all duration-300 ${isSidebarCollapsed ? 'md:w-20' : 'md:w-64'}`}>
-        <div className="flex flex-col flex-1 bg-white border-r border-gray-200">
-          <div className="flex items-center justify-between h-16 px-4 bg-primary-600">
+      <div className={`hidden md:flex md:flex-col md:fixed md:inset-y-0 transition-all duration-300 ${isSidebarCollapsed ? 'md:w-20' : 'md:w-64'} z-30`}>
+        <div className="flex flex-col h-full bg-white border-r border-gray-200">
+          <div className="flex items-center justify-between h-16 px-4 bg-primary-600 flex-shrink-0">
             <div className="flex items-center gap-2">
-              <img src="/fb-logo.svg" alt="FB" className="w-8 h-8" />
+              <div className="text-3xl">🧢</div>
               {!isSidebarCollapsed && <h1 className="text-xl font-bold text-white">FraternityBase</h1>}
             </div>
             <button
@@ -154,7 +186,10 @@ const Layout = () => {
               {isSidebarCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
             </button>
           </div>
-          <nav className="flex-1 px-2 py-4 space-y-6 overflow-y-auto">
+          <nav className="flex-1 px-2 py-4 space-y-6 overflow-y-auto overflow-x-hidden sidebar-scroll" style={{
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#D1D5DB #F3F4F6'
+          }}>
             {navigationSections.map((section, sectionIndex) => (
               <div key={sectionIndex}>
                 {section.title && !isSidebarCollapsed && (
@@ -217,7 +252,7 @@ const Layout = () => {
               </div>
             ))}
           </nav>
-          <div className="px-4 py-4 border-t border-gray-200">
+          <div className="px-4 py-4 border-t border-gray-200 flex-shrink-0">
             {isSidebarCollapsed ? (
               <div className="flex flex-col items-center gap-2">
                 <button
@@ -257,8 +292,8 @@ const Layout = () => {
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-          <div className="flex items-center gap-1">
-            <img src="/fb-logo.svg" alt="FB" className="w-6 h-6" />
+          <div className="flex items-center gap-2">
+            <div className="text-2xl">🧢</div>
             <h1 className="text-lg font-bold text-primary-600">FraternityBase</h1>
           </div>
           <button className="p-2 text-gray-500 hover:text-gray-700">
@@ -351,6 +386,11 @@ const Layout = () => {
           {/* Top bar */}
           <header className="hidden md:flex items-center justify-end px-6 py-4 bg-white border-b border-gray-200">
             <div className="flex items-center space-x-4">
+              {/* Subscription Tier Badge */}
+              <div className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold rounded-full">
+                {subscriptionTier}
+              </div>
+
               <button className="p-2 text-gray-500 hover:text-gray-700 relative">
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
@@ -365,9 +405,14 @@ const Layout = () => {
                   <div className="w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-primary-700" />
                   </div>
-                  <span className="text-sm font-medium">
-                    {user?.firstName} {user?.lastName}
-                  </span>
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm font-medium">
+                      {user?.firstName} {user?.lastName}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {credits.toLocaleString()} credits
+                    </span>
+                  </div>
                   <ChevronDown className={`w-4 h-4 transition-transform ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
