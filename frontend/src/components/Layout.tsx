@@ -520,12 +520,9 @@ const Layout = () => {
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                   className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-primary-700" />
-                  </div>
                   <div className="flex flex-col items-start">
                     <span className="text-sm font-medium">
-                      {user?.firstName} {user?.lastName}
+                      {user?.company?.name || user?.companyName || 'Company'}
                     </span>
                     <span className="text-xs text-gray-500">
                       {credits.toLocaleString()} credits
