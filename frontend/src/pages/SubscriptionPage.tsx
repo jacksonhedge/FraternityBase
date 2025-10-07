@@ -48,11 +48,14 @@ const SubscriptionPage = () => {
       icon: Zap,
       color: 'from-blue-500 to-blue-600',
       bgColor: 'from-blue-50 to-blue-100',
+      goldFeatures: [
+        '1 Premium Chapter Unlocked',
+        '1 Chapter Introduction'
+      ],
       features: [
         'Unlimited platform access',
         'Browse all 5,000+ chapters',
         'Advanced search & filters',
-        'Export data to CSV',
         'Email support',
         '100 monthly credits included',
         'Purchase additional credits'
@@ -75,6 +78,7 @@ const SubscriptionPage = () => {
         'Unlimited chapter unlocks',
         'Unlimited warm intros',
         '500 monthly credits included',
+        'Export data to CSV',
         'FraternityBase API access',
         'CRM & tool integrations',
         'Dedicated account manager',
@@ -116,7 +120,7 @@ const SubscriptionPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 pb-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* Back Button */}
         <Link
           to="/app/team"
@@ -236,6 +240,17 @@ const SubscriptionPage = () => {
 
                   {/* Features */}
                   <div className="space-y-2">
+                    {/* Gold Features (if present) */}
+                    {tier.goldFeatures?.map((feature, idx) => (
+                      <div key={`gold-${idx}`} className="flex items-start gap-2 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-300 rounded-lg p-2 -mx-1">
+                        <div className="flex-shrink-0 w-4 h-4 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center mt-0.5 shadow-sm">
+                          <Check className="w-2.5 h-2.5 text-white" />
+                        </div>
+                        <span className="text-xs font-bold text-amber-900 leading-tight">{feature}</span>
+                      </div>
+                    ))}
+
+                    {/* Regular Features */}
                     {tier.features.map((feature, idx) => (
                       <div key={idx} className="flex items-start gap-2">
                         <div className="flex-shrink-0 w-4 h-4 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
