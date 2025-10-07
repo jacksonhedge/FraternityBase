@@ -74,16 +74,24 @@ function getCreditNotificationService(): CreditNotificationService | null {
 
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'https://fraternitybase.com',
-    'https://www.fraternitybase.com',
-    'https://frontend-gxqgrycnw-jackson-fitzgeralds-projects.vercel.app',
-    'https://frontend-aapaw19p9-jackson-fitzgeralds-projects.vercel.app',
-    'https://frontend-dog5jt9fc-jackson-fitzgeralds-projects.vercel.app'
-  ],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'https://fraternitybase.com',
+      'https://www.fraternitybase.com'
+    ];
+
+    // Allow all Vercel preview deployments for frontend
+    const isVercelPreview = origin && origin.match(/^https:\/\/frontend-[a-z0-9]+-jackson-fitzgeralds-projects\.vercel\.app$/);
+
+    if (!origin || allowedOrigins.includes(origin) || isVercelPreview) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
