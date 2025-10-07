@@ -34,6 +34,7 @@ import {
 import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
 import ActivityLogsTab from '../components/admin/ActivityLogsTab';
+import AmbassadorsAdmin from '../components/AmbassadorsAdmin';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -180,7 +181,7 @@ interface CompanyDetail extends Company {
 const AdminPageV4 = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'users' | 'waitlist' |
+    'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
     'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity'
   >('dashboard');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -1170,6 +1171,22 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
+              setActiveTab('ambassadors');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'ambassadors'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Star className="w-5 h-5" />
+            <span className="font-medium">Ambassadors</span>
+          </button>
+
+          <button
+            onClick={() => {
               setActiveTab('users');
               setShowForm(false);
               setEditingId(null);
@@ -1366,6 +1383,7 @@ const AdminPageV4 = () => {
               {activeTab === 'fraternities' && 'Manage Greek organizations'}
               {activeTab === 'colleges' && 'Manage universities and colleges'}
               {activeTab === 'chapters' && 'Manage individual chapters'}
+              {activeTab === 'ambassadors' && 'Manage ambassador profiles and partnerships'}
               {activeTab === 'users' && 'Manage chapter users and contacts'}
               {activeTab === 'waitlist' && 'View and manage waitlist signups'}
               {activeTab === 'payments' && 'Track revenue, transactions, and financial analytics'}
@@ -1690,7 +1708,7 @@ const AdminPageV4 = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
-                        ${(company.credits_balance || 0).toFixed(2)}
+                        {company.credits_balance || 0} credits
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -1830,6 +1848,38 @@ const AdminPageV4 = () => {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-xs text-gray-500 uppercase mb-1">Unlocks</p>
                   <p className="text-lg font-semibold text-gray-900">{selectedCompany.unlocks?.length || 0}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-xs text-gray-500 uppercase mb-1">Subscription Tier</p>
+                  <select
+                    value={selectedCompany.subscription_tier || 'trial'}
+                    onChange={async (e) => {
+                      const newTier = e.target.value;
+                      try {
+                        const response = await fetch(`${API_URL}/admin/companies/${selectedCompany.id}/subscription-tier`, {
+                          method: 'POST',
+                          headers: getAdminHeaders(),
+                          body: JSON.stringify({ tier: newTier })
+                        });
+
+                        if (response.ok) {
+                          alert(`Successfully updated to ${newTier} tier`);
+                          await fetchCompanyDetails(selectedCompany.id);
+                        } else {
+                          const result = await response.json();
+                          alert(`Failed to update tier: ${result.error || 'Unknown error'}`);
+                        }
+                      } catch (error) {
+                        console.error('Error updating tier:', error);
+                        alert('Error updating subscription tier');
+                      }
+                    }}
+                    className="mt-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-semibold bg-white hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="trial">Trial</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
                 </div>
               </div>
 
@@ -1988,7 +2038,7 @@ const AdminPageV4 = () => {
       )}
 
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'ambassadors' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
@@ -2787,6 +2837,11 @@ const AdminPageV4 = () => {
             </>
           )}
 
+          {/* Ambassadors Tab Content */}
+          {activeTab === 'ambassadors' && (
+            <AmbassadorsAdmin />
+          )}
+
           {/* Users Tab Content */}
           {activeTab === 'users' && (
             <>
@@ -3012,6 +3067,9 @@ const AdminPageV4 = () => {
 
           {/* User Activity Tab */}
           {activeTab === 'activity' && <ActivityLogsTab />}
+
+          {/* Ambassadors Tab */}
+          {activeTab === 'ambassadors' && <AmbassadorsAdmin />}
         </div>
       )}
         </div>
