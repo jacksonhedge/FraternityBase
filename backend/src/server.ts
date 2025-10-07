@@ -118,8 +118,8 @@ app.get('/api/credits/balance', async (req, res) => {
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
     console.log('🔑 Token extracted:', token.substring(0, 20) + '...');
 
-    // Verify the token with Supabase and get user
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    // Verify the token with Supabase using service role client for server-side verification
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
     console.log('👤 User verification:', user ? `User ID: ${user.id}` : 'NO USER');
     console.log('⚠️ Auth error:', authError ? authError.message : 'No error');
 
