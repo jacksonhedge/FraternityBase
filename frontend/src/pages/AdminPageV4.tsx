@@ -29,7 +29,8 @@ import {
   ShoppingCart,
   Unlock,
   Handshake,
-  FileUp
+  FileUp,
+  Rocket
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
