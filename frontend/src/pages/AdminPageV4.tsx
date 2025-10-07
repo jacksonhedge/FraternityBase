@@ -87,6 +87,7 @@ interface Chapter {
   engagement_score?: number;
   partnership_openness?: string;
   event_frequency?: number;
+  grade?: number;
   greek_organizations?: { name: string };
   universities?: { name: string; state: string };
 }
@@ -202,6 +203,7 @@ const AdminPageV4 = () => {
   const [showCSVImport, setShowCSVImport] = useState(false);
   const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
   const [collegeFilter, setCollegeFilter] = useState<string>('all');
+  const [chapterOrderBy, setChapterOrderBy] = useState<'name' | 'university' | 'grade'>('grade');
   const [aiPrompt, setAiPrompt] = useState('');
   const [selectedCompany, setSelectedCompany] = useState<CompanyDetail | null>(null);
   const [showCompanyDetail, setShowCompanyDetail] = useState(false);
@@ -251,7 +253,8 @@ const AdminPageV4 = () => {
     phone: '',
     engagement_score: '75',
     partnership_openness: 'open',
-    event_frequency: '20'
+    event_frequency: '20',
+    grade: ''
   });
 
   const [userForm, setUserForm] = useState({
@@ -617,7 +620,8 @@ const AdminPageV4 = () => {
           phone: chapterForm.phone || null,
           engagement_score: chapterForm.engagement_score ? parseInt(chapterForm.engagement_score) : null,
           partnership_openness: chapterForm.partnership_openness,
-          event_frequency: chapterForm.event_frequency ? parseInt(chapterForm.event_frequency) : null
+          event_frequency: chapterForm.event_frequency ? parseInt(chapterForm.event_frequency) : null,
+          grade: chapterForm.grade ? parseFloat(chapterForm.grade) : null
         })
       });
 
@@ -639,7 +643,8 @@ const AdminPageV4 = () => {
           phone: '',
           engagement_score: '75',
           partnership_openness: 'open',
-          event_frequency: '20'
+          event_frequency: '20',
+          grade: ''
         });
         fetchData();
       }
@@ -1037,11 +1042,26 @@ const AdminPageV4 = () => {
       return 0;
     });
 
-  const filteredChapters = chapters.filter(ch =>
-    ch.chapter_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    ch.greek_organizations?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    ch.universities?.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredChapters = chapters
+    .filter(ch =>
+      ch.chapter_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ch.greek_organizations?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ch.universities?.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (chapterOrderBy === 'grade') {
+        return (b.grade || 0) - (a.grade || 0); // Sort descending (5.0 first)
+      } else if (chapterOrderBy === 'name') {
+        const aName = a.greek_organizations?.name || '';
+        const bName = b.greek_organizations?.name || '';
+        return aName.localeCompare(bName);
+      } else if (chapterOrderBy === 'university') {
+        const aUni = a.universities?.name || '';
+        const bUni = b.universities?.name || '';
+        return aUni.localeCompare(bUni);
+      }
+      return 0;
+    });
 
   const filteredUsers = users.filter(off =>
     off.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -2752,6 +2772,19 @@ const AdminPageV4 = () => {
                         <option value="inactive">Inactive</option>
                       </select>
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Grade</label>
+                      <select
+                        value={chapterForm.grade || ''}
+                        onChange={(e) => setChapterForm({ ...chapterForm, grade: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                      >
+                        <option value="">No Grade</option>
+                        <option value="5.0">5.0 - Full Roster</option>
+                        <option value="4.0">4.0 - Some Contacts</option>
+                        <option value="3.0">3.0 - Social Links Only</option>
+                      </select>
+                    </div>
                   </div>
                   <div className="flex justify-end space-x-3 mt-6">
                     <button
@@ -2771,10 +2804,50 @@ const AdminPageV4 = () => {
                   </div>
                 </form>
               )}
+
+              {/* Grade Key */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-4 border border-blue-200">
+                <div className="flex items-start gap-3">
+                  <Star className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900 mb-2">Chapter Grade Key</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-1 bg-green-100 text-green-800 font-bold rounded">5.0</span>
+                        <span className="text-gray-700">Full roster (all contacts)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 font-bold rounded">4.0</span>
+                        <span className="text-gray-700">Some contacts available</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-1 bg-orange-100 text-orange-800 font-bold rounded">3.0</span>
+                        <span className="text-gray-700">Social links & websites only</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order By Dropdown */}
+              <div className="mb-4 flex items-center gap-3">
+                <label className="text-sm font-medium text-gray-700">Order by:</label>
+                <select
+                  value={chapterOrderBy}
+                  onChange={(e) => setChapterOrderBy(e.target.value as 'name' | 'university' | 'grade')}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
+                >
+                  <option value="grade">Grade (Highest First)</option>
+                  <option value="name">Fraternity Name</option>
+                  <option value="university">University Name</option>
+                </select>
+              </div>
+
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fraternity</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">University</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
@@ -2785,6 +2858,20 @@ const AdminPageV4 = () => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredChapters.map((ch) => (
                       <tr key={ch.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {ch.grade ? (
+                            <span className={`px-2 py-1 font-bold rounded text-sm ${
+                              ch.grade >= 5.0 ? 'bg-green-100 text-green-800' :
+                              ch.grade >= 4.0 ? 'bg-yellow-100 text-yellow-800' :
+                              ch.grade >= 3.0 ? 'bg-orange-100 text-orange-800' :
+                              'bg-gray-100 text-gray-600'
+                            }`}>
+                              {ch.grade.toFixed(1)}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 text-sm">-</span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {ch.greek_organizations?.name || '-'}
                         </td>
