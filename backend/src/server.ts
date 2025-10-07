@@ -9,6 +9,7 @@ import multer from 'multer';
 import { parse } from 'csv-parse/sync';
 import creditsRouter from './routes/credits';
 import activityTrackingRouter from './routes/activityTracking';
+import roadmapRouter from './routes/roadmap';
 import CreditNotificationService from './services/CreditNotificationService';
 
 dotenv.config();
@@ -257,6 +258,7 @@ app.get('/api/user/profile', async (req, res) => {
 // Mount credits router
 app.use('/api/credits', creditsRouter);
 app.use('/api/activity', activityTrackingRouter);
+app.use('/api/roadmap', roadmapRouter);
 
 // Admin authentication middleware (temporarily disabled for debugging)
 const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {

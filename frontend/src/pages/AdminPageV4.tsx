@@ -36,6 +36,7 @@ import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
 import ActivityLogsTab from '../components/admin/ActivityLogsTab';
 import AmbassadorsAdmin from '../components/AmbassadorsAdmin';
+import RoadmapAdmin from '../components/RoadmapAdmin';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -1406,15 +1407,20 @@ const AdminPageV4 = () => {
             <span className="font-medium">User Activity</span>
           </button>
 
-          <a
-            href="/app/roadmap"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
+          <button
+            onClick={() => {
+              setActiveTab('roadmap');
+              setCurrentSection('main');
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'roadmap'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
           >
             <Rocket className="w-5 h-5" />
             <span className="font-medium">Product Roadmap</span>
-          </a>
+          </button>
         </nav>
 
         {/* Bottom Section */}
@@ -3222,6 +3228,9 @@ const AdminPageV4 = () => {
 
           {/* Ambassadors Tab */}
           {activeTab === 'ambassadors' && <AmbassadorsAdmin />}
+
+          {/* Product Roadmap Tab */}
+          {activeTab === 'roadmap' && <RoadmapAdmin />}
         </div>
       )}
         </div>
