@@ -1439,7 +1439,7 @@ const MapPageFullScreen = () => {
                     {collegeChapters.some(c => !c.unlocked) && (
                       <div className="mt-4 text-center">
                         <Link
-                          to="/app/credits"
+                          to="/app/subscription"
                           className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all shadow-lg"
                         >
                           <Unlock className="w-5 h-5" />
