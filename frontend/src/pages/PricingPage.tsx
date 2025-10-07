@@ -68,8 +68,8 @@ const PricingPage = () => {
       price: 'Pay as you go',
       description: 'Unlock individual chapters',
       icon: Crown,
-      color: 'from-purple-500 to-purple-600',
-      bgColor: 'from-purple-50 to-purple-100',
+      color: 'from-yellow-400 via-yellow-500 to-amber-500',
+      bgColor: 'from-amber-50 via-yellow-50 to-amber-100',
       features: [
         'Chapter Unlock: $9.99',
         'Warm Introduction: $59.99',
@@ -79,8 +79,9 @@ const PricingPage = () => {
         'Credits never expire'
       ],
       limitations: [],
+      premium: true,
       buttonText: 'Buy Credits',
-      buttonStyle: 'border-2 border-purple-500 text-purple-600 hover:bg-purple-50 hover:border-purple-600 transition-all duration-200'
+      buttonStyle: 'bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-white hover:from-yellow-500 hover:via-yellow-600 hover:to-amber-600 border-transparent shadow-lg hover:shadow-xl transition-all duration-200'
     },
     {
       id: 'enterprise',
