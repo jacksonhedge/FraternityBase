@@ -118,6 +118,12 @@ app.get('/api/credits/balance', async (req, res) => {
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
     console.log('🔑 Token extracted:', token.substring(0, 20) + '...');
 
+    // Create admin client for server-side operations
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
     // Verify the token with Supabase using service role client for server-side verification
     const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
     console.log('👤 User verification:', user ? `User ID: ${user.id}` : 'NO USER');
@@ -144,10 +150,6 @@ app.get('/api/credits/balance', async (req, res) => {
     }
 
     // Query the new account_balance table using service_role to bypass RLS
-    const supabaseAdmin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
 
     const { data: balanceRows, error } = await supabaseAdmin
       .from('account_balance')
