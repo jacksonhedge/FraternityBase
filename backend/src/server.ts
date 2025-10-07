@@ -151,7 +151,7 @@ app.get('/api/credits/balance', async (req, res) => {
 
     const { data: balanceRows, error } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier, last_monthly_credit_grant_at, auto_reload_enabled, auto_reload_threshold, auto_reload_amount, companies(company_name)')
+      .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier, last_monthly_credit_grant_at, auto_reload_enabled, auto_reload_threshold, auto_reload_amount, companies(id, company_name, created_at)')
       .eq('company_id', profile.company_id)
       .order('created_at', { ascending: false })
       .limit(1);
@@ -201,6 +201,8 @@ app.get('/api/credits/balance', async (req, res) => {
       subscriptionTier: data?.subscription_tier || 'trial',
       lastMonthlyGrant: data?.last_monthly_credit_grant_at || null,
       companyName: (data?.companies as any)?.company_name || null,
+      companyId: (data?.companies as any)?.id || null,
+      companyCreatedAt: (data?.companies as any)?.created_at || null,
       autoReload: {
         enabled: data?.auto_reload_enabled || false,
         threshold: data?.auto_reload_threshold || 10.00,
