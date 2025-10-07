@@ -119,6 +119,8 @@ app.get('/api/credits/balance', async (req, res) => {
     console.log('🔑 Token extracted:', token.substring(0, 20) + '...');
 
     // Create admin client for server-side operations
+    console.log('🔧 SUPABASE_URL:', process.env.SUPABASE_URL ? 'Set' : 'NOT SET');
+    console.log('🔧 SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Set' : 'NOT SET');
     const supabaseAdmin = createClient(
       process.env.SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -131,7 +133,11 @@ app.get('/api/credits/balance', async (req, res) => {
 
     if (authError || !user) {
       console.log('❌ Invalid token or user not found');
-      return res.status(401).json({ error: 'Invalid token or user not found' });
+      console.log('❌ Auth error details:', JSON.stringify(authError));
+      return res.status(401).json({
+        error: 'Invalid token or user not found',
+        details: authError?.message || 'User not found'
+      });
     }
 
     // Get user's company_id from user_profiles
