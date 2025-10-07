@@ -1797,33 +1797,62 @@ const AdminPageV4 = () => {
                       {new Date(company.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={async () => {
-                          const amount = prompt('How many credits to add?');
-                          if (!amount || isNaN(parseInt(amount))) return;
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={async () => {
+                            const amount = prompt('How many credits to add?');
+                            if (!amount || isNaN(parseInt(amount))) return;
 
-                          try {
-                            const response = await fetch(`${API_URL}/admin/companies/${company.id}/add-credits`, {
-                              method: 'POST',
-                              headers: getAdminHeaders(),
-                              body: JSON.stringify({ credits: parseInt(amount) })
-                            });
+                            try {
+                              const response = await fetch(`${API_URL}/admin/companies/${company.id}/add-credits`, {
+                                method: 'POST',
+                                headers: getAdminHeaders(),
+                                body: JSON.stringify({ credits: parseInt(amount) })
+                              });
 
-                            if (response.ok) {
-                              alert(`Successfully added ${amount} credits to ${company.company_name}`);
-                              fetchData();
-                            } else {
-                              alert('Failed to add credits');
+                              if (response.ok) {
+                                alert(`Successfully added ${amount} credits to ${company.company_name}`);
+                                fetchData();
+                              } else {
+                                alert('Failed to add credits');
+                              }
+                            } catch (error) {
+                              alert('Error adding credits');
                             }
-                          } catch (error) {
-                            alert('Error adding credits');
-                          }
-                        }}
-                        className="px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors flex items-center gap-1"
-                      >
-                        <Plus className="w-3 h-3" />
-                        Add Credits
-                      </button>
+                          }}
+                          className="px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors flex items-center gap-1"
+                        >
+                          <Plus className="w-3 h-3" />
+                          Add Credits
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to DELETE the account for ${company.company_name}? This action CANNOT be undone!`)) return;
+
+                            try {
+                              const response = await fetch(`${API_URL}/admin/companies/${company.id}`, {
+                                method: 'DELETE',
+                                headers: getAdminHeaders()
+                              });
+
+                              if (response.ok) {
+                                alert(`Successfully deleted account for ${company.company_name}`);
+                                fetchData();
+                              } else {
+                                const error = await response.json();
+                                alert(`Failed to delete account: ${error.message || 'Unknown error'}`);
+                              }
+                            } catch (error) {
+                              alert('Error deleting account');
+                              console.error(error);
+                            }
+                          }}
+                          className="px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 transition-colors flex items-center gap-1"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
