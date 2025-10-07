@@ -14,12 +14,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand */}
-          <Link to="/" className="flex items-center gap-2">
-            <img src="/cap-logo.svg" alt="FraternityBase" className="w-10 h-10" />
-            <div className="flex flex-col -space-y-1">
-              <span className="text-2xl font-bold text-blue-600" style={{ fontFamily: 'cursive', letterSpacing: '-0.5px' }}>Fraternity</span>
-              <span className="text-2xl font-bold text-blue-600 pl-8" style={{ fontFamily: 'cursive', letterSpacing: '-0.5px' }}>Base</span>
-            </div>
+          <Link to="/" className="flex items-center gap-3">
+            <div className="text-4xl">🧢</div>
+            <span className="text-xl font-bold text-gray-900">FraternityBase</span>
           </Link>
 
           {/* Desktop Navigation */}

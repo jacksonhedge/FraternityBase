@@ -42,6 +42,7 @@ const DashboardPage = () => {
   const [accountBalance, setAccountBalance] = useState(0);
   const [lifetimeSpent, setLifetimeSpent] = useState(0);
   const [lifetimeAdded, setLifetimeAdded] = useState(0);
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
   const [unlockedChapters, setUnlockedChapters] = useState<any[]>([]);
   const [stats, setStats] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
@@ -115,6 +116,7 @@ const DashboardPage = () => {
           setAccountBalance(creditsData.balance || 0);
           setLifetimeSpent(creditsData.lifetimeSpent || 0);
           setLifetimeAdded(creditsData.lifetimeAdded || 0);
+          setSubscriptionTier(creditsData.subscriptionTier || 'trial');
           setUnlockedChapters(chaptersData.data || []);
           setActivityFeed(activityData.data || []);
 
@@ -124,6 +126,11 @@ const DashboardPage = () => {
 
           // Get unique states
           const states = new Set(universities.map((u: any) => u.state).filter(Boolean));
+
+          // Format subscription tier for display
+          const tierDisplay = subscriptionTier === 'trial' ? 'Trial' :
+                             subscriptionTier === 'monthly' ? 'Monthly' :
+                             subscriptionTier === 'enterprise' ? 'Enterprise' : 'Trial';
 
           setStats([
             {
@@ -152,6 +159,15 @@ const DashboardPage = () => {
               icon: TrendingUp,
               color: 'blue',
               description: 'Geographic coverage'
+            },
+            {
+              label: 'Subscription',
+              value: tierDisplay,
+              change: subscriptionTier === 'trial' ? 'Free tier' : subscriptionTier === 'monthly' ? '100 credits/month' : '800 credits/month',
+              trend: 'neutral',
+              icon: Award,
+              color: 'purple',
+              description: 'Current plan'
             }
           ]);
 

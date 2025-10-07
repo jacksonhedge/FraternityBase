@@ -93,10 +93,12 @@ const PricingPage = () => {
       features: [
         'Unlimited chapter unlocks',
         'Unlimited warm intros',
-        'API access',
+        'FraternityBase API access',
+        'CRM & tool integrations',
         'Custom integrations',
         'Dedicated account manager',
-        'Custom onboarding & training'
+        'Custom onboarding & training',
+        'Priority support'
       ],
       limitations: [],
       buttonText: 'Contact Sales',

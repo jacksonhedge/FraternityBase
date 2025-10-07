@@ -141,14 +141,18 @@ const SignUpPage = () => {
         // Don't fail signup if team member creation fails
       }
 
-      // 5. Initialize account balance (starts at $0 - must purchase credits)
+      // 5. Initialize account balance (starts at 0 credits for trial)
       const { error: balanceError } = await supabase
         .from('account_balance')
         .insert({
           company_id: company.id,
+          balance_credits: 0,
           balance_dollars: 0.00,
+          lifetime_spent_credits: 0,
           lifetime_spent_dollars: 0.00,
+          lifetime_earned_credits: 0,
           lifetime_added_dollars: 0.00,
+          subscription_tier: 'trial',
         });
 
       if (balanceError) {
