@@ -1276,6 +1276,18 @@ const AdminPageV4 = () => {
             )}
           </button>
 
+          <button
+            onClick={() => setActiveTab('roadmap')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'roadmap'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Rocket className="w-5 h-5" />
+            <span className="font-medium">Product Roadmap</span>
+          </button>
+
           <a
             href="/admin/csv-upload"
             className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 border-t border-gray-700 mt-2 pt-4"
@@ -1405,18 +1417,6 @@ const AdminPageV4 = () => {
           >
             <Activity className="w-5 h-5" />
             <span className="font-medium">User Activity</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('roadmap')}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'roadmap'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Rocket className="w-5 h-5" />
-            <span className="font-medium">Product Roadmap</span>
           </button>
         </nav>
 
