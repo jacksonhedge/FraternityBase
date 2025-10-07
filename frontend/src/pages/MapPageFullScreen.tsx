@@ -138,6 +138,8 @@ const MapPageFullScreen = () => {
   const [universities, setUniversities] = useState<any[]>([]); // Store all universities from database with IDs
   const [collegeChapters, setCollegeChapters] = useState<any[]>([]);
   const [loadingChapters, setLoadingChapters] = useState(false);
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
+  const [collegeClickedName, setCollegeClickedName] = useState<string>('');
   const mapRef = useRef<any>(null);
 
   const handleLogout = () => {
@@ -215,6 +217,33 @@ const MapPageFullScreen = () => {
     };
 
     fetchCollegeLogos();
+  }, []);
+
+  // Fetch subscription tier
+  useEffect(() => {
+    const fetchSubscriptionTier = async () => {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const response = await fetch(`${API_URL}/account/balance`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSubscriptionTier(data.subscriptionTier || 'trial');
+        }
+      } catch (error) {
+        console.error('Error fetching subscription tier:', error);
+      }
+    };
+
+    fetchSubscriptionTier();
   }, []);
 
   // Dynamic style for states based on light/dark mode
@@ -595,6 +624,17 @@ const MapPageFullScreen = () => {
       sororities: collegeData.sororities
     });
 
+    // Check if user is on free trial and trying to access non-BIG10 college
+    const isFreeUser = subscriptionTier.toLowerCase() === 'trial' || subscriptionTier.toLowerCase() === 'free';
+    const isBIG10College = collegeData.conference === 'BIG 10';
+
+    if (isFreeUser && !isBIG10College) {
+      // Show paywall for free users clicking non-BIG10 colleges
+      setCollegeClickedName(collegeName);
+      setShowLockOverlay(true);
+      return;
+    }
+
     setSelectedCollege({ name: collegeName, ...collegeData });
     setViewMode('campus'); // This will trigger the fraternity list view in the sidebar
     setShowInfo(false);
@@ -917,10 +957,7 @@ const MapPageFullScreen = () => {
           Big 10
         </button>
         <button
-          onClick={() => {
-            setDivisionFilter('mychapters');
-            setShowLockOverlay(true);
-          }}
+          onClick={() => setDivisionFilter('mychapters')}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'mychapters'
               ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-md'
@@ -930,10 +967,7 @@ const MapPageFullScreen = () => {
           My Chapters
         </button>
         <button
-          onClick={() => {
-            setDivisionFilter('power4');
-            setShowLockOverlay(true);
-          }}
+          onClick={() => setDivisionFilter('power4')}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'power4'
               ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
@@ -944,10 +978,7 @@ const MapPageFullScreen = () => {
           Power 5
         </button>
         <button
-          onClick={() => {
-            setDivisionFilter('d1');
-            setShowLockOverlay(true);
-          }}
+          onClick={() => setDivisionFilter('d1')}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd1'
               ? 'bg-blue-600 text-white shadow-md'
@@ -957,10 +988,7 @@ const MapPageFullScreen = () => {
           All D1
         </button>
         <button
-          onClick={() => {
-            setDivisionFilter('d2');
-            setShowLockOverlay(true);
-          }}
+          onClick={() => setDivisionFilter('d2')}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd2'
               ? 'bg-green-600 text-white shadow-md'
@@ -970,10 +998,7 @@ const MapPageFullScreen = () => {
           All D2
         </button>
         <button
-          onClick={() => {
-            setDivisionFilter('d3');
-            setShowLockOverlay(true);
-          }}
+          onClick={() => setDivisionFilter('d3')}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'd3'
               ? 'bg-orange-600 text-white shadow-md'
@@ -983,10 +1008,7 @@ const MapPageFullScreen = () => {
           All D3
         </button>
         <button
-          onClick={() => {
-            setDivisionFilter('all');
-            setShowLockOverlay(true);
-          }}
+          onClick={() => setDivisionFilter('all')}
           className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
             divisionFilter === 'all'
               ? 'bg-gray-800 text-white shadow-md'
@@ -1004,7 +1026,38 @@ const MapPageFullScreen = () => {
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Lock className="w-8 h-8 text-blue-600" />
             </div>
-            {divisionFilter === 'mychapters' ? (
+            {collegeClickedName ? (
+              <>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Subscribe to Access {collegeClickedName}
+                </h3>
+                <p className="text-gray-600 mb-2">
+                  Unlock access to all colleges and their chapters with a subscription.
+                </p>
+                <p className="text-2xl font-bold text-blue-600 mb-6">
+                  $29.99/month
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => {
+                      setShowLockOverlay(false);
+                      setCollegeClickedName('');
+                    }}
+                    className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      window.location.href = '/app/subscription';
+                    }}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
+                    Subscribe Now
+                  </button>
+                </div>
+              </>
+            ) : divisionFilter === 'mychapters' ? (
               <>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   Subscribe to Interactive Map
