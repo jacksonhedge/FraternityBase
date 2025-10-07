@@ -64,7 +64,13 @@ export default function CreditsPage() {
       }
 
       const data = await response.json();
-      setAccountData(data);
+      // Map API response fields to component state
+      setAccountData({
+        balance: data.balance_credits || 0,
+        lifetimeSpent: data.lifetimeSpentCredits || 0,
+        lifetimeAdded: data.lifetimeEarnedCredits || 0,
+        autoReload: data.autoReload
+      });
       setAutoReloadSettings(data.autoReload);
     } catch (error) {
       console.error('Failed to fetch balance:', error);
