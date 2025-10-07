@@ -165,7 +165,12 @@ interface ActivityLogEntry {
 interface CompanyUser {
   user_id: string;
   email: string;
+  first_name?: string;
+  last_name?: string;
+  member_number?: number;
   role: string;
+  status?: string;
+  joined_at?: string;
   created_at: string;
 }
 
