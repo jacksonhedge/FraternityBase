@@ -115,66 +115,66 @@ const SubscriptionPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 pb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         {/* Back Button */}
         <Link
           to="/app/team"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-3 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Team & Billing
         </Link>
 
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-lg">
-              <Sparkles className="w-8 h-8 text-white" />
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-3">
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg">
+              <Sparkles className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-3xl font-bold mb-2">
             <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
               Choose Your Plan
             </span>
           </h1>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <p className="text-sm text-gray-600 mb-3">
             Upgrade or change your subscription at any time
           </p>
 
           {/* Current Subscription Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200">
-            <span className="text-sm text-gray-600">Current Plan:</span>
-            <span className="text-sm font-bold text-gray-900 capitalize">{currentTier}</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full shadow-md border border-gray-200">
+            <span className="text-xs text-gray-600">Current Plan:</span>
+            <span className="text-xs font-bold text-gray-900 capitalize">{currentTier}</span>
           </div>
         </div>
 
         {/* Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start max-w-6xl mx-auto mb-6">
           {pricingTiers.map((tier) => {
             const Icon = tier.icon;
             return (
               <div
                 key={tier.id}
-                className={`relative bg-white rounded-3xl shadow-xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl overflow-hidden ${
+                className={`relative bg-white rounded-2xl shadow-lg border transition-all duration-300 hover:shadow-xl overflow-hidden ${
                   tier.highlighted
-                    ? 'border-blue-300 shadow-blue-100 scale-105'
+                    ? 'border-blue-300 shadow-blue-100'
                     : tier.isCurrent
                     ? 'border-green-300 shadow-green-100'
                     : 'border-gray-100 hover:border-gray-200'
                 }`}
               >
                 {tier.highlighted && !tier.isCurrent && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                       Recommended
                     </div>
                   </div>
                 )}
 
                 {tier.isCurrent && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="bg-gradient-to-r from-green-600 to-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="bg-gradient-to-r from-green-600 to-green-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
                       <Check className="w-3 h-3" />
                       Current Plan
                     </div>
@@ -182,48 +182,48 @@ const SubscriptionPage = () => {
                 )}
 
                 {/* Header with gradient background */}
-                <div className={`p-6 pb-4 bg-gradient-to-r ${tier.bgColor}`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-bold text-gray-900">
+                <div className={`p-4 pb-3 bg-gradient-to-r ${tier.bgColor}`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-bold text-gray-900">
                       {tier.name}
                     </h3>
-                    <div className={`p-3 rounded-xl bg-gradient-to-r ${tier.color} shadow-lg`}>
-                      <Icon className="w-6 h-6 text-white" />
+                    <div className={`p-2 rounded-lg bg-gradient-to-r ${tier.color} shadow-lg`}>
+                      <Icon className="w-5 h-5 text-white" />
                     </div>
                   </div>
 
                   {/* Price */}
-                  <div className="mb-2">
+                  <div className="mb-1">
                     {typeof tier.price === 'number' ? (
                       <div className="flex items-baseline">
-                        <span className="text-4xl font-bold text-gray-900">
+                        <span className="text-3xl font-bold text-gray-900">
                           ${tier.price}
                         </span>
                         {tier.price > 0 && (
-                          <span className="text-gray-600 ml-1 text-lg">
+                          <span className="text-gray-600 ml-1 text-base">
                             /mo
                           </span>
                         )}
                       </div>
                     ) : (
-                      <span className="text-4xl font-bold text-gray-900">
+                      <span className="text-3xl font-bold text-gray-900">
                         {tier.price}
                       </span>
                     )}
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-600 text-sm font-medium">
+                  <p className="text-gray-600 text-xs font-medium">
                     {tier.description}
                   </p>
                 </div>
 
-                <div className="p-6 pt-2">
+                <div className="p-4 pt-2">
                   {/* CTA Button */}
                   <button
                     onClick={() => handleSubscriptionChange(tier.id)}
                     disabled={tier.isCurrent}
-                    className={`block w-full text-center py-3 px-6 rounded-xl font-bold transition-all duration-200 mb-6 ${
+                    className={`block w-full text-center py-2 px-4 rounded-lg font-bold transition-all duration-200 mb-3 text-sm ${
                       tier.isCurrent
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         : tier.highlighted
@@ -235,21 +235,21 @@ const SubscriptionPage = () => {
                   </button>
 
                   {/* Features */}
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {tier.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
-                          <Check className="w-3 h-3 text-green-600" />
+                      <div key={idx} className="flex items-start gap-2">
+                        <div className="flex-shrink-0 w-4 h-4 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+                          <Check className="w-2.5 h-2.5 text-green-600" />
                         </div>
-                        <span className="text-sm text-gray-700 font-medium leading-relaxed">{feature}</span>
+                        <span className="text-xs text-gray-700 leading-tight">{feature}</span>
                       </div>
                     ))}
                     {tier.limitations.map((limitation, idx) => (
-                      <div key={idx} className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center mt-0.5">
-                          <X className="w-3 h-3 text-gray-400" />
+                      <div key={idx} className="flex items-start gap-2">
+                        <div className="flex-shrink-0 w-4 h-4 bg-gray-100 rounded-full flex items-center justify-center mt-0.5">
+                          <X className="w-2.5 h-2.5 text-gray-400" />
                         </div>
-                        <span className="text-sm text-gray-500 leading-relaxed">{limitation}</span>
+                        <span className="text-xs text-gray-500 leading-tight">{limitation}</span>
                       </div>
                     ))}
                   </div>
@@ -260,59 +260,59 @@ const SubscriptionPage = () => {
         </div>
 
         {/* Credits Add-on Section */}
-        <div className="mt-12 max-w-4xl mx-auto">
-          <div className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-100 rounded-3xl shadow-2xl border-2 border-yellow-300 overflow-hidden">
+        <div className="max-w-5xl mx-auto mb-4">
+          <div className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-100 rounded-2xl shadow-xl border-2 border-yellow-300 overflow-hidden">
             {/* Shimmer effect overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-shimmer"></div>
 
-            <div className="relative p-8">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-4 rounded-2xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 shadow-lg">
-                    <Crown className="w-8 h-8 text-white" />
+            <div className="relative p-5">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 shadow-lg">
+                    <Crown className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-1">Add-On Credits</h2>
-                    <p className="text-gray-700 font-medium">Pay as you go - No commitment required</p>
+                    <h2 className="text-2xl font-bold text-gray-900">Add-On Credits</h2>
+                    <p className="text-xs text-gray-700">Pay as you go - No commitment required</p>
                   </div>
                 </div>
                 <Link
                   to="/app/team"
-                  className="px-6 py-3 bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-white rounded-xl font-bold hover:from-yellow-500 hover:via-yellow-600 hover:to-amber-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="px-5 py-2 bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-white rounded-lg font-bold hover:from-yellow-500 hover:via-yellow-600 hover:to-amber-600 transition-all duration-200 shadow-lg hover:shadow-xl text-sm"
                 >
                   Buy Credits
                 </Link>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-yellow-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Check className="w-5 h-5 text-yellow-600" />
-                    <span className="font-bold text-gray-900">Chapter Unlock: $9.99</span>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-yellow-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Check className="w-4 h-4 text-yellow-600" />
+                    <span className="font-bold text-gray-900 text-sm">Chapter Unlock: $9.99</span>
                   </div>
-                  <p className="text-sm text-gray-600">Full roster access</p>
+                  <p className="text-xs text-gray-600">Full roster access</p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-yellow-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Check className="w-5 h-5 text-yellow-600" />
-                    <span className="font-bold text-gray-900">Warm Intro: $59.99</span>
+                <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-yellow-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Check className="w-4 h-4 text-yellow-600" />
+                    <span className="font-bold text-gray-900 text-sm">Warm Intro: $59.99</span>
                   </div>
-                  <p className="text-sm text-gray-600">Connect with ambassadors</p>
+                  <p className="text-xs text-gray-600">Connect with ambassadors</p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-yellow-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Check className="w-5 h-5 text-yellow-600" />
-                    <span className="font-bold text-gray-900">Referral: $99.99</span>
+                <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-yellow-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Check className="w-4 h-4 text-yellow-600" />
+                    <span className="font-bold text-gray-900 text-sm">Referral: $99.99</span>
                   </div>
-                  <p className="text-sm text-gray-600">Ambassador referrals</p>
+                  <p className="text-xs text-gray-600">Ambassador referrals</p>
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center gap-3 bg-white/80 backdrop-blur rounded-xl p-4 border border-yellow-200">
-                <Sparkles className="w-5 h-5 text-yellow-600" />
-                <p className="text-sm text-gray-700">
+              <div className="flex items-center gap-2 bg-white/80 backdrop-blur rounded-lg p-3 border border-yellow-200">
+                <Sparkles className="w-4 h-4 text-yellow-600" />
+                <p className="text-xs text-gray-700">
                   <strong>Credits never expire</strong> • Buy anytime • No monthly commitment
                 </p>
               </div>
@@ -321,13 +321,13 @@ const SubscriptionPage = () => {
         </div>
 
         {/* Help Section */}
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-4">
+        <div className="text-center mb-4">
+          <p className="text-sm text-gray-600 mb-2">
             Need help choosing? Contact our sales team
           </p>
           <a
             href="mailto:sales@fraternitybase.com"
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-primary-600 hover:text-primary-700 font-medium text-sm"
           >
             sales@fraternitybase.com
           </a>
