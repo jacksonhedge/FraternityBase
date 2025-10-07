@@ -1457,6 +1457,7 @@ const AdminPageV4 = () => {
               {activeTab === 'intelligence' && 'Deep dive into company behavior and health metrics'}
               {activeTab === 'analytics' && 'Business intelligence and growth analytics'}
               {activeTab === 'activity' && 'Track user clicks and interaction analytics'}
+              {activeTab === 'roadmap' && 'Manage product roadmap features and data coverage'}
             </p>
           </div>
 
@@ -2103,7 +2104,7 @@ const AdminPageV4 = () => {
       )}
 
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'ambassadors' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'ambassadors' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity' || activeTab === 'roadmap') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
