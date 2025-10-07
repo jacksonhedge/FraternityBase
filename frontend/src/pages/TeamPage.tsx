@@ -13,7 +13,8 @@ import {
   TrendingUp,
   DollarSign,
   UserPlus,
-  Mail
+  Mail,
+  Info
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { RootState } from '../store/store';
@@ -33,15 +34,54 @@ interface TeamMember {
 }
 
 const TeamPage = () => {
-  const [activeTab, setActiveTab] = useState<'members' | 'credits'>('members');
+  const [activeTab, setActiveTab] = useState<'info' | 'members' | 'credits'>('info');
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'admin' | 'member'>('member');
   const [isInviting, setIsInviting] = useState(false);
+  const [companyInfo, setCompanyInfo] = useState<{
+    company_name: string;
+    created_at: string;
+    subscription_tier: string;
+    id: string;
+  } | null>(null);
 
   const { user } = useSelector((state: RootState) => state.auth);
+
+  // Fetch company info
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      if (!user?.companyId) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('companies')
+          .select('id, company_name, created_at')
+          .eq('id', user.companyId)
+          .single();
+
+        if (error) throw error;
+
+        // Also get subscription tier from account_balance
+        const { data: balanceData } = await supabase
+          .from('account_balance')
+          .select('subscription_tier')
+          .eq('company_id', user.companyId)
+          .single();
+
+        setCompanyInfo({
+          ...data,
+          subscription_tier: balanceData?.subscription_tier || 'Free'
+        });
+      } catch (error) {
+        console.error('Error fetching company info:', error);
+      }
+    };
+
+    fetchCompanyInfo();
+  }, [user?.companyId]);
 
   // Fetch team members
   useEffect(() => {
@@ -205,6 +245,7 @@ const TeamPage = () => {
         <div className="border-b border-gray-200">
           <nav className="flex -mb-px">
             {[
+              { key: 'info', label: 'Info' },
               { key: 'members', label: 'Team Members' },
               { key: 'credits', label: 'Billing' }
             ].map((tab) => (
@@ -224,6 +265,115 @@ const TeamPage = () => {
         </div>
 
         <div className="p-6">
+          {activeTab === 'info' && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg">
+                  <Building className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Company Information</h2>
+                  <p className="text-sm text-gray-600">View your team details</p>
+                </div>
+              </div>
+
+              {companyInfo ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Account Name */}
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Building className="w-5 h-5 text-blue-600" />
+                        <h3 className="text-sm font-medium text-gray-600">Account Name</h3>
+                      </div>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mt-2">
+                      {companyInfo.company_name}
+                    </p>
+                  </div>
+
+                  {/* Company ID */}
+                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-xl p-6">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Shield className="w-5 h-5 text-gray-600" />
+                        <h3 className="text-sm font-medium text-gray-600">Company ID</h3>
+                      </div>
+                    </div>
+                    <p className="text-lg font-mono text-gray-700 mt-2 break-all">
+                      {companyInfo.id}
+                    </p>
+                  </div>
+
+                  {/* Subscription Tier */}
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Star className="w-5 h-5 text-purple-600" />
+                        <h3 className="text-sm font-medium text-gray-600">Subscription Tier</h3>
+                      </div>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mt-2 capitalize">
+                      {companyInfo.subscription_tier}
+                    </p>
+                  </div>
+
+                  {/* Account Created */}
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-5 h-5 text-green-600" />
+                        <h3 className="text-sm font-medium text-gray-600">Account Created</h3>
+                      </div>
+                    </div>
+                    <p className="text-lg font-semibold text-gray-900 mt-2">
+                      {new Date(companyInfo.created_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  </div>
+
+                  {/* Team Size */}
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Users className="w-5 h-5 text-orange-600" />
+                        <h3 className="text-sm font-medium text-gray-600">Team Size</h3>
+                      </div>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mt-2">
+                      {teamMembers.length} / 3 members
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+                  <p className="text-gray-600 mt-4">Loading company information...</p>
+                </div>
+              )}
+
+              {/* Additional Info Section */}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mt-6">
+                <div className="flex items-start gap-3">
+                  <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-blue-900 mb-2">Need to update your account information?</p>
+                    <p className="text-sm text-blue-700">
+                      Contact our support team at{' '}
+                      <a href="mailto:support@fraternitybase.com" className="underline font-semibold">
+                        support@fraternitybase.com
+                      </a>
+                      {' '}to make changes to your company details.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === 'members' && (
             <div className="space-y-6">
               {/* Team limit notice */}
