@@ -1202,6 +1202,10 @@ app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
   const { chapterId } = req.params;
   const updateData = req.body;
 
+  console.log('⭐ === PATCH CHAPTER REQUEST ===');
+  console.log('Chapter ID:', chapterId);
+  console.log('Update Data:', JSON.stringify(updateData, null, 2));
+
   try {
     // Validate that we have a chapter ID
     if (!chapterId) {
@@ -1237,8 +1241,7 @@ app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
       }
     }
 
-    // Add last_updated_at timestamp
-    filteredData.last_updated_at = new Date().toISOString();
+    console.log('Filtered Data:', JSON.stringify(filteredData, null, 2));
 
     // Update the chapter
     const { data, error } = await supabaseAdmin
@@ -1253,21 +1256,23 @@ app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
       .single();
 
     if (error) {
-      console.error('Error updating chapter:', error);
+      console.error('❌ Supabase Error updating chapter:', JSON.stringify(error, null, 2));
       return res.status(500).json({ error: 'Failed to update chapter', details: error.message });
     }
 
     if (!data) {
+      console.error('❌ No data returned - Chapter not found');
       return res.status(404).json({ error: 'Chapter not found' });
     }
 
+    console.log('✅ Chapter updated successfully:', JSON.stringify(data, null, 2));
     res.json({
       success: true,
       message: 'Chapter updated successfully',
       data
     });
   } catch (error: any) {
-    console.error('Chapter update error:', error);
+    console.error('❌ Caught exception in chapter update:', error);
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
