@@ -140,7 +140,7 @@ app.get('/api/credits/balance', async (req, res) => {
 
     const { data: balanceRows, error } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_dollars, lifetime_spent_dollars, lifetime_added_dollars, auto_reload_enabled, auto_reload_threshold, auto_reload_amount')
+      .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier, last_monthly_credit_grant_at, auto_reload_enabled, auto_reload_threshold, auto_reload_amount')
       .eq('company_id', profile.company_id)
       .order('created_at', { ascending: false })
       .limit(1);
@@ -148,25 +148,29 @@ app.get('/api/credits/balance', async (req, res) => {
     const data = balanceRows?.[0] || null;
 
     console.log('💵 Balance rows returned:', balanceRows?.length || 0);
-    console.log('💵 Balance data:', data ? `$${data.balance_dollars}` : 'NO DATA');
+    console.log('💵 Balance data:', data ? `${data.balance_credits} credits ($${data.balance_dollars})` : 'NO DATA');
     console.log('⚠️ Balance error:', error ? error.message : 'No error');
 
-    // If no balance record exists, create one with $0 (shouldn't happen in production after signup fix)
+    // If no balance record exists, create one with 0 credits (shouldn't happen in production after signup fix)
     if (!data) {
-      console.log('⚠️ No balance record found - creating one with $0');
+      console.log('⚠️ No balance record found - creating one with 0 credits');
       const { error: insertError } = await supabaseAdmin
         .from('account_balance')
         .insert({
           company_id: profile.company_id,
+          balance_credits: 0,
           balance_dollars: 0.00,
+          lifetime_spent_credits: 0,
           lifetime_spent_dollars: 0.00,
+          lifetime_earned_credits: 0,
           lifetime_added_dollars: 0.00,
+          subscription_tier: 'trial',
         });
 
       if (insertError) {
         console.error('❌ Failed to create balance record:', insertError);
       } else {
-        console.log('✅ Created balance record with $0');
+        console.log('✅ Created balance record with 0 credits');
       }
     }
 
@@ -176,9 +180,15 @@ app.get('/api/credits/balance', async (req, res) => {
     }
 
     const response = {
-      balance: data?.balance_dollars || 0,
-      lifetimeSpent: data?.lifetime_spent_dollars || 0,
-      lifetimeAdded: data?.lifetime_added_dollars || 0,
+      balance: data?.balance_credits || 0,
+      balanceCredits: data?.balance_credits || 0,
+      balanceDollars: data?.balance_dollars || 0,
+      lifetimeSpentCredits: data?.lifetime_spent_credits || 0,
+      lifetimeSpentDollars: data?.lifetime_spent_dollars || 0,
+      lifetimeEarnedCredits: data?.lifetime_earned_credits || 0,
+      lifetimeAddedDollars: data?.lifetime_added_dollars || 0,
+      subscriptionTier: data?.subscription_tier || 'trial',
+      lastMonthlyGrant: data?.last_monthly_credit_grant_at || null,
       autoReload: {
         enabled: data?.auto_reload_enabled || false,
         threshold: data?.auto_reload_threshold || 10.00,
@@ -488,7 +498,7 @@ app.get('/api/chapters/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { data: chapter, error} = await supabaseAdmin
+    const { data: chapterInfo, error} = await supabaseAdmin
       .from('chapters')
       .select(`
         *,
@@ -506,14 +516,14 @@ app.get('/api/chapters/:id', async (req, res) => {
       .eq('id', id)
       .single();
 
-    if (error || !chapter) {
+    if (error || !chapterInfo) {
       return res.status(404).json({
         success: false,
         error: 'Chapter not found'
       });
     }
 
-    res.json({ success: true, data: chapter });
+    res.json({ success: true, data: chapterInfo });
   } catch (error: any) {
     console.error('Error fetching chapter:', error);
     res.status(500).json({
@@ -577,15 +587,48 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       return res.status(401).json({ error: 'Invalid token or user not found' });
     }
 
-    // Only 'full' unlock is supported now - $19.99
+    // Only 'full' unlock is supported now
     if (unlockType !== 'full') {
       return res.status(400).json({
         error: 'Only full chapter unlock is available',
-        message: 'Please use unlock type "full" for $19.99'
+        message: 'Please use unlock type "full"'
       });
     }
 
-    const cost = 19.99;
+    // Get chapter to check if it's a 5-star unlock
+    const { data: chapterData, error: chapterError } = await supabaseAdmin
+      .from('chapters')
+      .select('greek_rank, chapter_name, universities(name)')
+      .eq('id', chapterId)
+      .single();
+
+    if (chapterError || !chapterData) {
+      return res.status(404).json({ error: 'Chapter not found' });
+    }
+
+    // Determine credits cost based on greek_rank (rating out of 5.0)
+    // Higher rank = more expensive (better chapters cost more)
+    const rank = chapterData.greek_rank || 0;
+    let credits = 20; // Default for low-ranked chapters
+    let dollarValue = 5.99;
+
+    if (rank >= 5.0) {
+      // 5.0 star chapter - premium
+      credits = 40;
+      dollarValue = 11.99;
+    } else if (rank >= 4.0) {
+      // 4.0-4.9 star chapter
+      credits = 25;
+      dollarValue = 7.49;
+    } else if (rank >= 3.5) {
+      // 3.5-3.9 star chapter
+      credits = 20;
+      dollarValue = 5.99;
+    } else {
+      // Below 3.5 or no rank - cheapest
+      credits = 20;
+      dollarValue = 5.99;
+    }
 
     // Get user's company_id from user_profiles
     const { data: profile, error: profileError } = await supabase
@@ -615,21 +658,24 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       });
     }
 
-    // Call deduct_balance function
-    const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_balance', {
+    // Call deduct_credits function
+    const rankLabel = rank >= 5.0 ? '5.0⭐' : rank >= 4.0 ? '4.0⭐' : rank >= 3.5 ? '3.5⭐' : 'Standard';
+    const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
       p_company_id: profile.company_id,
-      p_amount: cost,
-      p_transaction_type: 'chapter_unlock',
-      p_description: `Unlocked full chapter access`,
+      p_credits: credits,
+      p_dollars: dollarValue,
+      p_transaction_type: rank >= 5.0 ? 'five_star_unlock' : 'chapter_unlock',
+      p_description: `Unlocked ${rankLabel} chapter: ${chapterData.chapter_name}`,
       p_chapter_id: chapterId
     });
 
     if (deductError) {
-      console.error('Error deducting balance:', deductError);
-      if (deductError.message?.includes('Insufficient balance')) {
+      console.error('Error deducting credits:', deductError);
+      if (deductError.message?.includes('Insufficient credits')) {
         return res.status(402).json({
-          error: 'Insufficient balance',
-          message: deductError.message
+          error: 'Insufficient credits',
+          message: deductError.message,
+          required: credits
         });
       }
       return res.status(500).json({ error: 'Failed to unlock chapter' });
@@ -642,7 +688,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
         company_id: profile.company_id,
         chapter_id: chapterId,
         unlock_type: unlockType,
-        amount_paid: cost,
+        amount_paid: credits, // Store credits amount
         transaction_id: transactionId
       });
 
@@ -651,47 +697,45 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       return res.status(500).json({ error: 'Failed to create unlock record' });
     }
 
-    // Get chapter and company info for logging
-    const { data: chapter } = await supabaseAdmin
-      .from('chapters')
-      .select('chapter_name, universities(name)')
-      .eq('id', chapterId)
-      .single();
-
+    // Get company info for logging
     const { data: company } = await supabaseAdmin
       .from('companies')
       .select('company_name')
-      .eq('id', user.id)
+      .eq('id', profile.company_id)
       .single();
 
     // Get updated balance
     const { data: balanceData } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_dollars')
+      .select('balance_credits, balance_dollars')
       .eq('company_id', profile.company_id)
       .single();
 
     // Log activity
     await supabaseAdmin.rpc('log_admin_activity', {
       p_event_type: 'unlock',
-      p_event_title: `${unlockType} unlocked: ${chapter?.chapter_name || 'Chapter'}`,
-      p_event_description: `${company?.company_name || 'User'} unlocked ${unlockType} for $${cost.toFixed(2)}`,
+      p_event_title: `${is5Star ? '5-star' : 'Standard'} chapter unlocked: ${chapterData?.chapter_name || 'Chapter'}`,
+      p_event_description: `${company?.company_name || 'User'} unlocked ${unlockType} for ${credits} credits ($${dollarValue} value)`,
       p_company_id: profile.company_id,
       p_company_name: company?.company_name,
       p_reference_id: chapterId,
       p_reference_type: 'chapter',
       p_metadata: {
         unlockType,
-        amountPaid: cost,
-        chapterName: chapter?.chapter_name,
-        universityName: (chapter?.universities as any)?.name
+        creditsSpent: credits,
+        dollarValue: dollarValue,
+        is5Star: is5Star,
+        chapterName: chapterData?.chapter_name,
+        universityName: (chapterData?.universities as any)?.name
       }
     });
 
     res.json({
       success: true,
-      balance: balanceData?.balance_dollars || 0,
-      amountPaid: cost,
+      balance: balanceData?.balance_credits || 0,
+      creditsSpent: credits,
+      dollarValue: dollarValue,
+      is5Star: is5Star,
       unlockType,
       transactionId
     });
@@ -1734,7 +1778,7 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
         // Get account balance
         const { data: accountBalance } = await supabaseAdmin
           .from('account_balance')
-          .select('balance_dollars')
+          .select('balance_credits, lifetime_spent_credits')
           .eq('company_id', company.id)
           .single();
 
@@ -1743,8 +1787,8 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
           company_name: company.name, // Map 'name' to 'company_name' for frontend
           email: email,
           unlocks: unlocks || [],
-          total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0,
-          credits_balance: accountBalance?.balance_dollars || 0
+          total_spent: accountBalance?.lifetime_spent_credits || 0,
+          credits_balance: accountBalance?.balance_credits || 0
         };
       })
     );
@@ -1817,7 +1861,7 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
     // Get account balance (use admin client to bypass RLS)
     const { data: accountBalance, error: balanceError } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_dollars, lifetime_spent_dollars, lifetime_added_dollars')
+      .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier')
       .eq('company_id', id)
       .single();
 
@@ -1833,10 +1877,10 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
         users: users || [],
         unlocks: unlocks || [],
         transactions: transactions || [],
-        total_spent: unlocks?.reduce((sum, u) => sum + (u.credits_spent || 0), 0) || 0,
-        credits_balance: accountBalance?.balance_dollars || 0,
-        lifetime_spent: accountBalance?.lifetime_spent_dollars || 0,
-        lifetime_added: accountBalance?.lifetime_added_dollars || 0
+        total_spent: accountBalance?.lifetime_spent_credits || 0,
+        credits_balance: accountBalance?.balance_credits || 0,
+        lifetime_spent: accountBalance?.lifetime_spent_credits || 0,
+        lifetime_added: accountBalance?.lifetime_earned_credits || 0
       }
     });
   } catch (error: any) {
@@ -1869,18 +1913,19 @@ app.post('/api/admin/companies/:id/add-credits', requireAdmin, async (req, res) 
     // Get balance before
     const { data: balanceBefore } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_dollars')
+      .select('balance_credits')
       .eq('company_id', id)
       .single();
 
-    const balanceBeforeAmount = balanceBefore?.balance_dollars || 0;
+    const balanceBeforeAmount = balanceBefore?.balance_credits || 0;
 
     // Add credits using the stored procedure
-    const { data, error } = await supabase.rpc('add_balance', {
+    const { data, error } = await supabaseAdmin.rpc('add_credits', {
       p_company_id: id,
-      p_amount: credits,
-      p_transaction_type: 'manual_add',
-      p_description: `Admin added $${credits}`,
+      p_credits: credits,
+      p_dollars: 0.00,
+      p_transaction_type: 'credit_purchase',
+      p_description: `Admin added ${credits} credits`,
       p_stripe_payment_intent_id: null
     });
 
@@ -1924,6 +1969,39 @@ app.post('/api/admin/companies/:id/add-credits', requireAdmin, async (req, res) 
   }
 });
 
+// Update subscription tier (admin only)
+app.post('/api/admin/companies/:id/subscription-tier', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tier } = req.body;
+
+    if (!['trial', 'monthly', 'enterprise'].includes(tier)) {
+      return res.status(400).json({ error: 'Invalid tier value' });
+    }
+
+    // Get company name for logging
+    const { data: company } = await supabaseAdmin
+      .from('companies')
+      .select('name')
+      .eq('id', id)
+      .single();
+
+    // Update subscription tier in account_balance
+    const { error } = await supabaseAdmin
+      .from('account_balance')
+      .update({ subscription_tier: tier })
+      .eq('company_id', id);
+
+    if (error) throw error;
+
+    console.log(`🎫 Updated subscription tier for ${company?.name || id} to: ${tier.toUpperCase()}`);
+    res.json({ success: true, message: `Updated subscription tier to ${tier}` });
+  } catch (error: any) {
+    console.error('❌ Error updating subscription tier:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Update company status (admin only)
 app.patch('/api/admin/companies/:id/status', requireAdmin, async (req, res) => {
   try {
@@ -1951,6 +2029,53 @@ app.patch('/api/admin/companies/:id/status', requireAdmin, async (req, res) => {
     });
   } catch (error: any) {
     console.error('Error updating company status:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Cron job to grant monthly credits (should be called daily by a cron service)
+app.post('/api/cron/grant-monthly-credits', async (req, res) => {
+  try {
+    // Verify cron secret
+    const cronSecret = req.headers['x-cron-secret'];
+    if (cronSecret !== process.env.CRON_SECRET) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // Get all companies with active subscriptions
+    const { data: activeSubscriptions, error } = await supabaseAdmin
+      .from('account_balance')
+      .select('company_id, subscription_tier, last_monthly_credit_grant_at')
+      .in('subscription_tier', ['monthly', 'enterprise']);
+
+    if (error) throw error;
+
+    const results = [];
+    for (const account of activeSubscriptions || []) {
+      // Call grant_monthly_credits function for each account
+      const { data, error: grantError } = await supabaseAdmin.rpc('grant_monthly_credits', {
+        p_company_id: account.company_id
+      });
+
+      results.push({
+        company_id: account.company_id,
+        success: !grantError,
+        granted: data,
+        error: grantError?.message
+      });
+
+      if (data) {
+        console.log(`✅ Granted monthly credits to company ${account.company_id} (${account.subscription_tier})`);
+      }
+    }
+
+    res.json({
+      success: true,
+      message: `Processed ${activeSubscriptions?.length || 0} accounts`,
+      results
+    });
+  } catch (error: any) {
+    console.error('❌ Error granting monthly credits:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -3055,18 +3180,50 @@ app.post('/api/chapters/:id/warm-intro-request', async (req, res) => {
       return res.status(401).json({ error: 'Invalid token or user not found' });
     }
 
+    // Get user's company_id
+    const { data: profile } = await supabaseAdmin
+      .from('user_profiles')
+      .select('company_id')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile?.company_id) {
+      return res.status(400).json({ error: 'Company not found' });
+    }
+
     // Get chapter info
-    const { data: chapter } = await supabaseAdmin
+    const { data: warmIntroChapter } = await supabaseAdmin
       .from('chapters')
       .select('chapter_name, universities(name)')
       .eq('id', chapterId)
       .single();
 
+    // Fraternity introduction costs 333 credits ($99.99)
+    const credits = 333;
+    const dollarValue = 99.99;
+
+    // Deduct credits for the introduction request
+    const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
+      p_company_id: profile.company_id,
+      p_credits: credits,
+      p_dollars: dollarValue,
+      p_transaction_type: 'fraternity_introduction',
+      p_description: `Fraternity introduction request: ${warmIntroChapter?.chapter_name}`,
+      p_chapter_id: chapterId
+    });
+
+    if (deductError) {
+      console.error('Error deducting credits:', deductError);
+      return res.status(400).json({ error: 'Insufficient credits or failed to process payment' });
+    }
+
+    console.log(`💳 Fraternity introduction requested - ${credits} credits deducted from company ${profile.company_id}`);
+
     // Log activity
     await supabaseAdmin.rpc('log_admin_activity', {
       p_event_type: 'warm_intro_request',
-      p_event_title: `Warm intro requested: ${chapter?.chapter_name || 'Chapter'}`,
-      p_event_description: `${companyName} requested introduction to ${chapter?.chapter_name}`,
+      p_event_title: `Warm intro requested: ${warmIntroChapter?.chapter_name || 'Chapter'}`,
+      p_event_description: `${companyName} requested introduction to ${warmIntroChapter?.chapter_name}`,
       p_company_id: user.id,
       p_company_name: companyName,
       p_reference_id: chapterId,
@@ -3077,14 +3234,238 @@ app.post('/api/chapters/:id/warm-intro-request', async (req, res) => {
         companyName,
         proposal,
         preferredContact,
-        chapterName: chapter?.chapter_name,
-        universityName: (chapter?.universities as any)?.name
+        chapterName: warmIntroChapter?.chapter_name,
+        universityName: (warmIntroChapter?.universities as any)?.name,
+        creditsCharged: credits
       }
     });
 
-    res.json({ success: true, message: 'Warm introduction request received' });
+    res.json({ success: true, message: 'Warm introduction request received', creditsCharged: credits });
   } catch (error: any) {
     console.error('Warm intro request error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Ambassador introduction request endpoint
+app.post('/api/officers/:id/ambassador-intro-request', async (req, res) => {
+  try {
+    const { id: officerId } = req.params;
+    const { name, email, companyName, proposal, preferredContact } = req.body;
+
+    // Get the authorization token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's company_id
+    const { data: profile } = await supabaseAdmin
+      .from('user_profiles')
+      .select('company_id')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile?.company_id) {
+      return res.status(400).json({ error: 'Company not found' });
+    }
+
+    // Get officer/ambassador info
+    const { data: officer } = await supabaseAdmin
+      .from('chapter_officers')
+      .select(`
+        *,
+        chapters (
+          chapter_name,
+          universities (name),
+          greek_organizations (name)
+        )
+      `)
+      .eq('id', officerId)
+      .single();
+
+    if (!officer) {
+      return res.status(404).json({ error: 'Ambassador not found' });
+    }
+
+    // Ambassador introduction costs 25 credits ($7.49)
+    const credits = 25;
+    const dollarValue = 7.49;
+
+    // Deduct credits for the introduction request
+    const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
+      p_company_id: profile.company_id,
+      p_credits: credits,
+      p_dollars: dollarValue,
+      p_transaction_type: 'ambassador_introduction',
+      p_description: `Ambassador introduction request: ${officer.first_name} ${officer.last_name}`,
+      p_chapter_id: officer.chapter_id
+    });
+
+    if (deductError) {
+      console.error('Error deducting credits:', deductError);
+      return res.status(400).json({ error: 'Insufficient credits or failed to process payment' });
+    }
+
+    console.log(`💳 Ambassador introduction requested - ${credits} credits deducted from company ${profile.company_id}`);
+
+    // Log activity
+    const chapterInfo = officer.chapters as any;
+    await supabaseAdmin.rpc('log_admin_activity', {
+      p_event_type: 'ambassador_intro_request',
+      p_event_title: `Ambassador intro requested: ${officer.first_name} ${officer.last_name}`,
+      p_event_description: `${companyName} requested introduction to ${officer.first_name} ${officer.last_name} (${chapterInfo?.chapter_name})`,
+      p_company_id: user.id,
+      p_company_name: companyName,
+      p_reference_id: officerId,
+      p_reference_type: 'officer',
+      p_metadata: {
+        name,
+        email,
+        companyName,
+        proposal,
+        preferredContact,
+        officerName: `${officer.first_name} ${officer.last_name}`,
+        position: officer.position,
+        chapterName: chapterInfo?.chapter_name,
+        organizationName: chapterInfo?.greek_organizations?.name,
+        universityName: chapterInfo?.universities?.name,
+        creditsCharged: credits
+      }
+    });
+
+    res.json({ success: true, message: 'Ambassador introduction request received', creditsCharged: credits });
+  } catch (error: any) {
+    console.error('Ambassador intro request error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Ambassador profile unlock endpoint
+app.post('/api/ambassadors/:id/unlock', async (req, res) => {
+  try {
+    const { id: ambassadorId } = req.params;
+
+    // Get the authorization token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's company_id
+    const { data: profile } = await supabaseAdmin
+      .from('user_profiles')
+      .select('company_id')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile?.company_id) {
+      return res.status(400).json({ error: 'Company not found' });
+    }
+
+    // Check if already unlocked
+    const { data: existingUnlock } = await supabaseAdmin
+      .from('ambassador_unlocks')
+      .select('id')
+      .eq('company_id', profile.company_id)
+      .eq('officer_id', ambassadorId)
+      .single();
+
+    if (existingUnlock) {
+      return res.status(400).json({ error: 'Ambassador already unlocked' });
+    }
+
+    // Check subscription tier for enterprise access
+    const { data: accountBalance } = await supabaseAdmin
+      .from('account_balance')
+      .select('subscription_tier')
+      .eq('company_id', profile.company_id)
+      .single();
+
+    // Enterprise tier gets free ambassador unlocks
+    if (accountBalance?.subscription_tier === 'enterprise') {
+      // Create unlock record without charging
+      const { error: unlockError } = await supabaseAdmin
+        .from('ambassador_unlocks')
+        .insert({
+          company_id: profile.company_id,
+          officer_id: ambassadorId,
+          unlock_type: 'full_profile',
+          credits_spent: 0,
+          amount_paid: 0.00
+        });
+
+      if (unlockError) {
+        console.error('Error creating unlock:', unlockError);
+        return res.status(500).json({ error: 'Failed to unlock ambassador' });
+      }
+
+      console.log(`✨ Enterprise tier - Free ambassador unlock for company ${profile.company_id}`);
+      return res.json({ success: true, message: 'Ambassador unlocked (Enterprise)', creditsCharged: 0 });
+    }
+
+    // Non-enterprise: charge 50 credits
+    const credits = 50;
+    const dollarValue = 14.99;
+
+    // Get ambassador info for description
+    const { data: ambassador } = await supabaseAdmin
+      .from('chapter_officers')
+      .select('first_name, last_name')
+      .eq('id', ambassadorId)
+      .single();
+
+    // Deduct credits
+    const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
+      p_company_id: profile.company_id,
+      p_credits: credits,
+      p_dollars: dollarValue,
+      p_transaction_type: 'ambassador_unlock',
+      p_description: `Unlocked ambassador profile: ${ambassador?.first_name} ${ambassador?.last_name}`,
+      p_chapter_id: null
+    });
+
+    if (deductError) {
+      console.error('Error deducting credits:', deductError);
+      return res.status(400).json({ error: 'Insufficient credits or failed to process payment' });
+    }
+
+    // Create unlock record
+    const { error: unlockError } = await supabaseAdmin
+      .from('ambassador_unlocks')
+      .insert({
+        company_id: profile.company_id,
+        officer_id: ambassadorId,
+        unlock_type: 'full_profile',
+        credits_spent: credits,
+        amount_paid: dollarValue,
+        transaction_id: transactionId
+      });
+
+    if (unlockError) {
+      console.error('Error creating unlock:', unlockError);
+      return res.status(500).json({ error: 'Failed to create unlock record' });
+    }
+
+    console.log(`💳 Ambassador unlocked - ${credits} credits deducted from company ${profile.company_id}`);
+
+    res.json({ success: true, message: 'Ambassador profile unlocked', creditsCharged: credits });
+  } catch (error: any) {
+    console.error('Ambassador unlock error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -3153,7 +3534,7 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
     }
 
     // Verify chapter exists
-    const { data: chapter, error: chapterError } = await supabaseAdmin
+    const { data: rosterChapter, error: chapterError } = await supabaseAdmin
       .from('chapters')
       .select(`
         id,
@@ -3164,7 +3545,7 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
       .eq('id', chapterId)
       .single();
 
-    if (chapterError || !chapter) {
+    if (chapterError || !rosterChapter) {
       return res.status(404).json({ success: false, error: 'Chapter not found' });
     }
 
@@ -3176,7 +3557,7 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
       trim: true
     }) as Array<Record<string, string>>;
 
-    console.log(`📁 Uploading ${records.length} members for chapter: ${chapter.chapter_name}`);
+    console.log(`📁 Uploading ${records.length} members for chapter: ${rosterChapter.chapter_name}`);
 
     let insertedCount = 0;
     let updatedCount = 0;
@@ -3268,7 +3649,7 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
     // Log activity
     await supabaseAdmin.rpc('log_admin_activity', {
       p_event_type: 'admin_upload',
-      p_event_title: `Roster uploaded: ${chapter.chapter_name}`,
+      p_event_title: `Roster uploaded: ${rosterChapter.chapter_name}`,
       p_event_description: `${insertedCount} members inserted, ${updatedCount} updated`,
       p_reference_id: chapterId,
       p_reference_type: 'chapter',
@@ -3277,16 +3658,16 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
         insertedCount,
         updatedCount,
         skippedCount,
-        chapterName: chapter.chapter_name,
-        universityName: (chapter as any).universities?.name,
-        greekOrgName: (chapter as any).greek_organizations?.name
+        chapterName: rosterChapter.chapter_name,
+        universityName: (rosterChapter as any).universities?.name,
+        greekOrgName: (rosterChapter as any).greek_organizations?.name
       }
     });
 
     res.json({
       success: true,
       chapterId,
-      chapterName: chapter.chapter_name,
+      chapterName: rosterChapter.chapter_name,
       totalRecords: records.length,
       insertedCount,
       updatedCount,
