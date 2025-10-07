@@ -22,6 +22,7 @@ export interface Chapter {
   partnershipOpenness: 'open' | 'selective' | 'closed';
   eventFrequency: number;
   philanthropyFocus?: string;
+  header_image_url?: string;
   university?: {
     id: string;
     name: string;

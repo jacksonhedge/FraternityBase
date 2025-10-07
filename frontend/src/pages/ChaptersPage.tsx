@@ -15,6 +15,7 @@ import {
   List,
   Grid3x3,
   Unlock,
+  Lock,
   Clock,
   CheckCircle,
   Mail,
@@ -36,6 +37,7 @@ interface Chapter {
   website?: string;
   contact_email?: string;
   phone?: string;
+  header_image_url?: string;
   greek_organizations?: {
     id: string;
     name: string;
@@ -449,6 +451,9 @@ const ChaptersPage = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Fraternity
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -462,9 +467,6 @@ const ChaptersPage = () => {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     President
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Greek Rank
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -487,6 +489,14 @@ const ChaptersPage = () => {
                 ) : (
                   filteredChapters.map((chapter) => (
                     <tr key={chapter.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <Lock className="w-4 h-4 text-gray-400" />
+                          <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                            Locked
+                          </span>
+                        </div>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{chapter.greek_organizations?.name || '-'}</div>
                         <div className="text-sm text-gray-500">{chapter.chapter_name || '-'}</div>
@@ -516,18 +526,13 @@ const ChaptersPage = () => {
                         <div className="text-sm text-gray-900">Contact Locked</div>
                         <div className="text-sm text-gray-500">Unlock to view</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <span className="text-sm font-medium text-gray-900">-</span>
-                          <span className="text-sm text-gray-500 ml-1">/ 5.0</span>
-                        </div>
-                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <Link
                           to={`/app/chapters/${chapter.id}`}
-                          className="text-primary-600 hover:text-primary-900 mr-3"
+                          className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-900"
                         >
-                          View
+                          <span>View Details</span>
+                          <Unlock className="w-4 h-4" />
                         </Link>
                       </td>
                     </tr>
@@ -543,24 +548,47 @@ const ChaptersPage = () => {
             <Link
               key={chapter.id}
               to={`/app/chapters/${chapter.id}`}
-              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-200 hover:border-primary-300"
+              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all overflow-hidden border border-gray-200 hover:border-primary-300 relative group"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start gap-3">
+              {/* Header Background Image */}
+              <div className="h-24 bg-gradient-to-r from-primary-500 to-primary-700 relative">
+                {chapter.header_image_url ? (
                   <img
-                    src={chapter.universities?.logo_url || getCollegeLogoWithFallback(chapter.universities?.name || '')}
-                    alt={chapter.universities?.name || ''}
-                    className="w-14 h-14 object-contain flex-shrink-0"
+                    src={chapter.header_image_url}
+                    alt={`${chapter.greek_organizations?.name} header`}
+                    className="w-full h-full object-cover"
                   />
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900">{chapter.greek_organizations?.name || '-'}</h3>
-                    <p className="text-sm text-gray-600">{chapter.chapter_name || '-'}</p>
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600" />
+                )}
+
+                {/* Unlock Badge Overlay */}
+                <div className="absolute top-2 right-2">
+                  <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-gray-200">
+                    <Lock className="w-3.5 h-3.5 text-gray-600" />
+                    <span className="text-xs font-semibold text-gray-700">Unlock</span>
                   </div>
                 </div>
-                <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-semibold rounded">
-                  {chapter.universities?.state || '-'}
-                </span>
               </div>
+
+              {/* Card Content */}
+              <div className="p-6 pt-4">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={chapter.universities?.logo_url || getCollegeLogoWithFallback(chapter.universities?.name || '')}
+                      alt={chapter.universities?.name || ''}
+                      className="w-14 h-14 object-contain flex-shrink-0 bg-white rounded-lg border border-gray-100 p-1"
+                    />
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900">{chapter.greek_organizations?.name || '-'}</h3>
+                      <p className="text-sm text-gray-600">{chapter.chapter_name || '-'}</p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-semibold rounded">
+                    {chapter.universities?.state || '-'}
+                  </span>
+                </div>
 
               <div className="space-y-2 mb-4">
                 <div className="flex items-center text-sm text-gray-600">
@@ -577,34 +605,35 @@ const ChaptersPage = () => {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-200">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm">
-                    <p className="font-medium text-gray-900">Contact Locked</p>
-                    <p className="text-gray-500">Unlock to view</p>
-                  </div>
-                  <div className="flex items-center">
-                    <Award className="w-4 h-4 text-yellow-500 mr-1" />
-                    <span className="text-sm font-semibold text-gray-900">-</span>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm">
+                      <p className="font-medium text-gray-900">Contact Locked</p>
+                      <p className="text-gray-500">Unlock to view</p>
+                    </div>
+                    <div className="flex items-center">
+                      <Award className="w-4 h-4 text-yellow-500 mr-1" />
+                      <span className="text-sm font-semibold text-gray-900">-</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {chapter.instagram_handle && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <a
-                    href={`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline"
-                  >
-                    <Instagram className="w-4 h-4 mr-2" />
-                    {chapter.instagram_handle.startsWith('@') ? chapter.instagram_handle : `@${chapter.instagram_handle}`}
-                    <ExternalLink className="w-3 h-3 ml-1" />
-                  </a>
-                </div>
-              )}
+                {chapter.instagram_handle && (
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <a
+                      href={`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline"
+                    >
+                      <Instagram className="w-4 h-4 mr-2" />
+                      {chapter.instagram_handle.startsWith('@') ? chapter.instagram_handle : `@${chapter.instagram_handle}`}
+                      <ExternalLink className="w-3 h-3 ml-1" />
+                    </a>
+                  </div>
+                )}
+              </div>
             </Link>
           ))}
         </div>
