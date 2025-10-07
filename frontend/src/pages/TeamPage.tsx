@@ -76,6 +76,8 @@ const TeamPage = () => {
 
         if (response.ok) {
           const data = await response.json();
+          console.log('🔍 TeamPage API Response:', data);
+          console.log('🔍 companyName value:', data.companyName);
           setCompanyInfo({
             id: data.companyId,
             company_name: data.companyName,
