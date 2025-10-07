@@ -56,6 +56,7 @@ const SubscriptionPage = () => {
         'Unlimited platform access',
         'Browse all 5,000+ chapters',
         'Advanced search & filters',
+        'Interactive Map',
         'Email support',
         '100 monthly credits included',
         'Purchase additional credits'
