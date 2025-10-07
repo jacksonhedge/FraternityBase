@@ -21,7 +21,7 @@ const SubscriptionPage = () => {
   const pricingTiers = [
     {
       id: 'free',
-      name: 'Free Tier',
+      name: 'Basic',
       price: 4.99,
       description: '3-day free trial, then $4.99/mo',
       icon: Zap,
