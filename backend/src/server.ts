@@ -255,6 +255,87 @@ app.get('/api/credits/balance', async (req, res) => {
   }
 });
 
+// Team members endpoint
+app.get('/api/team/members', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's profile to find company_id
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('company_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      return res.status(404).json({ error: 'User profile or company not found' });
+    }
+
+    // Get all team members for this company using service role to bypass RLS
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const { data: teamMembers, error: teamError } = await supabaseAdmin
+      .from('team_members')
+      .select('id, member_number, role, status, joined_at, user_id')
+      .eq('company_id', profile.company_id)
+      .order('member_number', { ascending: true });
+
+    if (teamError) {
+      console.error('Error fetching team members:', teamError);
+      return res.status(500).json({ error: 'Failed to fetch team members' });
+    }
+
+    // For each team member, get their user profile and email
+    const membersWithProfiles = await Promise.all(
+      (teamMembers || []).map(async (member) => {
+        // Get user profile
+        const { data: userProfile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('first_name, last_name')
+          .eq('user_id', member.user_id)
+          .single();
+
+        // Get email from auth.users using admin client
+        const { data: { user: authUser } } = await supabaseAdmin.auth.admin.getUserById(member.user_id);
+
+        return {
+          id: member.id,
+          member_number: member.member_number,
+          role: member.role,
+          status: member.status,
+          joined_at: member.joined_at,
+          user_profiles: {
+            first_name: userProfile?.first_name || null,
+            last_name: userProfile?.last_name || null,
+            email: authUser?.email || null
+          }
+        };
+      })
+    );
+
+    res.json(membersWithProfiles);
+  } catch (error: any) {
+    console.error('Team members endpoint error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
 // User profile endpoint
 app.get('/api/user/profile', async (req, res) => {
   try {

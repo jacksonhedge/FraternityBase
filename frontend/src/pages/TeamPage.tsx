@@ -103,25 +103,28 @@ const TeamPage = () => {
       if (!user?.companyId) return;
 
       try {
-        const { data, error } = await supabase
-          .from('team_members')
-          .select(`
-            id,
-            member_number,
-            role,
-            status,
-            joined_at,
-            user_profiles!inner (
-              first_name,
-              last_name,
-              email
-            )
-          `)
-          .eq('company_id', user.companyId)
-          .order('member_number', { ascending: true });
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const token = localStorage.getItem('token');
 
-        if (error) throw error;
-        setTeamMembers((data || []) as unknown as TeamMember[]);
+        if (!token) {
+          console.error('No auth token found');
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_URL}/team/members`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch team members: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setTeamMembers(data as TeamMember[]);
       } catch (error) {
         console.error('Error fetching team members:', error);
       } finally {
