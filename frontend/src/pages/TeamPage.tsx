@@ -47,6 +47,8 @@ const TeamPage = () => {
     subscription_tier: string;
     id: string;
   } | null>(null);
+  const [companyInfoLoading, setCompanyInfoLoading] = useState(true);
+  const [companyInfoError, setCompanyInfoError] = useState<string | null>(null);
 
   const { user } = useSelector((state: RootState) => state.auth);
 
@@ -54,9 +56,16 @@ const TeamPage = () => {
   useEffect(() => {
     const fetchCompanyInfo = async () => {
       try {
+        setCompanyInfoLoading(true);
+        setCompanyInfoError(null);
+
         const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
         const token = localStorage.getItem('token');
-        if (!token) return;
+        if (!token) {
+          setCompanyInfoError('No authentication token found');
+          setCompanyInfoLoading(false);
+          return;
+        }
 
         const response = await fetch(`${API_URL}/credits/balance`, {
           headers: {
@@ -73,9 +82,15 @@ const TeamPage = () => {
             created_at: data.companyCreatedAt,
             subscription_tier: data.subscriptionTier || 'Free'
           });
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          setCompanyInfoError(errorData.message || `Failed to load company information (${response.status})`);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching company info:', error);
+        setCompanyInfoError(error.message || 'Failed to load company information');
+      } finally {
+        setCompanyInfoLoading(false);
       }
     };
 
@@ -276,7 +291,30 @@ const TeamPage = () => {
                 </div>
               </div>
 
-              {companyInfo ? (
+              {companyInfoLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+                  <p className="text-gray-600 mt-4">Loading company information...</p>
+                </div>
+              ) : companyInfoError ? (
+                <div className="text-center py-12">
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md mx-auto">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <div className="p-2 bg-red-100 rounded-full">
+                        <Info className="w-5 h-5 text-red-600" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-red-900">Unable to Load Information</h3>
+                    </div>
+                    <p className="text-sm text-red-700 mb-4">{companyInfoError}</p>
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                </div>
+              ) : companyInfo ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Account Name */}
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
@@ -347,12 +385,7 @@ const TeamPage = () => {
                     </p>
                   </div>
                 </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-                  <p className="text-gray-600 mt-4">Loading company information...</p>
-                </div>
-              )}
+              ) : null}
 
               {/* Additional Info Section */}
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mt-6">
