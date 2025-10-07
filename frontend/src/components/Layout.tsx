@@ -46,10 +46,12 @@ const Layout = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isSubscriptionDropdownOpen, setIsSubscriptionDropdownOpen] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
   const [subscriptionTier, setSubscriptionTier] = useState<string>('Free');
   const [credits, setCredits] = useState<number>(0);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const subscriptionDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkApprovalStatus = async () => {
@@ -105,6 +107,9 @@ const Layout = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
         setIsProfileDropdownOpen(false);
+      }
+      if (subscriptionDropdownRef.current && !subscriptionDropdownRef.current.contains(event.target as Node)) {
+        setIsSubscriptionDropdownOpen(false);
       }
     };
 
@@ -395,9 +400,112 @@ const Layout = () => {
           {/* Top bar */}
           <header className="hidden md:flex items-center justify-end px-6 py-4 bg-white border-b border-gray-200">
             <div className="flex items-center space-x-4">
-              {/* Subscription Tier Badge */}
-              <div className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold rounded-full">
-                {subscriptionTier}
+              {/* Subscription Tier Badge Dropdown */}
+              <div className="relative" ref={subscriptionDropdownRef}>
+                <button
+                  onClick={() => setIsSubscriptionDropdownOpen(!isSubscriptionDropdownOpen)}
+                  className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold rounded-full hover:from-blue-600 hover:to-purple-700 transition-all flex items-center gap-1"
+                >
+                  {subscriptionTier}
+                  <ChevronDown className={`w-3 h-3 transition-transform ${isSubscriptionDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Subscription Dropdown Menu */}
+                {isSubscriptionDropdownOpen && (
+                  <div className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
+                      <h3 className="font-bold text-lg mb-1">{subscriptionTier} Plan</h3>
+                      <p className="text-xs opacity-90">
+                        {subscriptionTier.toLowerCase() === 'free'
+                          ? '3-day trial with limited access'
+                          : subscriptionTier.toLowerCase() === 'team' || subscriptionTier.toLowerCase() === 'monthly'
+                          ? 'Full platform access'
+                          : 'Enterprise-level features'}
+                      </p>
+                    </div>
+                    <div className="p-4">
+                      {subscriptionTier.toLowerCase() === 'free' && (
+                        <>
+                          <div className="space-y-2 mb-4">
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">1 Premium chapter unlocked</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">Browse all 5,000+ chapters</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">3 days to explore</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Lock className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-500">Limited features</span>
+                            </div>
+                          </div>
+                          <Link
+                            to="/app/subscription"
+                            onClick={() => setIsSubscriptionDropdownOpen(false)}
+                            className="block w-full text-center py-2.5 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg"
+                          >
+                            Upgrade Now
+                          </Link>
+                        </>
+                      )}
+                      {(subscriptionTier.toLowerCase() === 'team' || subscriptionTier.toLowerCase() === 'monthly') && (
+                        <>
+                          <div className="space-y-2 mb-4">
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">Unlimited platform access</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">100 monthly credits</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">Advanced search & filters</span>
+                            </div>
+                          </div>
+                          <Link
+                            to="/app/subscription"
+                            onClick={() => setIsSubscriptionDropdownOpen(false)}
+                            className="block w-full text-center py-2.5 px-4 border-2 border-purple-600 text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-all"
+                          >
+                            View Plans
+                          </Link>
+                        </>
+                      )}
+                      {subscriptionTier.toLowerCase() === 'enterprise' && (
+                        <>
+                          <div className="space-y-2 mb-4">
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">Unlimited everything</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">500 monthly credits</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">Dedicated support</span>
+                            </div>
+                          </div>
+                          <Link
+                            to="/app/team"
+                            onClick={() => setIsSubscriptionDropdownOpen(false)}
+                            className="block w-full text-center py-2.5 px-4 border-2 border-purple-600 text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-all"
+                          >
+                            Manage Subscription
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <button className="p-2 text-gray-500 hover:text-gray-700 relative">
