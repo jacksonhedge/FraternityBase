@@ -33,6 +33,7 @@ import {
   CreditCard,
   ChevronDown,
   Rocket,
+  Check,
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
