@@ -278,7 +278,7 @@ export default function CreditsPage() {
             </div>
           </div>
           <a
-            href="/pricing"
+            href="/app/subscription"
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
           >
             Upgrade Plan

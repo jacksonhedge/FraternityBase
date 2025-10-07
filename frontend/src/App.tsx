@@ -39,6 +39,7 @@ import AnalyticsPage from './pages/AnalyticsPage';
 import ProfilePage from './pages/ProfilePage';
 import PricingPage from './pages/PricingPage';
 import CreditsPage from './pages/CreditsPage';
+import SubscriptionPage from './pages/SubscriptionPage';
 import AdminPageV3 from './pages/AdminPageV3';
 import AdminPageV4 from './pages/AdminPageV4';
 import AdminLoginPage from './pages/AdminLoginPage';
@@ -147,6 +148,7 @@ function AnimatedRoutes() {
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="credits" element={<CreditsPage />} />
+            <Route path="subscription" element={<SubscriptionPage />} />
             <Route path="roadmap" element={<ProductRoadmapPage />} />
           </Route>
         </Routes>
