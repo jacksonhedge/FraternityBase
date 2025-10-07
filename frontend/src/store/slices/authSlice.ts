@@ -13,6 +13,8 @@ interface User {
   companyId?: string;
   companyName?: string;
   role: 'admin' | 'user' | 'viewer';
+  subscriptionTier?: string;
+  credits?: number;
 }
 
 interface AuthState {
