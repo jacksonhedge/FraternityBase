@@ -220,7 +220,14 @@ app.get('/api/credits/balance', async (req, res) => {
     res.json(response);
   } catch (error: any) {
     console.error('❌ Balance endpoint error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('❌ Error stack:', error.stack);
+    console.error('❌ Error message:', error.message);
+    console.error('❌ Error details:', JSON.stringify(error, null, 2));
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message,
+      stack: error.stack
+    });
   }
 });
 
