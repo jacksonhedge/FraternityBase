@@ -81,7 +81,8 @@ app.use(cors({
     'https://fraternitybase.com',
     'https://www.fraternitybase.com',
     'https://frontend-gxqgrycnw-jackson-fitzgeralds-projects.vercel.app',
-    'https://frontend-aapaw19p9-jackson-fitzgeralds-projects.vercel.app'
+    'https://frontend-aapaw19p9-jackson-fitzgeralds-projects.vercel.app',
+    'https://frontend-dog5jt9fc-jackson-fitzgeralds-projects.vercel.app'
   ],
   credentials: true
 }));
