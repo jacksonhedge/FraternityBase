@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
-import { CreditCard, DollarSign, AlertCircle, Download } from 'lucide-react';
+import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap } from 'lucide-react';
 
 interface AccountBalance {
   balance: number;
   lifetimeSpent: number;
   lifetimeAdded: number;
+  subscription_tier?: string;
   autoReload: {
     enabled: boolean;
     threshold: number;
@@ -226,9 +227,64 @@ export default function CreditsPage() {
     ['chapter_unlock', 'warm_intro', 'ambassador_referral'].includes(t.transaction_type)
   );
 
+  const getSubscriptionIcon = (tier: string) => {
+    switch (tier?.toLowerCase()) {
+      case 'enterprise':
+        return Crown;
+      case 'monthly':
+      case 'team':
+        return Zap;
+      default:
+        return CreditCard;
+    }
+  };
+
+  const getSubscriptionColor = (tier: string) => {
+    switch (tier?.toLowerCase()) {
+      case 'enterprise':
+        return 'from-purple-500 to-purple-600';
+      case 'monthly':
+      case 'team':
+        return 'from-blue-500 to-blue-600';
+      default:
+        return 'from-gray-500 to-gray-600';
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Note: Header removed when embedded in TeamPage */}
+
+      {/* Subscription Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Subscription</h2>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className={`p-3 rounded-xl bg-gradient-to-r ${getSubscriptionColor(accountData?.subscription_tier || 'free')} shadow-lg`}>
+              {(() => {
+                const Icon = getSubscriptionIcon(accountData?.subscription_tier || 'free');
+                return <Icon className="w-6 h-6 text-white" />;
+              })()}
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 capitalize">
+                {accountData?.subscription_tier || 'Free'}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {accountData?.subscription_tier?.toLowerCase() === 'enterprise' ? 'Unlimited features' :
+                 accountData?.subscription_tier?.toLowerCase() === 'monthly' || accountData?.subscription_tier?.toLowerCase() === 'team' ? '$29.99/month' :
+                 '3-day trial'}
+              </p>
+            </div>
+          </div>
+          <a
+            href="/pricing"
+            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+          >
+            Upgrade Plan
+          </a>
+        </div>
+      </div>
 
         {/* Credit Balance Card */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
@@ -242,7 +298,7 @@ export default function CreditsPage() {
             <div className="flex-shrink-0 bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg p-8 min-w-[200px]">
               <div className="text-center">
                 <div className="text-4xl font-bold text-gray-900 mb-2">
-                  ${accountData?.balance?.toFixed(2) ?? '0.00'}
+                  {Math.floor(accountData?.balance ?? 0)} credits
                 </div>
                 <div className="text-sm text-gray-600">Remaining Balance</div>
               </div>
