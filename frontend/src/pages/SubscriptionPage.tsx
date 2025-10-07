@@ -21,22 +21,19 @@ const SubscriptionPage = () => {
   const pricingTiers = [
     {
       id: 'free',
-      name: '3-Day Trial',
-      price: 0,
-      description: 'Try FraternityBase risk-free',
+      name: 'Free Tier',
+      price: 4.99,
+      description: '3-day free trial, then $4.99/mo',
       icon: Zap,
       color: 'from-green-500 to-green-600',
       bgColor: 'from-green-50 to-green-100',
       features: [
-        '1 Premium chapter unlocked',
-        'Full platform access',
-        'Browse all 5,000+ chapters',
-        'Advanced search filters',
-        '3 days to explore'
+        'Interactive Map access',
+        'View all colleges in the U.S.',
+        'Browse 5,000+ chapters',
+        '3-day free trial included'
       ],
-      limitations: [
-        'Limited to 1 unlocked chapter'
-      ],
+      limitations: [],
       buttonText: 'Current Plan',
       isCurrent: currentTier === 'free'
     },
