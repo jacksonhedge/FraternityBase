@@ -118,16 +118,8 @@ app.get('/api/credits/balance', async (req, res) => {
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
     console.log('🔑 Token extracted:', token.substring(0, 20) + '...');
 
-    // Create admin client for server-side operations
-    console.log('🔧 SUPABASE_URL:', process.env.SUPABASE_URL ? 'Set' : 'NOT SET');
-    console.log('🔧 SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Set' : 'NOT SET');
-    const supabaseAdmin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
-    // Verify the token with Supabase using service role client for server-side verification
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    // Verify the token with Supabase using the same client that issued it
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     console.log('👤 User verification:', user ? `User ID: ${user.id}` : 'NO USER');
     console.log('⚠️ Auth error:', authError ? authError.message : 'No error');
 
@@ -155,8 +147,13 @@ app.get('/api/credits/balance', async (req, res) => {
       return res.status(404).json({ error: 'User profile not found' });
     }
 
-    // Query the new account_balance table using service_role to bypass RLS
+    // Create admin client for database queries to bypass RLS
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
 
+    // Query the new account_balance table using service_role to bypass RLS
     const { data: balanceRows, error } = await supabaseAdmin
       .from('account_balance')
       .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier, last_monthly_credit_grant_at, auto_reload_enabled, auto_reload_threshold, auto_reload_amount, companies(id, company_name, created_at)')
