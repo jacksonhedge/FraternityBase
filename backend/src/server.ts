@@ -168,7 +168,7 @@ app.get('/api/credits/balance', async (req, res) => {
     if (data && profile.company_id) {
       const { data: company, error: companyError } = await supabaseAdmin
         .from('companies')
-        .select('id, company_name, created_at')
+        .select('id, name, created_at')
         .eq('id', profile.company_id)
         .single();
 
@@ -229,7 +229,7 @@ app.get('/api/credits/balance', async (req, res) => {
       lifetimeAddedDollars: data?.lifetime_added_dollars || 0,
       subscriptionTier: data?.subscription_tier || 'trial',
       lastMonthlyGrant: data?.last_monthly_credit_grant_at || null,
-      companyName: companyData?.company_name || null,
+      companyName: companyData?.name || null,
       companyId: companyData?.id || profile.company_id || null,
       companyCreatedAt: companyData?.created_at || null,
       autoReload: {
