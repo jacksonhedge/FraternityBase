@@ -1213,7 +1213,9 @@ app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
       'founded_year',
       'chapter_name',
       'greek_letter_name',
-      'status'
+      'status',
+      'grade',
+      'is_favorite'
     ];
 
     // Filter update data to only include allowed fields
