@@ -316,29 +316,16 @@ const TeamPage = () => {
                 </div>
               ) : companyInfo ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Account Name */}
+                  {/* Company Name */}
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Building className="w-5 h-5 text-blue-600" />
-                        <h3 className="text-sm font-medium text-gray-600">Account Name</h3>
+                        <h3 className="text-sm font-medium text-gray-600">Company Name</h3>
                       </div>
                     </div>
                     <p className="text-2xl font-bold text-gray-900 mt-2">
-                      {companyInfo.company_name}
-                    </p>
-                  </div>
-
-                  {/* Company ID */}
-                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-xl p-6">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-5 h-5 text-gray-600" />
-                        <h3 className="text-sm font-medium text-gray-600">Company ID</h3>
-                      </div>
-                    </div>
-                    <p className="text-lg font-mono text-gray-700 mt-2 break-all">
-                      {companyInfo.id}
+                      {companyInfo.company_name || 'Not Available'}
                     </p>
                   </div>
 
@@ -351,7 +338,7 @@ const TeamPage = () => {
                       </div>
                     </div>
                     <p className="text-2xl font-bold text-gray-900 mt-2 capitalize">
-                      {companyInfo.subscription_tier}
+                      {companyInfo.subscription_tier || 'Free'}
                     </p>
                   </div>
 
@@ -364,11 +351,13 @@ const TeamPage = () => {
                       </div>
                     </div>
                     <p className="text-lg font-semibold text-gray-900 mt-2">
-                      {new Date(companyInfo.created_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
+                      {companyInfo.created_at && new Date(companyInfo.created_at).getFullYear() > 2000
+                        ? new Date(companyInfo.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })
+                        : 'Date not available'}
                     </p>
                   </div>
 
