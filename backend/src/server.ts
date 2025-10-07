@@ -2109,6 +2109,111 @@ app.post('/api/admin/companies/:id/add-credits', requireAdmin, async (req, res) 
   }
 });
 
+// Delete company account (admin only)
+app.delete('/api/admin/companies/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Get company name for logging
+    const { data: company, error: fetchError } = await supabaseAdmin
+      .from('companies')
+      .select('name')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    const companyName = company.name;
+
+    // Get all user_ids associated with this company
+    const { data: userProfiles } = await supabaseAdmin
+      .from('user_profiles')
+      .select('user_id')
+      .eq('company_id', id);
+
+    const userIds = userProfiles?.map(p => p.user_id) || [];
+
+    // Delete in correct order to respect foreign key constraints
+
+    // 1. Delete team members
+    const { error: teamError } = await supabaseAdmin
+      .from('team_members')
+      .delete()
+      .eq('company_id', id);
+
+    if (teamError) {
+      console.error('Error deleting team members:', teamError);
+      throw new Error('Failed to delete team members');
+    }
+
+    // 2. Delete credit transactions
+    const { error: transactionsError } = await supabaseAdmin
+      .from('credit_transactions')
+      .delete()
+      .eq('company_id', id);
+
+    if (transactionsError) {
+      console.error('Error deleting credit transactions:', transactionsError);
+      throw new Error('Failed to delete credit transactions');
+    }
+
+    // 3. Delete account balance
+    const { error: balanceError } = await supabaseAdmin
+      .from('account_balance')
+      .delete()
+      .eq('company_id', id);
+
+    if (balanceError) {
+      console.error('Error deleting account balance:', balanceError);
+      throw new Error('Failed to delete account balance');
+    }
+
+    // 4. Delete user profiles
+    const { error: profilesError } = await supabaseAdmin
+      .from('user_profiles')
+      .delete()
+      .eq('company_id', id);
+
+    if (profilesError) {
+      console.error('Error deleting user profiles:', profilesError);
+      throw new Error('Failed to delete user profiles');
+    }
+
+    // 5. Delete company
+    const { error: companyError } = await supabaseAdmin
+      .from('companies')
+      .delete()
+      .eq('id', id);
+
+    if (companyError) {
+      console.error('Error deleting company:', companyError);
+      throw new Error('Failed to delete company');
+    }
+
+    // 6. Delete auth users (best effort - may fail if users are referenced elsewhere)
+    for (const userId of userIds) {
+      try {
+        await supabaseAdmin.auth.admin.deleteUser(userId);
+      } catch (authError) {
+        console.error(`Failed to delete auth user ${userId}:`, authError);
+        // Continue even if auth deletion fails
+      }
+    }
+
+    console.log(`✅ Admin deleted company account: ${companyName} (${id})`);
+    res.json({
+      success: true,
+      message: `Successfully deleted account for ${companyName}`,
+      deletedUsers: userIds.length
+    });
+  } catch (error: any) {
+    console.error('Error deleting company:', error);
+    res.status(500).json({ error: error.message || 'Failed to delete company' });
+  }
+});
+
 // Update subscription tier (admin only)
 app.post('/api/admin/companies/:id/subscription-tier', requireAdmin, async (req, res) => {
   try {
