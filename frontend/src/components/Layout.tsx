@@ -51,6 +51,7 @@ const Layout = () => {
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
   const [subscriptionTier, setSubscriptionTier] = useState<string>('Free');
   const [credits, setCredits] = useState<number>(0);
+  const [companyName, setCompanyName] = useState<string>('');
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const subscriptionDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -91,6 +92,7 @@ const Layout = () => {
           const data = await response.json();
           setSubscriptionTier(data.subscription_tier || 'Free');
           setCredits(data.balance_credits || 0);
+          setCompanyName(data.companyName || '');
         }
       } catch (error) {
         console.error('Failed to fetch account balance:', error);
@@ -522,7 +524,7 @@ const Layout = () => {
                 >
                   <div className="flex flex-col items-start">
                     <span className="text-sm font-medium">
-                      {user?.company?.name || user?.companyName || 'Company'}
+                      {companyName || user?.company?.name || user?.companyName || 'Company'}
                     </span>
                     <span className="text-xs text-gray-500">
                       {credits.toLocaleString()} credits

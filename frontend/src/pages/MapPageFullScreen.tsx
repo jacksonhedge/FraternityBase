@@ -1013,7 +1013,7 @@ const MapPageFullScreen = () => {
                   Access "My Chapters" and personalized features with a subscription.
                 </p>
                 <p className="text-2xl font-bold text-blue-600 mb-6">
-                  $19.99/month
+                  $29.99/month
                 </p>
                 <div className="flex gap-3 justify-center">
                   <button
@@ -1027,7 +1027,7 @@ const MapPageFullScreen = () => {
                   </button>
                   <button
                     onClick={() => {
-                      window.location.href = '/app/credits';
+                      window.location.href = '/app/subscription';
                     }}
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
                   >
@@ -1044,7 +1044,7 @@ const MapPageFullScreen = () => {
                   This filter requires a subscription to unlock.
                 </p>
                 <p className="text-2xl font-bold text-blue-600 mb-6">
-                  $19.99/month
+                  $29.99/month
                 </p>
                 <div className="flex gap-3 justify-center">
                   <button
@@ -1058,7 +1058,7 @@ const MapPageFullScreen = () => {
                   </button>
                   <button
                     onClick={() => {
-                      window.location.href = '/app/credits';
+                      window.location.href = '/app/subscription';
                     }}
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
                   >
