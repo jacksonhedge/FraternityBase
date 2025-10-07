@@ -58,7 +58,7 @@ const TeamPage = () => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        const response = await fetch(`${API_URL}/account/balance`, {
+        const response = await fetch(`${API_URL}/credits/balance`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
