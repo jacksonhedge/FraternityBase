@@ -53,6 +53,8 @@ import MyAmbassadorsPage from './pages/MyAmbassadorsPage';
 import OutreachPage from './pages/OutreachPage';
 import BarsPage from './pages/BarsPage';
 import ProductRoadmapPage from './pages/ProductRoadmapPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -116,6 +118,8 @@ function AnimatedRoutes() {
           <Route path="/browse" element={<BrowsePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/pending-approval" element={<PendingApprovalPage />} />
           <Route path="/admin-login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
