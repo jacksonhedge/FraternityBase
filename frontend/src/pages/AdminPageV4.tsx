@@ -929,39 +929,74 @@ const AdminPageV4 = () => {
   // CSV Import Handler
   const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log('[CSV Import] No file selected');
+      return;
+    }
+
+    console.log('[CSV Import] 📁 File selected:', {
+      name: file.name,
+      size: `${(file.size / 1024).toFixed(2)} KB`,
+      type: file.type
+    });
 
     const reader = new FileReader();
     reader.onload = async (event) => {
+      console.log('[CSV Import] 📖 File reading completed');
+
       const text = event.target?.result as string;
+      console.log('[CSV Import] File content length:', text.length, 'characters');
+      console.log('[CSV Import] First 200 characters:', text.substring(0, 200));
+
       const lines = text.split('\n').filter(line => line.trim());
+      console.log('[CSV Import] 📊 Total lines (excluding empty):', lines.length);
+      console.log('[CSV Import] Data rows:', lines.length - 1, '(excluding header)');
+
       const headers = lines[0].split(',').map(h => h.trim());
+      console.log('[CSV Import] 📋 Headers detected:', headers);
+      console.log('[CSV Import] Header count:', headers.length);
 
       let successCount = 0;
       let errorCount = 0;
 
+      console.log('[CSV Import] 🎯 Active tab:', activeTab);
+      console.log('[CSV Import] ⚙️ Starting row processing...\n');
+
       for (let i = 1; i < lines.length; i++) {
+        console.log(`\n[CSV Import] ━━━ Processing Row ${i}/${lines.length - 1} ━━━`);
+
         const values = lines[i].split(',').map(v => v.trim());
         const row: Record<string, string> = {};
         headers.forEach((header, index) => {
           row[header] = values[index] || '';
         });
 
+        console.log(`[CSV Import] Row ${i} parsed data:`, row);
+
         try {
           // Import based on active tab
           if (activeTab === 'colleges') {
+            console.log(`[CSV Import] Row ${i} - Importing as UNIVERSITY`);
             let logoUrl = row.logo_url || row['Logo URL'] || '';
+            console.log(`[CSV Import] Row ${i} - Logo URL:`, logoUrl || '(none)');
 
             // If logo_url is provided and it's a URL, download and upload it
             if (logoUrl && logoUrl.startsWith('http')) {
+              console.log(`[CSV Import] Row ${i} - 🖼️ Downloading logo from:`, logoUrl);
               try {
                 const response = await fetch(logoUrl);
                 const blob = await response.blob();
+                console.log(`[CSV Import] Row ${i} - Logo downloaded:`, {
+                  size: `${(blob.size / 1024).toFixed(2)} KB`,
+                  type: blob.type
+                });
+
                 // Sanitize filename: remove all non-alphanumeric characters except hyphens and underscores
                 const sanitizedName = (row.name || row.Name).toLowerCase()
                   .replace(/[^a-z0-9]+/g, '-')  // Replace non-alphanumeric with hyphens
                   .replace(/^-+|-+$/g, '');      // Remove leading/trailing hyphens
                 const fileName = `${sanitizedName}-${Date.now()}.${blob.type.split('/')[1]}`;
+                console.log(`[CSV Import] Row ${i} - Uploading as:`, fileName);
 
                 const reader = new FileReader();
                 const base64Promise = new Promise<string>((resolve) => {
@@ -971,85 +1006,149 @@ const AdminPageV4 = () => {
                 const base64Data = await base64Promise;
 
                 logoUrl = await handleUploadImage(blob as File, 'college-logos', fileName);
+                console.log(`[CSV Import] Row ${i} - ✅ Logo uploaded successfully:`, logoUrl);
               } catch (uploadError) {
-                console.error(`Failed to upload logo for ${row.name}:`, uploadError);
+                console.error(`[CSV Import] Row ${i} - ❌ Failed to upload logo:`, uploadError);
                 logoUrl = ''; // Continue without logo
               }
             }
 
-            await fetch(`${API_URL}/admin/universities`, {
+            const universityPayload = {
+              name: row.name || row.Name,
+              location: row.location || row.Location,
+              state: row.state || row.State,
+              student_count: parseInt(row.student_count || row['Student Count'] || '0'),
+              greek_percentage: parseFloat(row.greek_percentage || row['Greek %'] || '0'),
+              website: row.website || row.Website || '',
+              logo_url: logoUrl,
+              conference: row.conference || row.Conference || '',
+              bars_nearby: parseInt(row.bars_nearby || row['Bars Nearby'] || '0'),
+              unlock_count: parseInt(row.unlock_count || row['Unlock Count'] || '0')
+            };
+
+            console.log(`[CSV Import] Row ${i} - 🚀 Creating university with payload:`, universityPayload);
+
+            const universityResponse = await fetch(`${API_URL}/admin/universities`, {
               method: 'POST',
               headers: getAdminHeaders(),
-              body: JSON.stringify({
-                name: row.name || row.Name,
-                location: row.location || row.Location,
-                state: row.state || row.State,
-                student_count: parseInt(row.student_count || row['Student Count'] || '0'),
-                greek_percentage: parseFloat(row.greek_percentage || row['Greek %'] || '0'),
-                website: row.website || row.Website || '',
-                logo_url: logoUrl,
-                conference: row.conference || row.Conference || '',
-                bars_nearby: parseInt(row.bars_nearby || row['Bars Nearby'] || '0'),
-                unlock_count: parseInt(row.unlock_count || row['Unlock Count'] || '0')
-              })
+              body: JSON.stringify(universityPayload)
             });
+
+            console.log(`[CSV Import] Row ${i} - API response status:`, universityResponse.status);
+
+            if (!universityResponse.ok) {
+              const errorText = await universityResponse.text();
+              console.error(`[CSV Import] Row ${i} - ❌ API error:`, errorText);
+              throw new Error(`API returned ${universityResponse.status}: ${errorText}`);
+            }
+
             successCount++;
+            console.log(`[CSV Import] Row ${i} - ✅ SUCCESS! Total successes: ${successCount}`);
           } else if (activeTab === 'users') {
+            console.log(`[CSV Import] Row ${i} - Importing as OFFICER/ROSTER`);
+
             // Officer/Roster CSV import
             const chapterName = row.chapter || row.Chapter;
             const universityName = row.university || row.University || row.college || row.College;
 
+            console.log(`[CSV Import] Row ${i} - Looking up chapter:`, {
+              chapterName,
+              universityName
+            });
+
             // Need to look up chapter_id from chapter name and university
             if (!chapterName || !universityName) {
-              console.error('Missing chapter or university name for user import');
+              console.error(`[CSV Import] Row ${i} - ❌ Missing chapter or university name`);
               errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
               continue;
             }
 
             // First, find the chapter
+            console.log(`[CSV Import] Row ${i} - 🔍 Fetching all chapters to find match...`);
             const chaptersRes = await fetch(`${API_URL}/admin/chapters`, {
               headers: getAdminHeaders()
             });
             const chaptersData = await chaptersRes.json();
+            console.log(`[CSV Import] Row ${i} - Found ${chaptersData.length} total chapters`);
+
             const chapter = chaptersData.find((ch: any) =>
               ch.chapter_name?.toLowerCase().includes(chapterName.toLowerCase()) &&
               ch.universities?.name?.toLowerCase().includes(universityName.toLowerCase())
             );
 
             if (!chapter) {
-              console.error(`Could not find chapter: ${chapterName} at ${universityName}`);
+              console.error(`[CSV Import] Row ${i} - ❌ Could not find chapter: ${chapterName} at ${universityName}`);
+              console.log(`[CSV Import] Row ${i} - Available chapters:`, chaptersData.map((ch: any) => ({
+                name: ch.chapter_name,
+                university: ch.universities?.name
+              })));
               errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
               continue;
             }
 
-            await fetch(`${API_URL}/admin/officers`, {
+            console.log(`[CSV Import] Row ${i} - ✅ Found chapter:`, {
+              id: chapter.id,
+              name: chapter.chapter_name,
+              university: chapter.universities?.name
+            });
+
+            const officerPayload = {
+              chapter_id: chapter.id,
+              name: row.name || row.Name,
+              position: row.position || row.Position || 'Member',
+              member_type: (row.member_type || row['Member Type'] || row.type || 'member').toLowerCase(),
+              email: row.email || row.Email || '',
+              phone: row.phone || row.Phone || '',
+              linkedin_profile: row.linkedin || row.LinkedIn || row.linkedin_profile || '',
+              graduation_year: parseInt(row.graduation_year || row['Graduation Year'] || row.grad_year || '0') || undefined,
+              major: row.major || row.Major || '',
+              is_primary_contact: (row.is_primary || row['Primary Contact'] || '').toLowerCase() === 'true'
+            };
+
+            console.log(`[CSV Import] Row ${i} - 🚀 Creating officer with payload:`, officerPayload);
+
+            const officerResponse = await fetch(`${API_URL}/admin/officers`, {
               method: 'POST',
               headers: getAdminHeaders(),
-              body: JSON.stringify({
-                chapter_id: chapter.id,
-                name: row.name || row.Name,
-                position: row.position || row.Position || 'Member',
-                member_type: (row.member_type || row['Member Type'] || row.type || 'member').toLowerCase(),
-                email: row.email || row.Email || '',
-                phone: row.phone || row.Phone || '',
-                linkedin_profile: row.linkedin || row.LinkedIn || row.linkedin_profile || '',
-                graduation_year: parseInt(row.graduation_year || row['Graduation Year'] || row.grad_year || '0') || undefined,
-                major: row.major || row.Major || '',
-                is_primary_contact: (row.is_primary || row['Primary Contact'] || '').toLowerCase() === 'true'
-              })
+              body: JSON.stringify(officerPayload)
             });
+
+            console.log(`[CSV Import] Row ${i} - API response status:`, officerResponse.status);
+
+            if (!officerResponse.ok) {
+              const errorText = await officerResponse.text();
+              console.error(`[CSV Import] Row ${i} - ❌ API error:`, errorText);
+              throw new Error(`API returned ${officerResponse.status}: ${errorText}`);
+            }
+
             successCount++;
+            console.log(`[CSV Import] Row ${i} - ✅ SUCCESS! Total successes: ${successCount}`);
           }
         } catch (error) {
-          console.error(`Error importing row ${i}:`, error);
+          console.error(`[CSV Import] Row ${i} - ❌ ERROR:`, error);
           errorCount++;
+          console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
         }
       }
+
+      console.log('\n[CSV Import] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('[CSV Import] 🏁 IMPORT COMPLETE!');
+      console.log('[CSV Import] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('[CSV Import] 📊 Final Results:');
+      console.log('[CSV Import]   ✅ Successes:', successCount);
+      console.log('[CSV Import]   ❌ Errors:', errorCount);
+      console.log('[CSV Import]   📝 Total rows processed:', lines.length - 1);
+      console.log('[CSV Import]   📈 Success rate:', `${((successCount / (lines.length - 1)) * 100).toFixed(1)}%`);
+      console.log('[CSV Import] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
       showSuccessMsg(`CSV Import Complete!\n✅ Success: ${successCount}\n❌ Errors: ${errorCount}`);
       fetchData();
       e.target.value = ''; // Reset file input
     };
+
+    console.log('[CSV Import] 📖 Starting file read...');
     reader.readAsText(file);
   };
 
