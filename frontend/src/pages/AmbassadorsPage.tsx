@@ -387,7 +387,7 @@ const AmbassadorsPage = () => {
                   <div className="flex gap-2">
                     <button className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium flex items-center justify-center gap-2">
                       <Lock className="w-4 h-4" />
-                      Unlock for $99.99
+                      Request Introduction for $99.99
                     </button>
                     <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium flex items-center gap-2">
                       <MessageSquare className="w-4 h-4" />
@@ -512,11 +512,7 @@ const AmbassadorsPage = () => {
                         <>
                           <button className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-900">
                             <Lock className="w-4 h-4" />
-                            <span>Unlock</span>
-                          </button>
-                          <button className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-900">
-                            <MessageSquare className="w-4 h-4" />
-                            <span>Request Intro</span>
+                            <span>Request Introduction for $99.99</span>
                           </button>
                         </>
                       )}
