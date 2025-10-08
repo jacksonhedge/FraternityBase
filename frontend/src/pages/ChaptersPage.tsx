@@ -20,7 +20,8 @@ import {
   CheckCircle,
   Mail,
   Phone,
-  Download
+  Download,
+  UserPlus
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
@@ -62,6 +63,7 @@ const ChaptersPage = () => {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(true);
+  const [requestedIntros, setRequestedIntros] = useState<Set<string>>(new Set());
 
   // Fetch chapters from database
   useEffect(() => {
@@ -81,6 +83,28 @@ const ChaptersPage = () => {
 
     fetchChapters();
   }, []);
+
+  const handleRequestIntro = async (chapter: Chapter) => {
+    try {
+      const response = await fetch(`${API_URL}/intro-requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chapter_id: chapter.id,
+          chapter_name: chapter.chapter_name,
+          fraternity_name: chapter.greek_organizations?.name,
+          university_name: chapter.universities?.name,
+          grade: chapter.grade
+        })
+      });
+
+      if (response.ok) {
+        setRequestedIntros(prev => new Set(prev).add(chapter.id));
+      }
+    } catch (error) {
+      console.error('Error requesting intro:', error);
+    }
+  };
 
   // Filter and sort logic adapted for database structure
   const filteredChapters = chapters
@@ -431,19 +455,48 @@ const ChaptersPage = () => {
                   </div>
                 </div>
 
-                {chapter.instagram_handle && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <a
-                      href={`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline"
-                    >
-                      <Instagram className="w-4 h-4 mr-2" />
-                      {chapter.instagram_handle.startsWith('@') ? chapter.instagram_handle : `@${chapter.instagram_handle}`}
-                      <ExternalLink className="w-3 h-3 ml-1" />
-                    </a>
+                {(chapter.instagram_handle || (chapter.grade && chapter.grade >= 4.0)) && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between gap-4">
+                    {chapter.instagram_handle && (
+                      <a
+                        href={`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline"
+                      >
+                        <Instagram className="w-4 h-4 mr-2" />
+                        {chapter.instagram_handle.startsWith('@') ? chapter.instagram_handle : `@${chapter.instagram_handle}`}
+                        <ExternalLink className="w-3 h-3 ml-1" />
+                      </a>
+                    )}
+                    {chapter.grade && chapter.grade >= 4.0 && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleRequestIntro(chapter);
+                        }}
+                        disabled={requestedIntros.has(chapter.id)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                          requestedIntros.has(chapter.id)
+                            ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                            : 'bg-primary-600 text-white hover:bg-primary-700'
+                        }`}
+                      >
+                        {requestedIntros.has(chapter.id) ? (
+                          <>
+                            <CheckCircle className="w-4 h-4" />
+                            Requested
+                          </>
+                        ) : (
+                          <>
+                            <UserPlus className="w-4 h-4" />
+                            Request an Intro
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
