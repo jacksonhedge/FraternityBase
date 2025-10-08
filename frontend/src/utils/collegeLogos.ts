@@ -39,6 +39,7 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Northwestern': 'BIG 10/Northwestern_Wildcats_logo.png',
   'Ohio State': 'BIG 10/Ohio_State_Buckeyes_logo.png',
   'Penn State': 'BIG 10/Penn_State_Nittany_Lions_logo.png',
+  'Penn State University': 'BIG 10/Penn_State_Nittany_Lions_logo.png',
   'Purdue': 'BIG 10/Purdue_Boilermakers_logo.png',
   'Rutgers': 'BIG 10/Rutgers_Scarlet_Knights_logo.png',
   'Wisconsin': 'BIG 10/Wisconsin_Badgers_logo.png',

@@ -64,6 +64,7 @@ const ChaptersPage = () => {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(true);
   const [requestedIntros, setRequestedIntros] = useState<Set<string>>(new Set());
+  const [unlockedChapterIds, setUnlockedChapterIds] = useState<Set<string>>(new Set());
 
   // Fetch chapters from database
   useEffect(() => {
@@ -82,6 +83,29 @@ const ChaptersPage = () => {
     };
 
     fetchChapters();
+  }, []);
+
+  // Fetch unlocked chapters for the current user
+  useEffect(() => {
+    const fetchUnlockedChapters = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const res = await fetch(`${API_URL}/chapters/unlocked`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success && data.data) {
+          const unlockedIds = new Set<string>(data.data.map((chapter: any) => chapter.id));
+          setUnlockedChapterIds(unlockedIds);
+        }
+      } catch (error) {
+        console.error('Error fetching unlocked chapters:', error);
+      }
+    };
+
+    fetchUnlockedChapters();
   }, []);
 
   const handleRequestIntro = async (chapter: Chapter) => {
@@ -349,8 +373,17 @@ const ChaptersPage = () => {
                         <div className="text-sm text-gray-500">members</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">Contact Locked</div>
-                        <div className="text-sm text-gray-500">Unlock to view</div>
+                        {unlockedChapterIds.has(chapter.id) ? (
+                          <>
+                            <div className="text-sm text-green-700 font-medium">Contact Unlocked</div>
+                            <div className="text-sm text-gray-500">View chapter details</div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="text-sm text-gray-900">Contact Locked</div>
+                            <div className="text-sm text-gray-500">Unlock to view</div>
+                          </>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <Link
@@ -370,11 +403,17 @@ const ChaptersPage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredChapters.map((chapter) => (
+          {filteredChapters.map((chapter) => {
+            const isUnlocked = unlockedChapterIds.has(chapter.id);
+            return (
             <Link
               key={chapter.id}
               to={`/app/chapters/${chapter.id}`}
-              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all overflow-hidden border border-gray-200 hover:border-primary-300 relative group"
+              className={`bg-white rounded-lg shadow-sm hover:shadow-md transition-all overflow-hidden border relative group ${
+                isUnlocked
+                  ? 'border-green-400 hover:border-green-500'
+                  : 'border-gray-200 hover:border-primary-300'
+              }`}
             >
               {/* Header Background Image */}
               <div className="h-24 bg-gradient-to-r from-primary-500 to-primary-700 relative">
@@ -390,10 +429,17 @@ const ChaptersPage = () => {
 
                 {/* Unlock Badge Overlay */}
                 <div className="absolute top-2 right-2">
-                  <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-gray-200">
-                    <Lock className="w-3.5 h-3.5 text-gray-600" />
-                    <span className="text-xs font-semibold text-gray-700">Unlock</span>
-                  </div>
+                  {unlockedChapterIds.has(chapter.id) ? (
+                    <div className="bg-green-500/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-green-600">
+                      <Unlock className="w-3.5 h-3.5 text-white" />
+                      <span className="text-xs font-semibold text-white">Unlocked</span>
+                    </div>
+                  ) : (
+                    <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-gray-200">
+                      <Lock className="w-3.5 h-3.5 text-gray-600" />
+                      <span className="text-xs font-semibold text-gray-700">Unlock</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -434,8 +480,17 @@ const ChaptersPage = () => {
                 <div className="pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between">
                     <div className="text-sm">
-                      <p className="font-medium text-gray-900">Contact Locked</p>
-                      <p className="text-gray-500">Unlock to view</p>
+                      {unlockedChapterIds.has(chapter.id) ? (
+                        <>
+                          <p className="font-medium text-green-700">Contact Unlocked</p>
+                          <p className="text-gray-500">View chapter details</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="font-medium text-gray-900">Contact Locked</p>
+                          <p className="text-gray-500">Unlock to view</p>
+                        </>
+                      )}
                     </div>
                     <div className="flex items-center">
                       <Award className="w-4 h-4 text-yellow-500 mr-1" />
@@ -458,17 +513,18 @@ const ChaptersPage = () => {
                 {(chapter.instagram_handle || (chapter.grade && chapter.grade >= 4.0)) && (
                   <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between gap-4">
                     {chapter.instagram_handle && (
-                      <a
-                        href={`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline"
+                      <div
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          window.open(`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`, '_blank', 'noopener,noreferrer');
+                        }}
+                        className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline cursor-pointer"
                       >
                         <Instagram className="w-4 h-4 mr-2" />
                         {chapter.instagram_handle.startsWith('@') ? chapter.instagram_handle : `@${chapter.instagram_handle}`}
                         <ExternalLink className="w-3 h-3 ml-1" />
-                      </a>
+                      </div>
                     )}
                     {chapter.grade && chapter.grade >= 4.0 && (
                       <button
@@ -501,7 +557,8 @@ const ChaptersPage = () => {
                 )}
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
