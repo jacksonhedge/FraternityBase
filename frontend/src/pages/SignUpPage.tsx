@@ -20,6 +20,8 @@ const SignUpPage = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -52,6 +54,14 @@ const SignUpPage = () => {
       newErrors.companyDescription = 'Company description is required';
     } else if (formData.companyDescription.length < 20) {
       newErrors.companyDescription = 'Please provide at least 20 characters';
+    }
+
+    if (!agreedToTerms) {
+      newErrors.terms = 'You must agree to the Terms of Service';
+    }
+
+    if (!agreedToPrivacy) {
+      newErrors.privacy = 'You must agree to the Privacy Policy';
     }
 
     setErrors(newErrors);
@@ -465,17 +475,64 @@ const SignUpPage = () => {
                 )}
               </button>
 
-              {/* Terms */}
-              <p className="text-xs text-center text-gray-500 mt-4">
-                By signing up, you agree to our{' '}
-                <Link to="/terms" className="text-blue-600 hover:underline">
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link to="/privacy" className="text-blue-600 hover:underline">
-                  Privacy Policy
-                </Link>
-              </p>
+              {/* Terms and Privacy Checkboxes */}
+              <div className="space-y-3 pt-2">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="termsCheckbox"
+                    checked={agreedToTerms}
+                    onChange={(e) => {
+                      setAgreedToTerms(e.target.checked);
+                      if (errors.terms && e.target.checked) {
+                        setErrors(prev => ({ ...prev, terms: '' }));
+                      }
+                    }}
+                    className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="termsCheckbox" className="text-sm text-gray-700">
+                    I agree to the{' '}
+                    <Link
+                      to="/terms"
+                      target="_blank"
+                      className="text-blue-600 hover:underline font-medium"
+                    >
+                      Terms of Service
+                    </Link>
+                  </label>
+                </div>
+                {errors.terms && (
+                  <p className="text-sm text-red-600 ml-7">{errors.terms}</p>
+                )}
+
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="privacyCheckbox"
+                    checked={agreedToPrivacy}
+                    onChange={(e) => {
+                      setAgreedToPrivacy(e.target.checked);
+                      if (errors.privacy && e.target.checked) {
+                        setErrors(prev => ({ ...prev, privacy: '' }));
+                      }
+                    }}
+                    className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="privacyCheckbox" className="text-sm text-gray-700">
+                    I agree to the{' '}
+                    <Link
+                      to="/privacy"
+                      target="_blank"
+                      className="text-blue-600 hover:underline font-medium"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </label>
+                </div>
+                {errors.privacy && (
+                  <p className="text-sm text-red-600 ml-7">{errors.privacy}</p>
+                )}
+              </div>
             </form>
           </div>
 
