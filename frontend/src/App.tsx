@@ -133,6 +133,7 @@ function AnimatedRoutes() {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="my-unlocked" element={<MyUnlockedPage />} />
             <Route path="my-chapters" element={<MyChaptersPage />} />
+            <Route path="my-chapters/:id" element={<ChapterDetailPage />} />
             <Route path="my-ambassadors" element={<MyAmbassadorsPage />} />
             <Route path="my-colleges" element={<MyCollegesPage />} />
             <Route path="my-bars" element={<MyBarsPage />} />

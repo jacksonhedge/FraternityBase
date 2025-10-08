@@ -140,6 +140,8 @@ const MapPageFullScreen = () => {
   const [loadingChapters, setLoadingChapters] = useState(false);
   const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
   const [collegeClickedName, setCollegeClickedName] = useState<string>('');
+  const [unlockedChapters, setUnlockedChapters] = useState<any[]>([]);
+  const [unlockedCollegeIds, setUnlockedCollegeIds] = useState<Set<string>>(new Set());
   const mapRef = useRef<any>(null);
 
   const handleLogout = () => {
@@ -244,6 +246,82 @@ const MapPageFullScreen = () => {
     };
 
     fetchSubscriptionTier();
+  }, []);
+
+  // Fetch unlocked chapters
+  useEffect(() => {
+    const fetchUnlockedChapters = async () => {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const response = await fetch(`${API_URL}/chapters/unlocked`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setUnlockedChapters(data.data);
+
+            // Extract unique university names and match them to COLLEGE_LOCATIONS
+            const collegeNames = new Set<string>();
+
+            data.data.forEach((chapter: any) => {
+              const univName = chapter.university;
+              console.log('🏫 Matching university from API:', univName);
+
+              // Try to find matching college in COLLEGE_LOCATIONS
+              const normalizedUnivName = univName.toLowerCase()
+                .replace(/^the\s+/i, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+              console.log('   📝 Normalized API name:', normalizedUnivName);
+
+              let foundMatch = false;
+
+              // Check all college names in COLLEGE_LOCATIONS for a match
+              for (const collegeName of Object.keys(COLLEGE_LOCATIONS)) {
+                const normalizedCollegeName = collegeName.toLowerCase()
+                  .replace(/^the\s+/i, '')
+                  .replace(/\s*\([A-Z]{2}\)\s*$/, '')
+                  .replace(/\s+/g, ' ')
+                  .trim();
+
+                if (normalizedCollegeName === normalizedUnivName ||
+                    normalizedCollegeName.includes(normalizedUnivName) ||
+                    normalizedUnivName.includes(normalizedCollegeName)) {
+                  console.log('   ✅ MATCHED:', univName, '→', collegeName);
+                  collegeNames.add(collegeName);
+                  foundMatch = true;
+                  break;
+                }
+              }
+
+              if (!foundMatch) {
+                console.warn('   ❌ NO MATCH FOUND for:', univName);
+                console.warn('   Available Penn State variants in COLLEGE_LOCATIONS:');
+                Object.keys(COLLEGE_LOCATIONS).filter(name =>
+                  name.toLowerCase().includes('penn') || name.toLowerCase().includes('pennsylvania')
+                ).forEach(name => console.warn('      -', name));
+              }
+            });
+
+            console.log('📍 Unlocked college names for map:', Array.from(collegeNames));
+            setUnlockedCollegeIds(collegeNames);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching unlocked chapters:', error);
+      }
+    };
+
+    fetchUnlockedChapters();
   }, []);
 
   // Dynamic style for states based on light/dark mode
@@ -505,7 +583,11 @@ const MapPageFullScreen = () => {
     } else if (divisionFilter === 'd3') {
       collegesInState = collegesInState.filter((c: any) => c.division === 'D3');
     } else if (divisionFilter === 'mychapters') {
-      collegesInState = []; // No colleges shown in mychapters filter yet
+      // Filter to show only colleges with unlocked chapters
+      collegesInState = collegesInState.filter((c: any) => {
+        // Check if college name exists in unlockedCollegeIds
+        return unlockedCollegeIds.has(c.name);
+      });
     } else if (divisionFilter === 'all') {
       // Show all colleges - no filter applied
     }
@@ -671,17 +753,33 @@ const MapPageFullScreen = () => {
         });
 
         console.log(`✅ [MapPage - handleCollegeClick] Filtered to ${chapters.length} chapters for ${collegeName}`);
-        if (chapters.length > 0) {
+
+        // Mark chapters as unlocked based on unlockedChapters set
+        const unlockedIds = new Set(unlockedChapters.map((c: any) => c.id));
+        const chaptersWithUnlockStatus = chapters.map((c: any) => ({
+          ...c,
+          unlocked: unlockedIds.has(c.id)
+        }));
+
+        // If in mychapters mode, filter to only show unlocked chapters
+        let finalChapters = chaptersWithUnlockStatus;
+        if (divisionFilter === 'mychapters') {
+          finalChapters = chaptersWithUnlockStatus.filter((c: any) => c.unlocked);
+          console.log(`📍 [MapPage - handleCollegeClick] Filtered to ${finalChapters.length} unlocked chapters in mychapters mode`);
+        }
+
+        if (finalChapters.length > 0) {
           console.log(`📍 [MapPage - handleCollegeClick] Sample chapter:`, {
-            name: chapters[0].greek_organizations?.name,
-            type: chapters[0].greek_organizations?.organization_type,
-            members: chapters[0].member_count
+            name: finalChapters[0].greek_organizations?.name,
+            type: finalChapters[0].greek_organizations?.organization_type,
+            members: finalChapters[0].member_count,
+            unlocked: finalChapters[0].unlocked
           });
         }
         console.log('==================================================');
 
-        // If no chapters found from API, use mock data for Big 10 schools
-        if (chapters.length === 0 && collegeData.conference === 'BIG 10') {
+        // If no chapters found from API, use mock data for Big 10 schools (but not in mychapters mode)
+        if (finalChapters.length === 0 && collegeData.conference === 'BIG 10' && divisionFilter !== 'mychapters') {
           console.log('📝 [MapPage - handleCollegeClick] No API data, using mock chapters for Big 10 school');
           const mockChapters = [
             {
@@ -741,7 +839,7 @@ const MapPageFullScreen = () => {
           ];
           setCollegeChapters(mockChapters);
         } else {
-          setCollegeChapters(chapters);
+          setCollegeChapters(finalChapters);
         }
       }
     } catch (error) {
@@ -749,8 +847,8 @@ const MapPageFullScreen = () => {
       console.error('❌ [MapPage - handleCollegeClick] Error details:', error instanceof Error ? error.message : 'Unknown error');
       console.log('==================================================');
 
-      // Use mock data for Big 10 schools even on error
-      if (collegeData.conference === 'BIG 10') {
+      // Use mock data for Big 10 schools even on error (but not in mychapters mode)
+      if (collegeData.conference === 'BIG 10' && divisionFilter !== 'mychapters') {
         const mockChapters = [
           {
             id: 'mock-1',
@@ -958,13 +1056,18 @@ const MapPageFullScreen = () => {
         </button>
         <button
           onClick={() => setDivisionFilter('mychapters')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
+          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap flex items-center gap-1.5 ${
             divisionFilter === 'mychapters'
               ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
           My Chapters
+          {unlockedChapters.length > 0 && (
+            <span className="inline-flex items-center justify-center px-1.5 py-0.5 ml-1 text-[10px] font-bold bg-yellow-400 text-yellow-900 rounded-full min-w-[18px]">
+              {unlockedChapters.length}
+            </span>
+          )}
         </button>
         <button
           onClick={() => setDivisionFilter('power4')}
@@ -1370,10 +1473,12 @@ const MapPageFullScreen = () => {
 
                       if (isUnlocked) {
                         // Unlocked chapter - full display
+                        // Use /app/my-chapters/:id when in mychapters mode, otherwise /app/chapters/:id
+                        const chapterLink = divisionFilter === 'mychapters' ? `/app/my-chapters/${chapter.id}` : `/app/chapters/${chapter.id}`;
                         return (
                           <Link
                             key={chapter.id}
-                            to={`/app/chapters/${chapter.id}`}
+                            to={chapterLink}
                             className={`block rounded-lg p-4 transition-all group ${
                               isDarkMode
                                 ? 'bg-gradient-to-br from-black/80 to-cyan-900/20 border border-cyan-500/30 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/30'
@@ -1656,10 +1761,9 @@ const MapPageFullScreen = () => {
             }
 
             if (divisionFilter === 'mychapters') {
-              // Filter to show only unlocked colleges
-              // TODO: Replace with actual unlocked data from backend/Redux
-              // For now, return false to show no colleges (no unlocked yet)
-              return false;
+              // Filter to show only colleges with unlocked chapters
+              // Check if the college name exists in the unlockedCollegeIds set
+              return unlockedCollegeIds.has(collegeName);
             }
 
             if (divisionFilter === 'power4') {

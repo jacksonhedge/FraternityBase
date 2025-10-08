@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
 import {
@@ -25,8 +25,12 @@ import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const ChapterDetailPage = () => {
   const { id } = useParams();
+  const location = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
   const [selectedYear, setSelectedYear] = useState('2025-2026');
+
+  // Determine back link based on current path
+  const backLink = location.pathname.includes('/my-chapters/') ? '/app/my-chapters' : '/app/chapters';
 
   // Credit unlock system
   const [unlockStatus, setUnlockStatus] = useState<string[]>([]);
@@ -36,6 +40,8 @@ const ChapterDetailPage = () => {
   // Chapter data from API
   const [chapterData, setChapterData] = useState<any>(null);
   const [members, setMembers] = useState<any[]>([]);
+  const [officers, setOfficers] = useState<any[]>([]);
+  const [regularMembers, setRegularMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Introduction request form
@@ -70,15 +76,17 @@ const ChapterDetailPage = () => {
           setLoading(false);
         });
 
-      // Fetch chapter members
+      // Fetch chapter members and officers
       fetch(`${API_URL}/chapters/${id}/members`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
         .then(res => res.json())
         .then(data => {
           console.log('Chapter members from API:', data);
-          if (data.success && data.data) {
-            setMembers(data.data);
+          if (data.success) {
+            setMembers(data.data || []);
+            setOfficers(data.officers || []);
+            setRegularMembers(data.regularMembers || []);
           }
         })
         .catch(err => console.error('Failed to fetch chapter members:', err));
@@ -102,37 +110,65 @@ const ChapterDetailPage = () => {
   }, [id, token]);
 
   const handleUnlock = async (unlockType: string, creditCost: number) => {
-    if (!token || !id) return;
+    console.log('🔓 handleUnlock called', { unlockType, creditCost, token: token?.substring(0, 20) + '...', id });
+
+    if (!token || !id) {
+      console.log('❌ Missing token or id', { hasToken: !!token, hasId: !!id });
+      return;
+    }
 
     if (balance < creditCost) {
+      console.log('❌ Insufficient credits', { balance, creditCost });
       alert(`Insufficient credits! You need ${creditCost} credits but only have ${balance}.`);
       return;
     }
 
     const confirmMessage = `This will cost ${creditCost} credits. You currently have ${balance} credits. Continue?`;
-    if (!confirm(confirmMessage)) return;
+    console.log('💬 Showing confirmation dialog');
+    if (!confirm(confirmMessage)) {
+      console.log('❌ User cancelled');
+      return;
+    }
 
+    console.log('✅ User confirmed, starting unlock');
     setIsUnlocking(true);
 
     try {
-      const response = await fetch(`${API_URL}/chapters/${id}/unlock`, {
+      const url = `${API_URL}/chapters/${id}/unlock`;
+      const payload = { unlockType };
+      console.log('📤 Sending unlock request:', { url, payload, API_URL });
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ unlockType })
+        body: JSON.stringify(payload)
       });
 
+      console.log('📥 Response received:', { status: response.status, statusText: response.statusText, ok: response.ok });
+
       const data = await response.json();
+      console.log('📊 Response data:', data);
 
       if (response.ok) {
+        console.log('✅ UNLOCK SUCCESSFUL!', data);
         setUnlockStatus([...unlockStatus, unlockType]);
-        setBalance(data.remainingBalance);
-        alert(`✅ Unlocked! ${data.creditsSpent} credits spent. Remaining balance: ${data.remainingBalance}`);
+        // Fix: backend sends 'balance' not 'remainingBalance'
+        const newBalance = data.balance || data.remainingBalance || balance - (data.creditsSpent || 0);
+        setBalance(newBalance);
+        alert(`✅ Unlocked! ${data.creditsSpent} credits spent. Remaining balance: ${newBalance}`);
         window.location.reload(); // Refresh to show unlocked data
       } else {
-        alert(`❌ ${data.error || 'Failed to unlock'}`);
+        console.error('❌ UNLOCK FAILED:', { status: response.status, error: data.error, data });
+
+        // Special message for database constraint errors
+        if (data.error && data.error.includes('constraint')) {
+          alert(`❌ DATABASE ERROR: ${data.error}\n\nThe database constraint needs to be fixed. Check console for details.`);
+        } else {
+          alert(`❌ ${data.error || 'Failed to unlock'}`);
+        }
       }
     } catch (error) {
       console.error('Error unlocking chapter:', error);
@@ -142,7 +178,13 @@ const ChapterDetailPage = () => {
     }
   };
 
-  const isUnlocked = (unlockType: string) => unlockStatus.includes(unlockType);
+  const isUnlocked = (unlockType: string) => {
+    console.log('🔍 isUnlocked check:', { unlockType, unlockStatus, hasFull: unlockStatus.includes('full') });
+    // If they have 'full' access, they have everything
+    if (unlockStatus.includes('full')) return true;
+    // Otherwise check for specific unlock type
+    return unlockStatus.includes(unlockType);
+  };
 
   // Show loading state
   if (loading) {
@@ -169,19 +211,19 @@ const ChapterDetailPage = () => {
     );
   }
 
-  // Helper to find member by position
+  // Helper to find officer by position
   const findOfficer = (positionName: string) => {
-    const member = members.find(m =>
-      m.position?.toLowerCase().includes(positionName.toLowerCase())
+    const officer = officers.find(o =>
+      o.position?.toLowerCase().includes(positionName.toLowerCase())
     );
-    if (!member) return null;
+    if (!officer) return null;
     return {
-      name: member.name,
-      emails: member.email ? [member.email] : [],
-      email: member.email,
-      phone: member.phone,
-      major: member.major || '',
-      year: member.graduation_year ? `Class of ${member.graduation_year}` : ''
+      name: officer.name || `${officer.first_name} ${officer.last_name}`,
+      emails: officer.email ? [officer.email] : [],
+      email: officer.email,
+      phone: officer.phone,
+      major: officer.major || '',
+      year: officer.graduation_year ? `Class of ${officer.graduation_year}` : ''
     };
   };
 
@@ -286,7 +328,7 @@ const ChapterDetailPage = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link
-            to="/app/chapters"
+            to={backLink}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -377,7 +419,7 @@ const ChapterDetailPage = () => {
                     Unlock full contact information (emails & phones) for all officers to reach out directly.
                   </p>
                   <button
-                    onClick={() => handleUnlock('officer_contacts', 8)}
+                    onClick={() => handleUnlock('full', 20)}
                     disabled={isUnlocking}
                     className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -389,7 +431,7 @@ const ChapterDetailPage = () => {
                     ) : (
                       <>
                         <Unlock className="w-4 h-4" />
-                        Unlock for 8 Credits
+                        Unlock for 20 Credits
                       </>
                     )}
                   </button>
@@ -405,33 +447,46 @@ const ChapterDetailPage = () => {
             </div>
           )}
 
+          {/* Dynamic Officers List */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {currentYearData.president && (
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900">President</h3>
-                <p className="text-gray-900 mt-1">{currentYearData.president.name}</p>
-                <p className="text-sm text-gray-600">{currentYearData.president.major} • {currentYearData.president.year}</p>
-                {isUnlocked('officer_contacts') ? (
-                  <div className="mt-2 space-y-1">
-                    {(currentYearData.president.emails || [currentYearData.president.email]).filter(Boolean).map((email, idx) => (
-                      <a key={idx} href={`mailto:${email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                        <Mail className="w-4 h-4 mr-1" />
-                        {email}
-                      </a>
-                    ))}
-                    {currentYearData.president.phone && (
-                      <a href={`tel:${currentYearData.president.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                        <Phone className="w-4 h-4 mr-1" />
-                        {currentYearData.president.phone}
-                      </a>
-                    )}
-                  </div>
-                ) : (
-                  <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
-                    <Lock className="w-4 h-4" />
-                    <span>Unlock to view contacts</span>
-                  </div>
-                )}
+            {officers.length > 0 ? (
+              officers.map((officer) => (
+                <div key={officer.id} className="border rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900">{officer.position || 'To be Determined'}</h3>
+                  <p className="text-gray-900 mt-1">{officer.name || (officer.first_name && officer.last_name ? `${officer.first_name} ${officer.last_name}` : 'To be Determined')}</p>
+                  {officer.major && officer.graduation_year && (
+                    <p className="text-sm text-gray-600">{officer.major} • Class of {officer.graduation_year}</p>
+                  )}
+                  {isUnlocked('officer_contacts') ? (
+                    <div className="mt-2 space-y-1">
+                      {officer.email ? (
+                        <a href={`mailto:${officer.email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                          <Mail className="w-4 h-4 mr-1" />
+                          {officer.email}
+                        </a>
+                      ) : (
+                        <p className="text-sm text-gray-500">Email: To be Determined</p>
+                      )}
+                      {officer.phone ? (
+                        <a href={`tel:${officer.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                          <Phone className="w-4 h-4 mr-1" />
+                          {officer.phone}
+                        </a>
+                      ) : (
+                        <p className="text-sm text-gray-500">Phone: To be Determined</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                      <Lock className="w-4 h-4" />
+                      <span>Unlock to view contacts</span>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="col-span-2 text-center py-8 text-gray-500">
+                Chapter leadership: To be Determined
               </div>
             )}
 

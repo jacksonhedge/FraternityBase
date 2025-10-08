@@ -52,55 +52,89 @@ const MyChaptersPage = () => {
   }, []);
 
   const fetchUnlockedData = async () => {
+    console.log('🚀 === MY CHAPTERS PAGE: FETCH UNLOCKED DATA ===');
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
       const token = localStorage.getItem('token');
 
+      console.log('📍 API_URL:', API_URL);
+      console.log('🔑 Token exists:', !!token);
+      console.log('🔑 Token (first 50 chars):', token?.substring(0, 50) + '...');
+
       if (!token) {
-        console.error('No authentication token found');
+        console.error('❌ No authentication token found');
         setLoading(false);
         return;
       }
 
-      const response = await fetch(`${API_URL}/chapters/unlocked`, {
+      const url = `${API_URL}/chapters/unlocked`;
+      console.log('📤 Fetching from:', url);
+      console.log('📤 Headers:', { 'Authorization': `Bearer ${token.substring(0, 20)}...` });
+
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
+      console.log('📥 Response status:', response.status);
+      console.log('📥 Response ok:', response.ok);
+      console.log('📥 Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Response not OK. Status:', response.status, 'Error text:', errorText);
         throw new Error('Failed to fetch unlocked chapters');
       }
 
       const result = await response.json();
+      console.log('📊 Raw result from API:', JSON.stringify(result, null, 2));
+      console.log('📊 result.success:', result.success);
+      console.log('📊 result.data:', result.data);
+      console.log('📊 result.data length:', result.data?.length);
 
       if (result.success && result.data) {
-        // Transform backend data to match our component interface
-        const transformedChapters = result.data.map((chapter: any) => ({
-          id: chapter.id,
-          chapter_name: chapter.chapter,
-          greek_organization: chapter.name,
-          university: chapter.university,
-          state: chapter.state,
-          member_count: chapter.memberCount,
-          unlocked_at: new Date().toISOString(), // Backend doesn't return this yet
-          credits_spent: 0 // Backend doesn't return this yet
-        }));
+        console.log('✅ Result is successful, transforming data...');
+        console.log('📋 Raw data before transform:', result.data);
 
+        // Transform backend data to match our component interface
+        const transformedChapters = result.data.map((chapter: any, index: number) => {
+          console.log(`🔄 Transforming chapter ${index}:`, chapter);
+          const transformed = {
+            id: chapter.id,
+            chapter_name: chapter.chapter,
+            greek_organization: chapter.name,
+            university: chapter.university,
+            state: chapter.state,
+            member_count: chapter.memberCount,
+            unlocked_at: new Date().toISOString(),
+            credits_spent: 0
+          };
+          console.log(`✨ Transformed chapter ${index}:`, transformed);
+          return transformed;
+        });
+
+        console.log('✅ All chapters transformed:', transformedChapters);
+        console.log('✅ Setting state with', transformedChapters.length, 'chapters');
         setUnlockedChapters(transformedChapters);
       } else {
+        console.log('⚠️ Result not successful or no data, setting empty array');
         setUnlockedChapters([]);
       }
 
       // For now, set unlocked users to empty until we have a backend endpoint
       setUnlockedUsers([]);
+      console.log('✅ Fetch completed successfully');
     } catch (error) {
-      console.error('Error fetching unlocked data:', error);
+      console.error('❌ ERROR in fetchUnlockedData:', error);
+      console.error('❌ Error stack:', (error as Error).stack);
       setUnlockedChapters([]);
       setUnlockedUsers([]);
     } finally {
+      console.log('🏁 Setting loading to false');
       setLoading(false);
     }
+    console.log('🏁 === END FETCH UNLOCKED DATA ===');
   };
 
   const exportToCSV = () => {
@@ -215,10 +249,10 @@ const MyChaptersPage = () => {
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {unlockedChapters.map((chapter) => (
-              <div
+              <Link
                 key={chapter.id}
+                to={`/app/my-chapters/${chapter.id}`}
                 className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => setSelectedChapter(chapter.chapter_name)}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div>
@@ -245,7 +279,7 @@ const MyChaptersPage = () => {
                   <span>Unlocked {new Date(chapter.unlocked_at).toLocaleDateString()}</span>
                   <span>{chapter.credits_spent} credits</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

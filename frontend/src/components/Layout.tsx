@@ -52,6 +52,7 @@ const Layout = () => {
   const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
   const [credits, setCredits] = useState<number>(0);
   const [companyName, setCompanyName] = useState<string>('');
+  const [unlockedChaptersCount, setUnlockedChaptersCount] = useState<number>(0);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const subscriptionDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -105,6 +106,37 @@ const Layout = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch unlocked chapters count
+  useEffect(() => {
+    const fetchUnlockedCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${API_URL}/chapters/unlocked`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            setUnlockedChaptersCount(result.data.length);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch unlocked chapters count:', error);
+      }
+    };
+
+    fetchUnlockedCount();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchUnlockedCount, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -135,7 +167,13 @@ const Layout = () => {
     {
       title: 'My Chapters',
       items: [
-        { name: 'My Chapters', href: '/app/my-unlocked', icon: Unlock, badge: null, requiresTeamPlan: true },
+        {
+          name: 'My Chapters',
+          href: '/app/my-unlocked',
+          icon: Unlock,
+          badge: unlockedChaptersCount > 0 ? { text: String(unlockedChaptersCount), type: 'gold' } : null,
+          requiresTeamPlan: true
+        },
         { name: 'My Ambassadors', href: '/app/my-ambassadors', icon: Briefcase, badge: 'SOON', requiresTeamPlan: true },
       ]
     },
@@ -174,7 +212,14 @@ const Layout = () => {
     },
   ];
 
-  const isActive = (path: string) => location.pathname.startsWith(path.split('?')[0]);
+  const isActive = (path: string) => {
+    const basePath = path.split('?')[0];
+    // Special case: "My Chapters" nav item should be active for both /app/my-unlocked and /app/my-chapters
+    if (basePath === '/app/my-unlocked' && location.pathname.startsWith('/app/my-chapters')) {
+      return true;
+    }
+    return location.pathname.startsWith(basePath);
+  };
 
   return (
     <div className="min-h-screen bg-green-50">
@@ -254,6 +299,8 @@ const Layout = () => {
                           <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${
                             item.badge === 'SOON'
                               ? 'text-yellow-800 bg-yellow-200'
+                              : typeof item.badge === 'object' && item.badge.type === 'gold'
+                              ? 'text-yellow-900 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-sm'
                               : 'text-emerald-700 bg-emerald-100'
                           }`}>
                             {typeof item.badge === 'object' ? item.badge.text : item.badge}
@@ -375,6 +422,8 @@ const Layout = () => {
                               <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${
                                 item.badge === 'SOON'
                                   ? 'text-yellow-800 bg-yellow-200'
+                                  : typeof item.badge === 'object' && item.badge.type === 'gold'
+                                  ? 'text-yellow-900 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-sm'
                                   : 'text-emerald-700 bg-emerald-100'
                               }`}>
                                 {typeof item.badge === 'object' ? item.badge.text : item.badge}

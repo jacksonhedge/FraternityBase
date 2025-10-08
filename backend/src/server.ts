@@ -554,7 +554,7 @@ app.get('/api/chapters/unlocked', async (req, res) => {
     }
 
     // Get user's company_id from user_profiles
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await supabaseAdmin
       .from('user_profiles')
       .select('company_id')
       .eq('user_id', user.id)
@@ -566,7 +566,7 @@ app.get('/api/chapters/unlocked', async (req, res) => {
     }
 
     // Query all unlocks for this company with chapter details
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('chapter_unlocks')
       .select(`
         chapter_id,
@@ -577,6 +577,7 @@ app.get('/api/chapters/unlocked', async (req, res) => {
           id,
           chapter_name,
           member_count,
+          five_star_rating,
           greek_organizations (
             name,
             greek_letters
@@ -587,17 +588,21 @@ app.get('/api/chapters/unlocked', async (req, res) => {
           )
         )
       `)
-      .eq('company_id', profile.company_id)
-      .or('expires_at.is.null,expires_at.gt.' + new Date().toISOString());
+      .eq('company_id', profile.company_id);
 
     if (error) {
       console.error('Error fetching unlocked chapters:', error);
       return res.status(500).json({ error: 'Failed to fetch unlocked chapters' });
     }
 
+    // Filter out expired unlocks (if expires_at is set and in the past)
+    const validUnlocks = data?.filter(unlock =>
+      !unlock.expires_at || new Date(unlock.expires_at) > new Date()
+    ) || [];
+
     // Group by chapter
     const chaptersMap = new Map();
-    data?.forEach((unlock: any) => {
+    validUnlocks.forEach((unlock: any) => {
       const chapterId = unlock.chapter_id;
       if (!chaptersMap.has(chapterId)) {
         chaptersMap.set(chapterId, {
@@ -607,6 +612,7 @@ app.get('/api/chapters/unlocked', async (req, res) => {
           university: unlock.chapters?.universities?.name || 'Unknown University',
           state: unlock.chapters?.universities?.state || '',
           memberCount: unlock.chapters?.member_count || 0,
+          chapterScore: unlock.chapters?.five_star_rating || null,
           unlockedTypes: []
         });
       }
@@ -670,21 +676,35 @@ app.get('/api/chapters/:id/members', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { data: members, error } = await supabaseAdmin
-      .from('chapter_members')
+    // Fetch officers from chapter_officers table
+    const { data: officers, error: officersError } = await supabaseAdmin
+      .from('chapter_officers')
       .select('*')
       .eq('chapter_id', id)
       .order('position', { ascending: true });
 
-    if (error) {
-      console.error('Error fetching chapter members:', error);
+    // Fetch regular members from chapter_members table
+    const { data: regularMembers, error: membersError } = await supabaseAdmin
+      .from('chapter_members')
+      .select('*')
+      .eq('chapter_id', id)
+      .order('name', { ascending: true });
+
+    if (officersError && membersError) {
+      console.error('Error fetching chapter data:', { officersError, membersError });
       return res.status(500).json({
         success: false,
         error: 'Failed to fetch members'
       });
     }
 
-    res.json({ success: true, data: members || [] });
+    // Combine officers and members
+    const allMembers = [
+      ...(officers || []).map(o => ({ ...o, type: 'officer' })),
+      ...(regularMembers || []).map(m => ({ ...m, type: 'member' }))
+    ];
+
+    res.json({ success: true, data: allMembers, officers: officers || [], regularMembers: regularMembers || [] });
   } catch (error: any) {
     console.error('Error fetching chapter members:', error);
     res.status(500).json({
@@ -696,9 +716,21 @@ app.get('/api/chapters/:id/members', async (req, res) => {
 
 // Unlock endpoints
 app.post('/api/chapters/:id/unlock', async (req, res) => {
+  console.log('🚀 === UNLOCK ENDPOINT HIT ===');
+  console.log('📍 Method:', req.method);
+  console.log('📍 URL:', req.url);
+  console.log('📍 Params:', req.params);
+  console.log('📍 Body:', req.body);
+  console.log('📍 Headers:', {
+    contentType: req.headers['content-type'],
+    authorization: req.headers.authorization?.substring(0, 30) + '...'
+  });
+
   try {
     const { id: chapterId } = req.params;
     const { unlockType } = req.body;
+
+    console.log('🔑 Extracted data:', { chapterId, unlockType });
 
     // Validate unlock type
     const validTypes = ['basic_info', 'roster', 'officers', 'warm_introduction', 'full'];
@@ -728,19 +760,23 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     }
 
     // Get chapter to check if it's a 5-star unlock
+    console.log(`🔓 Unlock request for chapter: ${chapterId}`);
     const { data: chapterData, error: chapterError } = await supabaseAdmin
       .from('chapters')
-      .select('greek_rank, chapter_name, universities(name)')
+      .select('five_star_rating, chapter_name, universities(name)')
       .eq('id', chapterId)
       .single();
 
+    console.log(`📊 Chapter query result:`, { chapterData, chapterError });
+
     if (chapterError || !chapterData) {
+      console.log(`❌ Chapter not found: ${chapterId}`, chapterError);
       return res.status(404).json({ error: 'Chapter not found' });
     }
 
-    // Determine credits cost based on greek_rank (rating out of 5.0)
+    // Determine credits cost based on five_star_rating (rating out of 5.0)
     // Higher rank = more expensive (better chapters cost more)
-    const rank = chapterData.greek_rank || 0;
+    const rank = chapterData.five_star_rating || 0;
     const is5Star = rank >= 5.0;
     let credits = 20; // Default for low-ranked chapters
     let dollarValue = 5.99;
@@ -763,27 +799,37 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       dollarValue = 5.99;
     }
 
+    console.log(`💰 Pricing determined: ${credits} credits ($${dollarValue}) for rank ${rank}`);
+
     // Get user's company_id from user_profiles
+    console.log(`👤 Fetching user profile for user ID: ${user.id}`);
     const { data: profile, error: profileError } = await supabase
       .from('user_profiles')
       .select('company_id')
       .eq('user_id', user.id)
       .single();
 
+    console.log(`🏢 Profile fetched:`, { profile, profileError });
+
     if (profileError || !profile?.company_id) {
+      console.log(`❌ User profile not found`);
       return res.status(404).json({ error: 'User profile not found' });
     }
 
     // Check if already unlocked
+    console.log(`🔍 Checking if chapter already unlocked for company: ${profile.company_id}`);
     const { data: existingUnlock } = await supabaseAdmin
       .from('chapter_unlocks')
       .select('*')
       .eq('company_id', profile.company_id)
       .eq('chapter_id', chapterId)
       .eq('unlock_type', unlockType)
-      .single();
+      .maybeSingle();
+
+    console.log(`🔍 Existing unlock check result:`, { existingUnlock });
 
     if (existingUnlock) {
+      console.log(`✅ Already unlocked, returning early`);
       return res.json({
         success: true,
         alreadyUnlocked: true,
@@ -793,6 +839,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
 
     // Call deduct_credits function
     const rankLabel = rank >= 5.0 ? '5.0⭐' : rank >= 4.0 ? '4.0⭐' : rank >= 3.5 ? '3.5⭐' : 'Standard';
+    console.log(`💳 Calling deduct_credits RPC with ${credits} credits for company ${profile.company_id}`);
     const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
       p_company_id: profile.company_id,
       p_credits: credits,
@@ -802,8 +849,10 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       p_chapter_id: chapterId
     });
 
+    console.log(`💳 Deduct credits result:`, { transactionId, deductError });
+
     if (deductError) {
-      console.error('Error deducting credits:', deductError);
+      console.error('❌ Error deducting credits:', deductError);
       if (deductError.message?.includes('Insufficient credits')) {
         return res.status(402).json({
           error: 'Insufficient credits',
@@ -815,7 +864,15 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     }
 
     // Create unlock record
-    const { error: unlockError } = await supabaseAdmin
+    console.log('💾 Attempting to insert unlock record:', {
+      company_id: profile.company_id,
+      chapter_id: chapterId,
+      unlock_type: unlockType,
+      amount_paid: credits,
+      transaction_id: transactionId
+    });
+
+    const { data: unlockData, error: unlockError } = await supabaseAdmin
       .from('chapter_unlocks')
       .insert({
         company_id: profile.company_id,
@@ -823,12 +880,17 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
         unlock_type: unlockType,
         amount_paid: credits, // Store credits amount
         transaction_id: transactionId
-      });
+      })
+      .select();
+
+    console.log('💾 Unlock insert result:', { unlockData, unlockError });
 
     if (unlockError) {
-      console.error('Error creating unlock record:', unlockError);
+      console.error('❌ Error creating unlock record:', unlockError);
       return res.status(500).json({ error: 'Failed to create unlock record' });
     }
+
+    console.log('✅ Unlock record created successfully:', unlockData);
 
     // Get company info for logging
     const { data: company } = await supabaseAdmin
@@ -881,45 +943,65 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
 app.get('/api/chapters/:id/unlock-status', async (req, res) => {
   try {
     const { id: chapterId } = req.params;
+    console.log('🔍 === UNLOCK STATUS ENDPOINT HIT ===');
+    console.log('📍 Chapter ID:', chapterId);
 
     // Get the authorization token
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('❌ No auth header found');
       return res.status(401).json({ error: 'Missing or invalid authorization token' });
     }
 
     const token = authHeader.substring(7);
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    console.log('👤 User from token:', { userId: user?.id, error: authError });
 
     if (authError || !user) {
+      console.log('❌ Invalid token or user not found');
       return res.status(401).json({ error: 'Invalid token or user not found' });
     }
 
     // Get user's company_id from user_profiles
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await supabaseAdmin
       .from('user_profiles')
       .select('company_id')
       .eq('user_id', user.id)
       .single();
 
+    console.log('🏢 User profile:', { profile, profileError });
+
     if (profileError || !profile?.company_id) {
+      console.log('❌ User profile not found');
       return res.status(404).json({ error: 'User profile not found' });
     }
 
+    console.log('🔎 Querying chapter_unlocks with:', {
+      company_id: profile.company_id,
+      chapter_id: chapterId
+    });
+
     // Query unlocks for this chapter
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('chapter_unlocks')
       .select('unlock_type, unlocked_at, expires_at, amount_paid')
       .eq('company_id', profile.company_id)
-      .eq('chapter_id', chapterId)
-      .or('expires_at.is.null,expires_at.gt.' + new Date().toISOString());
+      .eq('chapter_id', chapterId);
+
+    // Filter out expired unlocks (if expires_at is set and in the past)
+    const validUnlocks = data?.filter(unlock =>
+      !unlock.expires_at || new Date(unlock.expires_at) > new Date()
+    ) || [];
+
+    console.log('📊 Unlock status query result:', { data, error, count: data?.length, validCount: validUnlocks.length });
 
     if (error) {
-      console.error('Error fetching unlock status:', error);
+      console.error('❌ Error fetching unlock status:', error);
       return res.status(500).json({ error: 'Failed to fetch unlock status' });
     }
 
-    const unlockedTypes = data?.map(u => u.unlock_type) || [];
+    const unlockedTypes = validUnlocks.map(u => u.unlock_type);
+    console.log('✅ Returning unlock types:', unlockedTypes);
 
     res.json({
       success: true,
