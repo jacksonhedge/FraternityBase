@@ -1321,6 +1321,39 @@ app.get('/api/chapters/:chapterId/unlock-status', async (req, res) => {
   }
 });
 
+// Request intro for high-grade chapters
+app.post('/api/intro-requests', async (req, res) => {
+  try {
+    const { chapter_id, chapter_name, fraternity_name, university_name, grade } = req.body;
+
+    // Store the request in the database
+    const { data, error } = await supabase
+      .from('intro_requests')
+      .insert({
+        chapter_id,
+        chapter_name,
+        fraternity_name,
+        university_name,
+        grade,
+        requested_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error storing intro request:', error);
+      // Don't fail the request if storage fails - still send notification
+    }
+
+    console.log(`📨 Intro Request: ${fraternity_name} - ${chapter_name} at ${university_name} (Grade: ${grade})`);
+
+    res.json({ success: true, message: 'Intro request received' });
+  } catch (error: any) {
+    console.error('Error processing intro request:', error);
+    res.status(500).json({ error: 'Failed to process intro request' });
+  }
+});
+
 // Admin endpoint to update chapter details
 app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
   const { chapterId } = req.params;
