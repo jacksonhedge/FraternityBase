@@ -92,6 +92,7 @@ interface Chapter {
   event_frequency?: number;
   grade?: number;
   is_favorite?: boolean;
+  is_viewable?: boolean;
   greek_organizations?: { name: string };
   universities?: { name: string; state: string };
 }
