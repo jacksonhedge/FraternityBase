@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import {
@@ -15,12 +15,37 @@ import { Link } from 'react-router-dom';
 const SubscriptionPage = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
+  const [currentTier, setCurrentTier] = useState<string>('trial');
 
-  const currentTier = user?.subscriptionTier?.toLowerCase() || 'free';
+  // Fetch subscription tier from API
+  useEffect(() => {
+    const fetchSubscriptionTier = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${API_URL}/credits/balance`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentTier(data.subscriptionTier?.toLowerCase() || 'trial');
+        }
+      } catch (error) {
+        console.error('Failed to fetch subscription tier:', error);
+      }
+    };
+
+    fetchSubscriptionTier();
+  }, []);
 
   const pricingTiers = [
     {
-      id: 'free',
+      id: 'trial',
       name: 'Basic',
       price: 4.99,
       description: '3-day free trial, then $4.99/mo',
@@ -35,10 +60,10 @@ const SubscriptionPage = () => {
       ],
       limitations: [],
       buttonText: 'Current Plan',
-      isCurrent: currentTier === 'free'
+      isCurrent: currentTier === 'trial'
     },
     {
-      id: 'team',
+      id: 'monthly',
       name: 'Team',
       price: 29.99,
       description: 'Full platform access',
@@ -60,8 +85,8 @@ const SubscriptionPage = () => {
       ],
       limitations: [],
       highlighted: true,
-      buttonText: currentTier === 'team' || currentTier === 'monthly' ? 'Current Plan' : 'Upgrade to Team',
-      isCurrent: currentTier === 'team' || currentTier === 'monthly'
+      buttonText: currentTier === 'monthly' ? 'Current Plan' : 'Upgrade to Team',
+      isCurrent: currentTier === 'monthly'
     },
     {
       id: 'enterprise',
@@ -73,15 +98,14 @@ const SubscriptionPage = () => {
       bgColor: 'from-purple-50 to-purple-100',
       features: [
         'Everything in Team, plus:',
-        'Unlimited chapter unlocks',
-        'Unlimited warm intros',
-        '500 monthly credits included',
-        'Export data to CSV',
+        '1000 monthly credits included',
         'FraternityBase API access',
-        'CRM & tool integrations',
-        'Dedicated account manager',
-        'Custom onboarding & training',
-        'Priority support'
+        'Priority support',
+        'Early Access to College Influencer marketplace',
+        'Full Interactive Map Access',
+        'Early Access to Venue Partnerships',
+        '3 Request Intros per month Included',
+        'Early Access to Ambassadors'
       ],
       limitations: [],
       buttonText: currentTier === 'enterprise' ? 'Current Plan' : 'Upgrade to Enterprise',

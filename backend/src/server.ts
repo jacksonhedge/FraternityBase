@@ -1247,6 +1247,8 @@ app.get('/api/chapters', async (req, res) => {
         universities(id, name, location, state, student_count, logo_url)
       `)
       .eq('status', 'active')
+      .eq('is_viewable', true)
+      .order('is_favorite', { ascending: false, nullsFirst: false })
       .order('member_count', { ascending: false });
 
     if (error) throw error;
@@ -1347,12 +1349,19 @@ app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
       'fraternity_province',
       'house_address',
       'member_count',
-      'founded_year',
+      'charter_date',
       'chapter_name',
       'greek_letter_name',
       'status',
       'grade',
-      'is_favorite'
+      'is_favorite',
+      'is_viewable',
+      'contact_email',
+      'phone',
+      'instagram_handle',
+      'engagement_score',
+      'partnership_openness',
+      'event_frequency'
     ];
 
     // Filter update data to only include allowed fields
@@ -1918,7 +1927,7 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
         // Get account balance
         const { data: accountBalance } = await supabaseAdmin
           .from('account_balance')
-          .select('balance_credits, lifetime_spent_credits')
+          .select('balance_credits, lifetime_spent_credits, subscription_tier')
           .eq('company_id', company.id)
           .single();
 
@@ -1928,7 +1937,8 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
           email: email,
           unlocks: unlocks || [],
           total_spent: accountBalance?.lifetime_spent_credits || 0,
-          credits_balance: accountBalance?.balance_credits || 0
+          credits_balance: accountBalance?.balance_credits || 0,
+          subscription_tier: accountBalance?.subscription_tier || 'trial'
         };
       })
     );
@@ -2579,7 +2589,10 @@ app.post('/api/admin/chapters', requireAdmin, async (req, res) => {
       phone,
       engagement_score,
       partnership_openness,
-      event_frequency
+      event_frequency,
+      grade,
+      is_favorite,
+      is_viewable
     } = req.body;
 
     const { data, error } = await supabase
@@ -2598,7 +2611,10 @@ app.post('/api/admin/chapters', requireAdmin, async (req, res) => {
         phone,
         engagement_score,
         partnership_openness,
-        event_frequency
+        event_frequency,
+        grade,
+        is_favorite,
+        is_viewable
       })
       .select(`
         *,

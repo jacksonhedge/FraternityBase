@@ -24,6 +24,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import DashboardPage from './pages/DashboardPage';
 import TeamPage from './pages/TeamPage';
 import FraternitiesPage from './pages/FraternitiesPage';
+import SororitiesPage from './pages/SororitiesPage';
 import CollegesPage from './pages/CollegesPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
 import MapPage from './pages/MapPage';
@@ -137,6 +138,7 @@ function AnimatedRoutes() {
             <Route path="my-bars" element={<MyBarsPage />} />
             <Route path="team" element={<TeamPage />} />
             <Route path="fraternities" element={<FraternitiesPage />} />
+            <Route path="sororities" element={<SororitiesPage />} />
             <Route path="colleges" element={<CollegesPage />} />
             <Route path="colleges/:id" element={<CollegeDetailPage />} />
             <Route path="map" element={<MapPageFullScreen />} />

@@ -14,6 +14,7 @@ import {
   Upload,
   GraduationCap,
   Eye,
+  EyeOff,
   Search,
   Briefcase,
   Home,
@@ -263,7 +264,8 @@ const AdminPageV4 = () => {
     partnership_openness: 'open',
     event_frequency: '20',
     grade: '',
-    is_favorite: false
+    is_favorite: false,
+    is_viewable: false
   });
 
   const [userForm, setUserForm] = useState({
@@ -631,7 +633,8 @@ const AdminPageV4 = () => {
           partnership_openness: chapterForm.partnership_openness,
           event_frequency: chapterForm.event_frequency ? parseInt(chapterForm.event_frequency) : null,
           grade: chapterForm.grade ? parseFloat(chapterForm.grade) : null,
-          is_favorite: chapterForm.is_favorite
+          is_favorite: chapterForm.is_favorite,
+          is_viewable: chapterForm.is_viewable
         })
       });
 
@@ -655,7 +658,8 @@ const AdminPageV4 = () => {
           partnership_openness: 'open',
           event_frequency: '20',
           grade: '',
-          is_favorite: false
+          is_favorite: false,
+          is_viewable: false
         });
         fetchData();
       }
@@ -743,6 +747,43 @@ const AdminPageV4 = () => {
     }
   };
 
+  const handleTogglePinned = async (userId: string, isPinned: boolean) => {
+    try {
+      const response = await fetch(`${API_URL}/admin/officers/${userId}`, {
+        method: 'PUT',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ is_pinned: isPinned })
+      });
+
+      if (!response.ok) throw new Error('Failed to toggle pinned status');
+
+      showSuccessMsg(isPinned ? 'Officer pinned' : 'Officer unpinned');
+      fetchData();
+    } catch (error: any) {
+      console.error('Error toggling pinned:', error);
+    }
+  };
+
+  const handleAssignPosition = async (userId: string, position: string) => {
+    try {
+      const response = await fetch(`${API_URL}/admin/officers/${userId}`, {
+        method: 'PUT',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({
+          position,
+          is_pinned: true // Auto-pin when assigned to a position
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to assign position');
+
+      showSuccessMsg(`Assigned to ${position}`);
+      fetchData();
+    } catch (error: any) {
+      console.error('Error assigning position:', error);
+    }
+  };
+
   const handleChapterDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this chapter?')) return;
 
@@ -777,6 +818,25 @@ const AdminPageV4 = () => {
       fetchData();
     } catch (error) {
       console.error('Error toggling favorite:', error);
+    }
+  };
+
+  const handleToggleViewable = async (chapterId: string, currentStatus: boolean) => {
+    try {
+      const response = await fetch(`${API_URL}/admin/chapters/${chapterId}`, {
+        method: 'PATCH',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ is_viewable: !currentStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to toggle viewable');
+      }
+
+      showSuccessMsg(currentStatus ? 'Chapter hidden from dashboard' : 'Chapter visible in dashboard');
+      fetchData();
+    } catch (error) {
+      console.error('Error toggling viewable:', error);
     }
   };
 
@@ -1747,6 +1807,7 @@ const AdminPageV4 = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subscription</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Credits Balance</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unlocks</th>
@@ -1766,16 +1827,83 @@ const AdminPageV4 = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-600">{company.email}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        company.approval_status === 'approved'
-                          ? 'bg-green-100 text-green-700'
-                          : company.approval_status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}>
-                        {company.approval_status || 'approved'}
-                      </span>
+                    <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <select
+                        value={company.approval_status || 'approved'}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+                          try {
+                            const response = await fetch(`${API_URL}/admin/companies/${company.id}/status`, {
+                              method: 'PATCH',
+                              headers: getAdminHeaders(),
+                              body: JSON.stringify({ approval_status: newStatus })
+                            });
+
+                            if (response.ok) {
+                              setCompanies(companies.map(c =>
+                                c.id === company.id ? { ...c, approval_status: newStatus as 'pending' | 'approved' | 'rejected' } : c
+                              ));
+                              setSuccessMessage(`Status updated to ${newStatus}`);
+                              setShowSuccess(true);
+                              setTimeout(() => setShowSuccess(false), 3000);
+                            } else {
+                              alert('Failed to update status');
+                            }
+                          } catch (error) {
+                            alert('Error updating status');
+                          }
+                        }}
+                        className={`px-2 py-1 text-xs font-medium rounded-full border-0 cursor-pointer ${
+                          company.approval_status === 'approved'
+                            ? 'bg-green-100 text-green-700'
+                            : company.approval_status === 'pending'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        <option value="pending">pending</option>
+                        <option value="approved">approved</option>
+                        <option value="rejected">rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <select
+                        value={company.subscription_tier || 'trial'}
+                        onChange={async (e) => {
+                          const newTier = e.target.value;
+                          try {
+                            const response = await fetch(`${API_URL}/admin/companies/${company.id}/subscription-tier`, {
+                              method: 'POST',
+                              headers: getAdminHeaders(),
+                              body: JSON.stringify({ tier: newTier })
+                            });
+
+                            if (response.ok) {
+                              setCompanies(companies.map(c =>
+                                c.id === company.id ? { ...c, subscription_tier: newTier } : c
+                              ));
+                              setSuccessMessage(`Subscription updated to ${newTier}`);
+                              setShowSuccess(true);
+                              setTimeout(() => setShowSuccess(false), 3000);
+                            } else {
+                              alert('Failed to update subscription tier');
+                            }
+                          } catch (error) {
+                            alert('Error updating subscription tier');
+                          }
+                        }}
+                        className={`px-2 py-1 text-xs font-medium rounded-full border-0 cursor-pointer ${
+                          company.subscription_tier === 'enterprise'
+                            ? 'bg-purple-100 text-purple-700'
+                            : company.subscription_tier === 'monthly'
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-gray-100 text-gray-700'
+                        }`}
+                      >
+                        <option value="trial">trial</option>
+                        <option value="monthly">monthly</option>
+                        <option value="enterprise">enterprise</option>
+                      </select>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
@@ -2910,6 +3038,19 @@ const AdminPageV4 = () => {
                         Mark as Favorite (for auto-assignment on signup)
                       </label>
                     </div>
+                    <div className="flex items-center gap-3 pt-3">
+                      <input
+                        type="checkbox"
+                        id="is_viewable"
+                        checked={chapterForm.is_viewable}
+                        onChange={(e) => setChapterForm({ ...chapterForm, is_viewable: e.target.checked })}
+                        className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                      />
+                      <label htmlFor="is_viewable" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                        <Eye className="w-4 h-4 text-blue-500" />
+                        Viewable in Dashboard (clients can see this chapter)
+                      </label>
+                    </div>
                   </div>
                   <div className="flex justify-end space-x-3 mt-6">
                     <button
@@ -2972,6 +3113,9 @@ const AdminPageV4 = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
+                      <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase w-16">
+                        <Eye className="w-4 h-4 mx-auto" />
+                      </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fraternity</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">University</th>
@@ -2983,6 +3127,22 @@ const AdminPageV4 = () => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredChapters.map((ch) => (
                       <tr key={ch.id} className="hover:bg-gray-50">
+                        <td className="px-3 py-4 whitespace-nowrap text-center">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleViewable(ch.id, ch.is_viewable ?? true);
+                            }}
+                            className="hover:opacity-70 transition-opacity"
+                            title={ch.is_viewable !== false ? 'Visible to clients - click to hide' : 'Hidden from clients - click to show'}
+                          >
+                            {ch.is_viewable !== false ? (
+                              <Eye className="w-5 h-5 text-green-600" />
+                            ) : (
+                              <EyeOff className="w-5 h-5 text-gray-400" />
+                            )}
+                          </button>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {ch.grade ? (
                             <span className={`px-2 py-1 font-bold rounded text-sm ${
@@ -3312,6 +3472,8 @@ const AdminPageV4 = () => {
           onSave={handleChapterSave}
           chapterUsers={users.filter(u => u.chapter_id === editingChapter.id)}
           onImportRoster={handleRosterImport}
+          onTogglePinned={handleTogglePinned}
+          onAssignPosition={handleAssignPosition}
         />
       )}
     </div>
