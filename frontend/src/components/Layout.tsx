@@ -143,8 +143,7 @@ const Layout = () => {
       title: 'All Orgs',
       items: [
         { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null, requiresTeamPlan: true },
-        { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null, requiresTeamPlan: true },
-        { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null, requiresTeamPlan: true },
+        { name: 'Fraternities', href: '/app/chapters', icon: GraduationCap, badge: null, requiresTeamPlan: true },
         { name: 'Sororities', href: '/app/sororities', icon: Users, badge: 'SOON', requiresTeamPlan: true, comingSoon: true },
         { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' }, requiresTeamPlan: true },
       ]
