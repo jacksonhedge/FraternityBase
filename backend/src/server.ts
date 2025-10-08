@@ -2115,8 +2115,8 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
       })
     );
 
-    // Get unlock history
-    const { data: unlocks } = await supabase
+    // Get unlock history (use admin client to bypass RLS)
+    const { data: unlocks } = await supabaseAdmin
       .from('chapter_unlocks')
       .select(`
         *,
@@ -2129,8 +2129,8 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
       .eq('company_id', id)
       .order('unlocked_at', { ascending: false });
 
-    // Get balance transaction history
-    const { data: transactions } = await supabase
+    // Get balance transaction history (use admin client to bypass RLS)
+    const { data: transactions } = await supabaseAdmin
       .from('balance_transactions')
       .select('*')
       .eq('company_id', id)
