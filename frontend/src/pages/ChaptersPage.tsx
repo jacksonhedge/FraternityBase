@@ -38,6 +38,7 @@ interface Chapter {
   contact_email?: string;
   phone?: string;
   header_image_url?: string;
+  grade?: number;
   greek_organizations?: {
     id: string;
     name: string;
@@ -238,6 +239,9 @@ const ChaptersPage = () => {
                     Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Grade
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Fraternity
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -260,13 +264,13 @@ const ChaptersPage = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                    <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
                       Loading chapters...
                     </td>
                   </tr>
                 ) : filteredChapters.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                    <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
                       No chapters found
                     </td>
                   </tr>
@@ -280,6 +284,20 @@ const ChaptersPage = () => {
                             Locked
                           </span>
                         </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {chapter.grade ? (
+                          <span className={`px-2 py-1 font-bold rounded text-sm ${
+                            chapter.grade >= 5.0 ? 'bg-green-100 text-green-800' :
+                            chapter.grade >= 4.0 ? 'bg-yellow-100 text-yellow-800' :
+                            chapter.grade >= 3.0 ? 'bg-orange-100 text-orange-800' :
+                            'bg-gray-100 text-gray-600'
+                          }`}>
+                            {chapter.grade.toFixed(1)}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 text-sm">-</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{chapter.greek_organizations?.name || '-'}</div>
@@ -397,7 +415,18 @@ const ChaptersPage = () => {
                     </div>
                     <div className="flex items-center">
                       <Award className="w-4 h-4 text-yellow-500 mr-1" />
-                      <span className="text-sm font-semibold text-gray-900">-</span>
+                      {chapter.grade ? (
+                        <span className={`text-sm font-bold px-2 py-1 rounded ${
+                          chapter.grade >= 5.0 ? 'bg-green-100 text-green-800' :
+                          chapter.grade >= 4.0 ? 'bg-yellow-100 text-yellow-800' :
+                          chapter.grade >= 3.0 ? 'bg-orange-100 text-orange-800' :
+                          'bg-gray-100 text-gray-600'
+                        }`}>
+                          {chapter.grade.toFixed(1)}
+                        </span>
+                      ) : (
+                        <span className="text-sm font-semibold text-gray-400">-</span>
+                      )}
                     </div>
                   </div>
                 </div>
