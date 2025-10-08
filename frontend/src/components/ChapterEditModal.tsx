@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Save, Globe, Instagram, Linkedin, Twitter, MapPin, Building, Calendar, Users, Star, Upload } from 'lucide-react';
+import { X, Save, Globe, Instagram, Linkedin, Twitter, MapPin, Building, Calendar, Users, Star, Upload, Plus, Trash2, Edit2, UserPlus } from 'lucide-react';
 
 interface ChapterEditModalProps {
   chapter: any;
@@ -9,9 +9,10 @@ interface ChapterEditModalProps {
   chapterUsers?: any[];
   onTogglePinned?: (userId: string, isPinned: boolean) => Promise<void>;
   onImportRoster?: (chapterId: string, users: any[]) => Promise<void>;
+  onAssignPosition?: (userId: string, position: string) => Promise<void>;
 }
 
-const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [], onTogglePinned, onImportRoster }: ChapterEditModalProps) => {
+const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [], onTogglePinned, onImportRoster, onAssignPosition }: ChapterEditModalProps) => {
   const [activeTab, setActiveTab] = useState<'info' | 'roster'>('info');
   const [formData, setFormData] = useState({
     website: '',
@@ -25,7 +26,7 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
     fraternity_province: '',
     house_address: '',
     member_count: '',
-    founded_year: '',
+    charter_date: '',
     chapter_name: '',
     greek_letter_name: '',
   });
@@ -35,6 +36,20 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
   const [isImporting, setIsImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState('');
   const csvFileInputRef = useRef<HTMLInputElement>(null);
+
+  // POC management
+  const [customPOCs, setCustomPOCs] = useState<Array<{id: string, position: string, userId?: string}>>([]);
+  const [showAddPOC, setShowAddPOC] = useState(false);
+  const [newPOCPosition, setNewPOCPosition] = useState('');
+  const [showAddMember, setShowAddMember] = useState(false);
+  const [newMember, setNewMember] = useState({ name: '', position: '', email: '', phone: '' });
+
+  // Leadership assignment tracking
+  const [selectedLeadership, setSelectedLeadership] = useState<Record<string, string>>({});
+  const [selectedPOC, setSelectedPOC] = useState<Record<string, string>>({});
+
+  // Fixed leadership positions
+  const LEADERSHIP_POSITIONS = ['President', 'Vice President', 'Philanthropy Chair'];
 
   // Key positions to pin
   const KEY_POSITIONS = [
@@ -61,7 +76,7 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
         fraternity_province: chapter.fraternity_province || '',
         house_address: chapter.house_address || '',
         member_count: chapter.member_count || '',
-        founded_year: chapter.founded_year || '',
+        charter_date: chapter.charter_date || '',
         chapter_name: chapter.chapter_name || '',
         greek_letter_name: chapter.greek_letter_name || '',
       });
@@ -85,6 +100,19 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  // POC Management Functions
+  const handleAddPOC = () => {
+    if (newPOCPosition.trim()) {
+      setCustomPOCs([...customPOCs, { id: Date.now().toString(), position: newPOCPosition.trim() }]);
+      setNewPOCPosition('');
+      setShowAddPOC(false);
+    }
+  };
+
+  const handleRemovePOC = (pocId: string) => {
+    setCustomPOCs(customPOCs.filter(poc => poc.id !== pocId));
   };
 
   const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,7 +212,7 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
               }`}
             >
               <Users className="w-4 h-4 inline mr-2" />
-              Roster ({chapterUsers.length})
+              Roster and Leadership ({chapterUsers.length})
             </button>
           </div>
         </div>
@@ -233,14 +261,13 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Founded Year
+                  Charter Date
                 </label>
                 <input
-                  type="number"
-                  value={formData.founded_year}
-                  onChange={(e) => handleChange('founded_year', e.target.value)}
+                  type="date"
+                  value={formData.charter_date}
+                  onChange={(e) => handleChange('charter_date', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., 1888"
                 />
               </div>
               <div>
@@ -437,7 +464,7 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
 
           {/* Roster Tab */}
           {activeTab === 'roster' && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* CSV Import Section */}
               <div className="flex items-center justify-between pb-4 border-b border-gray-200">
                 <div>
@@ -481,38 +508,183 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
                 </div>
               )}
 
-              {/* Pinned Members */}
-              {chapterUsers.filter(u => u.is_pinned).length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                    Key Officers
-                  </h3>
-                  <div className="space-y-2">
-                    {chapterUsers
-                      .filter(u => u.is_pinned)
-                      .sort((a, b) => (a.position || '').localeCompare(b.position || ''))
-                      .map(user => (
-                        <div key={user.id} className="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                          <div className="flex-1">
-                            <div className="font-medium text-gray-900">{user.name}</div>
-                            <div className="text-sm text-gray-600">{user.position}</div>
-                            {user.email && <div className="text-xs text-gray-500">{user.email}</div>}
-                          </div>
-                          {onTogglePinned && (
+              {/* Chapter Leadership */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <Star className="w-5 h-5 text-blue-600 fill-blue-600" />
+                  Chapter Leadership
+                </h3>
+                <div className="space-y-2">
+                  {LEADERSHIP_POSITIONS.map(position => {
+                    const officer = chapterUsers.find(u => u.position === position && u.is_pinned);
+                    return (
+                      <div key={position} className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="text-sm font-medium text-blue-900">{position}</div>
+                          {officer && onTogglePinned && (
                             <button
-                              onClick={() => onTogglePinned(user.id, false)}
-                              className="p-2 text-yellow-600 hover:bg-yellow-100 rounded-lg transition-colors"
-                              title="Unpin"
+                              onClick={() => onTogglePinned(officer.id, false)}
+                              className="p-1 text-red-600 hover:bg-red-100 rounded transition-colors"
+                              title="Remove from position"
                             >
-                              <Star className="w-5 h-5 fill-yellow-500" />
+                              <X className="w-4 h-4" />
                             </button>
                           )}
                         </div>
-                      ))}
-                  </div>
+                        {officer ? (
+                          <div className="mt-1">
+                            <div className="font-medium text-gray-900">{officer.name}</div>
+                            {officer.email && <div className="text-xs text-gray-500">{officer.email}</div>}
+                          </div>
+                        ) : (
+                          <div className="flex gap-2">
+                            {onAssignPosition && (
+                              <>
+                                <select
+                                  value={selectedLeadership[position] || ''}
+                                  onChange={(e) => setSelectedLeadership({ ...selectedLeadership, [position]: e.target.value })}
+                                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                >
+                                  <option value="">Select member for {position}...</option>
+                                  {chapterUsers
+                                    .filter(u => !u.is_pinned)
+                                    .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+                                    .map(user => (
+                                      <option key={user.id} value={user.id}>
+                                        {user.name} {user.position ? `(${user.position})` : ''}
+                                      </option>
+                                    ))}
+                                </select>
+                                <button
+                                  onClick={() => {
+                                    if (selectedLeadership[position]) {
+                                      onAssignPosition(selectedLeadership[position], position);
+                                      setSelectedLeadership({ ...selectedLeadership, [position]: '' });
+                                    }
+                                  }}
+                                  disabled={!selectedLeadership[position]}
+                                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                >
+                                  Save
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
+
+              {/* Points of Contact */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                    <UserPlus className="w-5 h-5 text-purple-600" />
+                    Points of Contact
+                  </h3>
+                  <button
+                    onClick={() => setShowAddPOC(!showAddPOC)}
+                    className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add POC Role
+                  </button>
+                </div>
+
+                {showAddPOC && (
+                  <div className="mb-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newPOCPosition}
+                        onChange={(e) => setNewPOCPosition(e.target.value)}
+                        placeholder="e.g., Social Chair, Marketing Lead..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddPOC()}
+                      />
+                      <button
+                        onClick={handleAddPOC}
+                        className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+                      >
+                        Add
+                      </button>
+                      <button
+                        onClick={() => { setShowAddPOC(false); setNewPOCPosition(''); }}
+                        className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  {customPOCs.map(poc => {
+                    const officer = chapterUsers.find(u => u.position === poc.position);
+                    return (
+                      <div key={poc.id} className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="text-sm font-medium text-purple-900">{poc.position}</div>
+                          <button
+                            onClick={() => handleRemovePOC(poc.id)}
+                            className="p-1 text-red-600 hover:bg-red-100 rounded transition-colors"
+                            title="Remove POC role"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        {officer ? (
+                          <div className="mt-1">
+                            <div className="font-medium text-gray-900">{officer.name}</div>
+                            {officer.email && <div className="text-xs text-gray-500">{officer.email}</div>}
+                          </div>
+                        ) : (
+                          <div className="flex gap-2">
+                            {onAssignPosition && (
+                              <>
+                                <select
+                                  value={selectedPOC[poc.position] || ''}
+                                  onChange={(e) => setSelectedPOC({ ...selectedPOC, [poc.position]: e.target.value })}
+                                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                >
+                                  <option value="">Select member for {poc.position}...</option>
+                                  {chapterUsers
+                                    .filter(u => !u.is_pinned)
+                                    .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+                                    .map(user => (
+                                      <option key={user.id} value={user.id}>
+                                        {user.name} {user.position ? `(${user.position})` : ''}
+                                      </option>
+                                    ))}
+                                </select>
+                                <button
+                                  onClick={() => {
+                                    if (selectedPOC[poc.position]) {
+                                      onAssignPosition(selectedPOC[poc.position], poc.position);
+                                      setSelectedPOC({ ...selectedPOC, [poc.position]: '' });
+                                    }
+                                  }}
+                                  disabled={!selectedPOC[poc.position]}
+                                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                >
+                                  Save
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                  {customPOCs.length === 0 && !showAddPOC && (
+                    <div className="text-sm text-gray-500 italic p-3 bg-gray-50 rounded-lg">
+                      No custom points of contact. Click "Add POC Role" to create flexible contact positions.
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {/* All Members */}
               <div>
@@ -521,22 +693,31 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
                 </h3>
                 <div className="space-y-2 max-h-96 overflow-y-auto">
                   {chapterUsers
-                    .filter(u => !u.is_pinned)
-                    .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+                    .sort((a, b) => {
+                      // Sort pinned first
+                      if (a.is_pinned && !b.is_pinned) return -1;
+                      if (!a.is_pinned && b.is_pinned) return 1;
+                      return (a.name || '').localeCompare(b.name || '');
+                    })
                     .map(user => (
-                      <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div key={user.id} className={`flex items-center justify-between p-3 border rounded-lg hover:bg-gray-100 transition-colors ${
+                        user.is_pinned ? 'bg-yellow-50 border-yellow-200' : 'bg-gray-50 border-gray-200'
+                      }`}>
                         <div className="flex-1">
-                          <div className="font-medium text-gray-900">{user.name}</div>
+                          <div className="font-medium text-gray-900 flex items-center gap-2">
+                            {user.name}
+                            {user.is_pinned && <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />}
+                          </div>
                           <div className="text-sm text-gray-600">{user.position || 'Member'}</div>
                           {user.email && <div className="text-xs text-gray-500">{user.email}</div>}
                         </div>
-                        {onTogglePinned && KEY_POSITIONS.some(pos => user.position?.includes(pos)) && (
+                        {onTogglePinned && (
                           <button
-                            onClick={() => onTogglePinned(user.id, true)}
+                            onClick={() => onTogglePinned(user.id, !user.is_pinned)}
                             className="p-2 text-gray-400 hover:text-yellow-500 hover:bg-gray-200 rounded-lg transition-colors"
-                            title="Pin as key officer"
+                            title={user.is_pinned ? "Unpin" : "Pin as officer"}
                           >
-                            <Star className="w-5 h-5" />
+                            <Star className={`w-5 h-5 ${user.is_pinned ? 'fill-yellow-500 text-yellow-500' : ''}`} />
                           </button>
                         )}
                       </div>

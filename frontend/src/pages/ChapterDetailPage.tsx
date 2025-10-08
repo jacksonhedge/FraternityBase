@@ -604,7 +604,7 @@ const ChapterDetailPage = () => {
                     )}
                   </button>
                   <p className="text-xs text-gray-500 mt-2">
-                    ~$50 value • Significantly increases partnership success rate
+                    Significantly increases partnership success rate
                   </p>
                 </div>
               </div>

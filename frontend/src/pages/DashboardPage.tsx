@@ -150,48 +150,25 @@ const DashboardPage = () => {
               icon: Target,
               color: 'green',
               description: 'Schools in database'
-            },
-            {
-              label: 'States Covered',
-              value: states.size.toString(),
-              change: 'Nationwide',
-              trend: 'neutral',
-              icon: TrendingUp,
-              color: 'blue',
-              description: 'Geographic coverage'
-            },
-            {
-              label: 'Subscription',
-              value: tierDisplay,
-              change: subscriptionTier === 'trial' ? 'Free tier' : subscriptionTier === 'monthly' ? '100 credits/month' : '800 credits/month',
-              trend: 'neutral',
-              icon: Award,
-              color: 'purple',
-              description: 'Current plan'
             }
           ]);
 
           // Recent activities - for now empty until we track this
           setRecentActivities([]);
 
-          // Featured chapters - hardcoded examples
-          const featuredChapters = [
-            {
-              id: '1',
-              name: 'University of Alabama Delta Delta Delta',
-              university: 'University of Alabama',
-              members: 102,
-              grade: 'A'
-            },
-            {
-              id: '2',
-              name: 'Clemson University Sigma Chi',
-              university: 'Clemson University',
-              members: 85,
-              grade: 'A'
-            }
-          ];
-          setTopChapters(featuredChapters);
+          // Featured chapters - use real data from API (already sorted with favorites first)
+          const topChaptersData = chapters.slice(0, 10).map((chapter: any) => ({
+            id: chapter.id,
+            name: `${chapter.universities?.name} ${chapter.greek_organizations?.name}`,
+            university: chapter.universities?.name,
+            members: chapter.member_count || 0,
+            grade: chapter.grade || 'N/A',
+            is_favorite: chapter.is_favorite || false,
+            chapter_name: chapter.chapter_name,
+            greek_org: chapter.greek_organizations?.name,
+            logo_url: chapter.universities?.logo_url
+          }));
+          setTopChapters(topChaptersData);
 
           setLoading(false);
           setLoadingComplete(true);

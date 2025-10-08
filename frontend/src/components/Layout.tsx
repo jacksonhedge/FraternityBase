@@ -49,7 +49,7 @@ const Layout = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isSubscriptionDropdownOpen, setIsSubscriptionDropdownOpen] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
-  const [subscriptionTier, setSubscriptionTier] = useState<string>('Free');
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
   const [credits, setCredits] = useState<number>(0);
   const [companyName, setCompanyName] = useState<string>('');
   const profileDropdownRef = useRef<HTMLDivElement>(null);
@@ -90,8 +90,8 @@ const Layout = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setSubscriptionTier(data.subscription_tier || 'Free');
-          setCredits(data.balance_credits || 0);
+          setSubscriptionTier(data.subscriptionTier || 'trial');
+          setCredits(data.balanceCredits || 0);
           setCompanyName(data.companyName || '');
         }
       } catch (error) {
@@ -145,7 +145,7 @@ const Layout = () => {
         { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null, requiresTeamPlan: true },
         { name: 'Chapters', href: '/app/chapters', icon: GraduationCap, badge: null, requiresTeamPlan: true },
         { name: 'Fraternities', href: '/app/fraternities', icon: Users, badge: null, requiresTeamPlan: true },
-        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: null, requiresTeamPlan: true },
+        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: 'SOON', requiresTeamPlan: true, comingSoon: true },
         { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' }, requiresTeamPlan: true },
       ]
     },
@@ -213,22 +213,27 @@ const Layout = () => {
                     const isPendingAndLocked = approvalStatus === 'pending' && item.href !== '/app/dashboard' && !item.alwaysAccessible;
 
                     // Check if item is locked based on subscription tier
-                    const isFreePlan = subscriptionTier?.toLowerCase() === 'free';
-                    const isTeamOrHigher = ['team', 'monthly', 'enterprise'].includes(subscriptionTier?.toLowerCase());
-                    const isLockedByTier = isFreePlan && item.requiresTeamPlan && !item.alwaysAccessible;
+                    const isTrialPlan = subscriptionTier?.toLowerCase() === 'trial';
+                    const isTeamOrHigher = ['monthly', 'enterprise'].includes(subscriptionTier?.toLowerCase());
+                    const isLockedByTier = isTrialPlan && item.requiresTeamPlan && !item.alwaysAccessible;
+                    const isComingSoon = (item as any).comingSoon;
 
-                    return (isPendingAndLocked || isLockedByTier) ? (
+                    return (isPendingAndLocked || isLockedByTier || isComingSoon) ? (
                       <div
                         key={item.name}
                         className={`flex items-center ${isSidebarCollapsed ? 'justify-center px-3' : 'justify-between px-3'} py-2.5 text-sm font-medium rounded-lg opacity-50 cursor-not-allowed`}
-                        title={isSidebarCollapsed ? `${item.name} (${isPendingAndLocked ? 'Pending Approval' : 'Upgrade Required'})` : (isPendingAndLocked ? 'Pending Approval' : 'Upgrade to Team Plan')}
+                        title={isSidebarCollapsed ? `${item.name} (${isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade Required'})` : (isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade to Team Plan')}
                       >
                         <div className="flex items-center">
                           <Icon className={`w-5 h-5 flex-shrink-0 ${!isSidebarCollapsed ? 'mr-3' : ''}`} />
                           {!isSidebarCollapsed && <span>{item.name}</span>}
                         </div>
                         {!isSidebarCollapsed && (
-                          <Lock className="w-4 h-4 text-yellow-600" />
+                          isComingSoon ? (
+                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full text-yellow-800 bg-yellow-200">SOON</span>
+                          ) : (
+                            <Lock className="w-4 h-4 text-yellow-600" />
+                          )
                         )}
                       </div>
                     ) : (
@@ -338,8 +343,8 @@ const Layout = () => {
                         const isPendingAndLocked = approvalStatus === 'pending' && item.href !== '/app/dashboard' && !item.alwaysAccessible;
 
                         // Check if item is locked based on subscription tier
-                        const isFreePlan = subscriptionTier?.toLowerCase() === 'free';
-                        const isLockedByTier = isFreePlan && item.requiresTeamPlan && !item.alwaysAccessible;
+                        const isTrialPlan = subscriptionTier?.toLowerCase() === 'trial';
+                        const isLockedByTier = isTrialPlan && item.requiresTeamPlan && !item.alwaysAccessible;
 
                         return (isPendingAndLocked || isLockedByTier) ? (
                           <div
@@ -417,17 +422,17 @@ const Layout = () => {
                 {isSubscriptionDropdownOpen && (
                   <div className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
                     <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
-                      <h3 className="font-bold text-lg mb-1">{subscriptionTier} Plan</h3>
+                      <h3 className="font-bold text-lg mb-1 capitalize">{subscriptionTier} Plan</h3>
                       <p className="text-xs opacity-90">
-                        {subscriptionTier.toLowerCase() === 'free'
+                        {subscriptionTier.toLowerCase() === 'trial'
                           ? '3-day trial with limited access'
-                          : subscriptionTier.toLowerCase() === 'team' || subscriptionTier.toLowerCase() === 'monthly'
+                          : subscriptionTier.toLowerCase() === 'monthly'
                           ? 'Full platform access'
                           : 'Enterprise-level features'}
                       </p>
                     </div>
                     <div className="p-4">
-                      {subscriptionTier.toLowerCase() === 'free' && (
+                      {subscriptionTier.toLowerCase() === 'trial' && (
                         <>
                           <div className="space-y-2 mb-4">
                             <div className="flex items-start gap-2 text-sm">
@@ -456,7 +461,7 @@ const Layout = () => {
                           </Link>
                         </>
                       )}
-                      {(subscriptionTier.toLowerCase() === 'team' || subscriptionTier.toLowerCase() === 'monthly') && (
+                      {subscriptionTier.toLowerCase() === 'monthly' && (
                         <>
                           <div className="space-y-2 mb-4">
                             <div className="flex items-start gap-2 text-sm">
@@ -486,15 +491,19 @@ const Layout = () => {
                           <div className="space-y-2 mb-4">
                             <div className="flex items-start gap-2 text-sm">
                               <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700">Unlimited everything</span>
+                              <span className="text-gray-700">1000 monthly credits</span>
                             </div>
                             <div className="flex items-start gap-2 text-sm">
                               <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700">500 monthly credits</span>
+                              <span className="text-gray-700">FraternityBase API access</span>
                             </div>
                             <div className="flex items-start gap-2 text-sm">
                               <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700">Dedicated support</span>
+                              <span className="text-gray-700">Priority support</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">Early access features</span>
                             </div>
                           </div>
                           <Link
