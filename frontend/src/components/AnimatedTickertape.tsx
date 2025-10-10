@@ -23,6 +23,9 @@ const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
   const [isPaused, setIsPaused] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
+  console.log('[TickerTape] Received activities:', activities);
+  console.log('[TickerTape] Activities count:', activities.length);
+
   useEffect(() => {
     if (!tickertapeRef.current || !shouldAnimate()) return;
 
@@ -68,6 +71,11 @@ const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
 
   // Duplicate activities for seamless loop
   const duplicatedActivities = [...activities, ...activities];
+
+  // Don't render if no activities
+  if (activities.length === 0) {
+    return null;
+  }
 
   return (
     <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg overflow-hidden">

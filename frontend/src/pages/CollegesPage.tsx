@@ -15,6 +15,7 @@ interface College {
   students: number;
   greekLife: number;
   greekPercentage: number;
+  greekMembers: number;
   image: string;
   chapter_count: number;
   logo_url?: string;
@@ -69,15 +70,11 @@ const CollegesPage = () => {
             conference: uni.conference || 'Independent',
             students: uni.student_count || 0,
             greekLife: uni.chapter_count || 0,
-            greekPercentage: uni.student_count ? Math.round((uni.chapter_count * 100) / uni.student_count * 100) : 0,
+            greekPercentage: uni.greek_percentage || 15, // Default to 15% if not available
+            greekMembers: uni.greek_members || 0,
             image: uni.logo_url || getCollegeLogoWithFallback(uni.name),
             chapter_count: uni.chapter_count || 0,
             logo_url: uni.logo_url,
-            // Removed hardcoded dummy data:
-            // - topOrgs: was always ['Sigma Chi', 'Alpha Phi', 'Kappa Alpha']
-            // - nextEvent: was always 'Greek Week'
-            // - avgDealSize: was always fake ($15k, $28k, or $50k)
-            // These fields should either come from real data or not be displayed
             partnershipOpportunities: uni.chapter_count // Just show chapter count as opportunities
           }));
 
@@ -272,22 +269,21 @@ const CollegesPage = () => {
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-3 gap-4 mb-4 py-4 border-y border-gray-100">
+                <div className="grid grid-cols-2 gap-4 mb-4 py-4 border-y border-gray-100">
                   <div>
                     <div className="flex items-center text-gray-600">
-                      <GraduationCap className="w-4 h-4 mr-1" />
-                      <span className="text-sm">Students</span>
+                      <Building2 className="w-4 h-4 mr-1" />
+                      <span className="text-sm">Chapters</span>
                     </div>
-                    <p className="text-lg font-semibold text-gray-900">{college.students.toLocaleString()}</p>
+                    <p className="text-lg font-semibold text-gray-900">{college.chapter_count}</p>
                   </div>
                   <div>
                     <div className="flex items-center text-gray-600">
                       <Users className="w-4 h-4 mr-1" />
-                      <span className="text-sm">Greek Life</span>
+                      <span className="text-sm">Greek Life %</span>
                     </div>
                     <p className="text-lg font-semibold text-gray-900">{college.greekPercentage}%</p>
                   </div>
-                  {/* Avg Deal removed - was hardcoded dummy data */}
                 </div>
 
                 {/* Top Organizations - removed, was hardcoded dummy data */}
@@ -326,13 +322,10 @@ const CollegesPage = () => {
                   Division
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Students
+                  Chapters
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Greek Orgs
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Greek %
+                  Greek Life %
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Opportunities
@@ -371,10 +364,7 @@ const CollegesPage = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-gray-900">{college.students.toLocaleString()}</span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-blue-600">{college.greekLife}</span>
+                    <span className="text-sm font-semibold text-blue-600">{college.chapter_count}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">

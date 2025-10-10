@@ -198,45 +198,45 @@ const ChaptersPage = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm p-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+        <div className="bg-white rounded-md shadow-sm p-2">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-gray-900">{chapters.length}</p>
-              <p className="text-sm text-gray-600">Total Chapters</p>
+              <p className="text-lg font-bold text-gray-900">{chapters.length}</p>
+              <p className="text-xs text-gray-600">Total Chapters</p>
             </div>
-            <Users className="w-8 h-8 text-primary-500" />
+            <Users className="w-5 h-5 text-primary-500" />
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
+        <div className="bg-white rounded-md shadow-sm p-2">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-lg font-bold text-gray-900">
                 {chapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0).toLocaleString()}
               </p>
-              <p className="text-sm text-gray-600">Total Members</p>
+              <p className="text-xs text-gray-600">Total Members</p>
             </div>
-            <TrendingUp className="w-8 h-8 text-green-500" />
+            <TrendingUp className="w-5 h-5 text-green-500" />
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
+        <div className="bg-white rounded-md shadow-sm p-2">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-lg font-bold text-gray-900">
                 {chapters.length > 0 ? Math.round(chapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0) / chapters.length) : 0}
               </p>
-              <p className="text-sm text-gray-600">Avg Chapter Size</p>
+              <p className="text-xs text-gray-600">Avg Chapter Size</p>
             </div>
-            <Award className="w-8 h-8 text-yellow-500" />
+            <Award className="w-5 h-5 text-yellow-500" />
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
+        <div className="bg-white rounded-md shadow-sm p-2">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-gray-900">{states.length}</p>
-              <p className="text-sm text-gray-600">States</p>
+              <p className="text-lg font-bold text-gray-900">{states.length}</p>
+              <p className="text-xs text-gray-600">States</p>
             </div>
-            <MapPin className="w-8 h-8 text-purple-500" />
+            <MapPin className="w-5 h-5 text-purple-500" />
           </div>
         </div>
       </div>
@@ -369,7 +369,7 @@ const ChaptersPage = () => {
                         <div className="text-sm text-gray-500">{chapter.house_address || '-'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-lg font-semibold text-gray-900">{chapter.member_count || '-'}</div>
+                        <div className="text-lg font-semibold text-gray-900">50+</div>
                         <div className="text-sm text-gray-500">members</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -469,7 +469,7 @@ const ChaptersPage = () => {
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <Users className="w-4 h-4 mr-2 text-gray-400" />
-                  {chapter.member_count || 0} members
+                  50+ members
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <Calendar className="w-4 h-4 mr-2 text-gray-400" />

@@ -1,0 +1,3 @@
+chapter_name,university_id,greek_organization_id,grade,member_count,officer_count,status,instagram_handle,contact_email,website
+"Alpha Chapter",REPLACE_WITH_UNIVERSITY_UUID,REPLACE_WITH_GREEK_ORG_UUID,5.0,87,12,active,@sigmachialpha,president@sigmachialpha.com,https://sigmachi-alpha.com
+"Beta Chapter",REPLACE_WITH_UNIVERSITY_UUID,REPLACE_WITH_GREEK_ORG_UUID,4.5,65,10,active,@sigmachibeta,contact@sigmachibeta.org,

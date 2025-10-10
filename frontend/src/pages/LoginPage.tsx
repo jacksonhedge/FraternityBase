@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,10 +18,12 @@ type LoginFormData = z.infer<typeof loginSchema>;
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   // const [login, { isLoading }] = useLoginMutation();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [idleMessage, setIdleMessage] = useState<string | null>(null);
 
   const {
     register,
@@ -30,6 +32,17 @@ const LoginPage = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+
+  // Check for idle logout message
+  useEffect(() => {
+    if (searchParams.get('reason') === 'idle') {
+      setIdleMessage('You were automatically signed out due to inactivity.');
+      // Clear the URL parameter
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('reason');
+      navigate({ search: newParams.toString() }, { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   const onSubmit = async (data: LoginFormData) => {
     setError(null);
@@ -125,6 +138,11 @@ const LoginPage = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="bg-white py-8 px-4 shadow-xl rounded-lg sm:px-10">
             <div className="space-y-6">
+              {idleMessage && (
+                <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-md text-sm">
+                  {idleMessage}
+                </div>
+              )}
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
                   {error}

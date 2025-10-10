@@ -23,6 +23,18 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8">
             <div className="flex items-center gap-3">
               <Link
+                to="/chapters"
+                className={`flex items-center gap-2 px-4 py-2 transition-colors ${
+                  isActive('/chapters')
+                    ? 'text-blue-600 font-semibold'
+                    : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
+                <Search className="w-4 h-4" />
+                Browse All Chapters
+              </Link>
+
+              <Link
                 to="/login"
                 className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               >
@@ -58,6 +70,15 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-4 space-y-2">
+            <Link
+              to="/chapters"
+              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Search className="w-4 h-4" />
+              Browse All Chapters
+            </Link>
+
             <Link
               to="/login"
               className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"

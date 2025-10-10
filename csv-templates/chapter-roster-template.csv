@@ -1,0 +1,6 @@
+name,position,email,phone,linkedin,graduation_year,major,member_type,is_primary_contact
+John Smith,President,john.smith@university.edu,(555) 123-4567,https://linkedin.com/in/johnsmith,2025,Business Administration,officer,true
+Sarah Johnson,Vice President,sarah.j@university.edu,555-123-4568,linkedin.com/in/sarahjohnson,2025,Economics,officer,false
+Michael Chen,Treasurer,michael.chen@university.edu,(555) 123-4569,https://linkedin.com/in/michaelchen,2026,Accounting,officer,false
+David Lee,Member,david.lee@university.edu,555-123-4570,,2026,Computer Science,member,false
+Emily White,Member,emily.white@university.edu,,,2027,Biology,member,false

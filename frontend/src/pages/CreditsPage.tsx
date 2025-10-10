@@ -69,6 +69,7 @@ export default function CreditsPage() {
         balance: data.balance_credits || 0,
         lifetimeSpent: data.lifetimeSpentCredits || 0,
         lifetimeAdded: data.lifetimeEarnedCredits || 0,
+        subscription_tier: data.subscriptionTier,
         autoReload: data.autoReload
       });
       setAutoReloadSettings(data.autoReload);
@@ -274,7 +275,9 @@ export default function CreditsPage() {
             </div>
             <div>
               <h3 className="text-xl font-bold text-gray-900 capitalize">
-                {accountData?.subscription_tier || 'Free'}
+                {accountData?.subscription_tier?.toLowerCase() === 'monthly' ? 'Team' :
+                 accountData?.subscription_tier?.toLowerCase() === 'enterprise' ? 'Enterprise' :
+                 'Free'}
               </h3>
               <p className="text-sm text-gray-600">
                 {accountData?.subscription_tier?.toLowerCase() === 'enterprise' ? 'Unlimited features' :

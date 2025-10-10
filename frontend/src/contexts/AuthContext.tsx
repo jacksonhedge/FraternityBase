@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase, Profile } from '../lib/supabase';
+import { useIdleTimeout } from '../hooks/useIdleTimeout';
 
 interface AuthContextType {
   user: User | null;
@@ -237,6 +238,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const isAdmin = profile?.role === 'admin';
+
+  // Auto-logout after 5 minutes of inactivity
+  useIdleTimeout({
+    timeoutMs: 5 * 60 * 1000, // 5 minutes
+    onIdle: async () => {
+      if (user) {
+        console.log('🔒 Auto-logout due to inactivity');
+        await signOut();
+        // Redirect to login page
+        window.location.href = '/login?reason=idle';
+      }
+    },
+    enabled: !!user, // Only enable when user is logged in
+  });
 
   return (
     <AuthContext.Provider

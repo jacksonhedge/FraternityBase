@@ -1,0 +1,151 @@
+🎯 PROJECT CONTEXT
+
+I'm working on FraternityBase, a SaaS platform that helps businesses connect with Greek life organizations (fraternities and sororities) across 250+ universities. The platform provides access to 5,000+ chapters with features like chapter unlocks, warm introductions, and ambassador referrals.
+
+📂 PROJECT LOCATION
+
+Main Project Directory: /Users/jacksonfitzgerald/CollegeOrgNetwork/
+
+Key Directories:
+- Frontend: /Users/jacksonfitzgerald/CollegeOrgNetwork/frontend/
+- Backend: /Users/jacksonfitzgerald/CollegeOrgNetwork/backend/
+- Documentation: /Users/jacksonfitzgerald/CollegeOrgNetwork/ (pricing docs are here)
+
+Tech Stack:
+- Frontend: React + TypeScript + Vite + TailwindCSS
+- Backend: Express.js + Node.js
+- Database: Supabase (PostgreSQL)
+- Deployment: Vercel (both frontend and backend)
+- State Management: Redux
+- Routing: React Router
+
+🚀 DEPLOYMENT COMMANDS
+
+Deploy Backend to Production:
+cd /Users/jacksonfitzgerald/CollegeOrgNetwork/backend
+vercel deploy --prod
+
+Deploy Frontend to Production:
+cd /Users/jacksonfitzgerald/CollegeOrgNetwork/frontend
+vercel deploy --prod
+
+Note: Always deploy backend first if both have changes, then deploy frontend.
+
+📊 RECENT CHANGES
+
+What Was Completed Today (2025-10-09):
+✅ Added Enterprise Tier 1 ($299.99/mo) to public PricingPage.tsx
+- Previously only showed 4 tiers (Trial, Team, Billing, Enterprise Tier 2)
+- Now shows 5 tiers with proper ordering
+- Updated grid layout from 4 to 5 columns
+- Features: 1,000 credits/month, 3 warm intros, unlimited unlocks, API access
+- Deployed to production: https://frontend-jea45gklc-jackson-fitzgeralds-projects.vercel.app
+- File: /frontend/src/pages/PricingPage.tsx (lines 66-87)
+
+What Was Completed in Previous Sessions:
+✅ TickerTape Feature - Real data from /api/chapters/recent endpoint
+✅ Fraternities Page - Shows real database data (61 organizations)
+✅ College Detail Pages - Fixed chapter filtering and counts
+✅ Colleges Page - Removed Students, shows Chapters + Greek Life %
+✅ Auto-Logout - 5-minute idle timeout
+✅ Pricing Updates - Renamed tiers (Enterprise Tier 1 & 2), Team Plan shows 3 unlocks
+✅ Database Integration - All admin endpoints use supabaseAdmin
+
+🔧 AREAS THAT MIGHT NEED ENHANCEMENT
+
+1. TickerTape Blank Issue (UNRESOLVED)
+   - May still show blank on Dashboard
+   - Check browser console for [Dashboard] and [TickerTape] logs
+   - File: /frontend/src/pages/DashboardPage.tsx
+
+2. Database Fields Not Fully Utilized
+   - greek_percentage defaults to 15%, should calculate from chapter data
+   - greek_members field not populated
+   - File: /frontend/src/pages/CollegesPage.tsx
+
+3. Missing Backend Features
+   - /api/credits/transactions endpoint not implemented
+   - Auto-reload settings for credits not fully implemented
+
+4. List View "Avg Deal" Column
+   - Shows but has no data - either populate or remove
+   - File: /frontend/src/pages/CollegesPage.tsx (line ~330-395)
+
+5. Error Handling
+   - API calls lack comprehensive error handling
+   - Could add toast notifications and retry logic
+
+6. Performance Optimizations
+   - Large lists (5,000+ chapters) could use pagination or virtual scrolling
+   - API responses could use caching
+
+7. Mobile Responsiveness
+   - Complex tables may not work well on mobile
+
+🗄️ DATABASE STRUCTURE
+
+Supabase Tables:
+- universities - 1,106 universities
+- greek_organizations - 61 organizations
+- chapters - 103 chapters (links universities + greek_organizations)
+- officers - 160 officers
+- user_profiles - User account data
+- companies - Company/client data
+- unlock_history - Track chapter unlocks
+
+Key Relationships:
+- chapters.university_id → universities.id
+- chapters.greek_organization_id → greek_organizations.id
+
+🎨 DESIGN PATTERNS USED
+
+1. Data Fetching: useEffect + fetch + localStorage.getItem('token')
+2. State Management: Redux for auth, local useState for component state
+3. Routing: React Router with PrivateRoute and AdminRoute wrappers
+4. Styling: TailwindCSS utility classes + gradients
+5. Icons: Lucide React icons
+6. API Format: { success: boolean, data: any } for all responses
+
+📝 COMMON TASKS
+
+Add a new API endpoint:
+1. Add route in /backend/src/server.ts
+2. Use supabaseAdmin for database queries (bypasses RLS)
+3. Return format: res.json({ success: true, data: results })
+4. Add error handling with try/catch
+
+Update a page:
+1. Find page in /frontend/src/pages/
+2. Update component state and JSX
+3. Deploy with vercel deploy --prod from frontend directory
+
+🎯 SUGGESTED NEXT STEPS
+
+1. Debug TickerTape - Check why it might be showing blank
+2. Calculate Real Greek Life % - Instead of defaulting to 15%
+3. Remove "Avg Deal" column - Or populate with real data
+4. Implement transactions endpoint - For credits page
+5. Add pagination - For large lists (5,000+ items)
+6. Improve error handling - Add toast notifications
+7. Mobile optimization - Make tables responsive
+
+🚀 QUICK START
+
+# Navigate to project
+cd /Users/jacksonfitzgerald/CollegeOrgNetwork
+
+# Start backend dev server
+cd backend
+npm run dev
+
+# In new terminal, start frontend dev server
+cd /Users/jacksonfitzgerald/CollegeOrgNetwork/frontend
+npm run dev
+
+# Frontend: http://localhost:5173
+# Backend: http://localhost:3001
+
+---
+
+Last Updated: 2025-10-09
+Production URL: https://frontend-jea45gklc-jackson-fitzgeralds-projects.vercel.app

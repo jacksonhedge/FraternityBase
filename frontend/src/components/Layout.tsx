@@ -174,6 +174,7 @@ const Layout = () => {
           badge: unlockedChaptersCount > 0 ? { text: String(unlockedChaptersCount), type: 'gold' } : null,
           requiresTeamPlan: true
         },
+        { name: 'Requested Introductions', href: '/app/requested-introductions', icon: Handshake, badge: null, requiresTeamPlan: true },
         { name: 'My Ambassadors', href: '/app/my-ambassadors', icon: Briefcase, badge: 'SOON', requiresTeamPlan: true },
       ]
     },

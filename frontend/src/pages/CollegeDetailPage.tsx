@@ -11,6 +11,7 @@ const CollegeDetailPage = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'fraternities' | 'sororities' | 'events' | 'partnerships'>('overview');
   const [college, setCollege] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [unlockedChapterIds, setUnlockedChapterIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     console.log('==================================================');
@@ -62,11 +63,8 @@ const CollegeDetailPage = () => {
           let sororities: any[] = [];
 
           if (chaptersData.success && chaptersData.data) {
-            const chapters = chaptersData.data.filter((ch: any) => {
-              const uniName = ch.universities?.name || '';
-              return uniName.toLowerCase().includes(uni.name.toLowerCase()) ||
-                     uni.name.toLowerCase().includes(uniName.toLowerCase());
-            });
+            // Filter chapters by university ID, not name (more reliable)
+            const chapters = chaptersData.data.filter((ch: any) => ch.university_id === uni.id);
 
             fraternities = chapters.filter((ch: any) =>
               ch.greek_organizations?.organization_type === 'fraternity'
@@ -95,8 +93,8 @@ const CollegeDetailPage = () => {
             students: uni.student_count || 30000,
             founded: 1831,
             mascot: '',
-            greekLife: uni.chapter_count || 0,
-            greekPercentage: uni.student_count ? Math.round((uni.chapter_count / uni.student_count) * 100) : 0,
+            greekLife: fraternities.length + sororities.length,
+            greekPercentage: uni.student_count ? Math.round(((fraternities.length + sororities.length) / uni.student_count) * 100) : 0,
             image: uni.logo_url || getCollegeLogoWithFallback(uni.name),
             website: '',
             greekWebsite: '',
@@ -146,7 +144,41 @@ const CollegeDetailPage = () => {
     };
 
     fetchCollege();
+    fetchUnlockedChapters();
   }, [id]);
+
+  const fetchUnlockedChapters = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+
+      const res = await fetch(`${API_URL}/chapters/unlocked`, { headers });
+      const data = await res.json();
+
+      if (data.success && data.data) {
+        const unlockedIds = new Set<string>(data.data.map((chapter: any) => chapter.id as string));
+        setUnlockedChapterIds(unlockedIds);
+        console.log('🔓 [CollegeDetailPage] Loaded unlocked chapters:', unlockedIds.size);
+      }
+    } catch (error) {
+      console.error('❌ [CollegeDetailPage] Error fetching unlocked chapters:', error);
+    }
+  };
+
+  const handleChapterClick = (chapterId: string) => {
+    if (unlockedChapterIds.has(chapterId)) {
+      // If unlocked, go to My Chapters page
+      navigate('/app/my-chapters');
+    } else {
+      // If locked, go to chapter detail page
+      navigate(`/app/chapters/${chapterId}`);
+    }
+  };
 
   if (loading) {
     return (
@@ -371,7 +403,7 @@ const CollegeDetailPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div
                             className="flex items-center cursor-pointer"
-                            onClick={() => navigate(`/app/chapters/${frat.id}`)}
+                            onClick={() => handleChapterClick(frat.id)}
                           >
                             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
                               <span className="text-blue-600 font-bold text-sm">
@@ -460,7 +492,7 @@ const CollegeDetailPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div
                             className="flex items-center cursor-pointer"
-                            onClick={() => navigate(`/app/chapters/${sorority.id}`)}
+                            onClick={() => handleChapterClick(sorority.id)}
                           >
                             <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3">
                               <span className="text-pink-600 font-bold text-sm">
@@ -504,6 +536,28 @@ const CollegeDetailPage = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Events Tab */}
+        {activeTab === 'events' && (
+          <div className="animate-fadeIn">
+            <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+              <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Coming Soon</h3>
+              <p className="text-gray-600">Greek life events and calendar will be available soon.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Partnerships Tab */}
+        {activeTab === 'partnerships' && (
+          <div className="animate-fadeIn">
+            <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+              <Building2 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Coming Soon</h3>
+              <p className="text-gray-600">Partnership opportunities and collaborations will be available soon.</p>
             </div>
           </div>
         )}
