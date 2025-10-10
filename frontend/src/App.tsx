@@ -4,6 +4,7 @@ import { store } from './store/store';
 import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
+import AuthProvider from './components/AuthProvider';
 import { useEffect, useRef } from 'react';
 import { animate, set } from 'animejs';
 import { DURATIONS, EASINGS, shouldAnimate } from './animations/constants';
@@ -176,9 +177,11 @@ function App() {
   return (
     <ErrorBoundary>
       <Provider store={store}>
-        <Router>
-          <AnimatedRoutes />
-        </Router>
+        <AuthProvider>
+          <Router>
+            <AnimatedRoutes />
+          </Router>
+        </AuthProvider>
       </Provider>
     </ErrorBoundary>
   );
