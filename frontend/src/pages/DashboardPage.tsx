@@ -46,7 +46,7 @@ const DashboardPage = () => {
   const [unlockedChapters, setUnlockedChapters] = useState<any[]>([]);
   const [stats, setStats] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
-  const [topChapters, setTopChapters] = useState<any[]>([]);
+  const [comingSoonItems, setComingSoonItems] = useState<any[]>([]);
   // Only show loading screen on initial app load, not on navigation
   const hasSeenLoading = sessionStorage.getItem('hasSeenDashboardLoading') === 'true';
   const [loading, setLoading] = useState(!hasSeenLoading);
@@ -94,9 +94,10 @@ const DashboardPage = () => {
           headers: { 'Authorization': `Bearer ${token}` }
         }).then(res => res.json()).catch(() => ({ data: [] })),
         fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json()).catch(() => ({ data: [] })),
-        fetch(`${API_URL}/chapters/recent`).then(res => res.json()).catch(() => ({ data: [] }))
+        fetch(`${API_URL}/chapters/recent`).then(res => res.json()).catch(() => ({ data: [] })),
+        fetch(`${API_URL}/dashboard/coming-soon`).then(res => res.json()).catch(() => ({ data: [] }))
       ])
-        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData, recentChaptersData]) => {
+        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData, recentChaptersData, comingSoonData]) => {
           console.log('[Dashboard] Recent chapters API response:', recentChaptersData);
           console.log('[Dashboard] Recent chapters data array:', recentChaptersData.data);
 
@@ -106,6 +107,7 @@ const DashboardPage = () => {
           setSubscriptionTier(creditsData.subscriptionTier || 'trial');
           setUnlockedChapters(chaptersData.data || []);
           setActivityFeed(activityData.data || []);
+          setComingSoonItems(comingSoonData.data || []);
 
           const formattedChapters = (recentChaptersData.data || []).map((item: any) => ({ ...item, metadata: item }));
           console.log('[Dashboard] Formatted chapters for tickertape:', formattedChapters);
@@ -146,20 +148,6 @@ const DashboardPage = () => {
 
           // Recent activities - for now empty until we track this
           setRecentActivities([]);
-
-          // Featured chapters - use real data from API (already sorted with favorites first)
-          const topChaptersData = chapters.slice(0, 10).map((chapter: any) => ({
-            id: chapter.id,
-            name: `${chapter.universities?.name} ${chapter.greek_organizations?.name}`,
-            university: chapter.universities?.name,
-            members: chapter.member_count || 0,
-            grade: chapter.grade || 'N/A',
-            is_favorite: chapter.is_favorite || false,
-            chapter_name: chapter.chapter_name,
-            greek_org: chapter.greek_organizations?.name,
-            logo_url: chapter.universities?.logo_url
-          }));
-          setTopChapters(topChaptersData);
 
           setLoading(false);
           setLoadingComplete(true);
@@ -324,51 +312,6 @@ const DashboardPage = () => {
         </div>
         )}
 
-        {/* Top Chapters to Unlock - Only show if there are chapters */}
-        {topChapters.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm relative">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-              <Target className="w-5 h-5 mr-2 text-primary-600" />
-              Featured Chapters
-            </h2>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {topChapters.map((chapter, index) => (
-                <div key={index} className="border-l-4 border-purple-500 pl-4 hover:bg-gray-50 transition-colors cursor-pointer">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3 flex-1">
-                      <img
-                        src={getCollegeLogoWithFallback(chapter.university)}
-                        alt={chapter.university}
-                        className="w-12 h-12 object-contain flex-shrink-0"
-                      />
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-900">{chapter.name}</h4>
-                        <p className="text-sm text-gray-600">{chapter.university}</p>
-                        <div className="flex items-center gap-3 mt-2">
-                          <span className="text-xs text-gray-500">{chapter.members} members</span>
-                          <span className={`text-xs px-2 py-1 rounded ${
-                            chapter.grade === 'A+' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                          }`}>
-                            Grade {chapter.grade}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <Link to="/app/chapters" className="inline-block mt-4 text-primary-600 text-sm font-medium hover:text-primary-700">
-              Browse all chapters →
-            </Link>
-          </div>
-          {approvalStatus === 'pending' && <ApprovalPendingOverlay />}
-        </div>
-        )}
-
         {/* Newly Added Section */}
         <div className="bg-white rounded-lg shadow-sm">
           <div className="p-6 border-b border-gray-200">
@@ -438,64 +381,34 @@ const DashboardPage = () => {
       </div>
 
       {/* Coming Soon */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <Clock className="w-5 h-5 mr-2 text-blue-600" />
-          Coming Soon
-        </h2>
-        <div className={`space-y-4 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
-          <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
-            <div className="flex items-start gap-3">
-              <img
-                src={getCollegeLogoWithFallback('University of Texas')}
-                alt="University of Texas"
-                className="w-12 h-12 object-contain flex-shrink-0"
-              />
-              <div className="flex-1">
-                <h4 className="font-medium text-gray-900">University of Texas</h4>
-                <p className="text-sm text-gray-600">New chapters being added</p>
-                <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                  🔜 Coming Soon
-                </span>
+      {comingSoonItems.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <Clock className="w-5 h-5 mr-2 text-blue-600" />
+            Coming Soon
+          </h2>
+          <div className={`space-y-4 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
+            {comingSoonItems.map((item) => (
+              <div key={item.id} className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
+                <div className="flex items-start gap-3">
+                  <img
+                    src={getCollegeLogoWithFallback(item.university_name)}
+                    alt={item.university_name}
+                    className="w-12 h-12 object-contain flex-shrink-0"
+                  />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-900">{item.university_name}</h4>
+                    <p className="text-sm text-gray-600">{item.description}</p>
+                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                      🔜 Coming Soon
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
-            <div className="flex items-start gap-3">
-              <img
-                src={getCollegeLogoWithFallback('University of Pittsburgh')}
-                alt="University of Pittsburgh"
-                className="w-12 h-12 object-contain flex-shrink-0"
-              />
-              <div className="flex-1">
-                <h4 className="font-medium text-gray-900">University of Pittsburgh</h4>
-                <p className="text-sm text-gray-600">New chapters being added</p>
-                <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                  🔜 Coming Soon
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
-            <div className="flex items-start gap-3">
-              <img
-                src={getCollegeLogoWithFallback('Stanford University')}
-                alt="Stanford University"
-                className="w-12 h-12 object-contain flex-shrink-0"
-              />
-              <div className="flex-1">
-                <h4 className="font-medium text-gray-900">Stanford University</h4>
-                <p className="text-sm text-gray-600">New chapters being added</p>
-                <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                  🔜 Coming Soon
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

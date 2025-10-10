@@ -103,6 +103,69 @@ app.use('/api/credits/webhook', express.raw({ type: 'application/json' }));
 // JSON parsing for all other routes
 app.use(express.json());
 
+// Auth verification endpoint - verifies token and returns user data
+app.get('/api/auth/verify', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+
+    // Verify the token with Supabase
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({
+        error: 'Invalid token',
+        details: authError?.message || 'User not found'
+      });
+    }
+
+    // Get user's profile and company information
+    const { data: profile, error: profileError } = await supabaseAdmin
+      .from('user_profiles')
+      .select(`
+        company_id,
+        role,
+        companies (
+          id,
+          name
+        )
+      `)
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile) {
+      return res.status(404).json({ error: 'User profile not found' });
+    }
+
+    // Return user data in the format expected by the frontend
+    const companyData = profile.companies as any;
+    return res.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email || '',
+        firstName: user.user_metadata?.firstName || user.user_metadata?.first_name || '',
+        lastName: user.user_metadata?.lastName || user.user_metadata?.last_name || '',
+        company: companyData ? {
+          id: companyData.id,
+          name: companyData.name
+        } : undefined,
+        companyId: profile.company_id,
+        companyName: companyData?.name,
+        role: profile.role || 'user'
+      }
+    });
+  } catch (error) {
+    console.error('❌ Auth verification error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Credits balance endpoint - must come BEFORE router mount to override deprecated endpoint
 app.get('/api/credits/balance', async (req, res) => {
   console.log('💰 === BALANCE ENDPOINT CALLED ===');
@@ -4189,6 +4252,117 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
 
   } catch (error: any) {
     console.error('Error uploading roster CSV:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ===================================
+// DASHBOARD COMING SOON ENDPOINTS
+// ===================================
+
+// Public endpoint - Get active coming soon items for dashboard
+app.get('/api/dashboard/coming-soon', async (req, res) => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('dashboard_coming_soon')
+      .select('*')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true });
+
+    if (error) throw error;
+
+    res.json({ success: true, data: data || [] });
+  } catch (error: any) {
+    console.error('❌ Error fetching coming soon items:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin endpoint - Get all coming soon items
+app.get('/api/admin/coming-soon', requireAdmin, async (req, res) => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('dashboard_coming_soon')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) throw error;
+
+    res.json({ success: true, data: data || [] });
+  } catch (error: any) {
+    console.error('❌ Error fetching coming soon items:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin endpoint - Create new coming soon item
+app.post('/api/admin/coming-soon', requireAdmin, async (req, res) => {
+  try {
+    const { university_name, description, display_order, is_active } = req.body;
+
+    const { data, error } = await supabaseAdmin
+      .from('dashboard_coming_soon')
+      .insert([{
+        university_name,
+        description: description || 'New chapters being added',
+        display_order: display_order || 0,
+        is_active: is_active !== undefined ? is_active : true
+      }])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('❌ Error creating coming soon item:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin endpoint - Update coming soon item
+app.put('/api/admin/coming-soon/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { university_name, description, display_order, is_active } = req.body;
+
+    const updateData: any = { updated_at: new Date().toISOString() };
+    if (university_name !== undefined) updateData.university_name = university_name;
+    if (description !== undefined) updateData.description = description;
+    if (display_order !== undefined) updateData.display_order = display_order;
+    if (is_active !== undefined) updateData.is_active = is_active;
+
+    const { data, error } = await supabaseAdmin
+      .from('dashboard_coming_soon')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('❌ Error updating coming soon item:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin endpoint - Delete coming soon item
+app.delete('/api/admin/coming-soon/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { error} = await supabaseAdmin
+      .from('dashboard_coming_soon')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    res.json({ success: true, message: 'Coming soon item deleted successfully' });
+  } catch (error: any) {
+    console.error('❌ Error deleting coming soon item:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

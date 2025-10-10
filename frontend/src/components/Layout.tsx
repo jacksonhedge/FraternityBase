@@ -463,7 +463,7 @@ const Layout = () => {
                   onClick={() => setIsSubscriptionDropdownOpen(!isSubscriptionDropdownOpen)}
                   className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold rounded-full hover:from-blue-600 hover:to-purple-700 transition-all flex items-center gap-1"
                 >
-                  {subscriptionTier}
+                  {subscriptionTier?.charAt(0).toUpperCase() + subscriptionTier?.slice(1)}
                   <ChevronDown className={`w-3 h-3 transition-transform ${isSubscriptionDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 

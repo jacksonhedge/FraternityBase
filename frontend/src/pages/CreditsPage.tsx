@@ -66,7 +66,7 @@ export default function CreditsPage() {
       const data = await response.json();
       // Map API response fields to component state
       setAccountData({
-        balance: data.balance_credits || 0,
+        balance: data.balanceCredits || data.balance || 0,
         lifetimeSpent: data.lifetimeSpentCredits || 0,
         lifetimeAdded: data.lifetimeEarnedCredits || 0,
         subscription_tier: data.subscriptionTier,

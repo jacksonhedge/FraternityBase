@@ -20,7 +20,8 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Miami (Ohio)': 'MAC/Miami_OH_Redhawks_logo.png',
   'North Carolina': 'ACC/North_Carolina_Tar_Heels_logo.png',
   'North Carolina State': 'ACC/North_Carolina_State_Wolfpack_logo.png',
-  'Pittsburgh': 'ACC/Pittsburgh_Panthers_logo.png',
+  'Pittsburgh': 'ACC/Pitt_Panthers_logo.png',
+  'University of Pittsburgh': 'ACC/Pitt_Panthers_logo.png',
   'SMU': 'ACC/SMU_Mustang_logo.png',
   'Syracuse': 'ACC/Syracuse_Orange_logo.png',
   'Virginia': 'ACC/Virginia_Cavaliers_logo.png',
@@ -41,6 +42,7 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Penn State': 'BIG 10/Penn_State_Nittany_Lions_logo.png',
   'Penn State University': 'BIG 10/Penn_State_Nittany_Lions_logo.png',
   'Purdue': 'BIG 10/Purdue_Boilermakers_logo.png',
+  'Purdue University': 'BIG 10/Purdue_Boilermakers_logo.png',
   'Rutgers': 'BIG 10/Rutgers_Scarlet_Knights_logo.png',
   'Wisconsin': 'BIG 10/Wisconsin_Badgers_logo.png',
   'UCLA': 'BIG 10/UCLA.png',
@@ -88,6 +90,7 @@ const CONFERENCE_MAP: Record<string, string> = {
   // PAC-12
   'UC Berkeley': 'ACC/California_Golden_Bears_logo.png',
   'Stanford': 'ACC/Stanford_Cardinal_logo.png',
+  'Stanford University': 'ACC/Stanford_Cardinal_logo.png',
   'Oregon State': 'PAC - 12/Oregon_State_Beavers_logo.png',
   'Washington State': 'PAC - 12/Washington_State_Cougars_logo.png',
 
@@ -126,6 +129,22 @@ const CONFERENCE_MAP: Record<string, string> = {
   'Pennsylvania': 'IVY/Pennsylvania_Quakers_logo.png',
   'Princeton': 'IVY/Princeton_Tigers_logo.png',
   'Yale': 'IVY/Yale_Bulldogs_logo.png',
+
+  // Patriot League
+  'American University': 'Patriot League /American-Eagles-logo.png',
+  'Army': 'Patriot League /Army_West_Point_Black_Knights_logo.png',
+  'Boston University': 'Patriot League /Boston-University-Terriers-logo.png',
+  'Bucknell': 'Patriot League /Bucknell-Bison-logo.png',
+  'Bucknell University': 'Patriot League /Bucknell-Bison-logo.png',
+  'Colgate': 'Patriot League /Colgate-Raiders-logo.png',
+  'Colgate University': 'Patriot League /Colgate-Raiders-logo.png',
+  'Holy Cross': 'Patriot League /Holy-Cross-Crusaders-logo.png',
+  'Lafayette': 'Patriot League /Lafayette-Leopards-logo.png',
+  'Lafayette College': 'Patriot League /Lafayette-Leopards-logo.png',
+  'Lehigh': 'Patriot League /Lehigh-Mountain-Hawks-logo.png',
+  'Lehigh University': 'Patriot League /Lehigh-Mountain-Hawks-logo.png',
+  'Loyola Maryland': 'Patriot League /Loyola-University-Maryland-Greyhounds-logo.png',
+  'Navy': 'Patriot League /Navy_Midshipmen_logo.png',
 };
 
 /**

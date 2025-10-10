@@ -193,81 +193,67 @@ router.post('/subscribe', async (req, res) => {
   }
 });
 
-// Stripe webhook handler
-router.post('/webhook', async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+// Helper function to grant subscription benefits
+async function grantSubscriptionBenefits(
+  companyId: string,
+  tier: string,
+  stripeSubscriptionId: string,
+  currentPeriodEnd: Date,
+  isInitial: boolean = false
+) {
+  const supabase = getSupabaseAdmin();
 
-  if (!sig || !webhookSecret) {
-    return res.status(400).send('Webhook signature missing');
-  }
-
-  try {
-    const stripe = getStripe();
-    const event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-    const supabase = getSupabaseAdmin();
-
-    console.log('🔔 Stripe webhook received:', event.type);
-
-    switch (event.type) {
-      case 'checkout.session.completed': {
-        const session = event.data.object as any;
-        const metadata = session.metadata;
-
-        if (metadata.type === 'credit_purchase') {
-          // Add credits to account
-          const credits = parseInt(metadata.credits);
-          const dollarAmount = session.amount_total / 100;
-
-          await supabase.rpc('add_credits', {
-            p_company_id: metadata.company_id,
-            p_credits: credits,
-            p_dollars: dollarAmount,
-            p_transaction_type: 'credit_purchase',
-            p_description: `Purchased ${credits} credits`,
-            p_stripe_payment_intent_id: session.payment_intent
-          });
-
-          console.log(`✅ Added ${credits} credits to ${metadata.company_name}`);
-        } else if (metadata.type === 'subscription') {
-          // Update subscription tier
-          await supabase
-            .from('account_balance')
-            .update({ subscription_tier: metadata.tier })
-            .eq('company_id', metadata.company_id);
-
-          // Grant initial monthly credits
-          await supabase.rpc('grant_monthly_credits', {
-            p_company_id: metadata.company_id
-          });
-
-          console.log(`✅ Activated ${metadata.tier} subscription for ${metadata.company_name}`);
-        }
-        break;
-      }
-
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object as any;
-        // Downgrade to trial when subscription cancelled
-        // Note: You'll need to store customer_id in metadata to match this
-        console.log('⚠️ Subscription cancelled:', subscription.id);
-        break;
-      }
-
-      case 'invoice.payment_succeeded': {
-        const invoice = event.data.object as any;
-        // Handle successful recurring payment
-        console.log('✅ Recurring payment succeeded:', invoice.id);
-        break;
-      }
+  // Define benefits by tier
+  const benefits = {
+    monthly: {
+      monthly_credit_refresh: 0,
+      monthly_chapter_unlocks: 0,
+      monthly_warm_intros: 0,
+    },
+    enterprise: {
+      monthly_credit_refresh: 1000,
+      monthly_chapter_unlocks: -1, // -1 means unlimited
+      monthly_warm_intros: 3,
     }
+  };
 
-    res.json({ received: true });
-  } catch (error: any) {
-    console.error('❌ Webhook error:', error);
-    res.status(400).send(`Webhook Error: ${error.message}`);
+  const tierBenefits = benefits[tier as 'monthly' | 'enterprise'] || benefits.monthly;
+
+  // Update account_balance with subscription info and benefits
+  const updateData: any = {
+    subscription_tier: tier,
+    subscription_status: 'active',
+    stripe_subscription_id: stripeSubscriptionId,
+    subscription_current_period_end: currentPeriodEnd.toISOString(),
+    last_benefit_reset_at: new Date().toISOString(),
+    monthly_credit_refresh: tierBenefits.monthly_credit_refresh,
+    monthly_chapter_unlocks: tierBenefits.monthly_chapter_unlocks,
+    monthly_warm_intros: tierBenefits.monthly_warm_intros,
+    chapter_unlocks_remaining: tierBenefits.monthly_chapter_unlocks,
+    warm_intros_remaining: tierBenefits.monthly_warm_intros,
+  };
+
+  await supabase
+    .from('account_balance')
+    .update(updateData)
+    .eq('company_id', companyId);
+
+  // Grant initial credits if applicable
+  if (tierBenefits.monthly_credit_refresh > 0) {
+    await supabase.rpc('add_credits', {
+      p_company_id: companyId,
+      p_credits: tierBenefits.monthly_credit_refresh,
+      p_dollars: tierBenefits.monthly_credit_refresh * 0.30, // Rough dollar equivalent
+      p_transaction_type: isInitial ? 'subscription_initial_grant' : 'subscription_renewal',
+      p_description: isInitial
+        ? `Initial ${tier} subscription credits`
+        : `Monthly ${tier} subscription credits`,
+      p_stripe_payment_intent_id: stripeSubscriptionId
+    });
   }
-});
+
+  console.log(`✅ Granted ${tier} benefits to company ${companyId}:`, tierBenefits);
+}
 
 // Get transaction history
 router.get('/transactions', async (req, res) => {
@@ -546,134 +532,461 @@ router.post('/checkout', async (req, res) => {
   }
 });
 
-// Stripe webhook handler
+// Consolidated Stripe webhook handler
 router.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  if (!sig) {
-    return res.status(400).send('No signature');
+  if (!sig || !webhookSecret) {
+    return res.status(400).send('Webhook signature missing');
   }
 
   let event;
 
   try {
-    event = getStripe().webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET || ''
-    );
+    event = getStripe().webhooks.constructEvent(req.body, sig, webhookSecret);
   } catch (err: any) {
     console.error('Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  const supabase = getSupabaseAdmin();
+  console.log('🔔 Stripe webhook received:', event.type);
+
   // Handle the event
-  switch (event.type) {
-    case 'checkout.session.completed':
-      const session = event.data.object as Stripe.Checkout.Session;
-      const amountDollars = (session.amount_total || 0) / 100;
-      const companyId = session.metadata?.companyId;
-      const transactionType = session.metadata?.transaction_type || 'top_up';
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const metadata = session.metadata;
+        const companyId = metadata?.companyId || metadata?.company_id;
 
-      console.log('💳 Payment successful:', {
-        companyId,
-        amount: amountDollars,
-        transactionType,
-        paymentIntent: session.payment_intent
-      });
+        if (!companyId || companyId === 'demo') {
+          console.error('⚠️ Invalid company ID in webhook metadata');
+          break;
+        }
 
-      if (!companyId || companyId === 'demo') {
-        console.error('⚠️ Invalid company ID in webhook metadata');
-        break;
-      }
+        // Handle different transaction types
+        if (metadata?.type === 'credit_purchase') {
+          // One-time credit purchase
+          const credits = parseInt(metadata.credits);
+          const dollarAmount = (session.amount_total || 0) / 100;
 
-      try {
-        // Get balance before
-        const { data: balanceBefore } = await getSupabaseAdmin()
-          .from('account_balance')
-          .select('balance_dollars')
-          .eq('company_id', companyId)
-          .single();
+          await supabase.rpc('add_credits', {
+            p_company_id: companyId,
+            p_credits: credits,
+            p_dollars: dollarAmount,
+            p_transaction_type: 'credit_purchase',
+            p_description: `Purchased ${credits} credits`,
+            p_stripe_payment_intent_id: typeof session.payment_intent === 'string'
+              ? session.payment_intent
+              : session.payment_intent?.id || null
+          });
 
-        const balanceBeforeAmount = balanceBefore?.balance_dollars || 0;
+          console.log(`✅ Added ${credits} credits to company ${companyId}`);
 
-        // Call the add_balance SQL function
-        const { data, error } = await getSupabase().rpc('add_balance', {
-          p_company_id: companyId,
-          p_amount: amountDollars,
-          p_transaction_type: transactionType,
-          p_description: `Account top-up: $${amountDollars.toFixed(2)}`,
-          p_stripe_payment_intent_id: typeof session.payment_intent === 'string'
-            ? session.payment_intent
-            : session.payment_intent?.id || null
-        });
+        } else if (metadata?.type === 'subscription') {
+          // New subscription created
+          const tier = metadata.tier;
 
-        if (error) {
-          console.error('❌ Failed to add balance:', error);
-        } else {
-          console.log('✅ Balance added successfully. Transaction ID:', data);
-
-          const balanceAfterAmount = balanceBeforeAmount + amountDollars;
-
-          // Get company name
-          const { data: company } = await getSupabase()
-            .from('companies')
-            .select('name')
-            .eq('id', companyId)
-            .single();
-
-          // Send notification emails
-          const notificationService = getCreditNotificationService();
-          if (notificationService && company) {
-            notificationService.notifyCreditAdded({
-              companyId,
-              companyName: company.name,
-              amount: amountDollars,
-              balanceBefore: balanceBeforeAmount,
-              balanceAfter: balanceAfterAmount,
-              transactionType: 'stripe_purchase',
-              stripePaymentIntentId: typeof session.payment_intent === 'string'
-                ? session.payment_intent
-                : session.payment_intent?.id || undefined,
-              description: `Stripe payment processed`
-            }).catch(err => console.error('Failed to send credit notification:', err));
-          }
-
-          // If payment method was saved, update the account_balance record
-          if (session.setup_intent || session.payment_intent) {
-            const paymentIntent = await getStripe().paymentIntents.retrieve(
-              typeof session.payment_intent === 'string'
-                ? session.payment_intent
-                : session.payment_intent?.id || ''
+          // Get subscription details to find period end
+          if (session.subscription) {
+            const subscription = await getStripe().subscriptions.retrieve(
+              typeof session.subscription === 'string' ? session.subscription : session.subscription.id
             );
 
-            if (paymentIntent.customer && paymentIntent.payment_method) {
-              await getSupabase()
-                .from('account_balance')
-                .update({
-                  stripe_customer_id: typeof paymentIntent.customer === 'string'
-                    ? paymentIntent.customer
-                    : paymentIntent.customer?.id,
-                  stripe_payment_method_id: typeof paymentIntent.payment_method === 'string'
-                    ? paymentIntent.payment_method
-                    : paymentIntent.payment_method?.id
-                })
-                .eq('company_id', companyId);
+            const currentPeriodEnd = new Date(subscription.current_period_end * 1000);
 
-              console.log('💾 Saved payment method for auto-reload');
+            // Update customer ID in account_balance for future webhook matching
+            await supabase
+              .from('account_balance')
+              .update({
+                stripe_customer_id: typeof session.customer === 'string'
+                  ? session.customer
+                  : session.customer?.id || null
+              })
+              .eq('company_id', companyId);
+
+            // Grant subscription benefits
+            await grantSubscriptionBenefits(companyId, tier, subscription.id, currentPeriodEnd, true);
+
+            console.log(`✅ Activated ${tier} subscription for company ${companyId}`);
+          }
+
+        } else {
+          // Regular top-up payment
+          const amountDollars = (session.amount_total || 0) / 100;
+          const transactionType = metadata?.transaction_type || 'top_up';
+
+          // Get balance before
+          const { data: balanceBefore } = await supabase
+            .from('account_balance')
+            .select('balance_dollars')
+            .eq('company_id', companyId)
+            .single();
+
+          const balanceBeforeAmount = balanceBefore?.balance_dollars || 0;
+
+          // Call the add_balance SQL function
+          const { data, error } = await supabase.rpc('add_balance', {
+            p_company_id: companyId,
+            p_amount: amountDollars,
+            p_transaction_type: transactionType,
+            p_description: `Account top-up: $${amountDollars.toFixed(2)}`,
+            p_stripe_payment_intent_id: typeof session.payment_intent === 'string'
+              ? session.payment_intent
+              : session.payment_intent?.id || null
+          });
+
+          if (error) {
+            console.error('❌ Failed to add balance:', error);
+          } else {
+            console.log('✅ Balance added successfully. Transaction ID:', data);
+
+            const balanceAfterAmount = balanceBeforeAmount + amountDollars;
+
+            // Get company name
+            const { data: company } = await supabase
+              .from('companies')
+              .select('name')
+              .eq('id', companyId)
+              .single();
+
+            // Send notification emails
+            const notificationService = getCreditNotificationService();
+            if (notificationService && company) {
+              notificationService.notifyCreditAdded({
+                companyId,
+                companyName: company.name,
+                amount: amountDollars,
+                balanceBefore: balanceBeforeAmount,
+                balanceAfter: balanceAfterAmount,
+                transactionType: 'stripe_purchase',
+                stripePaymentIntentId: typeof session.payment_intent === 'string'
+                  ? session.payment_intent
+                  : session.payment_intent?.id || undefined,
+                description: `Stripe payment processed`
+              }).catch(err => console.error('Failed to send credit notification:', err));
+            }
+
+            // If payment method was saved, update the account_balance record
+            if (session.setup_intent || session.payment_intent) {
+              const paymentIntent = await getStripe().paymentIntents.retrieve(
+                typeof session.payment_intent === 'string'
+                  ? session.payment_intent
+                  : session.payment_intent?.id || ''
+              );
+
+              if (paymentIntent.customer && paymentIntent.payment_method) {
+                await supabase
+                  .from('account_balance')
+                  .update({
+                    stripe_customer_id: typeof paymentIntent.customer === 'string'
+                      ? paymentIntent.customer
+                      : paymentIntent.customer?.id,
+                    stripe_payment_method_id: typeof paymentIntent.payment_method === 'string'
+                      ? paymentIntent.payment_method
+                      : paymentIntent.payment_method?.id
+                  })
+                  .eq('company_id', companyId);
+
+                console.log('💾 Saved payment method for auto-reload');
+              }
             }
           }
         }
-      } catch (err: any) {
-        console.error('❌ Error processing payment:', err);
+        break;
       }
 
-      break;
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
+      case 'customer.subscription.created':
+      case 'customer.subscription.updated': {
+        const subscription = event.data.object as Stripe.Subscription;
 
-  res.json({ received: true });
+        // Find company by stripe_customer_id
+        const { data: account, error: accountError } = await supabase
+          .from('account_balance')
+          .select('company_id, subscription_tier')
+          .eq('stripe_customer_id', subscription.customer)
+          .single();
+
+        if (accountError || !account) {
+          console.error('⚠️ Could not find company for customer:', subscription.customer);
+          break;
+        }
+
+        const tier = account.subscription_tier || 'monthly';
+        const currentPeriodEnd = new Date(subscription.current_period_end * 1000);
+
+        // Update subscription status
+        await supabase
+          .from('account_balance')
+          .update({
+            subscription_status: subscription.status,
+            stripe_subscription_id: subscription.id,
+            subscription_current_period_end: currentPeriodEnd.toISOString()
+          })
+          .eq('company_id', account.company_id);
+
+        console.log(`✅ Updated subscription ${subscription.id} status to ${subscription.status}`);
+        break;
+      }
+
+      case 'invoice.payment_succeeded': {
+        const invoice = event.data.object as Stripe.Invoice;
+
+        // Only process for subscription renewals (not initial payment)
+        if (invoice.billing_reason === 'subscription_cycle') {
+          // Find company by stripe_customer_id
+          const { data: account, error: accountError } = await supabase
+            .from('account_balance')
+            .select('company_id, subscription_tier, stripe_subscription_id, subscription_current_period_end')
+            .eq('stripe_customer_id', invoice.customer)
+            .single();
+
+          if (accountError || !account) {
+            console.error('⚠️ Could not find company for customer:', invoice.customer);
+            break;
+          }
+
+          // Get subscription to find new period end
+          if (account.stripe_subscription_id) {
+            const subscription = await getStripe().subscriptions.retrieve(account.stripe_subscription_id);
+            const currentPeriodEnd = new Date(subscription.current_period_end * 1000);
+
+            // Grant monthly benefits (credits, reset chapter unlocks, reset warm intros)
+            await grantSubscriptionBenefits(
+              account.company_id,
+              account.subscription_tier,
+              account.stripe_subscription_id,
+              currentPeriodEnd,
+              false // Not initial
+            );
+
+            console.log(`✅ Granted monthly benefits for company ${account.company_id}`);
+          }
+        }
+        break;
+      }
+
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as Stripe.Subscription;
+
+        // Find company by stripe_customer_id
+        const { data: account, error: accountError } = await supabase
+          .from('account_balance')
+          .select('company_id')
+          .eq('stripe_customer_id', subscription.customer)
+          .single();
+
+        if (accountError || !account) {
+          console.error('⚠️ Could not find company for customer:', subscription.customer);
+          break;
+        }
+
+        // Downgrade to trial - remove all benefits
+        await supabase
+          .from('account_balance')
+          .update({
+            subscription_tier: 'trial',
+            subscription_status: 'canceled',
+            monthly_credit_refresh: 0,
+            monthly_chapter_unlocks: 0,
+            monthly_warm_intros: 0,
+            chapter_unlocks_remaining: 0,
+            warm_intros_remaining: 0,
+          })
+          .eq('company_id', account.company_id);
+
+        console.log(`⚠️ Subscription cancelled for company ${account.company_id}`);
+        break;
+      }
+
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object as Stripe.Invoice;
+
+        // Find company and update status
+        const { data: account } = await supabase
+          .from('account_balance')
+          .select('company_id')
+          .eq('stripe_customer_id', invoice.customer)
+          .single();
+
+        if (account) {
+          await supabase
+            .from('account_balance')
+            .update({ subscription_status: 'past_due' })
+            .eq('company_id', account.company_id);
+
+          console.log(`⚠️ Payment failed for company ${account.company_id} - marked past_due`);
+        }
+        break;
+      }
+
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+
+    res.json({ received: true });
+  } catch (error: any) {
+    console.error('❌ Webhook processing error:', error);
+    res.status(500).json({ error: 'Webhook processing failed', details: error.message });
+  }
+});
+
+// Get subscription status and benefit information
+router.get('/subscription/status', async (req, res) => {
+  try {
+    const { companyId } = req.query;
+
+    if (!companyId) {
+      return res.status(400).json({ error: 'Company ID required' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    // Get subscription info from account_balance
+    const { data: account, error } = await supabase
+      .from('account_balance')
+      .select(`
+        subscription_tier,
+        subscription_status,
+        stripe_subscription_id,
+        subscription_current_period_end,
+        last_benefit_reset_at,
+        monthly_credit_refresh,
+        monthly_chapter_unlocks,
+        monthly_warm_intros,
+        chapter_unlocks_remaining,
+        warm_intros_remaining
+      `)
+      .eq('company_id', companyId)
+      .single();
+
+    if (error || !account) {
+      return res.status(404).json({ error: 'Account not found' });
+    }
+
+    // Calculate days until renewal
+    let daysUntilRenewal = null;
+    if (account.subscription_current_period_end) {
+      const periodEnd = new Date(account.subscription_current_period_end);
+      const now = new Date();
+      daysUntilRenewal = Math.ceil((periodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    res.json({
+      success: true,
+      subscription: {
+        tier: account.subscription_tier,
+        status: account.subscription_status,
+        stripeSubscriptionId: account.stripe_subscription_id,
+        currentPeriodEnd: account.subscription_current_period_end,
+        daysUntilRenewal,
+        lastBenefitResetAt: account.last_benefit_reset_at,
+      },
+      benefits: {
+        monthlyCredits: account.monthly_credit_refresh,
+        monthlyChapterUnlocks: account.monthly_chapter_unlocks,
+        monthlyWarmIntros: account.monthly_warm_intros,
+      },
+      remaining: {
+        chapterUnlocks: account.chapter_unlocks_remaining,
+        warmIntros: account.warm_intros_remaining,
+      }
+    });
+  } catch (error: any) {
+    console.error('Subscription status error:', error);
+    res.status(500).json({ error: 'Failed to fetch subscription status' });
+  }
+});
+
+// Manually trigger benefit reset (admin only)
+router.post('/subscription/reset-benefits', async (req, res) => {
+  try {
+    const { companyId } = req.body;
+
+    if (!companyId) {
+      return res.status(400).json({ error: 'Company ID required' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    // Get current subscription info
+    const { data: account, error: accountError } = await supabase
+      .from('account_balance')
+      .select(`
+        subscription_tier,
+        stripe_subscription_id,
+        subscription_current_period_end
+      `)
+      .eq('company_id', companyId)
+      .single();
+
+    if (accountError || !account) {
+      return res.status(404).json({ error: 'Account not found' });
+    }
+
+    if (!account.subscription_tier || account.subscription_tier === 'trial') {
+      return res.status(400).json({ error: 'No active subscription' });
+    }
+
+    // Trigger benefit grant
+    const currentPeriodEnd = account.subscription_current_period_end
+      ? new Date(account.subscription_current_period_end)
+      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // Default 30 days
+
+    await grantSubscriptionBenefits(
+      companyId,
+      account.subscription_tier,
+      account.stripe_subscription_id || 'manual_reset',
+      currentPeriodEnd,
+      false
+    );
+
+    res.json({
+      success: true,
+      message: 'Benefits reset successfully'
+    });
+  } catch (error: any) {
+    console.error('Benefit reset error:', error);
+    res.status(500).json({ error: 'Failed to reset benefits', details: error.message });
+  }
+});
+
+// Cancel subscription
+router.post('/subscription/cancel', async (req, res) => {
+  try {
+    const { companyId } = req.body;
+
+    if (!companyId) {
+      return res.status(400).json({ error: 'Company ID required' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    // Get subscription info
+    const { data: account, error: accountError } = await supabase
+      .from('account_balance')
+      .select('stripe_subscription_id')
+      .eq('company_id', companyId)
+      .single();
+
+    if (accountError || !account || !account.stripe_subscription_id) {
+      return res.status(404).json({ error: 'No active subscription found' });
+    }
+
+    // Cancel the subscription in Stripe
+    const stripe = getStripe();
+    await stripe.subscriptions.cancel(account.stripe_subscription_id);
+
+    res.json({
+      success: true,
+      message: 'Subscription cancelled. Benefits will remain active until the end of the current billing period.'
+    });
+  } catch (error: any) {
+    console.error('Subscription cancellation error:', error);
+    res.status(500).json({ error: 'Failed to cancel subscription', details: error.message });
+  }
 });
 
 // Create warm introduction request ($59.99)
