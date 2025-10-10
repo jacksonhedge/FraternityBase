@@ -54,24 +54,7 @@ const DashboardPage = () => {
   const [showDashboard, setShowDashboard] = useState(hasSeenLoading);
   const [activityFeed, setActivityFeed] = useState<any[]>([]);
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
-
-  // Hardcoded Big 10 Sigma Chi examples for tickertape
-  const big10Examples = [
-    { universityName: 'Penn State University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '1', insertedCount: undefined },
-    { universityName: 'Ohio State University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '2', insertedCount: undefined },
-    { universityName: 'University of Michigan', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '3', insertedCount: undefined },
-    { universityName: 'University of Wisconsin', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '4', insertedCount: undefined },
-    { universityName: 'Northwestern University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '5', insertedCount: undefined },
-    { universityName: 'Purdue University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '6', insertedCount: undefined },
-    { universityName: 'University of Illinois', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '7', insertedCount: undefined },
-    { universityName: 'Indiana University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '8', insertedCount: undefined },
-    { universityName: 'University of Minnesota', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '9', insertedCount: undefined },
-    { universityName: 'University of Iowa', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '10', insertedCount: undefined },
-    { universityName: 'Michigan State University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '11', insertedCount: undefined },
-    { universityName: 'University of Nebraska', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '12', insertedCount: undefined },
-    { universityName: 'University of Maryland', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '13', insertedCount: undefined },
-    { universityName: 'Rutgers University', greekOrgName: 'Sigma Chi', event_type: 'new_chapter', id: '14', insertedCount: undefined },
-  ].map(item => ({ ...item, metadata: item }));
+  const [recentChapters, setRecentChapters] = useState<any[]>([]);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
   const token = localStorage.getItem('token');
@@ -110,15 +93,23 @@ const DashboardPage = () => {
         fetch(`${API_URL}/admin/universities`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }).then(res => res.json()).catch(() => ({ data: [] })),
-        fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json()).catch(() => ({ data: [] }))
+        fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json()).catch(() => ({ data: [] })),
+        fetch(`${API_URL}/chapters/recent`).then(res => res.json()).catch(() => ({ data: [] }))
       ])
-        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData]) => {
+        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData, recentChaptersData]) => {
+          console.log('[Dashboard] Recent chapters API response:', recentChaptersData);
+          console.log('[Dashboard] Recent chapters data array:', recentChaptersData.data);
+
           setAccountBalance(creditsData.balance || 0);
           setLifetimeSpent(creditsData.lifetimeSpent || 0);
           setLifetimeAdded(creditsData.lifetimeAdded || 0);
           setSubscriptionTier(creditsData.subscriptionTier || 'trial');
           setUnlockedChapters(chaptersData.data || []);
           setActivityFeed(activityData.data || []);
+
+          const formattedChapters = (recentChaptersData.data || []).map((item: any) => ({ ...item, metadata: item }));
+          console.log('[Dashboard] Formatted chapters for tickertape:', formattedChapters);
+          setRecentChapters(formattedChapters);
 
           // Calculate real stats from API data
           const chapters = allChaptersData.data || [];
@@ -235,7 +226,7 @@ const DashboardPage = () => {
       )}
 
       {/* RECENT ACTIVITY TICKERTAPE - Enhanced with Anime.js */}
-      <AnimatedTickertape activities={big10Examples} />
+      <AnimatedTickertape activities={recentChapters} />
 
 
       {/* Header */}

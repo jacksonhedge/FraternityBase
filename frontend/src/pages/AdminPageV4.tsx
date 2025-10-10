@@ -322,6 +322,7 @@ const AdminPageV4 = () => {
         const data = await res.json();
         setUniversities(data.data || []);
       } else if (activeTab === 'chapters') {
+        console.log('[Chapters View] 📊 Fetching chapters data...');
         const [orgsRes, unisRes, chaptersRes, usersRes] = await Promise.all([
           fetch(`${API_URL}/admin/greek-organizations`, { headers: getAdminHeaders() }),
           fetch(`${API_URL}/admin/universities`, { headers: getAdminHeaders() }),
@@ -334,6 +335,13 @@ const AdminPageV4 = () => {
           chaptersRes.json(),
           usersRes.json()
         ]);
+        console.log('[Chapters View] ✅ Data fetched:', {
+          greekOrgs: orgsData.data?.length || 0,
+          universities: unisData.data?.length || 0,
+          chapters: chaptersData.data?.length || 0,
+          officers: usersData.data?.length || 0
+        });
+        console.log('[Chapters View] Sample chapters:', chaptersData.data?.slice(0, 3));
         setGreekOrgs(orgsData.data || []);
         setUniversities(unisData.data || []);
         setChapters(chaptersData.data || []);
@@ -958,6 +966,9 @@ const AdminPageV4 = () => {
 
       let successCount = 0;
       let errorCount = 0;
+      let skippedDuplicates = 0;
+      const errorDetails: Array<{row: number, data: any, error: string}> = [];
+      const duplicateDetails: Array<{row: number, data: any}> = [];
 
       console.log('[CSV Import] 🎯 Active tab:', activeTab);
       console.log('[CSV Import] ⚙️ Starting row processing...\n');
@@ -1058,7 +1069,9 @@ const AdminPageV4 = () => {
 
             // Need to look up chapter_id from chapter name and university
             if (!chapterName || !universityName) {
-              console.error(`[CSV Import] Row ${i} - ❌ Missing chapter or university name`);
+              const errorMsg = 'Missing chapter or university name';
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
+              errorDetails.push({row: i, data: row, error: errorMsg});
               errorCount++;
               console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
               continue;
@@ -1069,7 +1082,8 @@ const AdminPageV4 = () => {
             const chaptersRes = await fetch(`${API_URL}/admin/chapters`, {
               headers: getAdminHeaders()
             });
-            const chaptersData = await chaptersRes.json();
+            const chaptersResponse = await chaptersRes.json();
+            const chaptersData = chaptersResponse.data || chaptersResponse;
             console.log(`[CSV Import] Row ${i} - Found ${chaptersData.length} total chapters`);
 
             const chapter = chaptersData.find((ch: any) =>
@@ -1078,11 +1092,13 @@ const AdminPageV4 = () => {
             );
 
             if (!chapter) {
-              console.error(`[CSV Import] Row ${i} - ❌ Could not find chapter: ${chapterName} at ${universityName}`);
+              const errorMsg = `Could not find chapter: ${chapterName} at ${universityName}`;
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
               console.log(`[CSV Import] Row ${i} - Available chapters:`, chaptersData.map((ch: any) => ({
                 name: ch.chapter_name,
                 university: ch.universities?.name
               })));
+              errorDetails.push({row: i, data: row, error: errorMsg});
               errorCount++;
               console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
               continue;
@@ -1125,9 +1141,145 @@ const AdminPageV4 = () => {
 
             successCount++;
             console.log(`[CSV Import] Row ${i} - ✅ SUCCESS! Total successes: ${successCount}`);
+          } else if (activeTab === 'chapters') {
+            console.log(`[CSV Import] Row ${i} - Importing as CHAPTER`);
+
+            // Chapter CSV import (organization, university, chapter_name, grade)
+            const organizationName = row.organization || row.Organization;
+            const universityName = row.university || row.University;
+            const chapterName = row.chapter_name || row['Chapter Name'] || row.chapter || row.Chapter;
+            const grade = parseFloat(row.grade || row.Grade || '3.0');
+
+            console.log(`[CSV Import] Row ${i} - Looking up:`, {
+              organization: organizationName,
+              university: universityName,
+              chapter_name: chapterName,
+              grade
+            });
+
+            // Validate required fields
+            if (!organizationName || !universityName || !chapterName) {
+              const errorMsg = 'Missing required fields (organization, university, or chapter_name)';
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
+              errorDetails.push({row: i, data: row, error: errorMsg});
+              errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
+              continue;
+            }
+
+            // Fetch universities to find university_id
+            console.log(`[CSV Import] Row ${i} - 🔍 Fetching universities to find match...`);
+            const universitiesRes = await fetch(`${API_URL}/admin/universities`, {
+              headers: getAdminHeaders()
+            });
+            const universitiesResponse = await universitiesRes.json();
+            const universitiesData = universitiesResponse.data || universitiesResponse;
+            console.log(`[CSV Import] Row ${i} - Found ${universitiesData.length} total universities`);
+
+            const university = universitiesData.find((u: any) =>
+              u.name?.toLowerCase().includes(universityName.toLowerCase()) ||
+              universityName.toLowerCase().includes(u.name?.toLowerCase())
+            );
+
+            if (!university) {
+              const errorMsg = `Could not find university: ${universityName}`;
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
+              console.log(`[CSV Import] Row ${i} - Available universities sample:`, universitiesData.slice(0, 5).map((u: any) => u.name));
+              errorDetails.push({row: i, data: row, error: errorMsg});
+              errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
+              continue;
+            }
+
+            console.log(`[CSV Import] Row ${i} - ✅ Found university:`, {
+              id: university.id,
+              name: university.name
+            });
+
+            // Fetch greek organizations to find greek_organization_id
+            console.log(`[CSV Import] Row ${i} - 🔍 Fetching greek organizations to find match...`);
+            const greekOrgsRes = await fetch(`${API_URL}/admin/greek-organizations`, {
+              headers: getAdminHeaders()
+            });
+            const greekOrgsResponse = await greekOrgsRes.json();
+            const greekOrgsData = greekOrgsResponse.data || greekOrgsResponse;
+            console.log(`[CSV Import] Row ${i} - Found ${greekOrgsData.length} total greek organizations`);
+
+            const greekOrg = greekOrgsData.find((g: any) =>
+              g.name?.toLowerCase() === organizationName.toLowerCase() ||
+              g.name?.toLowerCase().includes(organizationName.toLowerCase()) ||
+              organizationName.toLowerCase().includes(g.name?.toLowerCase())
+            );
+
+            if (!greekOrg) {
+              const errorMsg = `Could not find greek organization: ${organizationName}`;
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
+              console.log(`[CSV Import] Row ${i} - Available organizations:`, greekOrgsData.map((g: any) => g.name));
+              errorDetails.push({row: i, data: row, error: errorMsg});
+              errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
+              continue;
+            }
+
+            console.log(`[CSV Import] Row ${i} - ✅ Found greek organization:`, {
+              id: greekOrg.id,
+              name: greekOrg.name
+            });
+
+            // Check for duplicates - fetch existing chapters
+            console.log(`[CSV Import] Row ${i} - 🔍 Checking for duplicate chapter...`);
+            const existingChaptersRes = await fetch(`${API_URL}/admin/chapters`, {
+              headers: getAdminHeaders()
+            });
+            const existingChaptersResponse = await existingChaptersRes.json();
+            const existingChapters = existingChaptersResponse.data || existingChaptersResponse;
+
+            const duplicate = existingChapters.find((ch: any) =>
+              ch.greek_organization_id === greekOrg.id && ch.university_id === university.id
+            );
+
+            if (duplicate) {
+              console.log(`[CSV Import] Row ${i} - ⏭️ SKIPPED - Duplicate chapter already exists:`, {
+                existing_id: duplicate.id,
+                existing_name: duplicate.chapter_name
+              });
+              duplicateDetails.push({row: i, data: row});
+              skippedDuplicates++;
+              console.log(`[CSV Import] Row ${i} - SKIPPED! Total duplicates: ${skippedDuplicates}`);
+              continue;
+            }
+
+            const chapterPayload = {
+              chapter_name: chapterName,
+              university_id: university.id,
+              greek_organization_id: greekOrg.id,
+              grade: grade,
+              status: 'active'
+            };
+
+            console.log(`[CSV Import] Row ${i} - 🚀 Creating chapter with payload:`, chapterPayload);
+
+            const chapterResponse = await fetch(`${API_URL}/admin/chapters`, {
+              method: 'POST',
+              headers: getAdminHeaders(),
+              body: JSON.stringify(chapterPayload)
+            });
+
+            console.log(`[CSV Import] Row ${i} - API response status:`, chapterResponse.status);
+
+            if (!chapterResponse.ok) {
+              const errorText = await chapterResponse.text();
+              console.error(`[CSV Import] Row ${i} - ❌ API error:`, errorText);
+              throw new Error(`API returned ${chapterResponse.status}: ${errorText}`);
+            }
+
+            successCount++;
+            console.log(`[CSV Import] Row ${i} - ✅ SUCCESS! Total successes: ${successCount}`);
           }
         } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error);
           console.error(`[CSV Import] Row ${i} - ❌ ERROR:`, error);
+          errorDetails.push({row: i, data: row, error: errorMsg});
           errorCount++;
           console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
         }
@@ -1138,12 +1290,41 @@ const AdminPageV4 = () => {
       console.log('[CSV Import] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log('[CSV Import] 📊 Final Results:');
       console.log('[CSV Import]   ✅ Successes:', successCount);
+      console.log('[CSV Import]   ⏭️ Skipped (Duplicates):', skippedDuplicates);
       console.log('[CSV Import]   ❌ Errors:', errorCount);
       console.log('[CSV Import]   📝 Total rows processed:', lines.length - 1);
       console.log('[CSV Import]   📈 Success rate:', `${((successCount / (lines.length - 1)) * 100).toFixed(1)}%`);
       console.log('[CSV Import] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-      showSuccessMsg(`CSV Import Complete!\n✅ Success: ${successCount}\n❌ Errors: ${errorCount}`);
+      // Display skipped duplicates in orange
+      if (duplicateDetails.length > 0) {
+        console.log('\n[CSV Import] ⏭️⏭️⏭️ SKIPPED ROWS (Already Exists) ⏭️⏭️⏭️\n');
+        duplicateDetails.forEach(({row, data}) => {
+          console.log(`%c[CSV Import] Row ${row} - DUPLICATE ⏭️`, 'color: orange; font-weight: bold; font-size: 14px');
+          console.log(`%c  Organization: ${data.organization || data.Organization || 'N/A'}`, 'color: orange');
+          console.log(`%c  University: ${data.university || data.University || 'N/A'}`, 'color: orange');
+          console.log(`%c  Chapter: ${data.chapter_name || data['Chapter Name'] || 'N/A'}`, 'color: orange');
+          console.log(`%c  Reason: This chapter already exists in the database`, 'color: orange; font-weight: bold');
+          console.log('');
+        });
+        console.log('[CSV Import] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+      }
+
+      // Display failed rows with 0.0 grade in red
+      if (errorDetails.length > 0) {
+        console.log('\n[CSV Import] ❌❌❌ FAILED ROWS (Grade: 0.0) ❌❌❌\n');
+        errorDetails.forEach(({row, data, error}) => {
+          console.log(`%c[CSV Import] Row ${row} - Grade: 0.0 ❌`, 'color: red; font-weight: bold; font-size: 14px');
+          console.log(`%c  Organization: ${data.organization || data.Organization || 'N/A'}`, 'color: red');
+          console.log(`%c  University: ${data.university || data.University || 'N/A'}`, 'color: red');
+          console.log(`%c  Chapter: ${data.chapter_name || data['Chapter Name'] || 'N/A'}`, 'color: red');
+          console.log(`%c  Error: ${error}`, 'color: red; font-weight: bold');
+          console.log('');
+        });
+        console.log('[CSV Import] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+      }
+
+      showSuccessMsg(`CSV Import Complete!\n✅ Success: ${successCount}\n⏭️ Skipped: ${skippedDuplicates}\n❌ Errors: ${errorCount}`);
       fetchData();
       e.target.value = ''; // Reset file input
     };

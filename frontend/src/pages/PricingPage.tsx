@@ -63,11 +63,34 @@ const PricingPage = () => {
       buttonStyle: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 border-transparent shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
     },
     {
+      id: 'enterprise-tier-1',
+      name: 'Enterprise Tier 1',
+      price: 299.99,
+      description: 'For agencies and large teams',
+      icon: Crown,
+      color: 'from-purple-600 to-purple-700',
+      bgColor: 'from-purple-50 to-purple-100',
+      features: [
+        '1,000 credits/month ($1,000 value)',
+        '3 Warm Introductions/month',
+        'Unlimited chapter unlocks',
+        'FraternityBase API access',
+        'Priority support',
+        'Early access to new features',
+        'Advanced analytics',
+        'Export to CSV'
+      ],
+      limitations: [],
+      premium: true,
+      buttonText: 'Upgrade to Tier 1',
+      buttonStyle: 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 border-transparent shadow-lg hover:shadow-xl transition-all duration-200'
+    },
+    {
       id: 'billing',
       name: 'Billing',
       price: 'Pay as you go',
       description: 'Unlock individual chapters',
-      icon: Crown,
+      icon: Sparkles,
       color: 'from-yellow-400 via-yellow-500 to-amber-500',
       bgColor: 'from-amber-50 via-yellow-50 to-amber-100',
       features: [
@@ -79,27 +102,26 @@ const PricingPage = () => {
         'Credits never expire'
       ],
       limitations: [],
-      premium: true,
       buttonText: 'Buy Credits',
       buttonStyle: 'bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 text-white hover:from-yellow-500 hover:via-yellow-600 hover:to-amber-600 border-transparent shadow-lg hover:shadow-xl transition-all duration-200'
     },
     {
-      id: 'enterprise',
-      name: 'Enterprise',
+      id: 'enterprise-tier-2',
+      name: 'Enterprise Tier 2',
       price: 'Custom Pricing',
       description: 'For large organizations',
       icon: Building2,
       color: 'from-gray-700 to-gray-800',
       bgColor: 'from-gray-50 to-gray-100',
       features: [
-        'Unlimited chapter unlocks',
+        'UNLIMITED credits & unlocks',
         'Unlimited warm intros',
-        'FraternityBase API access',
-        'CRM & tool integrations',
-        'Custom integrations',
+        'White-label platform',
         'Dedicated account manager',
+        'Custom integrations',
+        'SLA guarantees',
         'Custom onboarding & training',
-        'Priority support'
+        'Priority feature requests'
       ],
       limitations: [],
       buttonText: 'Contact Sales',
@@ -157,8 +179,8 @@ const PricingPage = () => {
             </div>
           </div>
 
-          {/* Pricing Grid - 4 columns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+          {/* Pricing Grid - 5 tiers */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-stretch">
             {pricingTiers.map((tier) => {
               const Icon = tier.icon;
               return (

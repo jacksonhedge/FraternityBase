@@ -450,7 +450,33 @@ const ChapterDetailPage = () => {
           {/* Dynamic Officers List */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {officers.length > 0 ? (
-              officers.map((officer) => (
+              officers
+                .filter((officer) => officer.position && officer.position.toLowerCase() !== 'member')
+                .sort((a, b) => {
+                  // Define officer position priority
+                  const positionOrder: {[key: string]: number} = {
+                    'president': 1,
+                    'vice president': 2,
+                    'vp': 2,
+                    'treasurer': 3,
+                    'secretary': 4,
+                    'rush': 5,
+                    'rush chair': 5,
+                    'social': 6,
+                    'social chair': 6,
+                    'philanthropy': 7,
+                    'philanthropy chair': 7,
+                  };
+
+                  const aPos = a.position?.toLowerCase() || '';
+                  const bPos = b.position?.toLowerCase() || '';
+
+                  const aOrder = positionOrder[aPos] || 999;
+                  const bOrder = positionOrder[bPos] || 999;
+
+                  return aOrder - bOrder;
+                })
+                .map((officer) => (
                 <div key={officer.id} className="border rounded-lg p-4">
                   <h3 className="font-semibold text-gray-900">{officer.position || 'To be Determined'}</h3>
                   <p className="text-gray-900 mt-1">{officer.name || (officer.first_name && officer.last_name ? `${officer.first_name} ${officer.last_name}` : 'To be Determined')}</p>
@@ -484,6 +510,10 @@ const ChapterDetailPage = () => {
                   )}
                 </div>
               ))
+            ) : officers.length > 0 ? (
+              <div className="col-span-2 text-center py-8 text-gray-500">
+                No officer positions available. Only general members listed.
+              </div>
             ) : (
               <div className="col-span-2 text-center py-8 text-gray-500">
                 Chapter leadership: To be Determined

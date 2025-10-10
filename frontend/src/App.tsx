@@ -50,6 +50,7 @@ import MyChaptersPage from './pages/MyChaptersPage';
 import MyCollegesPage from './pages/MyCollegesPage';
 import MyBarsPage from './pages/MyBarsPage';
 import MyUnlockedPage from './pages/MyUnlockedPage';
+import RequestedIntroductionsPage from './pages/RequestedIntroductionsPage';
 import MyAmbassadorsPage from './pages/MyAmbassadorsPage';
 import OutreachPage from './pages/OutreachPage';
 import BarsPage from './pages/BarsPage';
@@ -134,6 +135,7 @@ function AnimatedRoutes() {
             <Route path="my-unlocked" element={<MyUnlockedPage />} />
             <Route path="my-chapters" element={<MyChaptersPage />} />
             <Route path="my-chapters/:id" element={<ChapterDetailPage />} />
+            <Route path="requested-introductions" element={<RequestedIntroductionsPage />} />
             <Route path="my-ambassadors" element={<MyAmbassadorsPage />} />
             <Route path="my-colleges" element={<MyCollegesPage />} />
             <Route path="my-bars" element={<MyBarsPage />} />

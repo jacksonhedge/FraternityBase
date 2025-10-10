@@ -1,0 +1,4 @@
+name,location,state,student_count,greek_percentage,website,bars_nearby,conference
+"University of Virginia","Charlottesville",VA,25000,0.30,https://virginia.edu,15,ACC
+"Virginia Tech","Blacksburg",VA,34000,0.18,https://vt.edu,8,ACC
+"James Madison University","Harrisonburg",VA,22000,0.12,https://jmu.edu,6,CAA

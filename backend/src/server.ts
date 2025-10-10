@@ -11,6 +11,7 @@ import creditsRouter from './routes/credits';
 import activityTrackingRouter from './routes/activityTracking';
 import roadmapRouter from './routes/roadmap';
 import CreditNotificationService from './services/CreditNotificationService';
+import DailyReportService from './services/DailyReportService';
 
 dotenv.config();
 
@@ -627,6 +628,92 @@ app.get('/api/chapters/unlocked', async (req, res) => {
     });
   } catch (error: any) {
     console.error('Unlocked chapters endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get greek organizations with real chapter counts
+app.get('/api/greek-organizations', async (req, res) => {
+  try {
+    // Get all greek organizations
+    const { data: orgs, error: orgsError } = await supabaseAdmin
+      .from('greek_organizations')
+      .select('*')
+      .order('name', { ascending: true });
+
+    if (orgsError) {
+      console.error('Error fetching greek organizations:', orgsError);
+      return res.status(500).json({ error: 'Failed to fetch greek organizations' });
+    }
+
+    // Get chapter counts for each organization
+    const orgsWithCounts = await Promise.all(
+      (orgs || []).map(async (org: any) => {
+        const { count } = await supabaseAdmin
+          .from('chapters')
+          .select('*', { count: 'exact', head: true })
+          .eq('greek_organization_id', org.id);
+
+        return {
+          ...org,
+          chapter_count: count || 0
+        };
+      })
+    );
+
+    res.json({
+      success: true,
+      data: orgsWithCounts
+    });
+  } catch (error: any) {
+    console.error('Greek organizations endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get 20 newest chapters for tickertape
+app.get('/api/chapters/recent', async (req, res) => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('chapters')
+      .select(`
+        id,
+        chapter_name,
+        created_at,
+        greek_organizations (
+          name,
+          greek_letters
+        ),
+        universities (
+          name,
+          state
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (error) {
+      console.error('Error fetching recent chapters:', error);
+      return res.status(500).json({ error: 'Failed to fetch recent chapters' });
+    }
+
+    // Format for tickertape
+    const formattedChapters = data.map((chapter: any) => ({
+      id: chapter.id,
+      universityName: chapter.universities?.name || 'Unknown University',
+      greekOrgName: chapter.greek_organizations?.name || 'Unknown Organization',
+      greekLetters: chapter.greek_organizations?.greek_letters || '',
+      chapterName: chapter.chapter_name,
+      event_type: 'new_chapter',
+      created_at: chapter.created_at
+    }));
+
+    res.json({
+      success: true,
+      data: formattedChapters
+    });
+  } catch (error: any) {
+    console.error('Recent chapters endpoint error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -2464,6 +2551,43 @@ app.post('/api/cron/grant-monthly-credits', async (req, res) => {
   }
 });
 
+// Cron job to send daily reports (should be called daily by a cron service)
+app.post('/api/cron/send-daily-reports', async (req, res) => {
+  try {
+    // Verify cron secret
+    const cronSecret = req.headers['x-cron-secret'];
+    if (cronSecret !== process.env.CRON_SECRET) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    console.log('📊 Starting daily report generation...');
+
+    // Initialize the daily report service
+    const reportService = new DailyReportService(
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+      process.env.RESEND_API_KEY || '',
+      process.env.FROM_EMAIL || 'updates@fraternitybase.com'
+    );
+
+    // Send all daily reports
+    const result = await reportService.sendAllDailyReports();
+
+    console.log(`✅ Daily reports complete: ${result.sent} sent, ${result.failed} failed`);
+
+    res.json({
+      success: true,
+      message: `Daily reports sent to ${result.sent} companies`,
+      sent: result.sent,
+      failed: result.failed,
+      total: result.sent + result.failed
+    });
+  } catch (error: any) {
+    console.error('❌ Error sending daily reports:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Greek Organizations (Fraternities/Sororities)
 app.get('/api/admin/greek-organizations', requireAdmin, async (req, res) => {
   try {
@@ -2552,14 +2676,12 @@ app.delete('/api/admin/greek-organizations/:id', requireAdmin, async (req, res) 
 app.get('/api/admin/universities', requireAdmin, async (req, res) => {
   try {
     console.log('\n🔍 === FETCHING UNIVERSITIES FROM DATABASE ===');
-    console.log('📍 Client: supabase (regular client - may be subject to RLS)');
+    console.log('📍 Client: supabaseAdmin (bypasses RLS)');
     console.log('📍 Table: universities');
     console.log('📍 Query: SELECT * with chapter count, ORDER BY name ASC');
 
     // Fetch universities with chapter count
-    // TODO: Use supabaseAdmin once SUPABASE_SERVICE_ROLE_KEY is set in production
-    // TODO: Add unlock_history table relationship for unlock_count
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('universities')
       .select(`
         *,
@@ -2604,7 +2726,7 @@ app.post('/api/admin/universities', requireAdmin, async (req, res) => {
   try {
     const { name, location, state, student_count, greek_percentage, website, logo_url, bars_nearby, unlock_count } = req.body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('universities')
       .insert({
         name,
@@ -2634,7 +2756,7 @@ app.put('/api/admin/universities/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('universities')
       .update(updates)
       .eq('id', id)
@@ -2654,7 +2776,7 @@ app.delete('/api/admin/universities/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('universities')
       .delete()
       .eq('id', id);

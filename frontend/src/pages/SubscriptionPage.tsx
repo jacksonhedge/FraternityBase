@@ -8,7 +8,8 @@ import {
   Crown,
   Building2,
   Sparkles,
-  ArrowLeft
+  ArrowLeft,
+  Rocket
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -71,8 +72,8 @@ const SubscriptionPage = () => {
       color: 'from-blue-500 to-blue-600',
       bgColor: 'from-blue-50 to-blue-100',
       goldFeatures: [
-        '1 Premium Chapter Unlocked',
-        '1 Chapter Introduction'
+        '3 Premium Chapter Unlocks',
+        '1 Warm Introduction'
       ],
       features: [
         'Unlimited platform access',
@@ -90,7 +91,7 @@ const SubscriptionPage = () => {
     },
     {
       id: 'enterprise',
-      name: 'Enterprise',
+      name: 'Enterprise Tier 1',
       price: 299.99,
       description: 'For large organizations',
       icon: Building2,
@@ -108,13 +109,48 @@ const SubscriptionPage = () => {
         'Early Access to Ambassadors'
       ],
       limitations: [],
-      buttonText: currentTier === 'enterprise' ? 'Current Plan' : 'Upgrade to Enterprise',
+      buttonText: currentTier === 'enterprise' ? 'Current Plan' : 'Upgrade to Enterprise Tier 1',
       isCurrent: currentTier === 'enterprise'
+    },
+    {
+      id: 'super_enterprise',
+      name: 'Enterprise Tier 2',
+      price: 'Custom',
+      description: 'Tailored solutions for your needs',
+      icon: Rocket,
+      color: 'from-gradient-to-r from-indigo-600 to-violet-700',
+      bgColor: 'from-indigo-50 to-violet-100',
+      goldFeatures: [
+        'White-label platform access',
+        'Dedicated account manager',
+        'Custom integrations'
+      ],
+      features: [
+        'Everything in Enterprise Tier 1, plus:',
+        'Unlimited credits',
+        'Custom API rate limits',
+        'Advanced analytics & reporting',
+        'Multi-user team accounts',
+        'Custom contract terms',
+        'SLA guarantees',
+        'On-demand training sessions',
+        'Priority feature requests'
+      ],
+      limitations: [],
+      buttonText: currentTier === 'super_enterprise' ? 'Current Plan' : 'Contact Sales',
+      isCurrent: currentTier === 'super_enterprise',
+      isContactSales: true
     }
   ];
 
   const handleSubscriptionChange = async (tierId: string) => {
     if (tierId === currentTier) return;
+
+    // Handle "Contact Sales" for Enterprise Tier 2
+    if (tierId === 'super_enterprise') {
+      window.location.href = 'mailto:sales@fraternitybase.com?subject=Enterprise Tier 2 Plan Inquiry&body=Hi, I\'m interested in learning more about the Enterprise Tier 2 plan.';
+      return;
+    }
 
     // TODO: Implement Stripe subscription checkout
     try {

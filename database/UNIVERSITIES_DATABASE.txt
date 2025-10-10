@@ -1,0 +1,6683 @@
+FRATERNITYBASE UNIVERSITIES DATABASE
+=====================================
+Total Universities: 1106
+Exported: 2025-10-08T10:10:31.158Z
+
+1. Abilene Christian University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9ea6ba0f-2050-4c5a-9a36-332a463df5d0
+
+2. Adams State University
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8eca3760-77f2-432e-adb8-d306f85c0a53
+
+3. Adelphi University
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 91a95429-f7bf-4c05-8758-52ad36d9675f
+
+4. Adrian College
+   Location: MI, MI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8e38d024-c46e-49e0-baf0-9e0ff86dddac
+
+5. Agnes Scott CollegeA 1
+   Location: GA, GA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 07ecd419-0525-4376-a9a9-70c7036ba364
+
+6. Alabama Agricultural and Mechanical University
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b3569ec5-8aa7-434c-aa60-da2c9bed9477
+
+7. Alabama State University
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b1d047a9-b1c9-48e0-8e56-c8a96bc9e68a
+
+8. Albany State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 18372841-c8ca-4fd1-a6b1-2d238fe51543
+
+9. Albertus Magnus College
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e00c133d-f6a0-41e2-868d-565c67c3b3ef
+
+10. Albion College
+   Location: MI, MI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 98ca6753-4065-4f5b-af42-773a423d3888
+
+11. Albright College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a2e673c0-e39d-4f81-be82-7f7a2bb79fc2
+
+12. Alcorn State University
+   Location: MS, MS
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 561cf23c-3e1e-4863-bd9c-e75d4c9fce5d
+
+13. Alfred State College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f5405372-9561-4c36-b709-fca574b5ab03
+
+14. Alfred University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fa1c5f5f-408b-450d-8f91-140bdc77401d
+
+15. Allegheny College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f3d2f246-c638-4675-85ce-d3000030296f
+
+16. Allen University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9ade51c3-4c76-49e2-af94-b6473cb35f93
+
+17. Alma College
+   Location: MI, MI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 61366785-a0d4-4cc6-b332-4777d5cdeaeb
+
+18. Alvernia University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ca90924f-bc05-450c-b7d8-1ecd5ca338d8
+
+19. Alverno CollegeA 1
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 35b6a9e8-3c33-4f38-ac50-563be84ea8b2
+
+20. American International College
+   Location: MA, MA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8d3e5036-c63d-4678-935d-736896dfba81
+
+21. American University
+   Location: DC, DC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9a86fd12-d5c9-4536-aa17-c6f91d779205
+
+22. Amherst College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c5b5ec31-022b-4801-846c-c7eaea33979b
+
+23. Anderson University
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: acd5a55d-06fc-4d91-88f8-d2be89b5f276
+
+24. Angelo State University
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 393ebbf4-e8e7-40f1-a15a-d339df3c6018
+
+25. Anna Maria College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0ff4c65d-8d6e-4fb1-9f03-3cb04111a634
+
+26. Appalachian State University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: dfb3c80b-66f6-42ad-9812-e2ef86239852
+
+27. Arcadia University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c49ad85f-5da4-4010-96d4-c90ea27333de
+
+28. Arizona State University
+   Location: Tempe, AZ
+   Students: 61,000
+   Greek Life: 0.13%
+   Conference: BIG 12
+   ID: 8b61b91e-7010-4917-98a8-8898eb395728
+
+29. Arkansas State University
+   Location: AR, AR
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 50cc3067-18c0-40c7-b72d-6a91a35f02c7
+
+30. Arkansas Tech University
+   Location: AR, AR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3a3b67e7-f302-415d-a284-1f7ee3dcf1ea
+
+31. Asbury University
+   Location: KY, KY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f9986329-318a-4714-b2be-6a4feb02aaa9
+
+32. Ashland University
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3798b3ed-d6a5-46f6-8b97-72fcc1164bd4
+
+33. Assumption University
+   Location: MA, MA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1af609d1-1e7b-42c8-9ae0-b07179cd926b
+
+34. Auburn University
+   Location: Auburn, AL
+   Students: 30,440
+   Greek Life: 0.35%
+   Conference: SEC
+   ID: 9ca8ac38-1d66-47f1-8bd6-0cb0fabd86e3
+
+35. Auburn University at Montgomery
+   Location: AL, AL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 22591bce-b907-4a32-b75b-58c8df6a457d
+
+36. Augsburg University
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 59f2dbc3-ded3-4f8e-99a5-c30415be01b8
+
+37. Augusta University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 04f70b7c-ee6e-4847-a892-7e69cc1a1295
+
+38. Augustana College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 537a6ad2-7f6d-4d3b-be47-f6de2ad12338
+
+39. Augustana University
+   Location: SD, SD
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: fd8ef84c-5e3f-4927-bf50-dee9b5675ced
+
+40. Aurora University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b1b4c2ad-b668-440a-a928-881fd797825d
+
+41. Austin College
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0915b25c-a768-4582-af77-7b4d1ad7ddbc
+
+42. Austin Peay State University
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c1bd29ec-0dff-4576-a621-8fa366e69e29
+
+43. Averett University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: bc5010be-7eb7-4659-a688-ee95e589552e
+
+44. Azusa Pacific Universitya
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bebebc2e-9cbe-49b6-944f-2608a090bb5d
+
+45. Babson College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fcfb79f7-18ce-465e-9606-bb11cd5c999a
+
+46. Baldwin Wallace University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a0814480-6aab-4665-b90c-4877e8892865
+
+47. Ball State University
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: cb86da27-44af-4f0e-a2f3-19a5aa288f89
+
+48. Bard College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 29e10ab4-f69c-4b3d-8b77-ecac818d626c
+
+49. Barry University
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3da716b6-8d1e-4571-89da-5a8156bd7dd2
+
+50. Barton College
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 694b8572-8baf-4091-8300-d7f45b0eb9a5
+
+51. Baruch College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a1903731-04e4-4cc0-abaa-9a3d68850a2f
+
+52. Bates College
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7bebdb2f-74b8-4673-a406-14e587e96ea8
+
+53. Baylor University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 12
+   ID: 8431f4c8-4be9-4a89-b6b6-730ccf40dd21
+
+54. Belhaven University
+   Location: MS, MS
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f82e81ba-befc-49b6-9e69-84fb21454e8c
+
+55. Bellarmine University
+   Location: KY, KY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7880b7fe-1629-4665-b6bc-2293898968fc
+
+56. Belmont Abbey College
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7699e200-cb5f-49de-977d-0cefba8a4042
+
+57. Belmont University
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7247eae7-a87e-48f8-a429-fdb88fadd4ad
+
+58. Beloit College
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 81196f30-9386-423c-b074-b9aebb4929ad
+
+59. Bemidji State University
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: f9233ce7-38ae-4b81-b436-4123997b060e
+
+60. Benedict College
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 06dd2af8-9ecb-4d72-ac44-133f5cb6f515
+
+61. Benedictine University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4899d3fc-9894-453b-9854-0dc5d4bb09d4
+
+62. Bentley University
+   Location: MA, MA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9c33ca61-3d63-4b0c-9d54-3a749288d3ee
+
+63. Berea College
+   Location: KY, KY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c2c6d11e-4d9b-4af5-b7f8-0aab5bf3b4be
+
+64. Berry College
+   Location: GA, GA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 46620be6-8c58-400e-830e-2966ebd86daa
+
+65. Bethany College
+   Location: WV, WV
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8878a7ac-0451-4844-a8a0-dacdfe3cce9c
+
+66. Bethany Lutheran College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6ddaf6dd-55d7-4b4d-820f-606e0968304b
+
+67. Bethel University
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4e46a8e4-999f-4085-a67a-78a333dfd80b
+
+68. Bethune–Cookman University
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: dd4bba2a-ce73-4c65-ba6b-66322c14726d
+
+69. Biola University
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d31753ea-b0e6-4b95-aeb1-e2dcd634b159
+
+70. Black Hills State University
+   Location: SD, SD
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b15fca11-7967-4f9f-a70f-2fbbe02b0641
+
+71. Blackburn College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2d9ec217-b2da-43e3-89b5-3fa768ca3e45
+
+72. Bloomsburg University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e1d1ad85-138f-4314-8694-e81c3a7d2c43
+
+73. Bluefield State University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 04f8f29b-f163-4cf2-8635-3c0f9a5f62eb
+
+74. Bluffton University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 85d71d32-ff91-460d-a25e-9122f401b91a
+
+75. Boise State University
+   Location: Boise, ID
+   Students: 26,000
+   Greek Life: 0.08%
+   ID: a1240f9a-e6d2-48ae-8c87-6338f0574c7c
+
+76. Boston College
+   Location: MA, MA
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: ACC
+   ID: 1f6df2de-eb9f-4565-906b-940ff23abbcf
+
+77. Boston University
+   Location: Boston, MA
+   Students: 34,000
+   Greek Life: 0.1%
+   ID: e6a6a6af-089c-442c-a88d-cd01f5b5a9ff
+
+78. Bowdoin College
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9aaabffe-a8e0-409e-8744-e827b6237e7d
+
+79. Bowie State University
+   Location: MD, MD
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d39f2567-30fb-4367-b488-a8d7fd9a6e58
+
+80. Bowling Green State University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 810b3ec4-b47b-4248-95b8-2bbdba7cbe2a
+
+81. Bradley University
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0e2c0d24-62ea-4ded-a475-6b5081b6b598
+
+82. Brandeis University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 84726c90-fe40-4f9e-94b7-7aef738479a5
+
+83. Brevard College
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 47c742d7-b143-4933-a5e8-0aebaeb01cac
+
+84. Bridgewater College
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9ec01011-f500-434f-a919-ebdf876d6e22
+
+85. Bridgewater State University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8585f7e1-df6f-4f62-a6c0-7ba964db7f8f
+
+86. Brigham Young University
+   Location: Provo, UT
+   Students: 33,000
+   Conference: BIG 12
+   ID: a7756327-a222-4e9c-87f8-3c90a6d3e041
+
+87. Brooklyn College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: da55a9a9-81eb-4dff-8d54-8ffb812de7ad
+
+88. Brown University
+   Location: Providence, RI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 2519b7e7-5e3e-4123-af92-1f4eaa6ced26
+
+89. Bryant University
+   Location: RI, RI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 2459ef36-9e33-41c2-92b9-02e896cd7a86
+
+90. Bryn Mawr CollegeA 1
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: aeadf524-1bd1-4052-95d0-a9843f62192c
+
+91. Bucknell University
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 71e28146-a97b-4384-995f-81c4b67a43c7
+
+92. Buena Vista University
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b01a5129-b0ff-461c-aeaa-54dad0e06cae
+
+93. Buffalo State University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0c8e87c3-6dea-4067-bb94-f7f1f1663021
+
+94. Butler University
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: db315210-3a02-4bd6-907e-2718161e0e7f
+
+95. Cairn University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 28ea795b-e225-4df1-8d9d-4e0f1237237b
+
+96. Caldwell University
+   Location: NJ, NJ
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 026d4a44-85e9-4884-b981-21602ceb6d3a
+
+97. California Baptist University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e4d6dda6-3fa9-40ec-a58e-2a28e221f31c
+
+98. California Institute of Technology
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6fb0ce4a-e0d0-4fdd-89fd-c0c976523d45
+
+99. California Lutheran University
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 608b0e57-4d58-4256-b28f-5fe81a2ddd6d
+
+100. California Polytechnic State University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 73d37a43-09f2-46b9-b534-2c74f5e66de2
+
+101. California State Polytechnic University, Humboldt
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 2eef7624-4e91-4456-9940-909b72984a68
+
+102. California State Polytechnic University, Pomona
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b9b0590e-b230-4f9d-8325-edeb646eeb3c
+
+103. California State University San Marcos
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9bd380be-42cd-43e5-80c4-20c1aa18968c
+
+104. California State University, Bakersfield
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6844886e-74a7-49bb-8704-e08010f27549
+
+105. California State University, Chico
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 311a86a9-05bf-42d6-9194-86d44aaf1975
+
+106. California State University, Dominguez Hills
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3d676e5c-b056-4a3a-9903-689fa6ca0a2b
+
+107. California State University, East Bay
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 453f6c44-0fa0-49d4-b3a4-49d7d77f7188
+
+108. California State University, Fresno
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 293db538-be0e-4a8b-9468-ce08e364540f
+
+109. California State University, Fullerton
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 61c0eb46-3c01-4e00-8ad4-d408d6a79528
+
+110. California State University, Long Beach
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: be0c78dc-594a-4e3d-83b6-2a8954de8f90
+
+111. California State University, Los Angeles
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 02ef9587-4bab-4925-8f9a-6f4deced45f2
+
+112. California State University, Monterey Bay
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d371bdd8-3f6e-45a0-989b-3fd58dc3638b
+
+113. California State University, Northridge
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 31744bfd-d80f-4428-a0ac-47b5820b9c43
+
+114. California State University, Sacramento
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 795a3bed-8e3f-492d-87a5-6def5f5db3ee
+
+115. California State University, San Bernardino
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 103a89db-f770-4b33-8e49-4efeb2ef6df3
+
+116. California State University, Stanislaus
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 84284a79-14c3-47ff-b268-7467e13a0b17
+
+117. Calvin University
+   Location: MI, MI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1ce894e1-cdbe-47a9-9b08-0182f7069765
+
+118. Cameron University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: badb9cf1-75ca-40dd-8b0b-221f1292f55b
+
+119. Campbell University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c9ae777d-70e8-409f-9c88-348934f32b4b
+
+120. Canisius University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 86802a26-ea09-47f8-850f-ccfac094d81e
+
+121. Capital University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6690a975-ed80-4cb9-854b-02fc2efc4879
+
+122. Carleton College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8f6d0a52-151f-4aa3-8f96-27a2a34436c9
+
+123. Carlow UniversityA 2
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f01a13e9-335e-4ea9-b0bf-dbc7eeb9fd1e
+
+124. Carnegie Mellon University
+   Location: Pittsburgh, PA
+   Students: 15,000
+   Greek Life: 0.12%
+   ID: b27f5b4e-4dd3-45ef-8640-c11a5db07d04
+
+125. Carroll University
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b7e19466-bf9a-4121-90ff-f2e7457910d7
+
+126. Carson-Newman University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0fe7aafd-8873-4961-9ae3-680b9574d411
+
+127. Carthage College
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a1293ec9-508d-4650-ad30-aad4eee66fab
+
+128. Case Western Reserve University
+   Location: Cleveland, OH, OH
+   ID: 2a22a043-93f3-4584-883e-3d105b392aa9
+
+129. Catawba College
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9068b049-5c94-4412-aaf6-6cea97d42650
+
+130. Catholic University of America
+   Location: DC, DC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d2d7449a-fe22-46bf-841b-6991ef5534bc
+
+131. Cedar Crest CollegeA 1
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f180a09b-8100-4aa2-a664-21c18dc6067b
+
+132. Cedarville University
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: fd519e80-c9b2-45ef-a140-1c5e2f48713d
+
+133. Centenary College of Louisiana
+   Location: LA, LA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2c375d06-9ad9-4553-b75c-be8792bb4dc8
+
+134. Centenary University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 06b2b987-656a-4062-99d6-174914d0c5b6
+
+135. Central College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5fbb3b1d-63d0-407a-9b9d-ef590cdb992e
+
+136. Central Connecticut State University
+   Location: CT, CT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6a1c4afb-ebe1-4fce-ae33-16b773528455
+
+137. Central Michigan University
+   Location: MI, MI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7948ca53-648a-4de0-a6a1-89e45b87879e
+
+138. Central State University
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 93c87ddd-4f26-422b-8597-9c48a788bd9a
+
+139. Central Washington University
+   Location: WA, WA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 08c2fbb0-d213-477f-932b-7ca29bc40e57
+
+140. Centre College
+   Location: KY, KY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e1740e52-5ef4-4c26-9682-c0ffa3d4cadf
+
+141. Chadron State College
+   Location: NE, NE
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 31e396bb-dae8-4023-b201-baa291fb3ebc
+
+142. Chaminade University of Honolulu
+   Location: HI, HI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ce24886c-30e5-4250-b29c-982237abdeb1
+
+143. Chapman University
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d7891b3e-e65f-4705-b486-73ac0ec0fd28
+
+144. Charleston Southern University
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 862ef630-2ed6-4443-8134-57d78596e7bd
+
+145. Chatham University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 96a1046e-f83c-4897-99ff-9986f80d71a6
+
+146. Chestnut Hill College
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d771a6aa-f228-47df-a3d5-0d69ebe88b32
+
+147. Chicago State University
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6c9dd6cc-c1a8-410f-9b9f-c46eccff60e3
+
+148. Chowan University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bec6b77c-9ab2-4a56-83f5-95d2ec10e8e5
+
+149. Christian Brothers University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a6c96345-aec6-4ff1-92bc-e2e957ed1034
+
+150. Christopher Newport University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c3d97844-849b-4106-9479-b8fd94f1f4a2
+
+151. City College of New York
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: aec52020-6dcd-4ae6-a675-6d82b39471d4
+
+152. Claflin University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8e91b271-8e8b-4e64-952e-c0d830a99539
+
+153. Claremont McKenna College, Harvey Mudd College, and Scripps CollegeA 3
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: defb87b1-50d5-40d9-9b17-93b8d0c43a29
+
+154. Clark Atlanta University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 46ed5718-a185-4370-b3d4-ccdd154f7ff1
+
+155. Clark University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f5639d7f-d5d9-42e6-8af5-e21f2caa8d28
+
+156. Clarkson UniversityA 5A 6
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 45fcd1e0-8097-4b45-9415-9fb18a2c9142
+
+157. Clayton State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0c77a691-901a-401f-ad7c-dbe230f41d76
+
+158. Clemson University
+   Location: Clemson, SC
+   Students: 27,000
+   Greek Life: 0.13%
+   Conference: ACC
+   ID: 037f60a1-f406-48e5-a45e-426039c419b3
+
+159. Cleveland State University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e1480c03-2944-4173-baf9-1647ae85b24e
+
+160. Coastal Carolina University
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 8bfa0ad9-ee8c-4510-8248-8ba465e158ad
+
+161. Coe College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2a11a4e8-6f26-4407-b34f-6cc31abbe2f0
+
+162. Coker University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a0f63460-20a0-4ab8-b741-219739d35ff6
+
+163. Colby College
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d33da59a-a663-4dee-9a00-ea8bb4d852cc
+
+164. Colby–Sawyer College
+   Location: NH, NH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 93ae9397-4302-4525-8120-14d6b9febf3e
+
+165. Colgate University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9d23b8af-a243-4282-a2ab-a5c22c04e8b6
+
+166. College of Charleston
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4ad58a34-7c9a-460a-9253-cc56d7a05e35
+
+167. College of Saint BenedictA 20A 1
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f1bd6d95-fb2f-4592-9bbb-d55c9be50b5e
+
+168. College of Staten Island
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 65ab6498-384a-4e4c-91b5-3dd854ad617b
+
+169. College of the Holy Cross
+   Location: MA, MA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e9747502-70d7-46e7-bac8-68087f3d06c4
+
+170. College of Wooster
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 89b0aec4-2182-492b-a498-e7be64bd580d
+
+171. Colorado Christian University
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: df08edfd-d1e9-4a7f-a0df-0643fec80cb4
+
+172. Colorado CollegeA 5A 7
+   Location: CO, CO
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5bb0e386-3fd2-4649-88f4-d14b8af58685
+
+173. Colorado Mesa University
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: cc89757c-46ed-4527-8513-f61e3a71ff14
+
+174. Colorado School of Mines
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bd9cb478-d3fb-4a41-ba62-4b4c033bd762
+
+175. Colorado State University
+   Location: Fort Collins, CO
+   Students: 34,000
+   Greek Life: 0.08%
+   ID: edb7ec71-668f-410f-b79c-aea4d289c77e
+
+176. Colorado State University-Pueblo
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0a421451-f6e8-4c7b-97b7-030860a5ebb4
+
+177. Columbia University
+   Location: New York, NY
+   Students: 33,000
+   Greek Life: 0.08%
+   ID: 2b5d31e1-d2cb-41c7-ada3-cdb1f346a5cd
+
+178. Columbia University in the City of New York
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ef0d69d5-c5e3-4c0d-a8c1-3adae7f6ac71
+
+179. Columbus State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c19e37a4-bab0-4bf2-85c7-0985c80f9646
+
+180. Concord University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: f5a01c8a-ec3d-49ef-9263-eece14c90fe0
+
+181. Concordia College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 15c90542-0575-443f-aa9f-42d8832073a4
+
+182. Concordia University Chicago
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 13caea2b-b0de-4a8d-b3f5-70a24f23f940
+
+183. Concordia University Texas
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4324a7e9-5b2b-4239-8391-822f70ec1968
+
+184. Concordia University Wisconsin
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 140ca38f-571d-49b9-9c12-1357e617d84c
+
+185. Concordia University-Irvine
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3363f4dc-3242-4df0-90a0-e68080ae9fd5
+
+186. Concordia University-St. Paul
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e51c586f-1e95-48ca-b557-0e722f8b3c78
+
+187. Connecticut College
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 48b5cf42-810e-4be1-b8e4-d61d5eb7f4e0
+
+188. Converse University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 32bf6ca8-76f7-4e41-a16a-360cb4391e2d
+
+189. Coppin State University
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 21c335d0-f7aa-4b91-aca2-cb05875946f9
+
+190. Cornell College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fd21fa3d-34a6-472d-9aa5-bcd52a7c8373
+
+191. Cornell University
+   Location: Ithaca, NY
+   Students: 24,000
+   Greek Life: 0.18%
+   ID: 111346d6-9ba8-4599-a074-6e41924b09be
+
+192. Covenant College
+   Location: GA, GA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 09e53646-4c32-4c3e-adc3-2e8b63861588
+
+193. Creighton University
+   Location: NE, NE
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d8d8edda-2c47-4ca9-a280-8bda3de5514c
+
+194. Crown College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 726aadc5-a9db-4065-a78d-78d8892f91e5
+
+195. Curry College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 21c01d33-d5b5-4066-9b3e-e90ea7959a00
+
+196. D'Youville University
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 400f9d46-8985-4259-80df-9b58bda854d0
+
+197. Daemen University
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 92652e6a-3fd0-4b39-aac6-ae2d94e96229
+
+198. Dallas Baptist Universityb
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a8c5bece-a27b-415b-ab03-a95fb4c0a95d
+
+199. Dartmouth College
+   Location: NH, NH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b20c3039-c924-48cf-b94f-44c09a485898
+
+200. Davenport University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7a325f92-e3e9-4eff-b306-9825ed12065d
+
+201. Davidson College
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 149e1980-80db-4300-a784-5c4a20ee0dda
+
+202. Davis & Elkins College
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9cca38c5-290d-4e01-90de-e45d61b9d054
+
+203. Dean College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 181d75d1-919f-4b07-8450-d4f89a2f49f6
+
+204. Delaware State University
+   Location: DE, DE
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 211a0b0c-d2ed-4009-b3fb-19a1311a13f7
+
+205. Delaware Valley University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7aed2179-e2c0-487d-978d-854766b8c11e
+
+206. Delta State University
+   Location: MS, MS
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: daa0d768-c601-4eb7-be33-100183195ed6
+
+207. Denison University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c53758cf-dcc7-4975-a929-a2ec3cadb719
+
+208. DePaul University
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: f4e95ccc-8059-4ff3-a1a6-d182887d615d
+
+209. DePauw University
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0c7a27c7-d4a3-44ca-b65a-b93e3db0b71c
+
+210. DeSales University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8d67eca0-9ce4-4e58-b587-d22e1c7a5867
+
+211. Dickinson College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6210d136-11f5-4462-a95a-9a9d56e0c510
+
+212. Dominican University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 787e1e3e-199b-4ab4-9607-3f667999d8ec
+
+213. Dominican University New York
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7a621e3a-cf62-4376-a87b-70bb55d8f699
+
+214. Dominican University of California
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3d47bb9e-6e72-41b5-a1d6-31ffefe13158
+
+215. Drake University
+   Location: IA, IA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: eb8b9920-1a39-436f-83a2-6aaf56fa3638
+
+216. Drew University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 59458989-80fc-41c1-9142-03620d098377
+
+217. Drexel University
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 51c56abf-b674-47c4-a0c7-1a052d4602c3
+
+218. Drury University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: db060c0d-b2f1-4343-9acd-f067b4524fcb
+
+219. Duke University
+   Location: Durham, NC
+   Students: 17,000
+   Greek Life: 0.14%
+   Conference: ACC
+   ID: 39632a18-c333-4009-8f4f-c550d31fc63e
+
+220. Duquesne University of the Holy Spirit
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: acd49d3a-2526-434d-b555-a26dd174b8ee
+
+221. Earlham College
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b1a0f230-1a46-4487-b6cd-f45eb3b6c37f
+
+222. East Carolina University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 91a2243e-92b6-4818-b723-20d082420368
+
+223. East Central University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9b2b9448-c641-41b7-a257-7ebb3f07f716
+
+224. East Stroudsburg University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0f104735-6697-4aa8-9b26-104d767aec46
+
+225. East Tennessee State University
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c194097a-bdd8-403c-88b7-95ca8325babb
+
+226. East Texas A&M University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: dfa12006-b0bb-45d4-b65b-48ff71c9140b
+
+227. East Texas Baptist University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1fde8ee1-2414-4e56-90e5-02ab17d6d73b
+
+228. Eastern Connecticut State University
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7effee03-eb31-457f-a2b7-9693b7890b28
+
+229. Eastern Illinois University
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9a2edd26-3c24-4d7c-91bd-5e78f78789aa
+
+230. Eastern Kentucky University
+   Location: KY, KY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 48fb5913-647f-444d-97aa-96ea95962154
+
+231. Eastern Mennonite University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8d77cffe-27f4-4c00-b730-3100835b8d4e
+
+232. Eastern Michigan University
+   Location: MI, MI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6dbdc997-b0ad-435b-8bc7-8fc4e0963b75
+
+233. Eastern New Mexico University
+   Location: NM, NM
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ea7118cf-6d3c-4780-b028-32e38e0be47c
+
+234. Eastern University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: aee70105-6dde-4598-b576-2fb96009f69b
+
+235. Eastern Washington University
+   Location: WA, WA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9dd1d679-5823-429f-aa18-eb677c97c413
+
+236. Eckerd College
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 439c7fc1-68df-4e0c-b981-0f516bbfe53c
+
+237. Edgewood College
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 140f9b19-40db-412f-8a6d-2808010cda45
+
+238. Edward Waters University
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 053daec9-1a36-4e4f-85ee-da2ac7534d5c
+
+239. Elizabeth City State University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 45a91eca-3cc6-43c2-9dba-5d9992e2f26c
+
+240. Elizabethtown College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 122251e3-4367-4115-8649-3cf7d59f2b8b
+
+241. Elmhurst University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 71e2b00f-e92f-4700-b7ae-04a6ea772655
+
+242. Elmira College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2cd43317-b380-4b5d-83f3-ba75e3bf03fe
+
+243. Elms College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b1767dec-5af0-4a1b-affc-a084bae9eb02
+
+244. Elon University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 8acf0740-2df5-4f7f-bc53-1d28af151a1d
+
+245. Embry-Riddle Aeronautical University
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 6bddf583-e5d1-4783-b235-f8373b344f8d
+
+246. Emerson College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 66bfffdb-3394-4194-a0a1-b0b3305c8be7
+
+247. Emmanuel College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 48c3386b-57c0-4c14-ad61-8f77ed39b52d
+
+248. Emmanuel University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7eb8428d-24d4-42c1-8171-8e9e0af4a6ee
+
+249. Emory & Henry University
+   Location: VA, VA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c76cd705-ffc6-4a89-bf3f-06620b32f3e0
+
+250. Emory University
+   Location: Atlanta, GA
+   Students: 15,000
+   Greek Life: 0.14%
+   ID: 99c771ad-24d2-44ed-af98-c0fdfed16692
+
+251. Emporia State University
+   Location: KS, KS
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1adb8db8-32b3-40ad-8899-a21ff0fed42d
+
+252. Endicott College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 93cb68b9-1948-4952-b32b-35a7e87d2bc6
+
+253. Erskine College
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0f0b9c32-892c-45a6-812a-ed87c1a3d6ae
+
+254. Eureka College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d2f0e394-0f27-4a0f-bb56-6a95f7b1a757
+
+255. Fairfield University
+   Location: CT, CT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 90c69893-efb2-4f0a-aec9-ea51da0ce154
+
+256. Fairleigh Dickinson University
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e9289cea-3ee8-4a56-ac91-070f93e42ba5
+
+257. Fairleigh Dickinson University, Florham
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: bb6d654d-9328-4df7-9fbf-491b95b503f1
+
+258. Fairmont State University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0d4a8f97-e537-4bf9-ba21-8c7255232bba
+
+259. Farmingdale State College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f3a8a868-6c65-46d7-887f-b3cad4b9a10f
+
+260. Fayetteville State University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 015e835f-eeff-43e2-9586-94c8ba0bf95c
+
+261. Felician University
+   Location: NJ, NJ
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 47b74c54-cc87-4971-b6d6-70941fd3ae04
+
+262. Ferris State University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e6993cb2-b30c-4007-acb6-89f802e42155
+
+263. Fitchburg State University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4e4fcaf9-07a5-4df7-8165-3dde49cf2a68
+
+264. Flagler College
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 5692d152-fb59-4584-b761-6a84cc8b36c5
+
+265. Florida Agricultural and Mechanical University
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c2b59187-5c4f-47d5-b526-3a0f4d43754d
+
+266. Florida Atlantic University
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 04995219-c721-4507-b478-bb2d619f86bd
+
+267. Florida Gulf Coast University
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0445f9bd-eef0-4bba-8579-deda06e3a2a3
+
+268. Florida Institute of Technology
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: f785f578-32c2-45c1-b6a2-ec71bfaf2a26
+
+269. Florida International University
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: fd1714cd-f323-4a30-9837-8c18c98f56f6
+
+270. Florida Southern College
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b993d4be-8957-436f-a1ef-99b1ecb64a21
+
+271. Florida State University
+   Location: Tallahassee, FL
+   Students: 44,000
+   Greek Life: 0.14%
+   Conference: ACC
+   ID: bbb53576-86cb-47b8-bde3-c2ca8f5b0e0b
+
+272. Fordham University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d8c0cd6f-c698-491d-aa09-955fa66eabb5
+
+273. Fort Hays State University
+   Location: KS, KS
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 5695ef68-b00f-4cac-b059-8a0f05f8199e
+
+274. Fort Lewis College
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 36ba36a3-8d4e-4ef2-ab90-51063fad4e66
+
+275. Fort Valley State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8bfe0fde-81f9-41cb-a1a4-ea1f37a54fc6
+
+276. Framingham State University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7d55e5ee-16d4-4da2-b1ad-e29294c4932b
+
+277. Francis Marion University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a76b507a-cc2c-4902-a433-459eb3640df9
+
+278. Franciscan University of Steubenville
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1a07becc-5272-4141-8f01-18e1ce4de54a
+
+279. Franklin & Marshall CollegeA 8
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 86cbbb65-9827-4e93-a514-4f31722842a1
+
+280. Franklin College
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8e45006b-2945-4ff1-960f-f1c1b6031e1d
+
+281. Franklin Pierce University
+   Location: NH, NH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d0177f80-7a21-418f-8f2d-88a66b2d7bb4
+
+282. Fresno Pacific University
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 248983fd-3e58-45e2-97bd-afa160f3ee77
+
+283. Frostburg State University
+   Location: MD, MD
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a94e69f9-fcf4-4c35-87b8-f35d85d5f663
+
+284. Furman University
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9b5f89e1-c12d-4d03-bf4d-1f213976b805
+
+285. Gallaudet University
+   Location: DC, DC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1ff22a1f-dba9-4df4-87b0-5f8f0b523a31
+
+286. Gannon University
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7729fa27-6657-40e7-8d9b-d8e61bea1e73
+
+287. Gardner–Webb University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 62abe127-970b-4089-a9ec-549f8a97ce45
+
+288. Geneva College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 79643409-1902-4757-8348-3a39e2cbb853
+
+289. George Fox University
+   Location: OR, OR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: cf829b9f-3854-4317-8b46-30a5cc28f1c5
+
+290. George Mason University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e90432d8-2db9-40da-913a-5ab98a370402
+
+291. Georgetown University
+   Location: DC, DC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4da39099-999c-4b17-b42e-0bcbfb98f56b
+
+292. Georgia College & State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ab495f36-1da6-4de7-86e4-1928e8306cef
+
+293. Georgia Institute of Technology
+   Location: Atlanta, GA
+   Students: 40,000
+   Greek Life: 0.12%
+   Conference: ACC
+   ID: 67d56690-f455-4c84-b83d-81acdf61f5b4
+
+294. Georgia Southern University
+   Location: GA, GA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4d293dd2-a02f-4a72-8baa-f329da7e0213
+
+295. Georgia Southwestern State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b0fed2c2-11cb-4704-9eac-70cc21b8fa0f
+
+296. Georgia State University
+   Location: GA, GA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4480210f-037b-478c-881c-4f23df9a23ca
+
+297. Georgian Court University
+   Location: NJ, NJ
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: faead5a3-a72a-42b5-aa3d-148924509ef6
+
+298. Gettysburg College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 20e126fb-9d83-408e-83b9-a07d8688c615
+
+299. Glenville State University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ec0be623-0c7d-4300-be3f-5b7b67050b92
+
+300. Goldey-Beacom College
+   Location: DE, DE
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 02709026-06fb-421f-9b9d-4156afca3dae
+
+301. Gonzaga University
+   Location: WA, WA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 21bfc997-04da-413f-a921-87fe9a11d923
+
+302. Gordon College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0b689afa-89f7-4490-85a1-6aff190b181a
+
+303. Goucher College
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5914ac7b-6249-4c0b-9f2c-84ee3a31eb0d
+
+304. Grambling State University
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a00b4006-8ebc-4ed5-96c0-db2185941a24
+
+305. Grand Canyon University
+   Location: AZ, AZ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 74e17bb9-b87f-4edd-a50e-48f4438447eb
+
+306. Grand Valley State University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 72cc00a6-1ec1-494b-bdf6-a30313e95fea
+
+307. Greensboro College
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5b867685-56aa-442b-bbc7-523a5a9ed41f
+
+308. Greenville University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 61845bff-0ba1-4ca7-ad13-f9ab1ddc9726
+
+309. Grinnell College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a3f332eb-fed7-4536-9c36-6fec4fc4e2fc
+
+310. Grove City College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a045d1c3-60a6-492f-8fb7-177b5a9f3dbb
+
+311. Guilford College
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 81ea10b7-2708-49f8-a956-1546b0157941
+
+312. Gustavus Adolphus College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 925be41c-1b89-4a76-ac70-bad91fc7f002
+
+313. Gwynedd Mercy University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2547c7b1-5d37-4985-b7eb-1503d6865243
+
+314. Hamilton College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 91919fa7-cbe3-49b5-88a0-4b87fdb67136
+
+315. Hamline University
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8fd41d53-bce4-49fc-b27d-d2e3b19f2c9e
+
+316. Hampden–Sydney College
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 061e7a9c-a971-4f94-b13f-08749371b47e
+
+317. Hampton University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a9c58977-b24c-475b-b9b2-1a852d692cc5
+
+318. Hanover College
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 16189512-b988-4e48-b094-f8b224324c52
+
+319. Hardin–Simmons University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f5f1953b-595f-49b9-b201-ca62b35b0a07
+
+320. Harding University
+   Location: AR, AR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9f970346-e064-411e-8b2c-fec98de55265
+
+321. Hartwick College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a6e2b37d-2c1a-4f78-bf3f-4a627b449042
+
+322. Harvard University
+   Location: Cambridge, MA
+   Students: 23,000
+   Greek Life: 0.09%
+   ID: b4ea9445-4492-4985-8ff6-cad6cc63aeba
+
+323. Haverford College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e243c6c2-0130-4db1-9848-a1c1cedbe45c
+
+324. Hawai'i Pacific University
+   Location: HI, HI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 00d9b6a1-1587-4702-8766-b593942e2a33
+
+325. Heidelberg University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0093c1c5-7b23-4ee5-9a55-815b7771026e
+
+326. Henderson State University
+   Location: AR, AR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1e3a9951-2e20-4df1-b268-0663a162abb2
+
+327. Hendrix College
+   Location: AR, AR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2491a6bd-5190-4396-b39b-73f72fa7ef3a
+
+328. High Point University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4cb17192-8ea8-4db0-ae35-2c2b9fe9cde2
+
+329. Hilbert College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e52f653d-5ba0-49f2-bf17-fc06cd246d69
+
+330. Hillsdale College
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 6211ca68-0405-48f6-9064-a1d2d64c26b2
+
+331. Hiram College
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 326c9a7b-d2de-42a2-bb08-2a73c90d5d39
+
+332. Hobart CollegeA 9A 10A 11
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: cdeafb8e-24bd-47f9-a0c1-283be0dee89b
+
+333. Hofstra University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 2d6c512b-dfb4-4a02-91ca-4a9bc53d3325
+
+334. Hollins UniversityA 1
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e79f87fe-0e3f-4253-9904-7b39d0953dbf
+
+335. Holy Family University
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8e2d4d47-2952-48ea-8af6-6645af0dc0be
+
+336. Hood College
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 04221a1e-ae06-4e30-9910-1c90dd815cc9
+
+337. Hope College
+   Location: MI, MI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d676fe07-e2f4-49f7-a7a6-4402a51fea30
+
+338. Houghton University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 87a8e928-eb20-4ce5-89fa-5584b3397b17
+
+339. Houston Christian University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9bd3b45f-db26-4185-b163-43b8a6f13b8d
+
+340. Howard Payne University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: cd70b0f8-a174-479e-8359-da66bda121a0
+
+341. Howard University
+   Location: DC, DC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 68719f6d-63fb-4cc8-b142-04c86a815426
+
+342. Hunter College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f84ef7b5-6962-46d0-b927-68919e9c8aef
+
+343. Huntingdon College
+   Location: AL, AL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5db481b9-ef65-4404-85fe-c0f6dfa7da9f
+
+344. Husson University
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ddc74f1d-a9a9-41c1-8ffc-bd3ffaf3c9d0
+
+345. Idaho State University
+   Location: ID, ID
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5f6dfb79-0e1a-42c7-b748-7931cddaba88
+
+346. Illinois College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d92c895a-683a-49d3-9eef-052d972af6ad
+
+347. Illinois Institute of Technology
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 904cf76d-10cd-483d-a2ef-b32b0f14b6a6
+
+348. Illinois State University
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 22541fbb-60a0-42b2-9ec0-6d9f378486ed
+
+349. Illinois Wesleyan University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 68a8f7f2-ad26-4496-b400-ee43ec75c5e6
+
+350. Immaculata University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 3e884c2a-07f6-43d7-846a-e173be6750b1
+
+351. Indiana State University
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6bafd8c7-e783-4123-8fa1-6e7af755a308
+
+352. Indiana University
+   Location: Bloomington, IN
+   Students: 43,000
+   Greek Life: 0.22%
+   Conference: BIG 10
+   ID: 10211274-f0c4-4d65-bf9c-48ccec6d696d
+
+353. Indiana University Bloomington
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 10
+   ID: 22891cfb-1274-4495-bd1b-a81b2c36436d
+
+354. Indiana University Indianapolis
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: f0e02206-3212-4c06-bd01-79a40941aefb
+
+355. Indiana University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   Conference: BIG 10
+   ID: 9b7f7891-4673-4b33-8bec-c4dece6d5f32
+
+356. Iona University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a05315c5-79b2-43ce-9047-b186afeea864
+
+357. Iowa State University
+   Location: Ames, IA
+   Students: 34,000
+   Greek Life: 0.1%
+   Conference: BIG 12
+   ID: cc5b61a5-b0f7-4cba-b7c3-beb6a20403b8
+
+358. Iowa State University of Science and TechnologyN 6
+   Location: IA, IA
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 12
+   ID: b298f672-6396-448c-9511-d8ec2f2dc777
+
+359. Ithaca College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5d499149-6628-4ca3-a676-072722b26873
+
+360. Jackson State University
+   Location: MS, MS
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 39063174-15c7-4285-a783-d284417a550e
+
+361. Jacksonville State University
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: df4c3564-288a-4ab4-9dee-b1002da45543
+
+362. Jacksonville University
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 51ebce8d-bf65-4cc8-8988-bb690521da09
+
+363. James Madison University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5880c70b-3c99-4056-b8d3-43bb821f1c6f
+
+364. Jessup University
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 4c213d22-0672-4839-a86a-c0fbfc798bea
+
+365. John Carroll University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ba0bbf5a-1bcd-4acb-bef0-9cac33da7ddd
+
+366. John Jay College of Criminal Justice
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fd93101f-2307-4877-8dec-ce591aa640e8
+
+367. Johns Hopkins UniversityA 12
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2135a1bf-bfe3-4a6b-8219-488c1df5b3db
+
+368. Johnson & Wales University
+   Location: RI, RI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2be646e9-c486-4c57-9411-e0fcc33a9549
+
+369. Johnson & Wales University CharlotteA 13
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 512fa549-1e63-4fee-81cc-3e7a6b875d36
+
+370. Johnson C. Smith University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 27d6e811-dc3c-4fdf-bfa6-32b42ad84e9f
+
+371. Juniata College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a077d439-dab5-4491-b003-8587b0837f56
+
+372. Kalamazoo College
+   Location: MI, MI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 55b91104-3124-4e8d-8571-e120c4e71690
+
+373. Kansas State University
+   Location: Manhattan, KS
+   Students: 24,000
+   Greek Life: 0.13%
+   ID: 0ad721bf-fdd1-480e-8a47-05fe1b7e7f37
+
+374. Kean University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7d8b29d8-3f9a-41fc-95d5-9a8c8133a5b8
+
+375. Keene State College
+   Location: NH, NH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e2bc719f-9163-433f-8148-81bb5f58f4c5
+
+376. Kennesaw State University
+   Location: GA, GA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 323fd6d1-452e-48d7-ae75-39231497c601
+
+377. Kent State University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d89fb7c8-69f0-4c30-b15a-8661bbb05bca
+
+378. Kentucky State University
+   Location: KY, KY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 31283bed-80b4-4f59-90ea-23dba6cf095f
+
+379. Kentucky Wesleyan College
+   Location: KY, KY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 378f8afa-ca56-41a5-8f45-49f0bca31fed
+
+380. Kenyon College
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a5a2eb33-cc20-4b9d-9943-1269f3886625
+
+381. Keuka College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 50fff81c-e84b-44df-96e6-81213cb49c0a
+
+382. Keystone College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 23d8866e-7294-4207-8ca4-2a0ce14cec93
+
+383. King University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 55fb17a8-3045-43fd-8789-d9abd9082ee8
+
+384. King's College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 56ed6513-3682-4c0e-873f-aa6027ec7f49
+
+385. Knox College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 04510673-8158-482f-81a4-6ccbbbabf57c
+
+386. Kutztown University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1f0ea44b-cc15-4824-a09c-0afd83347731
+
+387. La Roche University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a8d0a102-d825-4e55-8637-4d01d9303881
+
+388. La Salle University
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6f9f862f-d05b-4b94-8dca-fd759261cb80
+
+389. Lafayette College
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0baed37f-644e-4a1d-a854-f95bfe25b1fa
+
+390. LaGrange College
+   Location: GA, GA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d600e54b-89c3-4eab-b652-e6712aa89a3a
+
+391. Lake Erie College
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e5cf6960-cc00-4a66-9626-f70a9b44904d
+
+392. Lake Forest College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 190ac333-70af-41e1-bfff-bfea4fb0a470
+
+393. Lake Superior State University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 2c0710a6-1a4f-459d-9cb5-f151930cc8fe
+
+394. Lakeland University
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 88dac3fc-3632-4032-888a-c5480c23f389
+
+395. Lamar University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9a9db25c-6616-4743-9570-a2f0017ea6fe
+
+396. Lancaster Bible College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1843ba0b-3771-4e43-b933-8b744ded6f8b
+
+397. Lander University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7d7fca12-ad4c-4f5f-a79e-eb6b34b9bebf
+
+398. Lane College
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1673df57-d880-48e5-9a86-601d1e792d04
+
+399. Lasell University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b302ac93-ffd3-4d15-8b01-649cf8a76252
+
+400. Lawrence University
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ef50a95a-48d2-4606-8857-1cf9210eb0c7
+
+401. Lebanon Valley College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 43098607-9491-4303-bb6e-007469ba4b3d
+
+402. Lee University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 59574ce3-16d4-42f1-80a9-6a33ca10b209
+
+403. Lees-McRae College
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c28b8fb7-fd29-4b5f-b501-d9caf404fd64
+
+404. Lehigh University
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 2f3c13af-d818-4afb-a634-9a1a68342878
+
+405. Lehman College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2eb7087e-5309-4049-82d6-5f26ea2f84e1
+
+406. Leland Stanford Junior University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 447f24fb-4c09-4c9b-af8d-8e08aa2dfd8a
+
+407. LeMoyne-Owen College
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b8d8e3e8-673d-4b57-893d-34f29ccdfa22
+
+408. Lenoir-Rhyne University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b4b7a535-cb5f-4ba7-9988-22bf7ac88554
+
+409. Lesley University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 58fea320-2ec8-4018-a005-d741ce426c2b
+
+410. LeTourneau University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0f582138-3273-4bad-a70e-19b94da293be
+
+411. Lewis & Clark College
+   Location: OR, OR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: cb4e937e-fbab-42a7-8ec3-966c7119e0ca
+
+412. Lewis University
+   Location: IL, IL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: af798d55-f135-46d7-af21-848a30301266
+
+413. Liberty University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a49bf6eb-5a40-487c-b173-df9672d72769
+
+414. Lincoln Memorial University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 27ddde3a-c9f8-4d1b-8188-4d30f7dcb090
+
+415. Lincoln University (MO)
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ec34ff8b-189a-42d7-8042-0f652fbe6dce
+
+416. Lincoln University (PA)
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a0101333-a527-4661-babc-0ebddfed6986
+
+417. Lindenwood University
+   Location: MO, MO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a9da658d-523f-484d-8f8e-64dab80096e8
+
+418. Linfield University
+   Location: OR, OR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ae8fc025-10ec-4572-9df9-42ffd10eb1d0
+
+419. Lipscomb University
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9309592e-21d1-4d90-adfc-19f9bb080634
+
+420. Livingstone College
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 6e78e2b5-009b-4f9f-9447-e08b780d4948
+
+421. Lock Haven University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1721797e-1517-4144-a8a2-3431476c6459
+
+422. Long Island University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c919e779-698c-4716-9c56-02fbb128d5cf
+
+423. Longwood University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a098f609-de79-498c-8f74-c20b6c974810
+
+424. Loras College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 08dd1948-3457-46da-987b-59ecf137d420
+
+425. Louisiana State University
+   Location: Baton Rouge, LA
+   Students: 34,290
+   Greek Life: 0.25%
+   Conference: SEC
+   ID: 16a1ee3e-8331-4bb0-9535-538b79f28e46
+
+426. Louisiana State University and Agricultural and Mechanical College
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: SEC
+   ID: 39e78fa3-ca98-4ec9-b037-d24e4dc94f83
+
+427. Louisiana Tech University
+   Location: Ruston, LA
+   Students: 12,000
+   Greek Life: 0.11%
+   ID: cc034651-6096-47d2-b86c-53dbc418ae87
+
+428. Loyola Marymount University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ab6a644c-4595-48fa-8806-f3992a70b8f8
+
+429. Loyola University Chicago
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 33bc103c-4a1c-4fdc-824c-879a3c586a7d
+
+430. Loyola University Maryland
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d7c8d511-e699-4f80-ba34-1f4cfce0db34
+
+431. Lubbock Christian University
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3e16485b-a67c-4a14-86af-a29cf2ee4169
+
+432. Luther College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5bb3f615-0a69-404f-b783-f66a957121b9
+
+433. Lycoming College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 49dce482-6100-4b9e-b026-b13f4188b4ec
+
+434. Lynn University
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 06e43930-fba8-46f0-a78a-5cb8899e1a95
+
+435. Lyon College
+   Location: AR, AR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 86ab83b9-46e6-4835-bc96-2e836f799b85
+
+436. Macalester College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 64198ebb-764b-4f03-85bf-3e0c2a457b26
+
+437. Maine Maritime Academy
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: bf45048a-4df9-40a5-97c9-d5bb9010db70
+
+438. Malone University
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9f04f460-ebf1-4f8a-8e3f-b82eeabe48f5
+
+439. Manchester University
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8b8674c8-e019-4aa9-b273-e5cc62356b2f
+
+440. Manhattan University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ae1da76d-44d3-447b-96d1-a4995dca2ed9
+
+441. Manhattanville University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c4f616cb-a66a-45cf-85b2-d5da81bfa208
+
+442. Mansfield University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b40b6037-c52e-40b0-883a-d615eba52ea4
+
+443. Maranatha Baptist University
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b6882aab-c830-4d16-9a14-6efd86bcd695
+
+444. Marian University
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e28c3982-eb3e-4274-912b-f817bdc0d5cb
+
+445. Marietta College
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 61684208-2a7c-4bdc-a0ba-fbe1c762fb41
+
+446. Marist College
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 78da440b-248f-4d4e-9a25-9f54493d40be
+
+447. Marquette University
+   Location: WI, WI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: aba32198-e9bd-4e9c-bf4a-ca175ab6712c
+
+448. Mars Hill University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 084f4c9c-8e03-4442-8a02-d4b6ea574b7d
+
+449. Marshall University
+   Location: WV, WV
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 01cf75d3-7d99-4c4f-b150-2b9b556e533a
+
+450. Martin Luther College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 90ba2552-53ff-43b2-9df5-d6a6739e2c11
+
+451. Mary Baldwin University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 654468d4-21c9-4cb6-af7e-4d5901bccac4
+
+452. Marymount University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9c92663d-8bf6-46f0-8998-38ab1c44e838
+
+453. Maryville College
+   Location: TN, TN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: df05a3ca-1567-43cd-85e0-9026058c6158
+
+454. Maryville University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d617bd96-c5b3-4c19-b61b-e2c7d5fb4781
+
+455. Marywood University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a0cd2da9-fb07-4da0-9e8d-c471a5086cd4
+
+456. Massachusetts College of Liberal Arts
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7e09e2d9-cde5-4022-a65f-68778cc42644
+
+457. Massachusetts Institute of Technology A 14
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b7ceedc9-e319-48e0-a772-73e4ccdab278
+
+458. Massachusetts Maritime AcademyA 15
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ca6e5608-9e94-41e4-a47c-cc01765c15f2
+
+459. McDaniel College
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 37ec81ae-2c97-4243-97d5-76a2231c199a
+
+460. McKendree University
+   Location: IL, IL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 85dae337-229d-446b-ad51-5ed616c20746
+
+461. McMurry University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e8727416-8e7c-47ca-9fe4-27d6db12d0ee
+
+462. McNeese State University
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 884aa111-4ba8-4d5e-ba5a-d246eb403b74
+
+463. Medgar Evers College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 696d5631-709d-4a19-bb50-554031093633
+
+464. Mercer University
+   Location: GA, GA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d0de55df-ab7c-458e-9029-fd97be4af58c
+
+465. Mercy University
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3a37bce0-3fad-43be-b733-4d38224ca3a2
+
+466. Meredith CollegeA 1
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 35384e48-df95-4761-8e04-cba33bc9610c
+
+467. Merrimack College
+   Location: MA, MA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4982f179-c080-428c-8214-c30fb55c8159
+
+468. Messiah University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d5615777-9d08-43ef-860d-ba1affbc320a
+
+469. Methodist University
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 716d3ffc-6a26-4da7-b95c-bff81cd91982
+
+470. Metropolitan State University of Denver
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c687b5ee-e3a6-49e4-9a7a-649cbf3e758e
+
+471. Miami University
+   Location: Oxford, OH
+   Students: 19,000
+   Greek Life: 0.22%
+   ID: 5a2a35e6-aaae-40cc-8036-360dffc90db1
+
+472. Michigan State University
+   Location: East Lansing, MI
+   Students: 50,000
+   Greek Life: 0.1%
+   Conference: BIG 10
+   ID: 4c116383-de9d-4993-97dc-a93d1c079157
+
+473. Michigan Technological University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 30f2618a-5b67-4ecc-9bfc-e2d67eff1848
+
+474. Middle Tennessee State University
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9a26c488-663a-4234-b714-04dd8edf085c
+
+475. Middlebury College
+   Location: VT, VT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b99ade02-41f5-4001-a834-ad0a0f859e84
+
+476. Midwestern State University
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 783b5b27-dca1-449a-93e0-16d9bec2b8a2
+
+477. Miles College
+   Location: AL, AL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a8479831-7589-4c17-b115-9bfa2d79ac98
+
+478. Millersville University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 937e6771-e8ec-4604-92e7-2bb7fc10ce4c
+
+479. Millikin University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fcaf1229-ed41-4df8-b992-49efdc9073ec
+
+480. Millsaps College
+   Location: MS, MS
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c8813078-acef-4ea8-8de7-d1f6cdafde7e
+
+481. Milwaukee School of Engineering
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8353bc02-5702-449d-b74e-72e32bb18536
+
+482. Minnesota State University Moorhead
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 666bf2df-761a-4fc8-b810-caef98611350
+
+483. Minnesota State University, Mankato
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8288d9cc-8e02-4ede-aa45-1d5e2b91f1a2
+
+484. Minot State University
+   Location: ND, ND
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 4c010a21-6aaf-4534-b34f-9eca247f4c93
+
+485. Misericordia University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 84674beb-c60d-48d9-84f4-38f8a9932039
+
+486. Mississippi College
+   Location: MS, MS
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a0cbb160-afaf-4120-a691-19d72cf86031
+
+487. Mississippi State University
+   Location: Starkville, MS
+   Students: 24,000
+   Greek Life: 0.15%
+   Conference: SEC
+   ID: b60d5033-1b53-4af9-a655-99265e57bf54
+
+488. Mississippi University for Women
+   Location: MS, MS
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b346bd91-8576-45c8-8b63-b13580e07c63
+
+489. Mississippi Valley State University
+   Location: MS, MS
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1b606446-da63-4a38-a8a2-c32c60e63186
+
+490. Missouri Southern State University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 6d635e07-362b-47d7-b81d-8f8d6deb678e
+
+491. Missouri State University
+   Location: MO, MO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d445b64c-8a4c-4612-b2cf-b95978ce8c01
+
+492. Missouri University of Science and Technology
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d3049032-b0f0-4d3f-8852-2f59cbefbed6
+
+493. Missouri Western State University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 2d70319f-8f01-4c31-a6ad-8026795e2318
+
+494. MIT
+   Location: Cambridge, MA
+   Students: 12,000
+   Greek Life: 0.12%
+   ID: 083cf753-ce93-458f-8b28-c1b9cc892673
+
+495. Mitchell College
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8aa432ec-0d26-4218-a5ba-3ce7f8a9dd0a
+
+496. Molloy University
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a6023e64-34b3-45a8-b92e-df5bed5f629b
+
+497. Monmouth College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 26624da1-7e4e-4e39-b974-9537ea511867
+
+498. Monmouth University
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 248e0d7a-234e-4bf5-90f8-91b663b125fc
+
+499. Montana State University
+   Location: MT, MT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: fe12e7f0-7222-469b-91db-a9540fdb6798
+
+500. Montana State University Billings
+   Location: MT, MT
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bf1b90c9-a884-4fba-88a7-34e18b4e815e
+
+501. Montclair State University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 68cf4127-c3d6-4a74-8321-fb46f32a9bf2
+
+502. Moravian University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: dfeea749-82a2-48c8-af6d-9174aa09f3d6
+
+503. Morehead State University
+   Location: KY, KY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: fdfecdec-7c4a-4913-84bb-df7a6eb7ab60
+
+504. Morehouse Collegee
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b19c8f33-eed0-4461-a55a-9ddd09132eeb
+
+505. Morgan State University
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 2c01c5fe-c37d-4a42-b43d-d3528dc3d450
+
+506. Mount Aloysius College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 601dcd9d-08ca-45ee-bc29-1ef0491c6820
+
+507. Mount Holyoke CollegeA 1
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: cc7e76b0-d436-48be-84dc-93e56643b27d
+
+508. Mount Saint Mary College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fef24932-1270-464a-8dc6-0b527549811b
+
+509. Mount Saint Mary's University
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ebeba640-f39e-457d-ba47-6636e0599c0a
+
+510. Mount St. Joseph University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f902ef99-33c7-431b-ae1c-3dc7ab437915
+
+511. Muhlenberg College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 07ba3fad-e458-4e2f-af05-0effb5b1b019
+
+512. Murray State University
+   Location: KY, KY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d446377d-7207-4aeb-a38d-e6cec5d1ff90
+
+513. Muskingum University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a7956b83-a187-474b-8fcf-64f61fd219fb
+
+514. Nazareth University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: eddffea9-63f5-4bf2-b908-bb9d5b286b9c
+
+515. Nebraska Wesleyan University
+   Location: NE, NE
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ccf1b573-868a-48f2-98d1-a2e5017ad724
+
+516. Neumann University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c0084ff4-9126-4ad3-9898-75e53e6d079b
+
+517. New England College
+   Location: NH, NH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 83a6bd11-f26f-450f-a53f-fb9a4bd830db
+
+518. New Jersey City University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a98dabff-172f-42c8-a84d-d28d901d94c5
+
+519. New Jersey Institute of Technology
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 200bf0de-f027-4283-b8df-23f7e556346a
+
+520. New Mexico Highlands University
+   Location: NM, NM
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1908b1b9-47c4-456e-9387-6494ac5cb73a
+
+521. New Mexico State University
+   Location: NM, NM
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a2169839-ef3a-4b35-81f2-c50efeece7f4
+
+522. New York University
+   Location: New York, NY
+   Students: 51,000
+   Greek Life: 0.05%
+   ID: ccc4673b-d7b0-4fec-9f5a-8de0f8299c4c
+
+523. Newberry College
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 05a719cc-44cd-4242-a428-8b0fa5795ad5
+
+524. Newman University
+   Location: KS, KS
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 47746977-d2b7-4e56-881d-10c55b33cdda
+
+525. Niagara University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e719d655-e8a7-498f-abe0-f12ff8533a0d
+
+526. Nicholls State University
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 55059c0f-8c66-4292-9e60-d675df7efd3a
+
+527. Nichols College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b6822af6-f304-41da-9cd9-4f6999b23e8a
+
+528. Norfolk State University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 93e7f630-9ecf-4345-9efe-c15fc2bf09f8
+
+529. North Carolina Agricultural and Technical State University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e80359b5-edc6-4b8b-8953-6d5d2c29b7ba
+
+530. North Carolina Central University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: cb0284cc-a538-479e-aac0-cbf150ddd5cf
+
+531. North Carolina State University
+   Location: Raleigh, NC, NC
+   Conference: ACC
+   ID: f278a31d-aac6-4e0f-92ba-9885fe31a498
+
+532. North Carolina Wesleyan University
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9e1a8746-6a69-4a3c-b957-9095256af877
+
+533. North Central College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0db568de-b9b9-48d7-ab99-023a6c8bd876
+
+534. North Central University
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 38f4dd46-a9bb-4a46-a184-22a692fc2d62
+
+535. North Dakota State University of Agriculture and Applied Sciences
+   Location: ND, ND
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ce5c72cd-17ca-4bf5-a389-35e59e6102d7
+
+536. North Greenville University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ac00078a-a19b-452d-ae29-ebfb4c197242
+
+537. North Park University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 20aede1c-13ce-4488-b167-0ea91cec46a1
+
+538. Northeastern State University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 13c8c001-bd95-47a5-a1df-c5d5ca132956
+
+539. Northeastern University
+   Location: MA, MA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4c6853c9-9cab-4b68-8fb3-64b9845cc457
+
+540. Northern Arizona University
+   Location: AZ, AZ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 139395d1-6fa4-4fc4-a7e1-2cabaea317d4
+
+541. Northern Illinois University
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 3e2762ba-1cd1-4b8c-bb28-28937c46f349
+
+542. Northern Kentucky University
+   Location: KY, KY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0151a9c7-f4e9-4705-a4be-f0a7548ae488
+
+543. Northern Michigan University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8d289d27-f87a-46bc-9a89-77eba49057de
+
+544. Northern State University
+   Location: SD, SD
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: feac9a23-1436-4240-91e9-92ea8bced6dc
+
+545. Northwest Missouri State University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8d81f8ae-ae5d-4705-b608-5691bf88ac7e
+
+546. Northwest Nazarene University
+   Location: ID, ID
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e3fa5528-43f4-4bdc-a659-cf1e5f36c091
+
+547. Northwestern Oklahoma State University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a49db441-cd8f-46c4-9294-1390facc3805
+
+548. Northwestern State University of Louisiana
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a872658a-3e49-4287-97ff-629a5e7148fa
+
+549. Northwestern University
+   Location: Evanston, IL
+   Students: 22,000
+   Greek Life: 0.16%
+   Conference: BIG 10
+   ID: 9529fe54-a146-495d-b634-4fc39a4ee94b
+
+550. Northwood University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 2664d09a-b493-4f3d-b1dc-353c97f66d87
+
+551. Norwich University
+   Location: VT, VT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 349f4617-e7f3-4099-a9dc-4aaacf8a9e15
+
+552. Notre Dame of Maryland University
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b9d19354-e681-44cd-b6f6-c84136027303
+
+553. Nova Southeastern University
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e816fcfb-3242-4220-87bc-1cc2ac966598
+
+554. Oakland University
+   Location: MI, MI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 41fdcd8a-0cef-4ec1-8958-87f29ab9eda5
+
+555. Oberlin College
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ae670bc3-89a6-4f16-ab80-2ef4eb3ce5d9
+
+556. Occidental College
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 3b115d81-51ad-4c1e-80df-b991a0344840
+
+557. Oglethorpe University
+   Location: GA, GA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ea72c342-0e65-4e0d-88f0-c2255ed378ce
+
+558. Ohio Dominican University
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 563294e0-f370-417f-a4b4-a8eff219a366
+
+559. Ohio Northern University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d0959459-a5cb-4f2f-8582-ff0f475c324c
+
+560. Ohio State University
+   Location: Columbus, OH
+   Students: 61,000
+   Greek Life: 0.14%
+   ID: 131be262-9c51-4049-a1fa-5ce9880a90d5
+
+561. Ohio Wesleyan University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 26efde08-8b76-477b-a9d0-cf1d4e72d4d9
+
+562. Oklahoma Baptist University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b80e907b-ffd8-482e-99fa-7ff983841241
+
+563. Oklahoma Christian University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 03c20b91-59bf-42b8-82a3-adde53cbee34
+
+564. Oklahoma State University
+   Location: Stillwater, OK
+   Students: 26,000
+   Greek Life: 0.14%
+   ID: 3b4d11bd-f9d6-4b36-8568-70684d18e1b8
+
+565. Oklahoma State University–Stillwater
+   Location: OK, OK
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 40cdc7f2-aac2-4896-b78c-e4908c345b59
+
+566. Old Dominion University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 52a07d08-0941-4c2e-b7c5-7d681ec25488
+
+567. Oral Roberts University
+   Location: OK, OK
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 81fd9ad8-0400-4e99-aa03-7ea57c94ad25
+
+568. Oregon State University
+   Location: Corvallis, OR
+   Students: 34,000
+   Greek Life: 0.1%
+   Conference: PAC - 12
+   ID: cbc70aa0-935e-4191-a76a-e7b9c2809802
+
+569. Otterbein University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5367b352-2585-4d33-884e-b1f08d706302
+
+570. Ouachita Baptist University
+   Location: AR, AR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: eddb9fd2-577f-4b69-857d-f2d1c03bb33a
+
+571. Pace University
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: df80fb01-86f4-4ebe-b0fe-936230cfbb81
+
+572. Pacific Lutheran University
+   Location: WA, WA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 360b5f6f-1edd-4694-82ef-bf69c6376964
+
+573. Pacific University
+   Location: OR, OR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 495ae558-172b-4a59-a123-6b8871f8f355
+
+574. Palm Beach Atlantic University
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7bbcd978-2421-4f23-89c2-2e534d1e0431
+
+575. Penn State University
+   Location: State College, PA
+   Students: 46,800
+   Greek Life: 0.18%
+   Conference: BIG 10
+   ID: 366d4d9e-07e9-4507-9596-458c90677cda
+
+576. Pennsylvania College of Technology
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1ba9413f-fc87-41af-bcd1-3d5f97d2c28d
+
+577. Pennsylvania State University, Abington
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: da70d554-f643-48e9-890c-82cf3abf77a8
+
+578. Pennsylvania State University, Altoona
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6562e3d1-5864-412d-a44b-29430ed5a3f3
+
+579. Pennsylvania State University, Behrend
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4e93c19f-6f78-42bb-8e6c-0a77cd7eafdc
+
+580. Pennsylvania State University, Berks College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4b364016-ab4a-4b51-a770-a27c8feff831
+
+581. Pennsylvania State University, BrandywineA 2
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 60854299-bf9b-4a92-ba72-22c38ea4b163
+
+582. Pennsylvania State University, Harrisburg
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: cc1115e8-9bba-4c27-8363-eb92971b0507
+
+583. Pennsylvania Western University, California
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 427924d8-f764-4765-bd0b-c3ccb580133f
+
+584. Pennsylvania Western University, Clarion
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 44a663b1-3f08-46c5-98cd-613ad1a0daf1
+
+585. Pennsylvania Western University, Edinboro
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 20291430-fac2-4173-b64b-cbdb95d6453b
+
+586. Pepperdine University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 98e02b20-0cd8-4955-9a34-14e303c8c352
+
+587. Pfeiffer University
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 616700e2-a5d9-4528-8521-88a8429295c1
+
+588. Piedmont University
+   Location: GA, GA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b9783098-4ed3-41c2-9ebf-58316ef4ec35
+
+589. Pittsburg State University
+   Location: KS, KS
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9a3f1812-6173-4629-bf7a-29e4ebbc61f1
+
+590. Plymouth State University
+   Location: NH, NH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9f04cd48-ea43-4888-b5c9-2e5fbd98ee1b
+
+591. Point Loma Nazarene University
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7d66b054-e520-4ee4-9c45-24abd205d36c
+
+592. Pomona College and Pitzer CollegeA 16
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f7f0ba07-301b-4c1a-8337-a5e479471718
+
+593. Portland State University
+   Location: OR, OR
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1fee9c58-b65a-477c-8997-29be07048838
+
+594. Post University
+   Location: CT, CT
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 6e223684-f6b3-4a7d-abaf-f96d027fe942
+
+595. Prairie View A&M University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c29b6241-9aec-4f60-9331-6d6fe2505dea
+
+596. Pratt Institute
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 29b1877b-6072-4437-8c93-66e0a122096b
+
+597. Presbyterian College
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 31965fbb-d810-4178-ba93-9a1d3fc4667f
+
+598. Princeton University
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6635b418-ad76-44c4-88a3-4bdd0377815f
+
+599. Principia College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5f58d9cd-ba55-47ce-95dc-a33c72eb8dc3
+
+600. Providence College
+   Location: RI, RI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 59a6599f-22dc-4cb5-b3df-c6067a548fe6
+
+601. Purdue University
+   Location: West Lafayette, IN
+   Students: 45,000
+   Greek Life: 0.2%
+   Conference: BIG 10
+   ID: 35b57af2-fa8c-402c-bfa6-2d5b09e33c0b
+
+602. Purdue University Fort Wayne
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 58a1290e-9860-468f-8299-c6046fa736b0
+
+603. Purdue University Northwest
+   Location: IN, IN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ae9d65b3-bdd0-45aa-a44d-cb6270729dcc
+
+604. Queens College
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7077a04a-fb54-4990-be98-84f95b6bb2c8
+
+605. Queens University of Charlotte
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5cbf81ac-21c4-4e6f-b0fa-ed98e98272f8
+
+606. Quincy University
+   Location: IL, IL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 08a50271-bb0e-4d13-85f8-39d8ceea637d
+
+607. Quinnipiac University
+   Location: CT, CT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 161023a9-6a74-4303-b655-1328f3ff98b5
+
+608. Radford University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: f37d6ebd-6407-440a-89e5-206ca89bdffb
+
+609. Ramapo College
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c442dcdd-1574-4595-8124-deb6b5c403cb
+
+610. Randolph College
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: db8c6fd3-e1cd-40f7-8046-96ace51bbb11
+
+611. Randolph–Macon College
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 122b2793-aa43-4235-9f9b-25b8ea96e5f0
+
+612. Regent UniversityA 13
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ab92c458-6fb8-40c9-b000-d187af3c34d7
+
+613. Regis College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e9d3672b-4428-4eeb-bf15-2e4fc0716a32
+
+614. Regis University
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bbe76d48-2872-4510-9aa0-61a1357ee068
+
+615. Rensselaer Polytechnic Institute A 5A 6
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 31db3e30-c559-4393-9a8d-c2237dad5a58
+
+616. Rhode Island College
+   Location: RI, RI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d3b7f6e8-8509-4d26-87b9-5172651a88b2
+
+617. Rhodes College
+   Location: TN, TN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1dc2ef39-fa5f-4bd1-b579-3412a8cd8b6a
+
+618. Rice University
+   Location: Houston, TX
+   Students: 8,000
+   Greek Life: 0.18%
+   ID: 6f8f047c-51b7-4aa6-97da-c981e3f73b4b
+
+619. Rider University
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6297c62a-8588-4260-a495-ffb49ce4fa05
+
+620. Ripon College
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 697d4292-b64a-4b6d-8bd5-143b0f97b767
+
+621. Rivier University
+   Location: NH, NH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c61f6409-c88f-49b9-ac7c-93d1ad0ee224
+
+622. Roanoke College
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d4bb7a84-9d09-425d-b74d-251106d2b597
+
+623. Robert Morris University
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 99bf9644-8930-4fbe-a2e0-76d434d82f9c
+
+624. Roberts Wesleyan University
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c9272c9c-a201-467d-879e-cc5fce3a12f7
+
+625. Rochester Institute of TechnologyA 18A 19
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e6de231a-bfa1-4b65-8076-592844ba1bc1
+
+626. Rockford University
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5b71a919-537d-4029-9cb7-ee31b8e30e2e
+
+627. Rockhurst University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 4e8f6358-ed46-409c-832d-7dd1383d94e4
+
+628. Roger Williams University
+   Location: RI, RI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 920896d4-3fc1-4375-a7f4-1659a3577439
+
+629. Rogers State University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8e423f78-503f-49cb-b40e-aeb42b2d7c21
+
+630. Rollins College
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b8609d47-c0d5-4ccc-b883-24d7770664c0
+
+631. Rose-Hulman Institute of Technology
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d8e93820-9fdd-4f48-a2d4-39e2f15d44cd
+
+632. Rosemont Collegea
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a739262c-36ba-4333-9898-aaab741ac3a1
+
+633. Rowan University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6779024f-eaae-4f4b-aab6-0d1c8d4b3dd8
+
+634. Russell Sage College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5404d6c3-571f-4182-a96a-8b9700d7d0da
+
+635. Rutgers University–Camden
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 40419092-b8d0-4f6e-9f64-26d5f3c670f3
+
+636. Rutgers University–New Brunswick
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 10
+   ID: f468ea92-833d-4fe5-8826-431fe6748720
+
+637. Rutgers University–Newark
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0e1b42e5-fe68-4ff0-89f3-66cf8674de61
+
+638. Sacred Heart University
+   Location: CT, CT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ecd010be-b88d-4367-869f-fdd0f7c3eb4a
+
+639. Saginaw Valley State University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9375196e-115e-4f58-ae4a-24a7c1bbaf27
+
+640. Saint Anselm College
+   Location: NH, NH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c7679bfc-6865-4b40-89ea-7b0c827fb7bd
+
+641. Saint Augustine's University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 67b90b2d-c6fb-4578-a775-18fb43663d17
+
+642. Saint Bonaventure University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c1546e72-1e0a-4674-9910-8ec395a22312
+
+643. Saint Elizabeth University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 388e105a-3c6d-4a23-92de-310432da2c54
+
+644. Saint Francis UniversityC 6
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7ca068a8-241b-420c-9237-2eaaf5bf364d
+
+645. Saint John's University
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 8e0326bb-bc09-4efc-bb8d-bab92acf9b42
+
+646. Saint John's UniversityA 20A 11
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e62888e1-0fdd-4c3f-9f59-6b390694ae81
+
+647. Saint Joseph's College of Maine
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8837f3c7-f404-4c7d-a1dc-8b4aac146fa4
+
+648. Saint Joseph's University
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a3e878c2-8f4a-41ba-95c8-d1e9e75420a8
+
+649. Saint Leo University
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0c83bf52-3f67-492b-9305-5faf64760571
+
+650. Saint Louis University
+   Location: MO, MO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6a7f6e90-5a4f-4db1-bb43-6967a0e34d2f
+
+651. Saint Martin's University
+   Location: WA, WA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 24885d86-1b59-42df-af5e-9d06d45e0548
+
+652. Saint Mary's College of California
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 56462586-42c5-4e4a-8832-d0a8bef82cc0
+
+653. Saint Mary's CollegeA 1
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: dad87e10-e677-493b-80d8-878289a2b729
+
+654. Saint Mary's University of Minnesota
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e9ee52bf-ca83-4a4e-a675-a1b93fa6a416
+
+655. Saint Michael's College
+   Location: VT, VT
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 22bbd805-bb5b-4917-a3f2-051f9d80a2d3
+
+656. Saint Peter's University
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ea4be418-8c7e-4e1e-ad1f-2f4bdae96716
+
+657. Saint Vincent College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d9c4629b-5668-409d-89e6-a75c75478e94
+
+658. Salem CollegeA 1
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1ee93d37-2079-4851-9e23-2d54aeba62f3
+
+659. Salem State University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 42b15f38-a82c-4b30-a456-6f7fbafa97d3
+
+660. Salem University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 40657e29-319e-4333-9307-af3ca654ddfe
+
+661. Salisbury University
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8791bfab-68af-434e-a80f-93d91b344dbd
+
+662. Salve Regina University
+   Location: RI, RI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5d9ba884-bf5b-4338-98b8-49f6ebfc3bad
+
+663. Sam Houston State University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a88ffc88-bfdf-4dcb-8c4f-ca2706c9f993
+
+664. Samford University
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1b28b333-f856-4302-bdf3-74e5b03392f2
+
+665. San Diego State University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7bf70e0c-76c3-4d54-9097-7a242ab69f76
+
+666. San Francisco State University
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a1e6cd0f-cd51-42f8-87c9-ecace43582c4
+
+667. San Jose State University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5e0d7617-7c47-4255-8819-c8fbd0713c42
+
+668. Santa Clara University
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a2eab6d9-95e6-4cce-80e6-7277f9e0d75a
+
+669. Sarah Lawrence College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d210e597-8e2d-4ffb-90d8-9decc7d3c7e1
+
+670. Savannah State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a435f7e1-7162-4982-bb12-fd2ebf110321
+
+671. Schreiner University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 602c5442-7461-4e95-93d1-08a77c61f8cb
+
+672. Seattle Pacific University
+   Location: WA, WA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 101db262-4c51-4492-91a8-86681c33a33f
+
+673. Seattle University
+   Location: WA, WA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1aa095d6-fc50-49fe-9802-aab51d6fdf45
+
+674. Seton Hall University
+   Location: NJ, NJ
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1f6938cf-cf03-4302-a733-4b997db78bd3
+
+675. Seton Hill University
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0549efa8-9b24-44f1-a795-4a33140c2c53
+
+676. Shaw University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: f8f32f94-dddc-4724-91d0-016b61e724dc
+
+677. Shenandoah University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e62f9639-361a-4692-ab44-a418a6d571a0
+
+678. Shepherd University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 444fcc78-b6b0-49b1-892b-f3a905aaa382
+
+679. Shippensburg University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 68618f5e-f321-471f-8bc9-6a6900723cd5
+
+680. Shorter University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 4cd3a609-f73d-43d4-887e-29b0527b152f
+
+681. Siena College
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ee1891d5-3fb7-4c52-97fc-a7ee55411962
+
+682. Simmons UniversityA 1A 15
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: be7d3f3c-e741-427a-b6de-daf27a6365a5
+
+683. Simon Fraser University
+   Location: BC, BC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ba480922-4b22-4f2a-9d26-764579b71541
+
+684. Simpson College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9182ffe3-ea7a-4fd9-b85d-d88113944414
+
+685. Skidmore College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f731fd74-0de3-447a-9530-413a18d01473
+
+686. Slippery Rock University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 227f65dc-f64a-4c55-b74a-ae6c430f4abb
+
+687. Smith CollegeA 1
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c2b99d06-231c-4ba0-946e-318165d716dd
+
+688. South Carolina State University
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 127a0634-72ae-4f44-bba3-baa2b0db7598
+
+689. South Dakota School of Mines and Technology
+   Location: SD, SD
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 862f8cba-31c9-471c-924a-1269e790b0be
+
+690. South Dakota State University
+   Location: Brookings, SD
+   Students: 12,000
+   Greek Life: 0.08%
+   ID: 2cee035d-8199-4eca-9608-e9bf27ee91d5
+
+691. Southeast Missouri State University
+   Location: MO, MO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d4fce611-bf76-4ba2-a7ea-e6a57bfdc68f
+
+692. Southeastern Louisiana University
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ad16e55e-ddea-4dc4-8697-bf3c1b6481f1
+
+693. Southeastern Oklahoma State University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: fa194501-17e2-4df1-800f-e09777fc3adb
+
+694. Southern Arkansas University
+   Location: AR, AR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 5de7fbe6-c698-4443-8095-2c98ec8c6465
+
+695. Southern Connecticut State University
+   Location: CT, CT
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 24451b03-2aa9-4151-a613-400fc7a7c214
+
+696. Southern Illinois University Carbondale
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0e7d0b5a-8709-4c29-8edb-c1fbf9787cab
+
+697. Southern Illinois University Edwardsville
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 88d0e0c1-8f01-4c8a-982c-f015880eaaed
+
+698. Southern Methodist University
+   Location: Dallas, TX
+   Students: 12,000
+   Greek Life: 0.2%
+   ID: ed0b7930-08ae-4e89-b510-2c463b108066
+
+699. Southern Mississippi
+   Location: Hattiesburg, MS
+   Students: 15,000
+   Greek Life: 0.12%
+   ID: a08c4d1d-7bdb-4753-8bdd-e72ad13c9809
+
+700. Southern Nazarene University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d16907d4-138e-4f7d-95e6-151e61ae0248
+
+701. Southern New Hampshire University
+   Location: NH, NH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 5edeb6f8-e56c-42c1-9f3d-6306d7e2b9e6
+
+702. Southern University and A&M College
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: f7dd8422-9ea1-431f-a778-63cbe78f2e9d
+
+703. Southern Utah University
+   Location: UT, UT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4b4039e7-0953-4e93-a479-69142ede10dd
+
+704. Southern Virginia University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 97d602ba-5885-4d14-a1a4-fe954c7a4041
+
+705. Southern Wesleyan University
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 32c0a862-fb53-4f16-9aaa-0a8d1097b48a
+
+706. Southwest Baptist University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 680157f1-b2df-465d-b950-374a7d36550c
+
+707. Southwest Minnesota State University
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e0a99f16-b7f2-4703-9d36-41d6eaf819a5
+
+708. Southwestern Oklahoma State University
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a7c3ad7d-6db2-409c-82fc-0f8db21a8ff1
+
+709. Southwestern University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 30a1c30b-a33b-4277-84ae-bbce34096c38
+
+710. Spalding University
+   Location: KY, KY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: daef6101-1ba7-418c-af1b-d72d149739a1
+
+711. Spring Hill College
+   Location: AL, AL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 533bfd98-0493-4018-96c0-1bde1ff7fef4
+
+712. Springfield College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7914701f-8ece-4eec-8845-4f55e125820c
+
+713. St. Catherine UniversityA 1
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 67d6ddc1-dc58-4b65-ab03-a50bc8ae713d
+
+714. St. Cloud State University
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bbd56c29-60f7-48c1-b85d-63e80a05be5e
+
+715. St. Edward's University
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 7aad0bd9-e9c4-4581-9dbf-0f06524d058c
+
+716. St. John Fisher University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a87b1ad7-4496-4fa7-b56f-de7826cfdada
+
+717. St. Joseph's University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8d36f28a-71c0-41f0-9d0d-15f06a4fb114
+
+718. St. Lawrence UniversityA 5A 6
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6b9e83f3-39a6-4259-b8dd-2762c4ead7a6
+
+719. St. Mary's College of Maryland
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 190aa615-c83d-4a36-8629-79ad96be1c2b
+
+720. St. Mary's University
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b3861b8e-eb6e-41d6-ac2f-4bbfbcb8773e
+
+721. St. Norbert College
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 288d6999-5514-45fb-9ba7-256fe51b2763
+
+722. St. Olaf College
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c88242a0-428c-4697-be2b-75cb7c44f337
+
+723. St. Thomas Aquinas College
+   Location: NY, NY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a990156a-ffec-4e5a-969a-e0a5b6ae76b1
+
+724. Stanford University
+   Location: Stanford, CA
+   Students: 17,000
+   Greek Life: 0.18%
+   Conference: ACC
+   ID: 772c279f-00b0-4315-8cc5-88de5dfe0a58
+
+725. State University of IowaN 10
+   Location: IA, IA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e1690dc5-967a-4e0e-bfb9-205e2e5c6950
+
+726. State University of New York at AlbanyN 11
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4ffebfb4-ac6f-4ae3-b582-1769ce7da961
+
+727. State University of New York at BinghamtonN 13
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0418c6be-735d-4604-bdd1-e9f2ddd1007c
+
+728. State University of New York at Brockport
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ec84ffc3-146f-4e66-83a4-4bca773e6e0d
+
+729. State University of New York at BuffaloN 14
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5b1bcc4d-6e41-429d-a3c2-9dc21d0976c7
+
+730. State University of New York at Canton
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 601b1f3d-b282-4764-b171-a55f2d61d0df
+
+731. State University of New York at Cobleskill
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ff6d59b4-85ca-464f-b225-398de09ce9f3
+
+732. State University of New York at Cortland
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 3a2019ee-4a7e-41f0-8800-2fedcf0b3d8f
+
+733. State University of New York at Delhi
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0f5fabab-c1aa-4b71-b83d-ed08406f3c2c
+
+734. State University of New York at Fredonia
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: dfcfd3ca-8d50-423c-87ba-e2387424816d
+
+735. State University of New York at Geneseo
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1ec899d9-a24e-42b4-9fee-bce4f6f02f4d
+
+736. State University of New York at Morrisville
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d2c3d44e-fae5-4066-b659-133edb728e61
+
+737. State University of New York at New Paltz
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 863ddc6e-192c-4c58-bee3-d76ae931bbd2
+
+738. State University of New York at Old Westbury
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f156dda0-4516-4177-be87-ac4c502ee044
+
+739. State University of New York at Oneonta
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4424ea98-6c37-44d8-9719-618634c399b6
+
+740. State University of New York at Oswego
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 18f450ec-9665-4516-a9e1-6f0b3736b3ea
+
+741. State University of New York at Plattsburgh
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f27c5ca7-4851-4ff1-aae2-17891ceb7a91
+
+742. State University of New York at Potsdam
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5cf6500a-d840-4b97-974c-01dccdd4e6ff
+
+743. State University of New York at Purchase
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 62834427-e866-4df2-b7f5-e08f88a43ea9
+
+744. State University of New York at Stony BrookN 15
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e2e908fe-3a72-47e5-9a8d-9f238b384274
+
+745. State University of New York Maritime College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fe16ff8f-61dc-49af-9653-1a1c9d26d924
+
+746. State University of New York Polytechnic Institute
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d3a51659-4a78-4ef0-8704-a1650da1f299
+
+747. Stephen F. Austin State UniversityN 16
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: f3652f2c-24d7-44f0-b5a4-d5643d852c78
+
+748. Stetson University
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e9678d31-e4bb-4f2f-9897-640db5a5db40
+
+749. Stevens Institute of Technology
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1044bf54-fb62-4079-88a7-b1d6f9e29e46
+
+750. Stevenson University
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fc9105e9-8635-4fb3-a2cc-603cfc01bbd2
+
+751. Stockton University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 51b44fb7-ab11-4213-8570-975619178077
+
+752. Stonehill College
+   Location: MA, MA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: db5d9983-e454-462c-89c6-d838a91c17a0
+
+753. Suffolk University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 599570f9-81c9-41cc-9e3d-ef55dce3d284
+
+754. Susquehanna University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9e968bd2-a11a-4995-847f-6c04cea4d765
+
+755. Swarthmore College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 61d4a3f4-d0de-47b2-aeb5-66f7b364ff3d
+
+756. Sweet Briar CollegeA 1A 15
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a95508b5-4e19-4ecf-849b-88175c612b01
+
+757. Syracuse University
+   Location: Syracuse, NY
+   Students: 22,000
+   Greek Life: 0.17%
+   Conference: ACC
+   ID: c31c7889-c4ee-4a73-ab6b-9f8e7821a133
+
+758. Tarleton State University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 3a007a21-86f4-4912-83db-c0d911d2b665
+
+759. Temple University
+   Location: Philadelphia, PA
+   Students: 34,000
+   Greek Life: 0.15%
+   ID: 46a5b2df-9d56-4e80-b5bb-22b020055411
+
+760. Tennessee State University
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 49778cec-7b11-41f0-b83a-75ec2b3e9e90
+
+761. Tennessee Technological University
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 573a8439-0fb9-460d-904e-463ec6d347d7
+
+762. Texas A&M International University
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 96d62c80-ff4b-4c34-b5a7-b026c74f3163
+
+763. Texas A&M University
+   Location: College Station, TX
+   Students: 70,000
+   Greek Life: 0.09%
+   ID: 7e778355-5720-4983-b77c-aa332c7b73c6
+
+764. Texas A&M University-Kingsville
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a5e3cc47-38fa-46ac-8cbf-8a5b58703cf6
+
+765. Texas A&M University–Corpus Christi
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 19a24903-6987-4f4f-a406-0db7aaee9e68
+
+766. Texas Christian University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 12
+   ID: 7c472bbc-6f9a-4526-9a20-cd16e0a1aa66
+
+767. Texas Lutheran University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7a421369-8fea-49dc-82f8-2314a598a354
+
+768. Texas Southern University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 40a4b13d-782a-4f0d-8068-4aa1f0a42480
+
+769. Texas State University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 25cf82de-591e-41db-9738-1798c934e961
+
+770. Texas Tech University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 12
+   ID: 1e464e97-1235-4591-997b-38a7547ddb53
+
+771. Texas Woman's Universityj
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 71ace302-974a-4475-bd4d-fa78118f26d3
+
+772. The Citadel, The Military College of South Carolinabe
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 916e7837-244d-4bff-9906-bce31ca5ec73
+
+773. The College of New Jersey
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1e6c4a57-aed8-4cf9-a04f-13a771e7644a
+
+774. The College of St. Scholastica
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a2f16312-382e-4f02-be31-ec7572797cca
+
+775. The College of William and Mary in Virginia
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 8e39e0a7-f959-4ea6-9bba-6b4548e097d5
+
+776. The George Washington University
+   Location: DC, DC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 3db34db3-f27b-4115-9748-319df6c0b98a
+
+777. The Ohio State University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 10
+   ID: 3474ab55-b3c0-40a2-a716-9cd1d6b79c5b
+
+778. The Ohio University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 48990296-5597-4448-8425-11ce072a4dee
+
+779. The University of Akron
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9f7d66b7-c942-4ceb-b172-833be6032503
+
+780. The University of Alabama
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: SEC
+   ID: 972f0f06-330f-45ec-a414-76065e59bb65
+
+781. The University of Mississippi
+   Location: MS, MS
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ac0562a6-6ecd-42ee-9dee-976afbab6183
+
+782. The University of New Mexico
+   Location: NM, NM
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0a32b998-fb8c-4793-a104-e43904c1dad8
+
+783. The University of Tennessee at Chattanooga
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 95cada45-42ad-49ad-a811-9255ea3304f4
+
+784. The University of Tennessee at Martin
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: dac03633-e8c3-43c3-a580-06ebbd434364
+
+785. The University of Tennessee, Knoxville
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: cfbc27da-dfc1-462a-b538-7ecf75f1ce53
+
+786. The University of Texas at Arlington
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 933cb4c9-1ab6-49a3-afc1-4ba5b57c6ce1
+
+787. The University of Texas at Austin
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: eb38841c-f8da-49ef-81c4-f833bc0e94f0
+
+788. The University of Texas at El Paso
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a1c100f5-fa81-4d1e-8e06-2298e15b2262
+
+789. The University of Texas at San Antonio
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 336e17e6-9a16-4f7e-9530-3fca1718683c
+
+790. The University of Texas Rio Grande Valley
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7ec143f6-499b-41eb-b27a-7fad6bc984c6
+
+791. The University of Tulsa
+   Location: OK, OK
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1c3a54e7-36bf-44c2-b3fa-ad7bfa9e5d7a
+
+792. The University of Vermont and State Agricultural College
+   Location: VT, VT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 114fc173-7bc3-4a1a-87b3-b391021b5bc1
+
+793. Thiel College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c4ccb353-2fcb-4009-a673-b40bd7492f96
+
+794. Thomas College
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0e3d7db8-9e49-45a8-b08b-884ddadff46c
+
+795. Thomas Jefferson University
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 748927ab-b04f-4cba-87ad-cee09ed2d9b0
+
+796. Thomas More University
+   Location: KY, KY
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: dd078ec8-e23b-4892-91cb-217f023063bb
+
+797. Tiffin University
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 1444f609-e654-4ed4-9f0e-231aa07ee4bc
+
+798. Towson University
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0dca2cfd-a6a4-4d30-8e78-9a12bba17291
+
+799. Transylvania University
+   Location: KY, KY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6434d5da-6a71-4ff2-9dc2-7821ab25a86b
+
+800. Trevecca Nazarene University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 49cde512-82bb-493e-8c5f-aa0d50ffd112
+
+801. Trine University
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 198a6865-efaf-44f5-aa30-4c1d17cc7f2b
+
+802. Trinity College
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e2c6e166-298f-480a-865e-2380d77887e9
+
+803. Trinity University
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8ec29a46-b3af-43d2-a99c-c4c609f28d41
+
+804. Trinity Washington UniversityA 1
+   Location: DC, DC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 589027f7-d661-411b-9f64-d69021ab2bdd
+
+805. Troy University
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 633fbe62-8119-4748-b60d-8d9695684bdf
+
+806. Truman State University
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b28d87f3-aaf9-4a67-a24e-9b3ca88e5e4e
+
+807. Tufts University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ca783755-cf41-4d5b-b582-c36de96a38dc
+
+808. Tulane University
+   Location: New Orleans, LA
+   Students: 14,000
+   Greek Life: 0.14%
+   ID: f2f338fa-4de6-4ffe-9af6-b7396d121536
+
+809. Tulane University of Louisiana
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 38ed7c87-a5f1-4bc1-9d8f-59373c98d737
+
+810. Tusculum University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 47f8fe5e-38eb-4928-9d77-f26da6dce16c
+
+811. Tuskegee University
+   Location: AL, AL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c2ddcfc7-801c-43d7-b774-dbf229882585
+
+812. UC Berkeley
+   Location: Berkeley, CA
+   Students: 45,000
+   Greek Life: 0.1%
+   ID: c79c4bec-2738-4f90-8cd1-999eebd63829
+
+813. UC San Diego
+   Location: San Diego, CA
+   Students: 40,000
+   Greek Life: 0.09%
+   ID: 0327e796-5f5b-458d-82a4-77282a7d9e1b
+
+814. UNC Chapel Hill
+   Location: Chapel Hill, NC
+   Students: 31,000
+   Greek Life: 0.14%
+   ID: 94021a06-dcd2-4d57-8acd-03edfa4ef310
+
+815. Union CollegeA 18A 19
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8843541f-18c6-4c02-850b-9048207f5def
+
+816. Union University
+   Location: TN, TN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: cfa472bb-814d-4864-a21b-627d80d77231
+
+817. United States Air Force Academy
+   Location: CO, CO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 75bfd6cd-6b42-42b2-b375-4e311f7778ed
+
+818. United States Coast Guard Academy
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 81aa5bf5-6b27-4137-b706-fe927e82993f
+
+819. United States Merchant Marine Academy
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 79e09c63-088b-48f6-86c9-795c98e40c50
+
+820. United States Military Academy
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: efe18107-e8a0-4834-9f50-5662e0109dd1
+
+821. United States Naval Academy
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5adb2e50-1b5d-425b-8b65-4103a3163dbc
+
+822. University of Alabama
+   Location: Tuscaloosa, AL
+   Students: 38,100
+   Greek Life: 0.36%
+   Conference: SEC
+   ID: 8d1138cc-24ae-4d00-bad4-6bd021b32836
+
+823. University of Alabama at Birmingham
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b58260d8-f83d-4dd9-a5e3-9421ad0eeb01
+
+824. University of Alabama in Huntsville
+   Location: AL, AL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: fcbfdf38-f9e1-4f7a-a73d-8b479daa22e3
+
+825. University of Alaska Anchorage
+   Location: AK, AK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 962846e6-51c8-4a38-a573-532890819929
+
+826. University of Alaska Fairbanks
+   Location: AK, AK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 74bcd1c2-f686-4454-af63-104d22629543
+
+827. University of Arizona
+   Location: Tucson, AZ
+   Students: 45,000
+   Greek Life: 0.17%
+   Conference: BIG 12
+   ID: 9e42c579-8185-401e-9ba8-ab824649e198
+
+828. University of Arkansas
+   Location: Fayetteville, AR
+   Students: 27,500
+   Greek Life: 0.3%
+   Conference: SEC
+   ID: e59a458e-06ef-41ad-a5ff-92e8a101a9e1
+
+829. University of Arkansas at Little Rock
+   Location: AR, AR
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 3a6e5a9b-9739-4a97-a888-4da458e61e3d
+
+830. University of Arkansas at Monticello
+   Location: AR, AR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 4c6d2479-1a13-45ea-a61c-d12ef39737ff
+
+831. University of Arkansas at Pine Bluff
+   Location: AR, AR
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: f52151e6-bceb-4b15-93eb-9af670da58cf
+
+832. University of Arkansas-Fort Smith
+   Location: AR, AR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 84d2781d-e8d7-4550-b358-53491cec0eb2
+
+833. University of Bridgeport
+   Location: CT, CT
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 4b2a527b-e09a-4e54-84b1-d192ac2131f0
+
+834. University of California, Berkeley
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: ACC
+   ID: 3f2b7bb1-ccee-4abb-94cf-09c11cbba8cb
+
+835. University of California, Davis
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9ee970d6-9717-4003-8729-672220410a6d
+
+836. University of California, Irvine
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 61b1e712-1916-410e-a597-3e0bfdfc0e76
+
+837. University of California, Los Angeles
+   Location: Los Angeles, CA, CA
+   Conference: Big Ten
+   ID: 151e7817-8d73-407c-b8df-fcbad9de0c3a
+
+838. University of California, Riverside
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0fb641bc-1408-4e68-bdb4-fe3b00f7e427
+
+839. University of California, San Diego
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 75e6fbcd-62b5-47e4-98d0-b610c308ad20
+
+840. University of California, Santa Barbara
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 395736f0-9289-4285-a748-4a64dc19038a
+
+841. University of California, Santa Cruz
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e2f04494-a7ed-4b14-8647-7a8b4d0fbf2c
+
+842. University of Central Arkansas
+   Location: AR, AR
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c19787f4-9bb4-43d7-acdf-a8aa6e21aedd
+
+843. University of Central Florida
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: a1226b4c-ac01-41d1-ad2a-b41422852918
+
+844. University of Central Missouri
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3f511f63-6e8d-45b6-ba92-d8a23ec02b05
+
+845. University of Central Oklahoma
+   Location: OK, OK
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 5291115e-71ba-435a-93fd-a91488dc539b
+
+846. University of Charleston
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 25ca3993-8501-4b20-8463-92b4641538bb
+
+847. University of Chicago
+   Location: Chicago, IL
+   Students: 17,000
+   Greek Life: 0.08%
+   ID: f89179f6-9e3c-4914-a199-184ec592d0f2
+
+848. University of Cincinnati
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 6eb03340-0382-40b3-94cd-5ec5cdde6576
+
+849. University of Colorado Boulder
+   Location: Boulder, CO
+   Students: 36,000
+   Greek Life: 0.1%
+   Conference: BIG 12
+   ID: a10043d5-19b1-4541-852f-3b7f18c425b1
+
+850. University of Colorado Colorado Springs
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 934aac6f-d3e2-4770-a950-75d3bf14d57d
+
+851. University of Connecticut
+   Location: Storrs, CT
+   Students: 32,000
+   Greek Life: 0.09%
+   ID: 2f92e0b6-11a4-457e-9e3c-7c54676460f8
+
+852. University of Dallas
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f335f3d0-0960-4fd3-8d0c-90910583dd4b
+
+853. University of Dayton
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e20a6ac0-c40b-456e-9a49-54a1ca074fd7
+
+854. University of Delaware
+   Location: DE, DE
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 789cfb9e-d9bd-46b5-9c04-25fb9b0a1155
+
+855. University of Denver
+   Location: CO, CO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 2b578088-350e-4107-bd3d-5fee755d4de0
+
+856. University of Detroit Mercy
+   Location: MI, MI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 54b9fac1-ea3a-4706-8e5d-6e2d435840c4
+
+857. University of Dubuque
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e97590e3-1efc-4911-8009-c44d6ac323b2
+
+858. University of Evansville
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 74f5e65a-15c8-4547-9195-4b435dbbdec1
+
+859. University of Findlay
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b67e1cb8-f644-4ef5-9770-a89c36c87072
+
+860. University of Florida
+   Location: Gainesville, FL
+   Students: 52,000
+   Greek Life: 0.2%
+   Conference: SEC
+   ID: 84629247-f872-4ebb-9c27-1b933453c812
+
+861. University of Georgia
+   Location: Athens, GA
+   Students: 40,000
+   Greek Life: 0.31%
+   Conference: SEC
+   ID: e670b58d-f93b-4fdc-825f-c2dc8cd68623
+
+862. University of Hartford
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: dd8ae3d9-4c83-46b4-9763-e4d03bb3affe
+
+863. University of Hawai'i at Hilo
+   Location: HI, HI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3aa3a77c-1e9b-4e78-8f5a-98a67cbaa55b
+
+864. University of Hawaiʻi at Mānoa
+   Location: HI, HI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 70a7a0a9-a192-419c-95f6-c1e9d7a95bb8
+
+865. University of Houston
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c8eb6091-1eb1-4e85-b19b-34c9ac69bb62
+
+866. University of Idaho
+   Location: ID, ID
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 37d5687e-d8b2-4657-986a-e942011b4445
+
+867. University of Illinois
+   Location: Champaign, IL
+   Students: 52,000
+   Greek Life: 0.22%
+   ID: f4911d4e-8f32-4937-b11d-1334b0a9b517
+
+868. University of Illinois at Springfield
+   Location: IL, IL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3a68a1ef-b620-42a1-8010-dbef1f4e524e
+
+869. University of Illinois Chicago
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5d4d2857-f74c-4a2f-a5a6-5ee86b9ad9c1
+
+870. University of Illinois Urbana-Champaign
+   Location: Champaign, IL, IL
+   Conference: BIG 10
+   ID: ec8e4abb-812e-4b32-8370-dae216c23a9c
+
+871. University of Indianapolis
+   Location: IN, IN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: fbb25451-4f35-4a76-8b37-6353978a97f1
+
+872. University of Iowa
+   Location: Iowa City, IA
+   Students: 30,000
+   Greek Life: 0.19%
+   Conference: BIG 10
+   ID: 15f6917d-6bfd-4acd-be2f-a19a3b77fab0
+
+873. University of Kansas
+   Location: Lawrence, KS
+   Students: 27,600
+   Greek Life: 0.21%
+   Conference: BIG 12
+   ID: 210cbddd-209d-4789-a02f-f31ae5696423
+
+874. University of Kentucky
+   Location: Lexington, KY
+   Students: 30,000
+   Greek Life: 0.24%
+   Conference: SEC
+   ID: 866a4661-36ef-4692-ac83-189e0c1ebd19
+
+875. University of La Verne
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2084a86a-1073-4d22-93bc-6c2f18f9d980
+
+876. University of Louisiana at Lafayette
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b19c2dc2-ba6c-44c9-8fd3-b85486ba9f95
+
+877. University of Louisiana at Monroe
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 57958fe3-9fdd-4004-b4ff-fb65042c3b11
+
+878. University of Louisville
+   Location: Louisville, KY
+   Students: 22,000
+   Greek Life: 0.1%
+   Conference: ACC
+   ID: 7e406b0b-46e2-42a6-ab68-794f2db9eea0
+
+879. University of Lynchburg
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4ac6bfeb-5031-4dad-9bbf-101dadcbb996
+
+880. University of Maine
+   Location: ME, ME
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 77545a23-6b04-40db-88d1-440b2b930e08
+
+881. University of Maine at Farmington
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0e101231-7941-495c-acb3-6b531cc1fae5
+
+882. University of Maine at Presque Isle
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 88ebfd14-82e7-41c7-a39d-3d287e0939cf
+
+883. University of Mary
+   Location: ND, ND
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 656c93a2-203f-423c-a466-394c135888ef
+
+884. University of Mary Hardin–Baylor
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e4e3a1b6-5977-430c-ac7c-7f7008b1dd99
+
+885. University of Mary Washington
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d0357213-582e-45f3-b3c7-e830723885b3
+
+886. University of Maryland
+   Location: College Park, MD
+   Students: 41,000
+   Greek Life: 0.09%
+   ID: a7696361-4b17-4e01-ad04-061ea6efad88
+
+887. University of Maryland Eastern Shore
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: da4fb220-2980-4ad1-ba82-4c73ad6a89e4
+
+888. University of Maryland, Baltimore County
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: d956bb37-46bb-457d-bb43-c71b9f436327
+
+889. University of Maryland, College Park
+   Location: MD, MD
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 10
+   ID: e52389c8-c20e-4da6-bca8-3abe928360f5
+
+890. University of Massachusetts Amherst
+   Location: MA, MA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e7f6cad9-d492-44f6-898d-11c26b6ddd67
+
+891. University of Massachusetts Boston
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 548bfe7e-0952-4007-be94-431f553a7870
+
+892. University of Massachusetts Dartmouth
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 81f1f28f-f1a3-4b05-a486-52add0f19d59
+
+893. University of Massachusetts Lowell
+   Location: MA, MA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c1f75e0e-6cc3-4bd9-97b3-ded99d84d584
+
+894. University of Memphis
+   Location: TN, TN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: fd326d7b-8071-42c5-b3d7-c265be56dffb
+
+895. University of Miami
+   Location: Coral Gables, FL
+   Students: 18,000
+   Greek Life: 0.16%
+   Conference: ACC
+   ID: 167dcebf-e8bf-4e41-a17b-19f3fb7eceb0
+
+896. University of Michigan
+   Location: Ann Arbor, MI
+   Students: 46,000
+   Greek Life: 0.18%
+   Conference: BIG 10
+   ID: b8d1234d-9ea0-412c-ab4f-2a5bcef78150
+
+897. University of Minnesota
+   Location: Minneapolis, MN
+   Students: 52,000
+   Greek Life: 0.08%
+   Conference: BIG 10
+   ID: dba42201-a30f-4081-aabf-77ac6bef9948
+
+898. University of Minnesota Crookston
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 03d7451d-3bbb-41ee-9eab-926bf3457403
+
+899. University of Minnesota Duluth
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d007858c-e400-463a-b3d0-7d49ca5bdc3e
+
+900. University of Minnesota Morris
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1c7837d0-34db-42fb-9929-4ad975680485
+
+901. University of Mississippi
+   Location: Oxford, MS
+   Students: 22,000
+   Greek Life: 0.38%
+   ID: 58b775a0-8c22-4f21-83f0-6ac95a4f07ee
+
+902. University of Missouri
+   Location: Columbia, MO
+   Students: 31,000
+   Greek Life: 0.26%
+   ID: 1bf1f9d6-354d-4783-a7b9-e4ca7387011e
+
+903. University of Missouri-St. Louis
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d8516843-d420-4bbe-89ad-044e8a043035
+
+904. University of Missouri–ColumbiaN 22
+   Location: MO, MO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e6348b78-a676-46b2-b9b6-928b5b003c65
+
+905. University of Missouri–Kansas City
+   Location: MO, MO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: db6f8a6b-fd21-4df6-8be8-9ed0beb31338
+
+906. University of Montana
+   Location: Missoula, MT
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c7fc7002-6886-4776-988a-7a1e532af4d6
+
+907. University of Montevallo
+   Location: AL, AL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 2a7139e3-7fcb-4843-8c94-ab6eb868558d
+
+908. University of Mount Olive
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ced45bec-be14-4567-b3c0-a7acda74314c
+
+909. University of Mount Saint Vincent
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 94155c93-4c0a-49fe-a99d-8aee105847d0
+
+910. University of Mount Union
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: bb57b390-649b-4838-9f77-0ae59b70583d
+
+911. University of Nebraska
+   Location: Lincoln, NE
+   Students: 26,000
+   Greek Life: 0.13%
+   ID: 04bcd326-75ce-4332-842d-50657d9d7148
+
+912. University of Nebraska at Kearney
+   Location: NE, NE
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 185a3006-cef4-4f0f-95ce-8f40ef9e4b5d
+
+913. University of Nebraska Omaha
+   Location: NE, NE
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c4a57f13-026d-4d5b-a727-17c3e27265e0
+
+914. University of Nebraska-Lincoln
+   Location: Lincoln, NE, NE
+   ID: 8978abe8-4c5b-4520-9aca-fea71c43be0a
+
+915. University of Nebraska–Lincoln
+   Location: NE, NE
+   Students: 25,000
+   Greek Life: 0.1%
+   Conference: BIG 10
+   ID: 63cd749b-2f96-499f-9b39-b32471f39a32
+
+916. University of Nevada Reno
+   Location: Reno, NV
+   Students: 21,000
+   Greek Life: 0.1%
+   ID: acf00688-2fea-4adb-a246-b0f4f5b5ed85
+
+917. University of Nevada, Las Vegas
+   Location: NV, NV
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0d5e36f8-5af7-4a20-a81c-bc2a1bc34202
+
+918. University of Nevada, Reno
+   Location: NV, NV
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 29788b52-6879-4137-8dcb-15c795785eb6
+
+919. University of New England
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: da9c7f3d-91a1-4e93-b012-c2ddc8be193f
+
+920. University of New Hampshire
+   Location: NH, NH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: eb85fd1d-e42a-4359-99eb-76a10f7bcc96
+
+921. University of New Mexico
+   Location: Albuquerque, NM
+   Students: 27,000
+   Greek Life: 0.09%
+   ID: 7c1cd618-cef7-48a6-b010-4310d3f77382
+
+922. University of New Orleans
+   Location: LA, LA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 10e2a979-f973-48aa-9401-2a052520f00c
+
+923. University of North Alabama
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b099de5e-1169-491d-bc77-83dd123961c4
+
+924. University of North Carolina at Asheville
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 57cd9abc-4a95-4224-8d37-eb033fa62e3e
+
+925. University of North Carolina at Chapel Hill
+   Location: Chapel Hill, NC, NC
+   ID: 2697cf55-eb8d-47d3-982e-784fe25ebfa3
+
+926. University of North Carolina at Charlotte
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 99b2e279-c55d-4b8e-96ba-6cc9f56de662
+
+927. University of North Carolina at Greensboro
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e966c293-a383-4a35-af05-d8789cd95d4a
+
+928. University of North Carolina at Pembroke
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e6f73f59-5dda-4ec1-a54b-a0e383f074d5
+
+929. University of North Carolina at Wilmington
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c858b5aa-7aef-432b-ba24-b491a74addc8
+
+930. University of North Dakota
+   Location: Grand Forks, ND
+   Students: 15,000
+   Greek Life: 0.08%
+   ID: 2452b7d3-f421-45a0-b33b-d9e1fbcf8c79
+
+931. University of North Florida
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: fb370fe8-898f-4c4a-a545-1f953d8fdbf0
+
+932. University of North Georgia
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 73e90ace-e9f2-4d45-9197-df1d0f992087
+
+933. University of North Texas
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 8e893416-e1c3-4acc-8892-3380c98927fa
+
+934. University of Northern Colorado
+   Location: CO, CO
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 8a7e2bd6-6658-4d26-8cd0-c86030e55a9e
+
+935. University of Northern Iowa
+   Location: IA, IA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 68ed9fdc-a45e-48e5-9ab1-67ce6ae19bc9
+
+936. University of Northwestern - St. Paul
+   Location: MN, MN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9f8fe35c-a64e-40f1-8bc4-a30280300022
+
+937. University of Notre Dame du Lac
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 8ad60390-9249-47a6-9bb0-66237b887f5f
+
+938. University of Oklahoma
+   Location: Norman, OK
+   Students: 28,000
+   Greek Life: 0.26%
+   ID: 6deceda6-7e8d-4090-85be-75033075cfee
+
+939. University of Olivet
+   Location: MI, MI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 624cff52-e1e3-4a41-bb83-f2343a84b051
+
+940. University of Oregon
+   Location: Eugene, OR
+   Students: 23,000
+   Greek Life: 0.13%
+   Conference: BIG 10
+   ID: e027179d-0677-4e8d-93f1-a2548f17d524
+
+941. University of Pennsylvania
+   Location: PA, PA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 9542adc3-4921-4a01-86cc-d6cec6f5fd5d
+
+942. University of Pittsburgh
+   Location: Pittsburgh, PA
+   Students: 33,000
+   Greek Life: 0.14%
+   Conference: ACC
+   ID: e99474af-e056-4776-9497-617b45c3e7fe
+
+943. University of Pittsburgh at Bradford
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 5346b83f-956a-4b2c-85f4-1ad9a0a114b8
+
+944. University of Pittsburgh at Greensburg
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c07dd2c2-197f-4ef0-9e14-a2cd14142731
+
+945. University of Pittsburgh at Johnstown
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3f3e34b0-3022-458b-b48f-7d32d0c7e4f7
+
+946. University of Portland
+   Location: OR, OR
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 99537fe4-c8ad-4f8e-9e92-3130bad097f8
+
+947. University of Puerto Rico at Bayamón
+   Location: PR, PR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: af931ef2-d5dc-425b-983b-bddd57ee0f25
+
+948. University of Puerto Rico at Mayagüez
+   Location: PR, PR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8165a27d-afc9-4b82-927b-a94fcacb53c8
+
+949. University of Puerto Rico at Río Piedras
+   Location: PR, PR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9a8a6609-71fd-4b2d-8fe4-64f5936055ea
+
+950. University of Puget Sound
+   Location: WA, WA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d320386d-61e4-4aa1-9adf-5fe6da666c6c
+
+951. University of Redlands
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0b41952c-55a9-475c-a8a8-cb0606cf4245
+
+952. University of Rhode Island
+   Location: RI, RI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 2d0a1d2a-2326-4c26-a15d-5f7d3d136c78
+
+953. University of Richmond
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ce07d5c8-281b-4416-bcd8-b8c6016a1259
+
+954. University of Rochester
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7b4daeca-0f89-4e63-8e95-802ee3fbbd34
+
+955. University of Saint Joseph
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 78df6da1-289a-4bed-8c13-683b187d2cf1
+
+956. University of Saint Thomas
+   Location: MN, MN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5325dc56-a7c9-46f0-93df-e93f1af9531f
+
+957. University of San Diego
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b616dea4-8f95-443d-b8b5-84c522ea550c
+
+958. University of San Francisco
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ce0f86f7-b7b2-4ef0-b7cf-935f106ca738
+
+959. University of Scranton
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: daadcd27-2b69-4465-bceb-0e13eb5d0790
+
+960. University of Sioux Falls
+   Location: SD, SD
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: e93d7fac-60a0-477c-84ff-1afeda77807d
+
+961. University of South Alabama
+   Location: AL, AL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c8aa2c5e-ec1a-4825-a328-615943b8b5bc
+
+962. University of South Carolina
+   Location: Columbia, SC
+   Students: 35,000
+   Greek Life: 0.25%
+   Conference: SEC
+   ID: 40164adf-0c90-4984-9c83-a77700b04fdb
+
+963. University of South Carolina Aiken
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 15d80501-e3eb-4983-b053-052744355fe6
+
+964. University of South Carolina Beaufort
+   Location: SC, SC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 6a439a80-b46f-4463-9ae0-315f0f259cff
+
+965. University of South Carolina Upstate
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: aff7e5f0-e37a-4462-bd71-70dfdf559dee
+
+966. University of South Dakota
+   Location: SD, SD
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: b5ed4b0f-84fd-4338-8494-f4fc21a1084c
+
+967. University of South Florida
+   Location: FL, FL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 36066578-8a75-4317-9efb-41e6d90a95ed
+
+968. University of Southern California
+   Location: Los Angeles, CA
+   Students: 44,000
+   Greek Life: 0.22%
+   Conference: BIG 10
+   ID: 1795d5f6-9b27-4439-97e0-c9a9993a339c
+
+969. University of Southern Indiana
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: e2a56685-5c86-4e99-b56f-f07dd37d02d2
+
+970. University of Southern Maine
+   Location: ME, ME
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8d41736a-1f9a-4e09-9348-406c7d62adcb
+
+971. University of Southern Mississippi
+   Location: MS, MS
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 712c230c-6eb0-4d39-974d-f097f036ac35
+
+972. University of St. Thomas (Texas)
+   Location: TX, TX
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 823a71eb-dc23-4a6c-8991-99dbb2e64c03
+
+973. University of Tampa
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0c38a8e6-99af-46bc-9af1-4a324e7c1720
+
+974. University of Tennessee
+   Location: Knoxville, TN
+   Students: 29,400
+   Greek Life: 0.22%
+   ID: 126a9579-a477-4a6d-9b72-4566f63b6278
+
+975. University of Texas at Austin
+   Location: Austin, TX
+   Students: 51,000
+   Greek Life: 0.16%
+   ID: 29b4445a-1859-4298-badf-54cd19672498
+
+976. University of Texas at Tyler
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 5e690123-f4a0-4c53-a34a-8153edcddd68
+
+977. University of Texas Permian Basin
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3dabd05b-b661-4986-93a7-3041a048d758
+
+978. University of the District of Columbia
+   Location: DC, DC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 032d2cf1-5fc1-4256-af94-f8ef93702be6
+
+979. University of the Incarnate Word
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 3c3d4878-4e89-4ddd-862f-fd3519c2c53b
+
+980. University of the Ozarks
+   Location: AR, AR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b89bc98a-5fbb-49e5-b741-3f0c60f00113
+
+981. University of the Pacific
+   Location: CA, CA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 49736052-026d-450f-a4c0-e694c82999df
+
+982. University of the SouthA 21
+   Location: TN, TN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e774ddd5-7a1f-4ab3-9fe8-711f9ff6f099
+
+983. University of Toledo
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7509fed3-5432-4634-91d4-1e5334969bfa
+
+984. University of Utah
+   Location: Salt Lake City, UT
+   Students: 34,000
+   Greek Life: 0.07%
+   Conference: BIG 12
+   ID: 389530e4-d9c8-47e9-9bda-48420c70b5ef
+
+985. University of Valley Forge
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a18ec214-d479-4f3b-a31c-45a7f9040f4e
+
+986. University of Virginia
+   Location: Charlottesville, VA
+   Students: 25,000
+   Greek Life: 0.18%
+   Conference: ACC
+   ID: 6980018e-1742-4af0-9ed9-9093b88e6e52
+
+987. University of Virginia's College at Wise
+   Location: VA, VA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 72501e72-72ea-4d74-84d7-344f8e068da1
+
+988. University of Washington
+   Location: Seattle, WA
+   Students: 48,000
+   Greek Life: 0.08%
+   Conference: BIG 10
+   ID: a1277842-c368-48ea-b641-73c5a30f8720
+
+989. University of West Alabama
+   Location: AL, AL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d1407f79-7683-47fc-b0b6-6b150ccb19f9
+
+990. University of West Florida
+   Location: FL, FL
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 324047fa-4fcf-4e33-89d0-3b4f4ad564e5
+
+991. University of Wisconsin
+   Location: Madison, WI
+   Students: 45,000
+   Greek Life: 0.11%
+   Conference: BIG 10
+   ID: e394b0cb-6a8b-4323-a929-2932bcb98db3
+
+992. University of Wisconsin-Madison
+   Location: Madison, WI, WI
+   Conference: BIG 10
+   ID: 9668470d-3b45-43f8-a028-5eb1248e69c0
+
+993. University of Wisconsin-Parkside
+   Location: WI, WI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8a298791-77fd-4340-9124-ca2866545314
+
+994. University of Wisconsin–Eau Claire
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 324e8146-0835-4a2f-a33c-44937d2ee3b1
+
+995. University of Wisconsin–Green Bay
+   Location: WI, WI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 88c41485-fd39-42ed-bab5-8b848e4ec145
+
+996. University of Wisconsin–La Crosse
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2e24d080-8004-42eb-a15e-a8e13fa4d9a4
+
+997. University of Wisconsin–Madison
+   Location: WI, WI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 71ff7efa-9b1a-4448-b48a-3d8a76e16eaa
+
+998. University of Wisconsin–Milwaukee
+   Location: WI, WI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: aa7422d5-b465-4a14-bb23-ddf35b2e3b26
+
+999. University of Wisconsin–Oshkosh
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d5e1bb4a-1dde-48bd-a60d-3dfc321fdf53
+
+1000. University of Wisconsin–Platteville
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a8b80b71-63ab-4d44-9225-e8fa3e97ea66
+
+1001. University of Wisconsin–River Falls
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b747a93d-021b-480b-9e48-c399e9492bf7
+
+1002. University of Wisconsin–Stevens Point
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 54b09e4d-e078-4546-a1e1-5adbed99adf8
+
+1003. University of Wisconsin–Stout
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 928f94f9-6671-4d98-9bcf-eb809a12d3e9
+
+1004. University of Wisconsin–Superior
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: eac83047-48ca-4ce4-8c6e-e2155caf7de8
+
+1005. University of Wisconsin–Whitewater
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 703e7676-12e8-420d-8b73-c7d3e6ba26c2
+
+1006. University of Wyoming
+   Location: Laramie, WY
+   Students: 13,000
+   Greek Life: 0.09%
+   ID: 30c4499f-eb70-44c7-b11d-fa5e724d189e
+
+1007. UNLV
+   Location: Las Vegas, NV
+   Students: 31,000
+   Greek Life: 0.09%
+   ID: c3cc8428-26d4-4486-8dcb-f7d09efdde73
+
+1008. Upper Iowa University
+   Location: IA, IA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0cdf0f1b-4b08-4d8a-ade2-ac94e9598d58
+
+1009. Ursinus College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9abb5ab2-78b4-4044-938c-a3a6a3040ed5
+
+1010. Ursuline Collegel
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 87de25ba-8be8-40c8-97ba-8851446a9f1d
+
+1011. Utah State University
+   Location: UT, UT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 07995767-b20e-4e86-872f-ac98015594ae
+
+1012. Utah Tech University
+   Location: UT, UT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: fa436c96-ee6b-4e26-a0af-ebd9b5909448
+
+1013. Utah Valley University
+   Location: UT, UT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 00d7d084-926f-4127-aecd-fd5316fd1cd7
+
+1014. Utica University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 05af88b8-0b04-4209-b376-ac1efd8bacfa
+
+1015. Valdosta State University
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bd079d41-c738-42f3-8a6c-2d21be7338f4
+
+1016. Valparaiso University
+   Location: IN, IN
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 054f7e1c-b6e6-4251-848a-e47ebad72ded
+
+1017. Vanderbilt University
+   Location: Nashville, TN
+   Students: 13,000
+   Greek Life: 0.16%
+   ID: 270bfab8-0bd7-4c43-a94b-1059600da31b
+
+1018. Vanguard University
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 8548b439-4061-4010-b7f0-9562009841d0
+
+1019. Vassar College
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 355f8d19-f8da-4fa8-8aff-82754c84318d
+
+1020. Vermont State University–Castleton
+   Location: VT, VT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 3af93cf6-f5c6-48fc-9370-572bc2218509
+
+1021. Vermont State University–Johnson
+   Location: VT, VT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: e84abab7-1457-4702-b43a-d5c1d87e0d79
+
+1022. Vermont State University–Lyndon
+   Location: VT, VT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c39a2f99-2024-49e4-bdad-76d04581ed8f
+
+1023. Villanova University
+   Location: Villanova, PA
+   Students: 11,000
+   Greek Life: 0.18%
+   ID: 45d2fe1f-055e-4ca9-89e9-b35dd69bcc52
+
+1024. Virginia Commonwealth University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: fcd5ba7e-64ad-413f-94e0-4a25cef0cd1d
+
+1025. Virginia Military Institutebe
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4f1075ac-51b7-4a84-b7cd-1a9a0994868a
+
+1026. Virginia Polytechnic Institute and State University
+   Location: VA, VA
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 4f2e4f32-f133-48d1-83dc-ee6bb87d965c
+
+1027. Virginia State University
+   Location: VA, VA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 26dc25c1-6dff-4e1d-a815-d08aea12f6a2
+
+1028. Virginia Tech
+   Location: Blacksburg, VA
+   Students: 37,000
+   Greek Life: 0.1%
+   ID: a17ed4b8-5783-47ae-8ca2-0bc43c80cf9f
+
+1029. Virginia Union University
+   Location: VA, VA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 821346a1-f25e-448b-a2e2-e828af2357f5
+
+1030. Virginia Wesleyan University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 132e451d-c064-43e2-9709-ef6cb3cb646f
+
+1031. Wabash CollegeA 11
+   Location: IN, IN
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2f0f5c59-77d0-49b1-8d22-82266d79de61
+
+1032. Wagner College
+   Location: NY, NY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 35518d89-01ec-4af0-a493-4a7a7640153e
+
+1033. Wake Forest University
+   Location: Winston-Salem, NC
+   Students: 9,000
+   Greek Life: 0.15%
+   ID: 159d2c64-7c2a-427a-a8b8-48f018792b5f
+
+1034. Walsh University
+   Location: OH, OH
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 0bf393c7-77dc-4507-a243-bab7fbc636c3
+
+1035. Warren Wilson College
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a7b63a0d-683c-407f-8905-ac83f5a617e4
+
+1036. Wartburg College
+   Location: IA, IA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6c9ba44d-01f6-4e7c-8728-3499c8e56f75
+
+1037. Washburn University
+   Location: KS, KS
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3f407158-b6d2-4252-b9d2-5383d7f0e188
+
+1038. Washington & Jefferson College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 33139a8a-47e2-48f3-8224-5e55cbb2ff38
+
+1039. Washington and Lee University
+   Location: VA, VA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1cf24efa-61c9-4067-8776-cd7d7188ae21
+
+1040. Washington College
+   Location: MD, MD
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 72f25401-547b-4638-8f3b-eb8c0113809c
+
+1041. Washington State University
+   Location: Pullman, WA
+   Students: 31,000
+   Greek Life: 0.11%
+   ID: 50a5e213-6041-427c-95f5-bdb31da12156
+
+1042. Washington University in St. Louis
+   Location: St. Louis, MO
+   Students: 16,000
+   Greek Life: 0.11%
+   ID: 0de03485-c567-4f57-9530-1d6e4db6bd67
+
+1043. Wayne State College
+   Location: NE, NE
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 431fbf1d-4012-4933-a79c-49a426010315
+
+1044. Wayne State University
+   Location: MI, MI
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 2501a779-da77-42f5-ae77-857a8890866b
+
+1045. Waynesburg University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 41f4dbc4-3d92-4db2-b016-01890b69ddf5
+
+1046. Weber State University
+   Location: UT, UT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 0c2c44e9-84e3-46fc-9f23-1500010c4861
+
+1047. Webster University
+   Location: MO, MO
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9d0b948f-c065-49cb-bd27-fbe90a274cd6
+
+1048. Wellesley CollegeA 1
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f4a7b9bd-b402-4e1e-b838-98e217307997
+
+1049. Wentworth Institute of Technology
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9fbc33b8-5aba-4801-b9c8-db901718db43
+
+1050. Wesleyan CollegeA 1b
+   Location: GA, GA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 7504c003-99e0-43f9-b279-b011bd956671
+
+1051. Wesleyan University
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 6b130d8e-f12d-452e-80f7-a4e753c7f2cf
+
+1052. West Chester University of Pennsylvania
+   Location: PA, PA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 218390c6-5b78-4157-999d-cea211362bcf
+
+1053. West Liberty University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: a4f9bf37-fdcd-474e-ba9e-d152c993446d
+
+1054. West Texas A&M University
+   Location: TX, TX
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: b85e5271-bb2b-4a21-88dc-48c1b1c20631
+
+1055. West Virginia State University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 019b6e3f-238f-4753-bb34-af3a00b5199d
+
+1056. West Virginia University
+   Location: Morgantown, WV
+   Students: 29,000
+   Greek Life: 0.11%
+   ID: 0967993d-315c-49ad-bd2f-f8b0874e53e8
+
+1057. West Virginia Wesleyan College
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 80099f97-1028-4d65-acbc-d5a704cb062f
+
+1058. Western Carolina University
+   Location: NC, NC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: ff70833f-cdbc-4c37-a75b-83ac4b4ab02c
+
+1059. Western Colorado University
+   Location: CO, CO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: fbd9c3b0-af9e-439c-a1b9-077ca469d9ce
+
+1060. Western Connecticut State University
+   Location: CT, CT
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: d7737472-3bb7-44c9-a107-f47d89f6ab20
+
+1061. Western Illinois University
+   Location: IL, IL
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 3db7f313-48ed-4d26-b56c-3837cea43ed8
+
+1062. Western Kentucky University
+   Location: KY, KY
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 261999e5-0865-4228-98ca-a61a8babc6e3
+
+1063. Western Michigan University
+   Location: MI, MI
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 20398660-aa18-48dc-ad4a-90d03dc056df
+
+1064. Western New England University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 3db58d1a-bb9b-4ba3-8264-6de9092a8a74
+
+1065. Western New Mexico University
+   Location: NM, NM
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 83ca94d9-8a0c-48cd-9a66-f454a27f0fea
+
+1066. Western Oregon University
+   Location: OR, OR
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: bfd3fb50-f0fc-4aa3-bb9e-a97aba3069af
+
+1067. Western Washington University
+   Location: WA, WA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 229bb23f-d49d-4e02-befd-ed73d7deedf2
+
+1068. Westfield State University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c377a794-8c49-4150-ac25-8072293efe56
+
+1069. Westminster College
+   Location: MO, MO
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: df8eb194-4170-4091-9204-52a7e3692ca0
+
+1070. Westminster University
+   Location: UT, UT
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c6a289df-c675-406b-8dec-a1e74d04a316
+
+1071. Westmont College
+   Location: CA, CA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: c404c708-b507-4e63-ae4c-20cb34ded27f
+
+1072. Wheaton College
+   Location: IL, IL
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4445dcc6-b9c1-4832-8252-cc1d2df24627
+
+1073. Wheeling University
+   Location: WV, WV
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: dcc6463d-9abd-426e-9126-702fe7f0d564
+
+1074. Whitman College
+   Location: WA, WA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 81c3984c-1d06-4dbc-817f-e17ca1c0673a
+
+1075. Whittier College
+   Location: CA, CA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: b6e5e893-cc9f-414e-98d0-1faeb53eb7ab
+
+1076. Whitworth University
+   Location: WA, WA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: aeb0ac48-81f0-4aec-beb6-1e57b2ae7c55
+
+1077. Wichita State University
+   Location: KS, KS
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 85a8a396-0dcc-4fb6-a93b-5c119b5025c4
+
+1078. Widener University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 2826b709-1eef-4257-bb4b-c1fb30c179ce
+
+1079. Wilkes University
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ee6b223a-0b49-40cc-89ae-14ae348823d2
+
+1080. Willamette University
+   Location: OR, OR
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 8709e9e9-11cb-4716-b875-36a491b3c9d3
+
+1081. William Jewell College
+   Location: MO, MO
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 9c10828a-5630-47a4-831f-6487e2dce0e7
+
+1082. William Marsh Rice University
+   Location: TX, TX
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: c203ab75-4862-4281-b461-53e872438d20
+
+1083. William Paterson University
+   Location: NJ, NJ
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 82fe7733-03dd-483c-90e3-5f54046673a1
+
+1084. William Peace University
+   Location: NC, NC
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 9d9ca7e0-6615-4127-8964-204bcec6f4a6
+
+1085. William Smith CollegeA 10A 1
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 49e1df0d-9716-4efa-938c-82ab525f1e4d
+
+1086. Williams College
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f059cb8e-ae91-421e-a829-4c95e5d32e2a
+
+1087. Wilmington College
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 1108e6f3-568b-4210-b8a6-1af3ed1ebc48
+
+1088. Wilmington University
+   Location: DE, DE
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ce836071-bbc4-497c-a66b-86dc9e041e24
+
+1089. Wilson College
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0066c8e7-b34c-41dd-b931-34a97c753d01
+
+1090. Wingate University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 3802b849-0eee-417f-b379-ac86bf8ce2cc
+
+1091. Winona State University
+   Location: MN, MN
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: d37da754-ae8b-464c-b7a4-fef4a22ca5b0
+
+1092. Winston-Salem State University
+   Location: NC, NC
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: 5901d7ac-8ef5-4808-b7fa-91cd0cff4e61
+
+1093. Winthrop University
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5a76f3f9-99a1-438d-b26b-5c7f687ef5d4
+
+1094. Wisconsin Lutheran College
+   Location: WI, WI
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: f65e31bd-d4b5-4b87-803e-6eb12aa45b39
+
+1095. Wittenberg University
+   Location: OH, OH
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: c5d5701e-5889-4ea1-a6cd-1931bebdef6b
+
+1096. Wofford College
+   Location: SC, SC
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1bd96efd-af50-4f38-a2a0-2329bad1f94a
+
+1097. Worcester Polytechnic Institute
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: ff73fab9-970b-4626-9743-e106d160da52
+
+1098. Worcester State University
+   Location: MA, MA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 0d7c27be-6c76-4300-b222-b8201f325b82
+
+1099. Wright State University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 26fdc8df-142c-46f8-95db-804a7cb62683
+
+1100. Xavier University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 7303e651-c56c-4df0-8b78-a78e19de58b4
+
+1101. Yale University
+   Location: CT, CT
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 1f22261b-cee9-4f72-a3de-89e0fa016493
+
+1102. Yeshiva University
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: fc224f59-0702-4ae5-94a2-d61829009c16
+
+1103. York College of Pennsylvania
+   Location: PA, PA
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: a37edd2f-f88d-485a-86c5-c19e75a706f5
+
+1104. York College, City University of New York
+   Location: NY, NY
+   Students: 5,000
+   Greek Life: 0.1%
+   ID: 4bf2ce22-014f-4851-a090-8ca969b72857
+
+1105. Young Harris College
+   Location: GA, GA
+   Students: 10,000
+   Greek Life: 0.1%
+   ID: ee31c4d7-b32f-445b-8d6a-98d8e24ac00c
+
+1106. Youngstown State University
+   Location: OH, OH
+   Students: 25,000
+   Greek Life: 0.1%
+   ID: 5c4a9c3b-4e0c-471b-99cb-fb7aaabf566e
+

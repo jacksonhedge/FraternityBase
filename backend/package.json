@@ -16,6 +16,9 @@
     "health": "node ./scripts/health-check.js",
     "setup:prod": "./scripts/production-setup.sh",
     "import:colleges": "tsx scripts/import-colleges.ts",
+    "daily-report": "tsx scripts/send-daily-reports.ts",
+    "daily-report-pdf": "tsx scripts/generate-daily-report-pdf.ts",
+    "validate-csv": "tsx scripts/validate-csv.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
