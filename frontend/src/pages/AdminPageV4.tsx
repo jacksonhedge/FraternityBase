@@ -38,6 +38,7 @@ import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
 import ActivityLogsTab from '../components/admin/ActivityLogsTab';
 import AmbassadorsAdmin from '../components/AmbassadorsAdmin';
 import RoadmapAdmin from '../components/RoadmapAdmin';
+import AdminNotificationCenter from '../components/AdminNotificationCenter';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -222,6 +223,16 @@ const AdminPageV4 = () => {
   const [aiStatus, setAiStatus] = useState<{ connected: boolean; model: string } | null>(null);
   const [editingChapter, setEditingChapter] = useState<Chapter | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  // CSV Paste Modal states
+  const [showPasteModal, setShowPasteModal] = useState(false);
+  const [pasteChapterId, setPasteChapterId] = useState('');
+  const [pasteCSVText, setPasteCSVText] = useState('');
+  const [pasteLoading, setPasteLoading] = useState(false);
+  const [pasteResult, setPasteResult] = useState<any>(null);
+  const [selectedUniversityId, setSelectedUniversityId] = useState('');
+  const [universitySearchTerm, setUniversitySearchTerm] = useState('');
+  const [chapterSearchTerm, setChapterSearchTerm] = useState('');
 
   // Form states
   const [fraternityForm, setFraternityForm] = useState({
@@ -1333,6 +1344,46 @@ const AdminPageV4 = () => {
     reader.readAsText(file);
   };
 
+  // CSV Paste Handler
+  const handleCSVPaste = async () => {
+    if (!pasteChapterId || !pasteCSVText.trim()) {
+      showSuccessMsg('Please select a chapter and paste CSV data');
+      return;
+    }
+
+    setPasteLoading(true);
+    setPasteResult(null);
+
+    try {
+      console.log('[CSV Paste] Uploading roster for chapter:', pasteChapterId);
+
+      const response = await fetch(`${API_URL}/admin/chapters/${pasteChapterId}/paste-roster`, {
+        method: 'POST',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ csvText: pasteCSVText })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log('[CSV Paste] Success:', result);
+        setPasteResult(result);
+        showSuccessMsg(
+          `Roster Updated!\n✅ Inserted: ${result.insertedCount}\n🔄 Updated: ${result.updatedCount}\n⏭️ Skipped: ${result.skippedCount}`
+        );
+        fetchData(); // Refresh data
+      } else {
+        throw new Error(result.error || 'Failed to paste roster');
+      }
+    } catch (error: any) {
+      console.error('[CSV Paste] Error:', error);
+      showSuccessMsg(`Error: ${error.message}`);
+      setPasteResult({ success: false, error: error.message });
+    } finally {
+      setPasteLoading(false);
+    }
+  };
+
   // AI Assistant Handler
   const handleAIAssist = async () => {
     setAiLoading(true);
@@ -1772,6 +1823,12 @@ const AdminPageV4 = () => {
             <Shield className="w-4 h-4" />
             <span className="text-sm font-medium">Admin Mode</span>
           </div>
+
+          {/* Notification Center */}
+          <div className="mb-3 flex justify-center">
+            <AdminNotificationCenter />
+          </div>
+
           <button
             onClick={handleLogout}
             className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center space-x-2"
@@ -2638,6 +2695,23 @@ const AdminPageV4 = () => {
                       className="hidden"
                     />
                   </label>
+                  {activeTab === 'chapters' && (
+                    <button
+                      onClick={() => {
+                        setShowPasteModal(true);
+                        setPasteChapterId('');
+                        setPasteCSVText('');
+                        setPasteResult(null);
+                        setSelectedUniversityId('');
+                        setUniversitySearchTerm('');
+                        setChapterSearchTerm('');
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                    >
+                      <FileUp className="w-4 h-4" />
+                      <span>Paste Roster</span>
+                    </button>
+                  )}
                   <button
                     onClick={() => {
                       setShowForm(!showForm);
@@ -3756,6 +3830,269 @@ const AdminPageV4 = () => {
           onTogglePinned={handleTogglePinned}
           onAssignPosition={handleAssignPosition}
         />
+      )}
+
+      {/* CSV Paste Modal */}
+      {showPasteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <FileUp className="w-6 h-6 text-blue-600" />
+                  <h2 className="text-2xl font-bold text-gray-900">Paste Roster CSV</h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowPasteModal(false);
+                    setPasteChapterId('');
+                    setPasteCSVText('');
+                    setPasteResult(null);
+                    setSelectedUniversityId('');
+                    setUniversitySearchTerm('');
+                    setChapterSearchTerm('');
+                  }}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="space-y-4">
+                {/* Step 1: School Selector */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Step 1: Select School *
+                  </label>
+                  {/* School Search Input */}
+                  <div className="relative mb-2">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      value={universitySearchTerm}
+                      onChange={(e) => setUniversitySearchTerm(e.target.value)}
+                      placeholder="Search schools..."
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled={pasteLoading}
+                    />
+                    {universitySearchTerm && (
+                      <button
+                        onClick={() => setUniversitySearchTerm('')}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  {/* Filtered School Select */}
+                  <select
+                    value={selectedUniversityId}
+                    onChange={(e) => {
+                      setSelectedUniversityId(e.target.value);
+                      setPasteChapterId(''); // Clear chapter selection when school changes
+                    }}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    disabled={pasteLoading}
+                    size={6}
+                  >
+                    <option value="">Choose a school...</option>
+                    {universities
+                      .filter(u => {
+                        if (!universitySearchTerm) return true;
+                        return u.name?.toLowerCase().includes(universitySearchTerm.toLowerCase());
+                      })
+                      .map(u => (
+                        <option key={u.id} value={u.id}>
+                          {u.name} ({u.state})
+                        </option>
+                      ))}
+                  </select>
+                  {universitySearchTerm && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Showing {universities.filter(u => u.name?.toLowerCase().includes(universitySearchTerm.toLowerCase())).length} of {universities.length} schools
+                    </p>
+                  )}
+                </div>
+
+                {/* Step 2: Chapter Selector (only shown after school is selected) */}
+                {selectedUniversityId && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Step 2: Select Chapter *
+                    </label>
+                    {/* Chapter Search Input */}
+                    <div className="relative mb-2">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        value={chapterSearchTerm}
+                        onChange={(e) => setChapterSearchTerm(e.target.value)}
+                        placeholder="Search chapters at this school..."
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled={pasteLoading}
+                      />
+                      {chapterSearchTerm && (
+                        <button
+                          onClick={() => setChapterSearchTerm('')}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                    {/* Filtered Chapter Select */}
+                    <select
+                      value={pasteChapterId}
+                      onChange={(e) => setPasteChapterId(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled={pasteLoading}
+                      size={6}
+                    >
+                      <option value="">Choose a chapter...</option>
+                      {chapters
+                        .filter(ch => ch.university_id === selectedUniversityId)
+                        .filter(ch => {
+                          if (!chapterSearchTerm) return true;
+                          const searchLower = chapterSearchTerm.toLowerCase();
+                          const orgMatch = ch.greek_organizations?.name?.toLowerCase().includes(searchLower);
+                          const chapterMatch = ch.chapter_name?.toLowerCase().includes(searchLower);
+                          return orgMatch || chapterMatch;
+                        })
+                        .map(ch => (
+                          <option key={ch.id} value={ch.id}>
+                            {ch.greek_organizations?.name} ({ch.chapter_name})
+                          </option>
+                        ))}
+                    </select>
+                    {chapterSearchTerm && (
+                      <p className="mt-1 text-xs text-gray-500">
+                        Showing {chapters.filter(ch => {
+                          if (ch.university_id !== selectedUniversityId) return false;
+                          const searchLower = chapterSearchTerm.toLowerCase();
+                          return ch.greek_organizations?.name?.toLowerCase().includes(searchLower) ||
+                                 ch.chapter_name?.toLowerCase().includes(searchLower);
+                        }).length} chapters
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* CSV Text Area */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Paste CSV Data *
+                  </label>
+                  <div className="mb-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-xs text-blue-800 font-mono">
+                      Expected format:<br />
+                      name,position,email,phone,linkedin,graduation_year,major,member_type,is_primary_contact<br />
+                      John Doe,President,john@example.com,555-1234,https://linkedin.com/in/john,2025,Business,officer,TRUE
+                    </p>
+                  </div>
+                  <textarea
+                    value={pasteCSVText}
+                    onChange={(e) => setPasteCSVText(e.target.value)}
+                    placeholder="Paste your CSV data here..."
+                    rows={12}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                    disabled={pasteLoading}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    {pasteCSVText.split('\n').filter(line => line.trim()).length - 1} data rows (excluding header)
+                  </p>
+                </div>
+
+                {/* Result Display */}
+                {pasteResult && (
+                  <div className={`p-4 rounded-lg ${pasteResult.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      {pasteResult.success ? (
+                        <>
+                          <span className="text-green-600">✅</span>
+                          <span className="text-green-800">Upload Successful!</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-red-600">❌</span>
+                          <span className="text-red-800">Upload Failed</span>
+                        </>
+                      )}
+                    </h3>
+                    {pasteResult.success && (
+                      <div className="text-sm space-y-1">
+                        <p className="text-gray-700">
+                          <strong>Total Records:</strong> {pasteResult.totalRecords}
+                        </p>
+                        <p className="text-green-700">
+                          <strong>✅ Inserted:</strong> {pasteResult.insertedCount} new members
+                        </p>
+                        <p className="text-blue-700">
+                          <strong>🔄 Updated:</strong> {pasteResult.updatedCount} existing members
+                        </p>
+                        {pasteResult.skippedCount > 0 && (
+                          <p className="text-orange-700">
+                            <strong>⏭️ Skipped:</strong> {pasteResult.skippedCount} rows
+                          </p>
+                        )}
+                        {pasteResult.errors && pasteResult.errors.length > 0 && (
+                          <div className="mt-2">
+                            <p className="text-red-700 font-semibold">Errors:</p>
+                            <ul className="list-disc list-inside text-xs text-red-600">
+                              {pasteResult.errors.map((err: string, idx: number) => (
+                                <li key={idx}>{err}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {!pasteResult.success && (
+                      <p className="text-sm text-red-700">{pasteResult.error}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex justify-end gap-3 pt-4 border-t">
+                  <button
+                    onClick={() => {
+                      setShowPasteModal(false);
+                      setPasteChapterId('');
+                      setPasteCSVText('');
+                      setPasteResult(null);
+                      setSelectedUniversityId('');
+                      setUniversitySearchTerm('');
+                      setChapterSearchTerm('');
+                    }}
+                    className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                    disabled={pasteLoading}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCSVPaste}
+                    disabled={pasteLoading || !pasteChapterId || !pasteCSVText.trim()}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {pasteLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4" />
+                        <span>Upload Roster</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
