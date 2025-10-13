@@ -58,6 +58,7 @@ import BarsPage from './pages/BarsPage';
 import ProductRoadmapPage from './pages/ProductRoadmapPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import SharePage from './pages/SharePage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -129,6 +130,12 @@ function AnimatedRoutes() {
           <Route path="/admin/csv-upload" element={<AdminRoute><AdminCSVUploadPage /></AdminRoute>} />
           <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />
 
+          {/* Public Map Route */}
+          <Route path="/dashboard-map" element={<MapPageFullScreen />} />
+
+          {/* Public Share Route */}
+          <Route path="/share/:token" element={<SharePage />} />
+
           {/* Private Routes */}
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Navigate to="/app/map" replace />} />
@@ -167,7 +174,7 @@ function AnimatedRoutes() {
 }
 
 function App() {
-  console.log('🧢 FraternityBase App loaded - Routes available: /, /signup, /pricing, /login - v3');
+  console.log('🧢 FraternityBase App loaded - Routes available: /, /signup, /pricing, /login - v3 [TEST]');
 
   // Add a loading check
   if (!store) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactElement } from 'react';
 import { MapContainer, TileLayer, GeoJSON, CircleMarker, Tooltip, useMap, Marker } from 'react-leaflet';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -132,7 +132,7 @@ const MapPageFullScreen = () => {
   const [showNavMenu, setShowNavMenu] = useState(false);
   const [hoveredCollege, setHoveredCollege] = useState<{ name: string; data: any } | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false); // Toggle between radar (dark) and logo (light) mode - default to light
-  const [divisionFilter, setDivisionFilter] = useState<'all' | 'big10' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('big10');
+  const [divisionFilter, setDivisionFilter] = useState<'all' | 'big10' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('big10'); // Default to Big 10 for public users
   const [showLockOverlay, setShowLockOverlay] = useState(false);
   const [collegeLogos, setCollegeLogos] = useState<Record<string, string>>({});
   const [universities, setUniversities] = useState<any[]>([]); // Store all universities from database with IDs
@@ -142,6 +142,8 @@ const MapPageFullScreen = () => {
   const [collegeClickedName, setCollegeClickedName] = useState<string>('');
   const [unlockedChapters, setUnlockedChapters] = useState<any[]>([]);
   const [unlockedCollegeIds, setUnlockedCollegeIds] = useState<Set<string>>(new Set());
+  const [hasEnterpriseAccess, setHasEnterpriseAccess] = useState(false); // Enterprise = unlimited chapter unlocks
+  const [collegeClickCount, setCollegeClickCount] = useState(0); // Track clicks for non-authenticated users
   const mapRef = useRef<any>(null);
 
   const handleLogout = () => {
@@ -221,7 +223,7 @@ const MapPageFullScreen = () => {
     fetchCollegeLogos();
   }, []);
 
-  // Fetch subscription tier
+  // Fetch subscription tier and check for Enterprise access
   useEffect(() => {
     const fetchSubscriptionTier = async () => {
       try {
@@ -239,6 +241,17 @@ const MapPageFullScreen = () => {
         if (response.ok) {
           const data = await response.json();
           setSubscriptionTier(data.subscriptionTier || 'trial');
+
+          // Check for Enterprise access (unlimited chapter unlocks)
+          const isEnterprise =
+            data.subscriptionTier === 'enterprise' ||
+            data.subscriptionTier === 'monthly' ||
+            data.chapterUnlocksRemaining === -1;
+          setHasEnterpriseAccess(isEnterprise);
+
+          if (isEnterprise) {
+            console.log('✅ Enterprise access detected - all chapters will be unlocked');
+          }
         }
       } catch (error) {
         console.error('Error fetching subscription tier:', error);
@@ -323,6 +336,16 @@ const MapPageFullScreen = () => {
 
     fetchUnlockedChapters();
   }, []);
+
+  // Load college click count from sessionStorage for non-authenticated users
+  useEffect(() => {
+    if (!user) {
+      const storedCount = sessionStorage.getItem('mapCollegeClicks');
+      if (storedCount) {
+        setCollegeClickCount(parseInt(storedCount, 10));
+      }
+    }
+  }, [user]);
 
   // Dynamic style for states based on light/dark mode
   const styleState = (feature?: any) => {
@@ -706,6 +729,21 @@ const MapPageFullScreen = () => {
       sororities: collegeData.sororities
     });
 
+    // Check if user is NOT authenticated - implement 3-click limit
+    if (!user) {
+      const newCount = collegeClickCount + 1;
+      setCollegeClickCount(newCount);
+      sessionStorage.setItem('mapCollegeClicks', newCount.toString());
+
+      console.log(`🔒 [Non-authenticated user] Click count: ${newCount}/3`);
+
+      if (newCount >= 3) {
+        console.log('🚫 [Non-authenticated user] Reached 3-click limit, redirecting to signup');
+        navigate('/signup');
+        return;
+      }
+    }
+
     // Check if user is on free trial and trying to access non-BIG10 college
     const isFreeUser = subscriptionTier.toLowerCase() === 'trial' || subscriptionTier.toLowerCase() === 'free';
     const isBIG10College = collegeData.conference === 'BIG 10';
@@ -754,12 +792,16 @@ const MapPageFullScreen = () => {
 
         console.log(`✅ [MapPage - handleCollegeClick] Filtered to ${chapters.length} chapters for ${collegeName}`);
 
-        // Mark chapters as unlocked based on unlockedChapters set
+        // Mark chapters as unlocked - Enterprise users get unlimited access
         const unlockedIds = new Set(unlockedChapters.map((c: any) => c.id));
         const chaptersWithUnlockStatus = chapters.map((c: any) => ({
           ...c,
-          unlocked: unlockedIds.has(c.id)
+          unlocked: hasEnterpriseAccess || unlockedIds.has(c.id) // Enterprise OR individually unlocked
         }));
+
+        if (hasEnterpriseAccess) {
+          console.log('🔓 Enterprise access: All chapters automatically unlocked');
+        }
 
         // If in mychapters mode, filter to only show unlocked chapters
         let finalChapters = chaptersWithUnlockStatus;
@@ -999,7 +1041,7 @@ const MapPageFullScreen = () => {
       </button>
 
       {/* Light/Dark Mode Toggle Switch & Reset Button */}
-      <div className="absolute top-4 left-20 z-[1001] flex items-center gap-3 bg-white rounded-lg shadow-lg p-2">
+      <div className="absolute bottom-32 right-4 z-[1001] flex items-center gap-3 bg-white rounded-lg shadow-lg p-2">
         <span className={`text-xl transition-colors ${!isDarkMode ? 'text-yellow-500' : 'text-gray-400'}`}>
           ☀️
         </span>
@@ -1540,8 +1582,8 @@ const MapPageFullScreen = () => {
                       }
                     })}
 
-                    {/* Unlock button if there are locked chapters */}
-                    {collegeChapters.some(c => !c.unlocked) && (
+                    {/* Unlock button if there are locked chapters and user doesn't have Enterprise access */}
+                    {!hasEnterpriseAccess && collegeChapters.some(c => !c.unlocked) && (
                       <div className="mt-4 text-center">
                         <Link
                           to="/app/subscription"
@@ -1744,8 +1786,9 @@ const MapPageFullScreen = () => {
         )}
 
         {/* College markers - Radar (dark) or Logo (light) style - Show in both USA and state view */}
-        {!showLockOverlay && (viewMode === 'usa' || viewMode === 'state') && Object.entries(COLLEGE_LOCATIONS)
-          .filter(([collegeName, collegeData]) => {
+        {!showLockOverlay && (viewMode === 'usa' || viewMode === 'state') && (() => {
+          // Filter all colleges first
+          const filteredColleges = Object.entries(COLLEGE_LOCATIONS).filter(([collegeName, collegeData]) => {
             // Filter by state if in state view
             if (viewMode === 'state' && selectedState) {
               if (collegeData.state !== selectedState.abbr) {
@@ -1761,13 +1804,10 @@ const MapPageFullScreen = () => {
             }
 
             if (divisionFilter === 'mychapters') {
-              // Filter to show only colleges with unlocked chapters
-              // Check if the college name exists in the unlockedCollegeIds set
               return unlockedCollegeIds.has(collegeName);
             }
 
             if (divisionFilter === 'power4') {
-              // Power 4: SEC, BIG 10, BIG 12, ACC
               const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
               return power4Conferences.includes(collegeData.conference || '');
             }
@@ -1785,45 +1825,99 @@ const MapPageFullScreen = () => {
             }
 
             return true;
-          })
-          .map(([collegeName, collegeData]) => {
-          const icon = isDarkMode
-            ? L.divIcon({
-                className: 'radar-marker',
+          });
+
+          // Group by state
+          const collegesByState: Record<string, Array<[string, any]>> = {};
+          filteredColleges.forEach(([name, data]) => {
+            if (!collegesByState[data.state]) {
+              collegesByState[data.state] = [];
+            }
+            collegesByState[data.state].push([name, data]);
+          });
+
+          // Create markers: first 10 per state + "+X More" markers
+          const markers: ReactElement[] = [];
+
+          Object.entries(collegesByState).forEach(([stateAbbr, colleges]) => {
+            const firstTen = colleges.slice(0, 10);
+            const remaining = colleges.length - 10;
+
+            // Add markers for first 10 colleges
+            firstTen.forEach(([collegeName, collegeData]) => {
+              const icon = isDarkMode
+                ? L.divIcon({
+                    className: 'radar-marker',
+                    html: `
+                      <div class="radar-container">
+                        <div class="radar-ping"></div>
+                        <div class="radar-ping radar-ping-2"></div>
+                        <div class="radar-dot"></div>
+                      </div>
+                    `,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                  })
+                : L.divIcon({
+                    className: 'logo-marker',
+                    html: `
+                      <div class="logo-container">
+                        <img src="${getCollegeLogo(collegeName)}" alt="${collegeName}" class="college-logo" />
+                      </div>
+                    `,
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20]
+                  });
+
+              markers.push(
+                <Marker
+                  key={collegeName}
+                  position={[collegeData.lat, collegeData.lng]}
+                  icon={icon}
+                  eventHandlers={{
+                    click: () => handleCollegeClick(collegeName, { name: collegeName, ...collegeData }),
+                    mouseover: () => setHoveredCollege({ name: collegeName, data: collegeData }),
+                    mouseout: () => setHoveredCollege(null),
+                  }}
+                />
+              );
+            });
+
+            // Add "+X More" marker if there are more than 10
+            if (remaining > 0 && STATE_COORDINATES[stateAbbr as keyof typeof STATE_COORDINATES]) {
+              const stateCoords = STATE_COORDINATES[stateAbbr as keyof typeof STATE_COORDINATES];
+              const moreIcon = L.divIcon({
+                className: 'more-marker',
                 html: `
-                  <div class="radar-container">
-                    <div class="radar-ping"></div>
-                    <div class="radar-ping radar-ping-2"></div>
-                    <div class="radar-dot"></div>
-                  </div>
+                  <div style="
+                    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+                    color: white;
+                    padding: 8px 12px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    white-space: nowrap;
+                    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+                    cursor: pointer;
+                    border: 2px solid white;
+                  ">+${remaining} More</div>
                 `,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15]
-              })
-            : L.divIcon({
-                className: 'logo-marker',
-                html: `
-                  <div class="logo-container">
-                    <img src="${getCollegeLogo(collegeName)}" alt="${collegeName}" class="college-logo" />
-                  </div>
-                `,
-                iconSize: [40, 40],
-                iconAnchor: [20, 20]
+                iconSize: [80, 36],
+                iconAnchor: [40, 18]
               });
 
-          return (
-            <Marker
-              key={collegeName}
-              position={[collegeData.lat, collegeData.lng]}
-              icon={icon}
-              eventHandlers={{
-                click: () => handleCollegeClick(collegeName, { name: collegeName, ...collegeData }),
-                mouseover: () => setHoveredCollege({ name: collegeName, data: collegeData }),
-                mouseout: () => setHoveredCollege(null),
-              }}
-            />
-          );
-        })}
+              markers.push(
+                <Marker
+                  key={`more-${stateAbbr}`}
+                  position={[stateCoords.lat, stateCoords.lng]}
+                  icon={moreIcon}
+                />
+              );
+            }
+          });
+
+          return markers;
+        })()}
 
 
         {/* Campus chapter markers */}
