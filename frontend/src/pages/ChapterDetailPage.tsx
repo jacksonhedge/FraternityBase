@@ -456,100 +456,101 @@ const ChapterDetailPage = () => {
 
           {/* Dynamic Officers List */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {officers.length > 0 ? (
-              officers
-                .filter((officer) => officer.position && officer.position.toLowerCase() !== 'member')
-                .sort((a, b) => {
-                  // Define officer position priority
-                  const positionOrder: {[key: string]: number} = {
-                    'president': 1,
-                    'vice president': 2,
-                    'vp': 2,
-                    'treasurer': 3,
-                    'secretary': 4,
-                    'rush': 5,
-                    'rush chair': 5,
-                    'social': 6,
-                    'social chair': 6,
-                    'philanthropy': 7,
-                    'philanthropy chair': 7,
-                  };
+            {(() => {
+              const filteredOfficers = officers.filter((officer) => officer.position && officer.position.toLowerCase() !== 'member');
 
-                  const aPos = a.position?.toLowerCase() || '';
-                  const bPos = b.position?.toLowerCase() || '';
+              if (filteredOfficers.length > 0) {
+                return filteredOfficers
+                  .sort((a, b) => {
+                    // Define officer position priority
+                    const positionOrder: {[key: string]: number} = {
+                      'president': 1,
+                      'vice president': 2,
+                      'vp': 2,
+                      'treasurer': 3,
+                      'secretary': 4,
+                      'rush': 5,
+                      'rush chair': 5,
+                      'social': 6,
+                      'social chair': 6,
+                      'philanthropy': 7,
+                      'philanthropy chair': 7,
+                    };
 
-                  const aOrder = positionOrder[aPos] || 999;
-                  const bOrder = positionOrder[bPos] || 999;
+                    const aPos = a.position?.toLowerCase() || '';
+                    const bPos = b.position?.toLowerCase() || '';
 
-                  return aOrder - bOrder;
-                })
-                .map((officer) => {
-                  // Determine masking tier for this officer
-                  const maskingTier = getMaskingTier(
-                    isUnlocked('officer_contacts'),
-                    subscriptionTier
-                  );
-                  const indicator = getMaskingIndicator(maskingTier);
-                  const officerName = officer.name || (officer.first_name && officer.last_name ? `${officer.first_name} ${officer.last_name}` : 'To be Determined');
+                    const aOrder = positionOrder[aPos] || 999;
+                    const bOrder = positionOrder[bPos] || 999;
 
-                  return (
-                    <div key={officer.id} className="border rounded-lg p-4">
-                      <h3 className="font-semibold text-gray-900">{officer.position || 'To be Determined'}</h3>
-                      <p className="text-gray-900 mt-1">
-                        {officerName !== 'To be Determined' ? maskName(officerName, maskingTier) : 'To be Determined'}
-                        {maskingTier !== 'unlocked' && officerName !== 'To be Determined' && (
-                          <span className="ml-1 text-xs">{indicator}</span>
+                    return aOrder - bOrder;
+                  })
+                  .map((officer) => {
+                    // Determine masking tier for this officer
+                    const maskingTier = getMaskingTier(
+                      isUnlocked('officer_contacts'),
+                      subscriptionTier
+                    );
+                    const indicator = getMaskingIndicator(maskingTier);
+                    const officerName = officer.name || (officer.first_name && officer.last_name ? `${officer.first_name} ${officer.last_name}` : 'To be Determined');
+
+                    return (
+                      <div key={officer.id} className="border rounded-lg p-4">
+                        <h3 className="font-semibold text-gray-900">{officer.position || 'To be Determined'}</h3>
+                        <p className="text-gray-900 mt-1">
+                          {officerName !== 'To be Determined' ? maskName(officerName, maskingTier) : 'To be Determined'}
+                          {maskingTier !== 'unlocked' && officerName !== 'To be Determined' && (
+                            <span className="ml-1 text-xs">{indicator}</span>
+                          )}
+                        </p>
+                        {officer.major && officer.graduation_year && (
+                          <p className="text-sm text-gray-600">{officer.major} • Class of {officer.graduation_year}</p>
                         )}
-                      </p>
-                      {officer.major && officer.graduation_year && (
-                        <p className="text-sm text-gray-600">{officer.major} • Class of {officer.graduation_year}</p>
-                      )}
-                      <div className="mt-2 space-y-1">
-                        {officer.email ? (
-                          maskingTier === 'unlocked' ? (
-                            <a href={`mailto:${officer.email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                              <Mail className="w-4 h-4 mr-1" />
-                              {officer.email}
-                            </a>
+                        <div className="mt-2 space-y-1">
+                          {officer.email ? (
+                            maskingTier === 'unlocked' ? (
+                              <a href={`mailto:${officer.email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                                <Mail className="w-4 h-4 mr-1" />
+                                {officer.email}
+                              </a>
+                            ) : (
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Mail className="w-4 h-4 mr-1" />
+                                <span>{maskEmail(officer.email, maskingTier)}</span>
+                                <span className="ml-1 text-xs">{indicator}</span>
+                              </div>
+                            )
                           ) : (
-                            <div className="flex items-center text-sm text-gray-600">
-                              <Mail className="w-4 h-4 mr-1" />
-                              <span>{maskEmail(officer.email, maskingTier)}</span>
-                              <span className="ml-1 text-xs">{indicator}</span>
-                            </div>
-                          )
-                        ) : (
-                          <p className="text-sm text-gray-500">Email: To be Determined</p>
-                        )}
-                        {officer.phone ? (
-                          maskingTier === 'unlocked' ? (
-                            <a href={`tel:${officer.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                              <Phone className="w-4 h-4 mr-1" />
-                              {officer.phone}
-                            </a>
+                            <p className="text-sm text-gray-500">Email: To be Determined</p>
+                          )}
+                          {officer.phone ? (
+                            maskingTier === 'unlocked' ? (
+                              <a href={`tel:${officer.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                                <Phone className="w-4 h-4 mr-1" />
+                                {officer.phone}
+                              </a>
+                            ) : (
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Phone className="w-4 h-4 mr-1" />
+                                <span>{maskPhone(officer.phone, maskingTier)}</span>
+                                <span className="ml-1 text-xs">{indicator}</span>
+                              </div>
+                            )
                           ) : (
-                            <div className="flex items-center text-sm text-gray-600">
-                              <Phone className="w-4 h-4 mr-1" />
-                              <span>{maskPhone(officer.phone, maskingTier)}</span>
-                              <span className="ml-1 text-xs">{indicator}</span>
-                            </div>
-                          )
-                        ) : (
-                          <p className="text-sm text-gray-500">Phone: To be Determined</p>
-                        )}
+                            <p className="text-sm text-gray-500">Phone: To be Determined</p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  );
-                }))
-            ) : officers.length > 0 ? (
-              <div className="col-span-2 text-center py-8 text-gray-500">
-                No officer positions available. Only general members listed.
-              </div>
-            ) : (
-              <div className="col-span-2 text-center py-8 text-gray-500">
-                Chapter leadership: To be Determined
-              </div>
-            )}
+                    );
+                  });
+              } else {
+                return (
+                  <div className="col-span-2 text-center py-8 text-gray-500">
+                    Chapter leadership: To be Determined
+                  </div>
+                );
+              }
+            })()}
 
             {currentYearData.vicePresident && (
               <div className="border rounded-lg p-4">
