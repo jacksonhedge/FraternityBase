@@ -22,12 +22,16 @@ import {
   Handshake
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+import { maskName, maskEmail, maskPhone, getMaskingTier, getMaskingIndicator } from '../utils/dataMasking';
 
 const ChapterDetailPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
   const [selectedYear, setSelectedYear] = useState('2025-2026');
+
+  // Subscription tier for masking
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
 
   // Determine back link based on current path
   const backLink = location.pathname.includes('/my-chapters/') ? '/app/my-chapters' : '/app/chapters';
@@ -99,12 +103,15 @@ const ChapterDetailPage = () => {
         .then(data => setUnlockStatus(data.unlocked || []))
         .catch(err => console.error('Failed to fetch unlock status:', err));
 
-      // Fetch credit balance
+      // Fetch credit balance and subscription tier
       fetch(`${API_URL}/credits/balance`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
         .then(res => res.json())
-        .then(data => setBalance(data.balance || 0))
+        .then(data => {
+          setBalance(data.balance || 0);
+          setSubscriptionTier(data.subscriptionTier || 'trial');
+        })
         .catch(err => console.error('Failed to fetch balance:', err));
     }
   }, [id, token]);
@@ -414,9 +421,9 @@ const ChapterDetailPage = () => {
               <div className="flex items-start gap-3">
                 <Lock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-1">🔒 Officer Contacts Locked</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1">🔓 See Partial Info • Unlock for Full Details</h3>
                   <p className="text-sm text-gray-700 mb-3">
-                    Unlock full contact information (emails & phones) for all officers to reach out directly.
+                    You can see partial officer names and contact info below. Unlock to reveal complete emails, phone numbers, and names for direct outreach.
                   </p>
                   <button
                     onClick={() => handleUnlock('full', 20)}
@@ -431,7 +438,7 @@ const ChapterDetailPage = () => {
                     ) : (
                       <>
                         <Unlock className="w-4 h-4" />
-                        Unlock for 20 Credits
+                        Unlock Full Access for 20 Credits
                       </>
                     )}
                   </button>
@@ -476,40 +483,64 @@ const ChapterDetailPage = () => {
 
                   return aOrder - bOrder;
                 })
-                .map((officer) => (
-                <div key={officer.id} className="border rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900">{officer.position || 'To be Determined'}</h3>
-                  <p className="text-gray-900 mt-1">{officer.name || (officer.first_name && officer.last_name ? `${officer.first_name} ${officer.last_name}` : 'To be Determined')}</p>
-                  {officer.major && officer.graduation_year && (
-                    <p className="text-sm text-gray-600">{officer.major} • Class of {officer.graduation_year}</p>
-                  )}
-                  {isUnlocked('officer_contacts') ? (
-                    <div className="mt-2 space-y-1">
-                      {officer.email ? (
-                        <a href={`mailto:${officer.email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                          <Mail className="w-4 h-4 mr-1" />
-                          {officer.email}
-                        </a>
-                      ) : (
-                        <p className="text-sm text-gray-500">Email: To be Determined</p>
+                .map((officer) => {
+                  // Determine masking tier for this officer
+                  const maskingTier = getMaskingTier(
+                    isUnlocked('officer_contacts'),
+                    subscriptionTier
+                  );
+                  const indicator = getMaskingIndicator(maskingTier);
+                  const officerName = officer.name || (officer.first_name && officer.last_name ? `${officer.first_name} ${officer.last_name}` : 'To be Determined');
+
+                  return (
+                    <div key={officer.id} className="border rounded-lg p-4">
+                      <h3 className="font-semibold text-gray-900">{officer.position || 'To be Determined'}</h3>
+                      <p className="text-gray-900 mt-1">
+                        {officerName !== 'To be Determined' ? maskName(officerName, maskingTier) : 'To be Determined'}
+                        {maskingTier !== 'unlocked' && officerName !== 'To be Determined' && (
+                          <span className="ml-1 text-xs">{indicator}</span>
+                        )}
+                      </p>
+                      {officer.major && officer.graduation_year && (
+                        <p className="text-sm text-gray-600">{officer.major} • Class of {officer.graduation_year}</p>
                       )}
-                      {officer.phone ? (
-                        <a href={`tel:${officer.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                          <Phone className="w-4 h-4 mr-1" />
-                          {officer.phone}
-                        </a>
-                      ) : (
-                        <p className="text-sm text-gray-500">Phone: To be Determined</p>
-                      )}
+                      <div className="mt-2 space-y-1">
+                        {officer.email ? (
+                          maskingTier === 'unlocked' ? (
+                            <a href={`mailto:${officer.email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                              <Mail className="w-4 h-4 mr-1" />
+                              {officer.email}
+                            </a>
+                          ) : (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Mail className="w-4 h-4 mr-1" />
+                              <span>{maskEmail(officer.email, maskingTier)}</span>
+                              <span className="ml-1 text-xs">{indicator}</span>
+                            </div>
+                          )
+                        ) : (
+                          <p className="text-sm text-gray-500">Email: To be Determined</p>
+                        )}
+                        {officer.phone ? (
+                          maskingTier === 'unlocked' ? (
+                            <a href={`tel:${officer.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
+                              <Phone className="w-4 h-4 mr-1" />
+                              {officer.phone}
+                            </a>
+                          ) : (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Phone className="w-4 h-4 mr-1" />
+                              <span>{maskPhone(officer.phone, maskingTier)}</span>
+                              <span className="ml-1 text-xs">{indicator}</span>
+                            </div>
+                          )
+                        ) : (
+                          <p className="text-sm text-gray-500">Phone: To be Determined</p>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
-                      <Lock className="w-4 h-4" />
-                      <span>Unlock to view contacts</span>
-                    </div>
-                  )}
-                </div>
-              ))
+                  );
+                }))
             ) : officers.length > 0 ? (
               <div className="col-span-2 text-center py-8 text-gray-500">
                 No officer positions available. Only general members listed.
@@ -812,7 +843,7 @@ const ChapterDetailPage = () => {
                       disabled={isSubmittingIntro}
                       className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {isSubmittingIntro ? 'Submitting...' : 'Submit Introduction Request'}
+                      {isSubmittingIntro ? 'Submitting...' : 'Submit Request'}
                     </button>
                   </form>
                 )}
