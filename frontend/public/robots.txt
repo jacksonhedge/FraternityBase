@@ -1,0 +1,18 @@
+# robots.txt for FraternityBase.com
+# Allow all crawlers to access all content
+
+User-agent: *
+Allow: /
+
+# Disallow admin pages and API endpoints
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api/
+Disallow: /app/profile
+Disallow: /app/subscription
+
+# Sitemap location
+Sitemap: https://fraternitybase.com/sitemap.xml
+
+# Crawl-delay (optional, helps prevent server overload)
+Crawl-delay: 1
