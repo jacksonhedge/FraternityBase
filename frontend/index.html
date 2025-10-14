@@ -11,32 +11,67 @@
     <meta name="title" content="FraternityBase - Your College Marketing Database">
     <meta name="description" content="Access 5,000+ Greek organizations across 250+ universities. The ultimate database for college marketing and fraternity partnerships.">
 
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FraternityBase">
+    <meta name="keywords" content="fraternities, sororities, greek life, college marketing, university partnerships, fraternity database">
+    <link rel="canonical" href="https://fraternitybase.com/">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fraternitybase.com/">
-    <meta property="og:title" content="FraternityBase - Find Your Fraternity Partner">
+    <meta property="og:title" content="FraternityBase - Your College Marketing Database">
     <meta property="og:description" content="Access 5,000+ Greek organizations across 250+ universities. The ultimate database for college marketing and fraternity partnerships.">
     <meta property="og:image" content="https://fraternitybase.com/og-cap-image.png?v=3">
     <meta property="og:image:secure_url" content="https://fraternitybase.com/og-cap-image.png?v=3">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="FraternityBase - Find Your Fraternity Partner">
+    <meta property="og:image:alt" content="FraternityBase - Your College Marketing Database">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://fraternitybase.com/">
-    <meta property="twitter:title" content="FraternityBase - Find Your Fraternity Partner">
+    <meta property="twitter:title" content="FraternityBase - Your College Marketing Database">
     <meta property="twitter:description" content="Access 5,000+ Greek organizations across 250+ universities. The ultimate database for college marketing and fraternity partnerships.">
     <meta property="twitter:image" content="https://fraternitybase.com/og-cap-image.png?v=3">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "FraternityBase",
+      "description": "Access 5,000+ Greek organizations across 250+ universities. The ultimate database for college marketing and fraternity partnerships.",
+      "url": "https://fraternitybase.com",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 
     <!-- Additional Meta Tags -->
     <meta name="theme-color" content="#3B82F6">
     <meta name="apple-mobile-web-app-title" content="FraternityBase">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
   </head>
   <body>
+    <noscript>
+      <div style="display: flex; align-items: center; justify-center: center; min-height: 100vh; padding: 20px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); max-width: 500px;">
+          <h1 style="color: #1a202c; margin-bottom: 16px; font-size: 24px;">JavaScript Required</h1>
+          <p style="color: #4a5568; margin-bottom: 24px; line-height: 1.6;">FraternityBase requires JavaScript to function properly. Please enable JavaScript in your browser settings to access the platform.</p>
+          <div style="background: #f7fafc; padding: 16px; border-radius: 8px; border-left: 4px solid #667eea;">
+            <p style="color: #2d3748; font-size: 14px; margin: 0;">Need help? Visit our <a href="mailto:support@fraternitybase.com" style="color: #667eea; text-decoration: none;">support page</a></p>
+          </div>
+        </div>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
