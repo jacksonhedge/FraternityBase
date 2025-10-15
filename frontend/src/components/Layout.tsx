@@ -196,6 +196,7 @@ const Layout = () => {
     {
       items: [
         { name: 'Billing', href: '/app/credits', icon: CreditCard, badge: null, alwaysAccessible: true },
+        { name: 'Credit System', href: '/app/credit-system', icon: Zap, badge: null, alwaysAccessible: true },
         { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null, alwaysAccessible: true },
       ]
     },
