@@ -141,7 +141,7 @@ const CreditSystemPage = () => {
       icon: Sparkles,
       color: 'from-purple-600 to-purple-700',
       bgColor: 'from-purple-50 to-purple-100',
-      credits: 20,
+      credits: 100,
       description: 'Personal introduction to verified Platinum chapters',
       features: [
         'Pre-vetted partnership relationship',
@@ -159,7 +159,7 @@ const CreditSystemPage = () => {
       icon: Handshake,
       color: 'from-indigo-500 to-indigo-600',
       bgColor: 'from-indigo-50 to-indigo-100',
-      credits: 100,
+      credits: 75,
       description: 'Personal introduction to any chapter leadership',
       features: [
         'Personal email introduction',
@@ -218,7 +218,7 @@ const CreditSystemPage = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full shadow-lg mb-6">
               <Crown className="w-5 h-5" />
               <span className="font-bold">Enterprise Member</span>
-              <span className="text-sm opacity-90">-享受 5.0⭐ 章节 50% 优惠!</span>
+              <span className="text-sm opacity-90">- Enjoy 50% off 5.0⭐ chapters!</span>
             </div>
           )}
         </div>
@@ -334,9 +334,9 @@ const CreditSystemPage = () => {
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-2">Platinum Chapters = 80% Savings</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Platinum Chapters = Premium Quality</h3>
               <p className="text-sm text-gray-600">
-                Platinum chapters are pre-vetted partners we've worked with before. Warm intros cost only 20 credits (vs 100 for standard chapters) with a 70% response rate.
+                Platinum chapters are pre-vetted partners we've worked with before. Warm intros cost 100 credits (vs 75 for standard chapters) with a 70% response rate and verified data.
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
