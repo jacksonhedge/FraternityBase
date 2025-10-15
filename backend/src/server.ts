@@ -11,7 +11,8 @@ import creditsRouter from './routes/credits';
 import activityTrackingRouter from './routes/activityTracking';
 import roadmapRouter from './routes/roadmap';
 import adminNotificationsRouter from './routes/adminNotifications';
-import sharesRouter from './routes/shares';
+// TEMPORARILY DISABLED - shares router needs PostgreSQL pool that doesn't exist yet
+// import sharesRouter from './routes/shares';
 import CreditNotificationService from './services/CreditNotificationService';
 import AdminNotificationService from './services/AdminNotificationService';
 import DailyReportService from './services/DailyReportService';
@@ -462,7 +463,8 @@ app.use('/api/credits', creditsRouter);
 app.use('/api/activity', activityTrackingRouter);
 app.use('/api/roadmap', roadmapRouter);
 app.use('/api/admin/notifications', adminNotificationsRouter);
-app.use('/api/shares', sharesRouter);
+// TEMPORARILY DISABLED - shares router needs PostgreSQL pool
+// app.use('/api/shares', sharesRouter);
 
 // Admin authentication middleware (temporarily disabled for debugging)
 const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -1593,7 +1595,7 @@ app.get('/api/chapters', async (req, res) => {
   try {
     const { universityName } = req.query;
 
-    let query = supabase
+    let query = supabaseAdmin
       .from('chapters')
       .select(`
         *,
@@ -1606,7 +1608,7 @@ app.get('/api/chapters', async (req, res) => {
     // Filter by university name if provided
     if (universityName && typeof universityName === 'string') {
       // First get the university ID
-      const { data: university, error: universityError } = await supabase
+      const { data: university, error: universityError } = await supabaseAdmin
         .from('universities')
         .select('id')
         .ilike('name', universityName)
@@ -3031,7 +3033,7 @@ app.delete('/api/admin/universities/:id', requireAdmin, async (req, res) => {
 // Chapters
 app.get('/api/admin/chapters', requireAdmin, async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('chapters')
       .select(`
         *,
@@ -3071,7 +3073,51 @@ app.post('/api/admin/chapters', requireAdmin, async (req, res) => {
       is_viewable
     } = req.body;
 
-    const { data, error } = await supabase
+    // Validate required fields
+    if (!greek_organization_id || greek_organization_id === '') {
+      return res.status(400).json({
+        success: false,
+        error: 'Please select a Greek Organization'
+      });
+    }
+    if (!university_id || university_id === '') {
+      return res.status(400).json({
+        success: false,
+        error: 'Please select a University'
+      });
+    }
+    if (!chapter_name || chapter_name.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        error: 'Chapter name is required'
+      });
+    }
+
+    // Check for existing chapter (including inactive/hidden ones)
+    const { data: existingChapter } = await supabaseAdmin
+      .from('chapters')
+      .select(`
+        id,
+        chapter_name,
+        status,
+        is_viewable,
+        greek_organizations(name),
+        universities(name)
+      `)
+      .eq('greek_organization_id', greek_organization_id)
+      .eq('university_id', university_id)
+      .maybeSingle();
+
+    if (existingChapter) {
+      const orgName = (existingChapter as any).greek_organizations?.name || 'Unknown Org';
+      const uniName = (existingChapter as any).universities?.name || 'Unknown University';
+      return res.status(400).json({
+        success: false,
+        error: `A chapter for ${orgName} at ${uniName} already exists (Status: ${existingChapter.status}, Visible: ${existingChapter.is_viewable}). Chapter ID: ${existingChapter.id}`
+      });
+    }
+
+    const { data, error } = await supabaseAdmin
       .from('chapters')
       .insert({
         greek_organization_id,
@@ -3120,7 +3166,125 @@ app.post('/api/admin/chapters', requireAdmin, async (req, res) => {
     res.json({ success: true, data });
   } catch (error: any) {
     console.error('Error creating chapter:', error);
-    res.status(500).json({ error: error.message });
+
+    // Provide user-friendly error messages
+    let errorMessage = error.message;
+    if (error.message?.includes('invalid input syntax for type uuid')) {
+      errorMessage = 'Invalid Greek Organization or University selected. Please select valid options from the dropdowns.';
+    } else if (error.message?.includes('duplicate key')) {
+      errorMessage = 'A chapter with this information already exists.';
+    } else if (error.message?.includes('violates foreign key constraint')) {
+      errorMessage = 'Selected Greek Organization or University does not exist. Please refresh the page and try again.';
+    }
+
+    res.status(500).json({
+      success: false,
+      error: errorMessage
+    });
+  }
+});
+
+// Quick Add Chapter - just provide names, we'll match them
+app.post('/api/admin/chapters/quick-add', requireAdmin, async (req, res) => {
+  try {
+    const {
+      organization_name,
+      university_name,
+      chapter_name,
+      grade,
+      member_count,
+      status = 'active',
+      is_viewable = true
+    } = req.body;
+
+    console.log('🚀 [Quick Add] Starting chapter creation...');
+    console.log('  Organization:', organization_name);
+    console.log('  University:', university_name);
+    console.log('  Chapter Name:', chapter_name);
+
+    // Find Greek Organization (fuzzy match)
+    const { data: orgs, error: orgError } = await supabaseAdmin
+      .from('greek_organizations')
+      .select('id, name, greek_letters, organization_type')
+      .ilike('name', `%${organization_name}%`);
+
+    if (orgError || !orgs || orgs.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: `Could not find Greek organization matching "${organization_name}". Please check spelling or add it first.`
+      });
+    }
+
+    const org = orgs[0];
+    console.log(`  ✅ Matched org: ${org.name} (${org.id})`);
+
+    // Find University (fuzzy match)
+    const { data: unis, error: uniError } = await supabaseAdmin
+      .from('universities')
+      .select('id, name, state')
+      .ilike('name', `%${university_name}%`);
+
+    if (uniError || !unis || unis.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: `Could not find university matching "${university_name}". Please check spelling or add it first.`
+      });
+    }
+
+    const uni = unis[0];
+    console.log(`  ✅ Matched university: ${uni.name} (${uni.id})`);
+
+    // Check for existing chapter
+    const { data: existingChapter } = await supabaseAdmin
+      .from('chapters')
+      .select('id, chapter_name, status, is_viewable')
+      .eq('greek_organization_id', org.id)
+      .eq('university_id', uni.id)
+      .maybeSingle();
+
+    if (existingChapter) {
+      return res.status(400).json({
+        success: false,
+        error: `A chapter for ${org.name} at ${uni.name} already exists (Status: ${existingChapter.status}, Visible: ${existingChapter.is_viewable}). Chapter ID: ${existingChapter.id}`,
+        existing_chapter: existingChapter
+      });
+    }
+
+    // Create the chapter
+    const { data, error } = await supabaseAdmin
+      .from('chapters')
+      .insert({
+        greek_organization_id: org.id,
+        university_id: uni.id,
+        chapter_name: chapter_name || `${uni.name} Chapter`,
+        member_count: member_count ? parseInt(member_count) : null,
+        status,
+        grade: grade ? parseFloat(grade) : null,
+        is_favorite: false,
+        is_viewable
+      })
+      .select(`
+        *,
+        greek_organizations(name, greek_letters, organization_type),
+        universities(name, state)
+      `)
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Created chapter: ${org.name} at ${uni.name}`);
+
+    res.json({
+      success: true,
+      data,
+      message: `Successfully created ${org.name} chapter at ${uni.name}`
+    });
+  } catch (error: any) {
+    console.error('Error in quick-add:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
   }
 });
 
@@ -3129,7 +3293,7 @@ app.put('/api/admin/chapters/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('chapters')
       .update(updates)
       .eq('id', id)
@@ -3153,7 +3317,7 @@ app.delete('/api/admin/chapters/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('chapters')
       .delete()
       .eq('id', id);
