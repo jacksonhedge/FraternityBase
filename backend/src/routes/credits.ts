@@ -218,9 +218,9 @@ async function grantSubscriptionBenefits(
   // Define benefits by tier
   const benefits = {
     monthly: {
-      monthly_credit_refresh: 0,
-      monthly_chapter_unlocks: 0,
-      monthly_warm_intros: 0,
+      monthly_credit_refresh: 100, // Monthly plan gets 100 credits per month
+      monthly_chapter_unlocks: 10, // 10 chapter unlocks per month
+      monthly_warm_intros: 1, // 1 warm intro per month
     },
     enterprise: {
       monthly_credit_refresh: 1000,

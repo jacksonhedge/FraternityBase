@@ -923,19 +923,19 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       return res.status(401).json({ error: 'Invalid token or user not found' });
     }
 
-    // Only 'full' unlock is supported now
-    if (unlockType !== 'full') {
+    // Support 'full' and 'warm_introduction' unlock types
+    if (unlockType !== 'full' && unlockType !== 'warm_introduction') {
       return res.status(400).json({
-        error: 'Only full chapter unlock is available',
-        message: 'Please use unlock type "full"'
+        error: 'Invalid unlock type',
+        message: 'Please use unlock type "full" or "warm_introduction"'
       });
     }
 
-    // Get chapter to check if it's a 5-star unlock
+    // Get chapter to check if it's a 5-star unlock and platinum status
     console.log(`🔓 Unlock request for chapter: ${chapterId}`);
     const { data: chapterData, error: chapterError } = await supabaseAdmin
       .from('chapters')
-      .select('five_star_rating, chapter_name, universities(name)')
+      .select('five_star_rating, chapter_name, is_platinum, universities(name)')
       .eq('id', chapterId)
       .single();
 
@@ -946,43 +946,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       return res.status(404).json({ error: 'Chapter not found' });
     }
 
-    // Determine credits cost based on five_star_rating (rating out of 5.0)
-    // Behavioral Economics Pricing - .99 charm pricing with graduated tiers
-    // Higher rank = more expensive (better chapters cost more)
-    const rank = chapterData.five_star_rating || 0;
-    const is5Star = rank >= 5.0;
-    let credits = 1; // Default for lowest-ranked chapters
-    let dollarValue = 0.99;
-
-    if (rank >= 5.0) {
-      // 5.0 star chapter - Premium tier
-      credits = 5;
-      dollarValue = 4.99;
-    } else if (rank >= 4.5) {
-      // 4.5-4.9 star chapter - Quality tier (Most Popular)
-      credits = 7;
-      dollarValue = 6.99;
-    } else if (rank >= 4.0) {
-      // 4.0-4.4 star chapter - Good tier (Best Value)
-      credits = 5;
-      dollarValue = 4.99;
-    } else if (rank >= 3.5) {
-      // 3.5-3.9 star chapter - Standard tier
-      credits = 3;
-      dollarValue = 2.99;
-    } else if (rank >= 3.0) {
-      // 3.0-3.4 star chapter - Basic tier
-      credits = 2;
-      dollarValue = 1.99;
-    } else {
-      // Below 3.0 or no rank - Budget tier (impulse purchase)
-      credits = 1;
-      dollarValue = 0.99;
-    }
-
-    console.log(`💰 Pricing determined: ${credits} credits ($${dollarValue}) for rank ${rank}`);
-
-    // Get user's company_id from user_profiles
+    // Get user's company_id from user_profiles FIRST
     console.log(`👤 Fetching user profile for user ID: ${user.id}`);
     const { data: profile, error: profileError } = await supabase
       .from('user_profiles')
@@ -995,6 +959,68 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     if (profileError || !profile?.company_id) {
       console.log(`❌ User profile not found`);
       return res.status(404).json({ error: 'User profile not found' });
+    }
+
+    // Get subscription tier to determine pricing
+    const { data: accountBalance } = await supabaseAdmin
+      .from('account_balance')
+      .select('subscription_tier')
+      .eq('company_id', profile.company_id)
+      .single();
+
+    const isEnterprise = accountBalance?.subscription_tier === 'enterprise';
+
+    // Determine credits cost based on unlock type
+    const rank = chapterData.five_star_rating || 0;
+    const is5Star = rank >= 5.0;
+    const isPlatinum = chapterData.is_platinum || false;
+    let credits = 1; // Default for lowest-ranked chapters
+    let dollarValue = 0.99;
+
+    if (unlockType === 'warm_introduction') {
+      // Special pricing for warm introductions
+      if (isPlatinum) {
+        // Platinum chapters - 20 credits
+        credits = 20;
+        dollarValue = 19.99;
+        console.log(`💎 Platinum warm introduction pricing: ${credits} credits ($${dollarValue})`);
+      } else {
+        // Regular chapters - 100 credits
+        credits = 100;
+        dollarValue = 99.99;
+        console.log(`🤝 Standard warm introduction pricing: ${credits} credits ($${dollarValue})`);
+      }
+    } else {
+      // Full unlock - Behavioral Economics Pricing based on rating
+      // Higher rank = more expensive (better chapters cost more)
+      if (rank >= 5.0) {
+        // 5.0 star chapter - Premium tier
+        // Enterprise gets 50% off (5 credits vs 10)
+        credits = isEnterprise ? 5 : 10;
+        dollarValue = isEnterprise ? 4.99 : 9.99;
+        console.log(`💰 5.0⭐ Premium unlock: ${credits} credits ($${dollarValue}) ${isEnterprise ? '[Enterprise 50% off]' : ''}`);
+      } else if (rank >= 4.5) {
+        // 4.5-4.9 star chapter - Quality tier (Most Popular)
+        credits = 7;
+        dollarValue = 6.99;
+      } else if (rank >= 4.0) {
+        // 4.0-4.4 star chapter - Good tier (Best Value)
+        credits = 5;
+        dollarValue = 4.99;
+      } else if (rank >= 3.5) {
+        // 3.5-3.9 star chapter - Standard tier
+        credits = 3;
+        dollarValue = 2.99;
+      } else if (rank >= 3.0) {
+        // 3.0-3.4 star chapter - Basic tier
+        credits = 2;
+        dollarValue = 1.99;
+      } else {
+        // Below 3.0 or no rank - Budget tier (impulse purchase)
+        credits = 1;
+        dollarValue = 0.99;
+      }
+      console.log(`💰 Full unlock pricing: ${credits} credits ($${dollarValue}) for rank ${rank}`);
     }
 
     // Check if already unlocked
@@ -1019,19 +1045,32 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     }
 
     // Call deduct_credits function
-    const rankLabel = rank >= 5.0 ? 'Premium (5.0⭐)' :
-                      rank >= 4.5 ? 'Quality (4.5⭐)' :
-                      rank >= 4.0 ? 'Good (4.0⭐)' :
-                      rank >= 3.5 ? 'Standard (3.5⭐)' :
-                      rank >= 3.0 ? 'Basic (3.0⭐)' :
-                      'Budget (<3.0⭐)';
+    let transactionType, description;
+
+    if (unlockType === 'warm_introduction') {
+      transactionType = 'warm_introduction';
+      description = isPlatinum
+        ? `💎 Platinum warm introduction: ${chapterData.chapter_name}`
+        : `🤝 Warm introduction: ${chapterData.chapter_name}`;
+    } else {
+      // Full unlock
+      const rankLabel = rank >= 5.0 ? 'Premium (5.0⭐)' :
+                        rank >= 4.5 ? 'Quality (4.5⭐)' :
+                        rank >= 4.0 ? 'Good (4.0⭐)' :
+                        rank >= 3.5 ? 'Standard (3.5⭐)' :
+                        rank >= 3.0 ? 'Basic (3.0⭐)' :
+                        'Budget (<3.0⭐)';
+      transactionType = rank >= 5.0 ? 'five_star_unlock' : 'chapter_unlock';
+      description = `Unlocked ${rankLabel} chapter: ${chapterData.chapter_name}`;
+    }
+
     console.log(`💰 Calling deduct_credits RPC with ${credits} credits ($${dollarValue}) for company ${profile.company_id}`);
     const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
       p_company_id: profile.company_id,
       p_credits: credits,
       p_dollars: dollarValue,
-      p_transaction_type: rank >= 5.0 ? 'five_star_unlock' : 'chapter_unlock',
-      p_description: `Unlocked ${rankLabel} chapter: ${chapterData.chapter_name}`,
+      p_transaction_type: transactionType,
+      p_description: description,
       p_chapter_id: chapterId
     });
 

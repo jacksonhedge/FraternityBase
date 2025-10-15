@@ -212,7 +212,7 @@ const SubscriptionPage = () => {
         </div>
 
         {/* Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start max-w-6xl mx-auto mb-6 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-start max-w-7xl mx-auto mb-6 mt-8">
           {pricingTiers.map((tier) => {
             const Icon = tier.icon;
             return (
@@ -244,13 +244,13 @@ const SubscriptionPage = () => {
                 )}
 
                 {/* Header with gradient background */}
-                <div className={`p-4 pb-3 bg-gradient-to-r ${tier.bgColor}`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-bold text-gray-900">
+                <div className={`p-3 pb-2 bg-gradient-to-r ${tier.bgColor}`}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <h3 className="text-base font-bold text-gray-900">
                       {tier.name}
                     </h3>
-                    <div className={`p-2 rounded-lg bg-gradient-to-r ${tier.color} shadow-lg`}>
-                      <Icon className="w-5 h-5 text-white" />
+                    <div className={`p-1.5 rounded-lg bg-gradient-to-r ${tier.color} shadow-md`}>
+                      <Icon className="w-4 h-4 text-white" />
                     </div>
                   </div>
 
@@ -258,34 +258,34 @@ const SubscriptionPage = () => {
                   <div className="mb-1">
                     {typeof tier.price === 'number' ? (
                       <div className="flex items-baseline">
-                        <span className="text-3xl font-bold text-gray-900">
+                        <span className="text-2xl font-bold text-gray-900">
                           ${tier.price}
                         </span>
                         {tier.price > 0 && (
-                          <span className="text-gray-600 ml-1 text-base">
+                          <span className="text-gray-600 ml-1 text-sm">
                             /mo
                           </span>
                         )}
                       </div>
                     ) : (
-                      <span className="text-3xl font-bold text-gray-900">
+                      <span className="text-2xl font-bold text-gray-900">
                         {tier.price}
                       </span>
                     )}
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-600 text-xs font-medium">
+                  <p className="text-gray-600 text-[10px] font-medium leading-tight">
                     {tier.description}
                   </p>
                 </div>
 
-                <div className="p-4 pt-2">
+                <div className="p-3 pt-2">
                   {/* CTA Button */}
                   <button
                     onClick={() => handleSubscriptionChange(tier.id)}
                     disabled={tier.isCurrent}
-                    className={`block w-full text-center py-2 px-4 rounded-lg font-bold transition-all duration-200 mb-3 text-sm ${
+                    className={`block w-full text-center py-1.5 px-3 rounded-lg font-bold transition-all duration-200 mb-2.5 text-xs ${
                       tier.isCurrent
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         : tier.highlighted
@@ -297,32 +297,32 @@ const SubscriptionPage = () => {
                   </button>
 
                   {/* Features */}
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {/* Gold Features (if present) */}
                     {tier.goldFeatures?.map((feature, idx) => (
-                      <div key={`gold-${idx}`} className="flex items-start gap-2 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-300 rounded-lg p-2 -mx-1">
-                        <div className="flex-shrink-0 w-4 h-4 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center mt-0.5 shadow-sm">
-                          <Check className="w-2.5 h-2.5 text-white" />
+                      <div key={`gold-${idx}`} className="flex items-start gap-1.5 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-300 rounded-md p-1.5 -mx-0.5">
+                        <div className="flex-shrink-0 w-3.5 h-3.5 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center mt-0.5 shadow-sm">
+                          <Check className="w-2 h-2 text-white" />
                         </div>
-                        <span className="text-xs font-bold text-amber-900 leading-tight">{feature}</span>
+                        <span className="text-[10px] font-bold text-amber-900 leading-tight">{feature}</span>
                       </div>
                     ))}
 
                     {/* Regular Features */}
                     {tier.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <div className="flex-shrink-0 w-4 h-4 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
-                          <Check className="w-2.5 h-2.5 text-green-600" />
+                      <div key={idx} className="flex items-start gap-1.5">
+                        <div className="flex-shrink-0 w-3.5 h-3.5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+                          <Check className="w-2 h-2 text-green-600" />
                         </div>
-                        <span className="text-xs text-gray-700 leading-tight">{feature}</span>
+                        <span className="text-[10px] text-gray-700 leading-tight">{feature}</span>
                       </div>
                     ))}
                     {tier.limitations.map((limitation, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <div className="flex-shrink-0 w-4 h-4 bg-gray-100 rounded-full flex items-center justify-center mt-0.5">
-                          <X className="w-2.5 h-2.5 text-gray-400" />
+                      <div key={idx} className="flex items-start gap-1.5">
+                        <div className="flex-shrink-0 w-3.5 h-3.5 bg-gray-100 rounded-full flex items-center justify-center mt-0.5">
+                          <X className="w-2 h-2 text-gray-400" />
                         </div>
-                        <span className="text-xs text-gray-500 leading-tight">{limitation}</span>
+                        <span className="text-[10px] text-gray-500 leading-tight">{limitation}</span>
                       </div>
                     ))}
                   </div>
