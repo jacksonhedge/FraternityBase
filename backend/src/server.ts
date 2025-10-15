@@ -3383,7 +3383,7 @@ app.post('/api/admin/officers', requireAdmin, async (req, res) => {
       .insert({
         chapter_id,
         name,
-        position,
+        position: position || 'Member',
         member_type: member_type || 'member',
         email,
         phone,
