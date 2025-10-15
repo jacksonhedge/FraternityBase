@@ -5,7 +5,9 @@ import crypto from 'crypto';
 const router = express.Router();
 
 // Import pool from database.ts
-import pool from '../database';
+// TEMPORARILY DISABLED - database.ts uses SQLite which doesn't work in serverless
+// TODO: Create proper PostgreSQL pool for shares functionality
+// import pool from '../database';
 
 // Types
 interface AuthRequest extends Request {

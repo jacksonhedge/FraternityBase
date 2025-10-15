@@ -1,0 +1,726 @@
+
+> backend@1.0.0 assign-grades
+> tsx src/scripts/assign_chapter_grades.ts
+
+[dotenv@17.2.2] injecting env (17) from .env -- tip: 📡 version env with Radar: https://dotenvx.com/radar
+╔════════════════════════════════════════════════════════════╗
+║         Chapter Grading Assignment Script                 ║
+╚════════════════════════════════════════════════════════════╝
+
+📊 Fetching chapters from database...
+
+Found 4174 chapters:
+  • 0 fraternities
+  • 3904 sororities
+  • 4174 with existing rank
+  • 105 with member count data
+  • 3904 with GreekRank URL
+
+📝 Calculating grades...
+
+Sample of assigned grades:
+  4.8 ⭐ (Quality) - Alpha Gamma
+  4.7 ⭐ (Quality) - Gamma Theta
+  4.7 ⭐ (Quality) - Delta
+  4.7 ⭐ (Quality) - Eta
+  4.7 ⭐ (Quality) - Epsilon Zeta
+  4.6 ⭐ (Quality) - Gamma Iota
+  4.5 ⭐ (Quality) - Beta Upsilon Chapter
+  4.5 ⭐ (Quality) - Beta Phi
+  4.4 ⭐ (Good) - Xi Xi Chapter
+  4.4 ⭐ (Good) - Gamma Sigma
+
+Grade Distribution:
+  5.0 stars (Premium):    0 chapters (0.0%)
+  4.5-4.9 (Quality):      8 chapters (0.2%)
+  4.0-4.4 (Good):         1084 chapters (26.0%)
+  3.5-3.9 (Standard):     3034 chapters (72.7%)
+  3.0-3.4 (Basic):        48 chapters (1.1%)
+  <3.0 (Budget):          0 chapters (0.0%)
+
+💾 Saving grades to database...
+
+  ✗ Error updating Delta Beta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Beta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Mu Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha-Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Omega Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating California Beta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Beta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Epsilon Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Rho Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Xi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Ohio Iota Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Mu Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Mu Omega Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Upsilon Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Delta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Omicron Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi at Pennsylvania State University: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Nu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omega Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Alpha Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Nu Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Zeta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Xi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Upsilon Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Xi Xi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Acacia at University of Nebraska-Lincoln: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Sigma at University of Nebraska-Lincoln: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Nu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Psi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Omicron Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Rho Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Chi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Psi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Tau Phi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Chi at Temple University: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Psi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  Progress: 100/4174 chapters updated
+  ✗ Error updating Phi Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Upsilon Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Lambda Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Beta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Iota: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Iota: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Kappa Epsilon at Indiana University Bloomington: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Upsilon at Purdue University: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi at Texas A&M University: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Chi at Towson University: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Kappa Tau at University of Nebraska-Lincoln: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Alpha Epsilon at University of Nebraska-Lincoln: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Kappa Alpha at University of South Carolina: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi at University of Texas at Austin: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Kappa Phi at Drexel University: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Sigma Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Mu Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Nu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Sigma Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Phi at University of Pittsburgh: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Mu Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Lambda Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Texas: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Sigma Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Beta Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Nu: Could not find the 'rank' column of 'chapters' in the schema cache
+  Progress: 200/4174 chapters updated
+  ✗ Error updating Eta Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Psi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Iota: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Xi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Nu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Iota: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Iota: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Iota: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Nu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Psi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Eta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Psi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Psi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Iota: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Epsilon Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Nu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Omicron: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Upsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Chi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Alpha Mu at Temple University: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Beta Theta Pi : Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Iota Psi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Texas Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Upsilon : Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Chi Phi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Eta Omicron Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Psi Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omicron Chapter: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  Progress: 300/4174 chapters updated
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  Progress: 400/4174 chapters updated
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Epsilon Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Phi Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Omega Phi Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Epsilon Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Xi Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Lambda Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Phi Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Delta Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  Progress: 500/4174 chapters updated
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Lambda Theta Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Lambda Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Phi Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Omega Phi Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Phi Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Epsilon Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Delta Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Phi Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Chi Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omega Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Omega Phi Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omega Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Alpha Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Delta Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Delta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Delta Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Theta Phi Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Pi Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  Progress: 600/4174 chapters updated
+  ✗ Error updating Sigma Phi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Epsilon Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Delta Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Iota Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omega Epsilon: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Phi Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Xi Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Phi Lambda: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Sigma Sigma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Beta Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Delta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Tau Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Delta Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Pi Beta Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Zeta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Kappa: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Phi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Gamma Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Mu: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Sigma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Xi Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Gamma Delta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Omicron Pi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Chi Omega: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Phi Beta Chi: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Zeta Phi Beta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Delta Tau: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Sigma Gamma Rho: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Delta Sigma Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Kappa Alpha: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Kappa Gamma: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Kappa Alpha Theta: Could not find the 'rank' column of 'chapters' in the schema cache
+  ✗ Error updating Alpha Delta Pi: Could not find the 'rank' column of 'chapters' in the schema cache

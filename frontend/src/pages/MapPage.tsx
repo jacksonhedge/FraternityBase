@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { STATE_COORDINATES, STATE_BOUNDS, COLLEGE_LOCATIONS } from '../data/statesGeoData';
 import { getCollegeLogo, getCollegeInitials } from '../utils/collegeLogos';
+import { useAuth } from '../contexts/AuthContext';
 
 // Fix for default markers in React-Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -172,6 +173,7 @@ const CoordinateDisplay = () => {
 };
 
 const MapPage = () => {
+  const { session } = useAuth();
   const [statesData, setStatesData] = useState<any>(null);
   const [selectedState, setSelectedState] = useState<SelectedState | null>(null);
   const [hoveredState, setHoveredState] = useState<string | null>(null);
@@ -184,6 +186,142 @@ const MapPage = () => {
   const [mapReady, setMapReady] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'big10' | 'mychapters' | 'd1' | 'd2' | 'd3' | 'power5'>('big10');
   const [showLockOverlay, setShowLockOverlay] = useState(false);
+  const [campusChapters, setCampusChapters] = useState<any[]>([]);
+  const [hasEnterpriseAccess, setHasEnterpriseAccess] = useState(false);
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
+  // Force rebuild - timestamp: 2025-10-10
+
+  // Check subscription status for Enterprise access
+  useEffect(() => {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🔍 [MapPage - useEffect] SUBSCRIPTION CHECK STARTED');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('📋 [MapPage] Session object:', session);
+    console.log('🔑 [MapPage] Session exists:', session ? 'YES' : 'NO');
+    console.log('🎫 [MapPage] Access token exists:', session?.access_token ? 'YES' : 'NO');
+    if (session?.access_token) {
+      const token = session.access_token;
+      console.log('🎫 [MapPage] Token preview:', `${token.substring(0, 20)}...${token.substring(token.length - 20)}`);
+      console.log('🎫 [MapPage] Token length:', token.length);
+    }
+
+    const checkSubscription = async () => {
+      try {
+        if (!session?.access_token) {
+          console.log('⚠️ [MapPage] ABORT: No session token available');
+          console.log('⚠️ [MapPage] Setting hasEnterpriseAccess = false');
+          setHasEnterpriseAccess(false);
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          return;
+        }
+
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const balanceEndpoint = `${API_URL}/balance`;
+        console.log('📡 [MapPage] API_URL:', API_URL);
+        console.log('📡 [MapPage] Full endpoint:', balanceEndpoint);
+        console.log('📡 [MapPage] Fetching balance data...');
+
+        const response = await fetch(balanceEndpoint, {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        });
+
+        console.log('📨 [MapPage] Response status:', response.status);
+        console.log('📨 [MapPage] Response ok:', response.ok);
+        console.log('📨 [MapPage] Response headers:', Object.fromEntries(response.headers.entries()));
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.log('💰 [MapPage] FULL BALANCE DATA RECEIVED:');
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.log(JSON.stringify(data, null, 2));
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+          console.log('📊 [MapPage] Extracted fields:');
+          console.log('   - subscriptionTier:', data.subscriptionTier);
+          console.log('   - subscriptionStatus:', data.subscriptionStatus);
+          console.log('   - chapterUnlocksRemaining:', data.chapterUnlocksRemaining);
+          console.log('   - monthlyChapterUnlocks:', data.monthlyChapterUnlocks);
+          console.log('   - balanceCredits:', data.balanceCredits);
+
+          const newTier = data.subscriptionTier || 'trial';
+          console.log('🎯 [MapPage] Setting subscriptionTier state to:', newTier);
+          setSubscriptionTier(newTier);
+
+          // Enterprise tier gets unlimited chapter unlocks (-1)
+          // Check for enterprise tier OR unlimited chapter unlocks
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.log('🧮 [MapPage] CALCULATING ENTERPRISE ACCESS:');
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+          const check1 = data.subscriptionTier === 'enterprise';
+          const check2 = data.subscriptionTier === 'monthly';
+          const check3 = data.chapterUnlocksRemaining === -1;
+
+          console.log('   ✓ Check 1 - Is tier "enterprise"?', check1, `(tier: "${data.subscriptionTier}")`);
+          console.log('   ✓ Check 2 - Is tier "monthly"?', check2, `(tier: "${data.subscriptionTier}")`);
+          console.log('   ✓ Check 3 - Unlimited unlocks?', check3, `(unlocks: ${data.chapterUnlocksRemaining})`);
+
+          const isEnterprise = check1 || check2 || check3;
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.log('🎯 [MapPage] FINAL RESULT: isEnterprise =', isEnterprise);
+          console.log('🎯 [MapPage] Setting hasEnterpriseAccess state to:', isEnterprise);
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+          setHasEnterpriseAccess(isEnterprise);
+
+          console.log('✅ [MapPage] State updates complete');
+          console.log('   - hasEnterpriseAccess → ', isEnterprise);
+          console.log('   - subscriptionTier → ', newTier);
+        } else {
+          const errorText = await response.text();
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('❌ [MapPage] Balance API ERROR');
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('   Status:', response.status);
+          console.error('   Status text:', response.statusText);
+          console.error('   Response body:', errorText);
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          setHasEnterpriseAccess(false);
+        }
+      } catch (error) {
+        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.error('❌ [MapPage] EXCEPTION in checkSubscription');
+        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.error('   Error type:', error?.constructor?.name);
+        console.error('   Error message:', error?.message);
+        console.error('   Full error:', error);
+        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        setHasEnterpriseAccess(false);
+      }
+    };
+
+    checkSubscription();
+  }, [session]);
+
+  // Monitor hasEnterpriseAccess state changes
+  useEffect(() => {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🔄 [MapPage] hasEnterpriseAccess STATE CHANGED');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('   New value:', hasEnterpriseAccess);
+    console.log('   Type:', typeof hasEnterpriseAccess);
+    console.log('   Current subscriptionTier:', subscriptionTier);
+    console.log('   Current campusChapters count:', campusChapters.length);
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  }, [hasEnterpriseAccess]);
+
+  // Monitor subscriptionTier state changes
+  useEffect(() => {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🔄 [MapPage] subscriptionTier STATE CHANGED');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('   New value:', subscriptionTier);
+    console.log('   Type:', typeof subscriptionTier);
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  }, [subscriptionTier]);
 
   // Load GeoJSON data
   useEffect(() => {
@@ -401,22 +539,105 @@ const MapPage = () => {
   };
 
   // Handle college click → show campus with Greek chapters
-  const handleCollegeClick = (collegeName: string, collegeData: College) => {
+  const handleCollegeClick = async (collegeName: string, collegeData: College) => {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🏫 [handleCollegeClick] COLLEGE CLICKED');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('📍 College name:', collegeName);
+    console.log('📍 College location:', collegeData.lat, collegeData.lng);
+    console.log('🔑 Current hasEnterpriseAccess state:', hasEnterpriseAccess);
+    console.log('🎯 Current subscriptionTier state:', subscriptionTier);
+
     setSelectedCollege({ name: collegeName, ...collegeData });
     setViewMode('campus');
+    console.log('✅ View mode set to: campus');
 
     // Zoom to campus level
     if (mapRef.current) {
       mapRef.current.setView([collegeData.lat, collegeData.lng], 15);
+      console.log('✅ Map zoomed to campus level (zoom: 15)');
+    }
+
+    // Fetch real chapters from API
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const chaptersEndpoint = `${API_URL}/chapters?universityName=${encodeURIComponent(collegeName)}`;
+      console.log('📡 Fetching chapters from:', chaptersEndpoint);
+
+      const response = await fetch(chaptersEndpoint);
+      console.log('📨 Response status:', response.status);
+      console.log('📨 Response ok:', response.ok);
+
+      const data = await response.json();
+      console.log('📦 API Response:', data);
+
+      if (data.success && data.data) {
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('📊 CHAPTER DATA PROCESSING');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('   Total chapters received:', data.data.length);
+        console.log('   hasEnterpriseAccess value:', hasEnterpriseAccess);
+        console.log('   Will set unlocked to:', hasEnterpriseAccess);
+        console.log('   Will set cost to:', hasEnterpriseAccess ? 0 : 100);
+
+        // Map chapters to include position offsets for display on map
+        const chaptersWithPositions = data.data.map((chapter: any, index: number) => {
+          const newChapter = {
+            ...chapter,
+            // Create a circle pattern around the campus center
+            lat: collegeData.lat + (Math.cos(index * (Math.PI * 2 / data.data.length)) * 0.002),
+            lng: collegeData.lng + (Math.sin(index * (Math.PI * 2 / data.data.length)) * 0.002),
+            // Enterprise users get all chapters unlocked automatically
+            unlocked: hasEnterpriseAccess,
+            cost: hasEnterpriseAccess ? 0 : 100 // Free for Enterprise
+          };
+
+          if (index < 3) {
+            console.log(`   Chapter ${index + 1}:`, {
+              name: chapter.greek_organizations?.name || chapter.name,
+              originalUnlocked: chapter.unlocked,
+              newUnlocked: newChapter.unlocked,
+              cost: newChapter.cost
+            });
+          }
+
+          return newChapter;
+        });
+
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('✅ Setting campusChapters state');
+        console.log('   Total chapters:', chaptersWithPositions.length);
+        console.log('   First chapter:', {
+          name: chaptersWithPositions[0]?.greek_organizations?.name || chaptersWithPositions[0]?.name,
+          unlocked: chaptersWithPositions[0]?.unlocked,
+          cost: chaptersWithPositions[0]?.cost
+        });
+        console.log('   Last chapter:', {
+          name: chaptersWithPositions[chaptersWithPositions.length - 1]?.greek_organizations?.name || chaptersWithPositions[chaptersWithPositions.length - 1]?.name,
+          unlocked: chaptersWithPositions[chaptersWithPositions.length - 1]?.unlocked,
+          cost: chaptersWithPositions[chaptersWithPositions.length - 1]?.cost
+        });
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+        setCampusChapters(chaptersWithPositions);
+        console.log('✅ State update complete - campusChapters set');
+      } else {
+        console.log('⚠️ No chapter data found or API returned failure');
+        console.log('   data.success:', data.success);
+        console.log('   data.data exists:', !!data.data);
+        setCampusChapters([]);
+      }
+    } catch (error) {
+      console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.error('❌ ERROR in handleCollegeClick');
+      console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.error('   Error type:', error?.constructor?.name);
+      console.error('   Error message:', error?.message);
+      console.error('   Full error:', error);
+      console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      setCampusChapters([]);
     }
   };
-
-  // Mock Greek chapter data for campus view (TODO: fetch from DB)
-  const campusChapters = selectedCollege ? [
-    { id: 1, name: 'Sigma Chi', lat: selectedCollege.lat + 0.002, lng: selectedCollege.lng - 0.001, members: 85, unlocked: false, cost: 100 },
-    { id: 2, name: 'Alpha Tau Omega', lat: selectedCollege.lat - 0.001, lng: selectedCollege.lng + 0.002, members: 75, unlocked: false, cost: 90 },
-    { id: 3, name: 'Pi Kappa Alpha', lat: selectedCollege.lat + 0.001, lng: selectedCollege.lng + 0.001, members: 92, unlocked: true, cost: 0 },
-  ] : [];
 
   return (
     <div className="space-y-6">
@@ -457,8 +678,17 @@ const MapPage = () => {
       <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Filter Buttons */}
         <div className="absolute top-4 left-4 z-[1000] flex gap-2 flex-wrap max-w-2xl">
+          {hasEnterpriseAccess && (
+            <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-lg shadow-lg flex items-center gap-2">
+              <Unlock className="w-4 h-4" />
+              <span className="font-semibold text-sm">Enterprise: All Filters Unlocked</span>
+            </div>
+          )}
           <button
-            onClick={() => setActiveFilter('big10')}
+            onClick={() => {
+              console.log('🔘 [MapPage] "Big 10" filter clicked');
+              setActiveFilter('big10');
+            }}
             className={`px-4 py-2 rounded-lg shadow-lg transition-colors ${
               activeFilter === 'big10'
                 ? 'bg-primary-600 text-white'
@@ -469,8 +699,15 @@ const MapPage = () => {
           </button>
           <button
             onClick={() => {
+              console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+              console.log('🔘 [MapPage] "My Chapters" filter clicked');
+              console.log('   hasEnterpriseAccess:', hasEnterpriseAccess);
+              console.log('   Will show lock overlay:', !hasEnterpriseAccess);
+              console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
               setActiveFilter('mychapters');
-              setShowLockOverlay(true);
+              if (!hasEnterpriseAccess) {
+                setShowLockOverlay(true);
+              }
             }}
             className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
               activeFilter === 'mychapters'
@@ -478,12 +715,20 @@ const MapPage = () => {
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
+            {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             My Chapters
           </button>
           <button
             onClick={() => {
+              console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+              console.log('🔘 [MapPage] "All D1" filter clicked');
+              console.log('   hasEnterpriseAccess:', hasEnterpriseAccess);
+              console.log('   Will show lock overlay:', !hasEnterpriseAccess);
+              console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
               setActiveFilter('d1');
-              setShowLockOverlay(true);
+              if (!hasEnterpriseAccess) {
+                setShowLockOverlay(true);
+              }
             }}
             className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
               activeFilter === 'd1'
@@ -491,12 +736,15 @@ const MapPage = () => {
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
+            {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             All D1
           </button>
           <button
             onClick={() => {
               setActiveFilter('d2');
-              setShowLockOverlay(true);
+              if (!hasEnterpriseAccess) {
+                setShowLockOverlay(true);
+              }
             }}
             className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
               activeFilter === 'd2'
@@ -504,12 +752,15 @@ const MapPage = () => {
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
+            {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             All D2
           </button>
           <button
             onClick={() => {
               setActiveFilter('d3');
-              setShowLockOverlay(true);
+              if (!hasEnterpriseAccess) {
+                setShowLockOverlay(true);
+              }
             }}
             className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
               activeFilter === 'd3'
@@ -517,12 +768,15 @@ const MapPage = () => {
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
+            {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             All D3
           </button>
           <button
             onClick={() => {
               setActiveFilter('power5');
-              setShowLockOverlay(true);
+              if (!hasEnterpriseAccess) {
+                setShowLockOverlay(true);
+              }
             }}
             className={`px-4 py-2 rounded-lg shadow-lg transition-colors relative ${
               activeFilter === 'power5'
@@ -530,7 +784,7 @@ const MapPage = () => {
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
-            <Lock className="w-4 h-4 inline mr-1" />
+            {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             Power 5
           </button>
         </div>
@@ -692,10 +946,10 @@ const MapPage = () => {
               <Tooltip>
                 <div style={{ padding: '4px' }}>
                   <div className="font-bold text-base">
-                    {chapter.name}
+                    {chapter.greek_organizations?.name || chapter.name || 'Unknown Chapter'}
                   </div>
                   <div className="text-sm text-gray-600 mt-1">
-                    👥 {chapter.members} members
+                    👥 {chapter.member_count || chapter.members || 0} members
                   </div>
                   {chapter.unlocked ? (
                     <div className="text-sm text-green-600 font-semibold mt-1">
@@ -703,7 +957,7 @@ const MapPage = () => {
                     </div>
                   ) : (
                     <div className="text-sm text-purple-600 font-semibold mt-1">
-                      🔒 {chapter.cost} credits to unlock
+                      🔒 {chapter.cost || 100} credits to unlock
                     </div>
                   )}
                 </div>
@@ -920,13 +1174,13 @@ const MapPage = () => {
                 <X className="w-5 h-5" />
               </button>
 
-              <h2 className="text-2xl font-bold">{selectedChapter.name}</h2>
+              <h2 className="text-2xl font-bold">{selectedChapter.greek_organizations?.name || selectedChapter.name || 'Unknown Chapter'}</h2>
               <p className="text-purple-100 text-sm mt-1">{selectedCollege?.name}</p>
 
               <div className="flex items-center gap-4 mt-4">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  <span className="font-semibold">{selectedChapter.members} members</span>
+                  <span className="font-semibold">{selectedChapter.member_count || selectedChapter.members || 0} members</span>
                 </div>
                 {selectedChapter.unlocked ? (
                   <span className="px-3 py-1 bg-green-500 text-white rounded-full text-sm font-semibold flex items-center gap-1">
@@ -1038,19 +1292,19 @@ const MapPage = () => {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Founded:</span>
-                    <span className="font-semibold">1925</span>
+                    <span className="font-semibold">{selectedChapter.founded_year || '1925'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Active Members:</span>
-                    <span className="font-semibold">{selectedChapter.members}</span>
+                    <span className="font-semibold">{selectedChapter.member_count || selectedChapter.members || 0}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">House Address:</span>
-                    <span className="font-semibold">420 Frat Row</span>
+                    <span className="font-semibold">{selectedChapter.house_address || '420 Frat Row'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Data Quality:</span>
-                    <span className="font-semibold text-green-600">A Grade</span>
+                    <span className="font-semibold text-green-600">{selectedChapter.data_quality || 'A Grade'}</span>
                   </div>
                 </div>
               </div>

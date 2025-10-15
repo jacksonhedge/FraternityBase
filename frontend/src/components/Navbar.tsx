@@ -23,9 +23,9 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8">
             <div className="flex items-center gap-3">
               <Link
-                to="/chapters"
+                to="/dashboard-map"
                 className={`flex items-center gap-2 px-4 py-2 transition-colors ${
-                  isActive('/chapters')
+                  isActive('/dashboard-map')
                     ? 'text-blue-600 font-semibold'
                     : 'text-gray-700 hover:text-blue-600'
                 }`}
@@ -71,7 +71,7 @@ const Navbar = () => {
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-4 space-y-2">
             <Link
-              to="/chapters"
+              to="/dashboard-map"
               className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >

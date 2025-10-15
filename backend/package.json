@@ -16,9 +16,13 @@
     "health": "node ./scripts/health-check.js",
     "setup:prod": "./scripts/production-setup.sh",
     "import:colleges": "tsx scripts/import-colleges.ts",
+    "import:sororities": "tsx src/scripts/import_greekrank_sororities.ts",
+    "assign-grades": "tsx src/scripts/assign_chapter_grades.ts",
     "daily-report": "tsx scripts/send-daily-reports.ts",
+    "daily-report-enhanced": "tsx scripts/send-enhanced-daily-reports.ts",
     "daily-report-pdf": "tsx scripts/generate-daily-report-pdf.ts",
     "validate-csv": "tsx scripts/validate-csv.ts",
+    "mass-import": "tsx scripts/mass-import-chapter-data.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

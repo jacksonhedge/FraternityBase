@@ -173,7 +173,7 @@ const CollegeDetailPage = () => {
   const handleChapterClick = (chapterId: string) => {
     if (unlockedChapterIds.has(chapterId)) {
       // If unlocked, go to My Chapters page
-      navigate('/app/my-chapters');
+      navigate('/app/my-unlocked');
     } else {
       // If locked, go to chapter detail page
       navigate(`/app/chapters/${chapterId}`);

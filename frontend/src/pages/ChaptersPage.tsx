@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Users,
   MapPin,
@@ -24,6 +24,7 @@ import {
   UserPlus
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+import UnlockConfirmationModal from '../components/UnlockConfirmationModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -57,14 +58,18 @@ interface Chapter {
 }
 
 const ChaptersPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'size' | 'name' | 'university'>('size');
+  const [sortBy, setSortBy] = useState<'grade' | 'name' | 'university'>('grade');
   const [filterState, setFilterState] = useState('all');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(true);
   const [requestedIntros, setRequestedIntros] = useState<Set<string>>(new Set());
   const [unlockedChapterIds, setUnlockedChapterIds] = useState<Set<string>>(new Set());
+  const [balance, setBalance] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
 
   // Fetch chapters from database
   useEffect(() => {
@@ -108,6 +113,26 @@ const ChaptersPage = () => {
     fetchUnlockedChapters();
   }, []);
 
+  // Fetch credit balance
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const res = await fetch(`${API_URL}/credits/balance`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setBalance(data.balance || 0);
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
+    };
+
+    fetchBalance();
+  }, []);
+
   const handleRequestIntro = async (chapter: Chapter) => {
     try {
       const response = await fetch(`${API_URL}/intro-requests`, {
@@ -130,6 +155,80 @@ const ChaptersPage = () => {
     }
   };
 
+  // Calculate unlock pricing based on chapter grade
+  const calculateUnlockPricing = (grade?: number) => {
+    const rank = grade || 4.0;
+    let credits = 5;
+    let tierLabel = 'Good';
+    let tierBadge = '';
+
+    if (rank >= 5.0) {
+      credits = 9;
+      tierLabel = 'Premium';
+      tierBadge = '⭐ Top Rated';
+    } else if (rank >= 4.5) {
+      credits = 7;
+      tierLabel = 'Quality';
+      tierBadge = '🔥 Most Popular';
+    } else if (rank >= 4.0) {
+      credits = 5;
+      tierLabel = 'Good';
+      tierBadge = '💎 Best Value';
+    } else if (rank >= 3.5) {
+      credits = 3;
+      tierLabel = 'Standard';
+      tierBadge = '';
+    } else if (rank >= 3.0) {
+      credits = 2;
+      tierLabel = 'Basic';
+      tierBadge = '';
+    } else {
+      credits = 1;
+      tierLabel = 'Budget';
+      tierBadge = '🎯 Best Deal';
+    }
+
+    return { credits, tierLabel, tierBadge };
+  };
+
+  // Handle unlock action
+  const handleUnlock = async () => {
+    if (!selectedChapter) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please login to unlock chapters');
+      return;
+    }
+
+    const pricing = calculateUnlockPricing(selectedChapter.grade);
+
+    try {
+      const response = await fetch(`${API_URL}/chapters/${selectedChapter.id}/unlock`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ unlockType: 'full' })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setUnlockedChapterIds(prev => new Set(prev).add(selectedChapter.id));
+        setBalance(data.balance || balance - pricing.credits);
+        // Navigate to the chapter detail page after successful unlock
+        navigate(`/app/chapters/${selectedChapter.id}`);
+      } else {
+        alert(`❌ ${data.error || 'Failed to unlock chapter'}`);
+      }
+    } catch (error) {
+      console.error('Error unlocking chapter:', error);
+      alert('Error unlocking chapter. Please try again.');
+    }
+  };
+
   // Filter and sort logic adapted for database structure
   const filteredChapters = chapters
     .filter(chapter => {
@@ -137,6 +236,10 @@ const ChaptersPage = () => {
       const universityName = chapter.universities?.name || '';
       const chapterName = chapter.chapter_name || '';
       const state = chapter.universities?.state || '';
+      const orgType = chapter.greek_organizations?.organization_type;
+
+      // Only show fraternities on this page
+      const isFraternity = orgType === 'fraternity';
 
       const matchesSearch =
         fraternityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -145,12 +248,12 @@ const ChaptersPage = () => {
 
       const matchesState = filterState === 'all' || state === filterState;
 
-      return matchesSearch && matchesState;
+      return isFraternity && matchesSearch && matchesState;
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'size':
-          return (b.member_count || 0) - (a.member_count || 0);
+        case 'grade':
+          return (b.grade || 0) - (a.grade || 0);
         case 'name':
           return (a.greek_organizations?.name || '').localeCompare(b.greek_organizations?.name || '');
         case 'university':
@@ -160,15 +263,19 @@ const ChaptersPage = () => {
       }
     });
 
+  // Get only fraternity chapters for stats
+  const fraternityChapters = chapters.filter(ch => ch.greek_organizations?.organization_type === 'fraternity');
+
   // Get unique states for filter
-  const states = [...new Set(chapters.map(c => c.universities?.state).filter(Boolean))].sort();
+  const states = [...new Set(fraternityChapters.map(c => c.universities?.state).filter(Boolean))].sort();
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Browse All Chapters</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Browse Fraternities</h1>
+          <p className="text-sm text-gray-600 mt-1">Explore fraternity chapters across the country</p>
         </div>
         <div className="flex items-center gap-3">
           {/* View Toggle */}
@@ -202,8 +309,8 @@ const ChaptersPage = () => {
         <div className="bg-white rounded-md shadow-sm p-2">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-lg font-bold text-gray-900">{chapters.length}</p>
-              <p className="text-xs text-gray-600">Total Chapters</p>
+              <p className="text-lg font-bold text-gray-900">{fraternityChapters.length}</p>
+              <p className="text-xs text-gray-600">Fraternity Chapters</p>
             </div>
             <Users className="w-5 h-5 text-primary-500" />
           </div>
@@ -212,7 +319,7 @@ const ChaptersPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-lg font-bold text-gray-900">
-                {chapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0).toLocaleString()}
+                {fraternityChapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0).toLocaleString()}
               </p>
               <p className="text-xs text-gray-600">Total Members</p>
             </div>
@@ -223,7 +330,7 @@ const ChaptersPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-lg font-bold text-gray-900">
-                {chapters.length > 0 ? Math.round(chapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0) / chapters.length) : 0}
+                {fraternityChapters.length > 0 ? Math.round(fraternityChapters.reduce((sum, ch) => sum + (ch.member_count || 0), 0) / fraternityChapters.length) : 0}
               </p>
               <p className="text-xs text-gray-600">Avg Chapter Size</p>
             </div>
@@ -259,9 +366,9 @@ const ChaptersPage = () => {
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
           >
-            <option value="size">Sort by Size</option>
+            <option value="grade">Sort by Grade</option>
             <option value="name">Sort by Name</option>
-            <option value="university">Sort by University</option>
+            <option value="university">Sort by College</option>
           </select>
           <select
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -435,10 +542,18 @@ const ChaptersPage = () => {
                       <span className="text-xs font-semibold text-white">Unlocked</span>
                     </div>
                   ) : (
-                    <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-gray-200">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedChapter(chapter);
+                        setIsModalOpen(true);
+                      }}
+                      className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
+                    >
                       <Lock className="w-3.5 h-3.5 text-gray-600" />
-                      <span className="text-xs font-semibold text-gray-700">Unlock</span>
-                    </div>
+                      <span className="text-xs font-semibold text-gray-700">Click to unlock</span>
+                    </button>
                   )}
                 </div>
               </div>
@@ -560,6 +675,23 @@ const ChaptersPage = () => {
             );
           })}
         </div>
+      )}
+
+      {/* Unlock Confirmation Modal */}
+      {selectedChapter && (
+        <UnlockConfirmationModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedChapter(null);
+          }}
+          onConfirm={handleUnlock}
+          chapterName={`${selectedChapter.greek_organizations?.name} - ${selectedChapter.chapter_name}`}
+          credits={calculateUnlockPricing(selectedChapter.grade).credits}
+          balance={balance}
+          tierLabel={calculateUnlockPricing(selectedChapter.grade).tierLabel}
+          tierBadge={calculateUnlockPricing(selectedChapter.grade).tierBadge}
+        />
       )}
     </div>
   );

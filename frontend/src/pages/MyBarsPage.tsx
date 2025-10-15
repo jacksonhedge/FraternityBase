@@ -59,7 +59,7 @@ const MyBarsPage = () => {
 
           <div className="mt-8">
             <Link
-              to="/app/my-chapters"
+              to="/app/my-unlocked"
               className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
             >
               <GraduationCap className="w-5 h-5" />

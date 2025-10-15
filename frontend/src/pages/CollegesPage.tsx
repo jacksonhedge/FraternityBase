@@ -119,7 +119,7 @@ const CollegesPage = () => {
     }
 
     return matchesSearch && matchesState && matchesDivision;
-  });
+  }).sort((a, b) => b.chapter_count - a.chapter_count); // Sort by chapter count (most to least)
 
   return (
     <div className="space-y-6">

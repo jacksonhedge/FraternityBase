@@ -183,15 +183,8 @@ const Layout = () => {
       items: [
         { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null, requiresTeamPlan: true },
         { name: 'Fraternities', href: '/app/chapters', icon: GraduationCap, badge: null, requiresTeamPlan: true },
-        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: 'SOON', requiresTeamPlan: true, comingSoon: true },
+        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: '834 • SOON', requiresTeamPlan: true, comingSoon: true },
         { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' }, requiresTeamPlan: true },
-      ]
-    },
-    {
-      title: 'Outreach Help',
-      items: [
-        { name: 'Request Intro', href: '/app/outreach?type=intro', icon: MessageSquare, badge: null, requiresTeamPlan: true },
-        { name: 'Request Sponsorship', href: '/app/outreach?type=sponsorship', icon: Handshake, badge: null, requiresTeamPlan: true },
       ]
     },
     {
@@ -215,8 +208,8 @@ const Layout = () => {
 
   const isActive = (path: string) => {
     const basePath = path.split('?')[0];
-    // Special case: "My Chapters" nav item should be active for both /app/my-unlocked and /app/my-chapters
-    if (basePath === '/app/my-unlocked' && location.pathname.startsWith('/app/my-chapters')) {
+    // Special case: "My Chapters" nav item should be active for both /app/my-unlocked and /app/my-unlocked
+    if (basePath === '/app/my-unlocked' && location.pathname.startsWith('/app/my-unlocked')) {
       return true;
     }
     return location.pathname.startsWith(basePath);

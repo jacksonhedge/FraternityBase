@@ -3041,7 +3041,8 @@ app.get('/api/admin/chapters', requireAdmin, async (req, res) => {
         universities(id, name, state)
       `)
       .order('is_favorite', { ascending: false, nullsFirst: false })
-      .order('member_count', { ascending: false });
+      .order('member_count', { ascending: false })
+      .limit(5000); // Increase limit to get all chapters
 
     if (error) throw error;
     res.json({ success: true, data });

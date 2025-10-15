@@ -1,0 +1,401 @@
+
+> backend@1.0.0 import:sororities
+> tsx src/scripts/import_greekrank_sororities.ts
+
+[dotenv@17.2.2] injecting env (17) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+╔════════════════════════════════════════════════════════════╗
+║         GreekRank Sorority Import Script                  ║
+╚════════════════════════════════════════════════════════════╝
+
+📂 Scanning for batch files...
+
+
+📦 Batch 1: 50 universities
+
+🏫 Florida State University - FSU - (21 sororities)
+  ✗ Error creating university "Florida State University - FSU -": Could not find the 'country' column of 'universities' in the schema cache
+
+🏫 Miami University of Ohio - MU - (22 sororities)
+  ✓ Matched university: "Miami University of Ohio - MU -" → "Miami University"
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+  ✗ Error creating organization "Phi Sigma Sigma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Epsilon Phi": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+
+🏫 Cleveland State University - CSU - (7 sororities)
+  ✓ Matched university: "Cleveland State University - CSU -" → "Cleveland State University"
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Theta Phi Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Ohio University - OU - (13 sororities)
+  ✓ Matched university: "Ohio University - OU -" → "The Ohio University"
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Bowling Green State University - BGSU - (18 sororities)
+  ✓ Matched university: "Bowling Green State University - BGSU -" → "Bowling Green State University"
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+  ✗ Error creating organization "Omega Phi Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 John Carroll University - JCU - (5 sororities)
+  ✓ Matched university: "John Carroll University - JCU -" → "John Carroll University"
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+
+🏫 Ohio State University - OSU - (25 sororities)
+  ✓ Matched university: "Ohio State University - OSU -" → "Ohio State University"
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ⊘ Chapter already exists: Kappa Kappa Gamma
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Chi Omega (ΧΩ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+  ✗ Error creating organization "Phi Sigma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+    ⊘ Chapter already exists: Alpha Phi
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Epsilon Phi": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Xi Phi": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Lambda Gamma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Kappa Phi Lambda": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Kent State University - KSU - (11 sororities)
+  ✓ Matched university: "Kent State University - KSU -" → "Kent State University"
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Chi Omega (ΧΩ)
+  ✗ Error creating organization "Sigma Sigma Sigma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Delta Tau": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Denison University - DU - (12 sororities)
+  ✓ Matched university: "Denison University - DU -" → "Denison University"
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Sigma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Lambda Theta Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Lambda Gamma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 University of Toledo - UT - (12 sororities)
+  ✓ Matched university: "University of Toledo - UT -" → "University of Toledo"
+  ✗ Error creating organization "Phi Sigma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Phi Epsilon": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 University of Florida - UF - (24 sororities)
+  ✓ Matched university: "University of Florida - UF -" → "University of Florida"
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+  ✗ Error creating organization "Omega Phi Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+  ✗ Error creating organization "Theta Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+  ✗ Error creating organization "Delta Phi Epsilon": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+  ✗ Error creating organization "Alpha Epsilon Phi": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Phi Sigma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Auburn University - AU - (21 sororities)
+  ✓ Matched university: "Auburn University - AU -" → "Auburn University"
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Sigma Sigma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 University of Miami - UM - (12 sororities)
+  ✓ Matched university: "University of Miami - UM -" → "Miami University"
+    ⊘ Chapter already exists: Alpha Delta Pi
+    ⊘ Chapter already exists: Delta Delta Delta
+    ⊘ Chapter already exists: Chi Omega
+  ✗ Error creating organization "Sigma Delta Tau": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ⊘ Chapter already exists: Zeta Tau Alpha
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ⊘ Chapter already exists: Delta Gamma
+    ⊘ Chapter already exists: Kappa Kappa Gamma
+  ✗ Error creating organization "Delta Phi Epsilon": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Virginia Tech - VT - (23 sororities)
+  ✓ Matched university: "Virginia Tech - VT -" → "Virginia Tech"
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Chi Gamma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+  ✗ Error creating organization "Alpha Omega Epsilon": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+  ✗ Error creating organization "Omega Phi Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 University of Virginia - UVA - (22 sororities)
+  ✓ Matched university: "University of Virginia - UVA -" → "University of Virginia"
+  ✗ Error creating organization "Alpha Omega Epsilon": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Alpha Omega": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+  ✗ Error creating organization "Sigma Sigma Sigma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Delta Tau": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Delta Phi": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 University of South Florida Tampa - USF - (12 sororities)
+  ✓ Matched university: "University of South Florida Tampa - USF -" → "University of South Florida"
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+  ✗ Error creating organization "Sigma Delta Tau": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Ohio Wesleyan University - OWU - (7 sororities)
+  ✓ Matched university: "Ohio Wesleyan University - OWU -" → "Wesleyan University"
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 University of Akron - UAkron - (8 sororities)
+  ✓ Matched university: "University of Akron - UAkron -" → "The University of Akron"
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+
+🏫 University of Dayton - UD - (11 sororities)
+  ✓ Matched university: "University of Dayton - UD -" → "University of Dayton"
+  ✗ Error creating organization "Theta Phi Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Phi Sigma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 University of Kentucky - UK - (22 sororities)
+  ✓ Matched university: "University of Kentucky - UK -" → "University of Kentucky"
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Phi Sigma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Delta Pi (ΑΔΠ)
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Gamma Delta (ΑΓΔ)
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+  ✗ Error creating organization "Delta Zeta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Gamma Phi Beta (ΓΦΒ)
+    ✓ Created chapter: Chi Omega (ΧΩ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+
+🏫 Dartmouth College - DC - (6 sororities)
+  ✓ Matched university: "Dartmouth College - DC -" → "Dartmouth College"
+  ✗ Error creating organization "Sigma Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+
+🏫 Depauw University - DU - (7 sororities)
+  ✓ Matched university: "Depauw University - DU -" → "DePauw University"
+    ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+    ✓ Created chapter: Kappa Kappa Gamma (ΚΚΓ)
+    ✓ Created chapter: Delta Gamma (ΔΓ)
+    ✓ Created chapter: Pi Beta Phi (ΠΒΦ)
+    ✓ Created chapter: Alpha Phi (ΑΦ)
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Elon University - EU - (13 sororities)
+  ✓ Matched university: "Elon University - EU -" → "Elon University"
+    ✓ Created chapter: Alpha Chi Omega (ΑΧΩ)
+    ✓ Created chapter: Kappa Delta (ΚΔ)
+  ✗ Error creating organization "Alpha Xi Delta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Delta Delta Delta (ΔΔΔ)
+    ✓ Created chapter: Alpha Omicron Pi (ΑΟΠ)
+  ✗ Error creating organization "Sigma Sigma Sigma": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Kappa": Could not find the 'description' column of 'greek_organizations' in the schema cache
+    ✓ Created chapter: Zeta Tau Alpha (ΖΤΑ)
+  ✗ Error creating organization "Phi Mu": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Zeta Phi Beta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Alpha Kappa Alpha": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Delta Sigma Theta": Could not find the 'description' column of 'greek_organizations' in the schema cache
+  ✗ Error creating organization "Sigma Gamma Rho": Could not find the 'description' column of 'greek_organizations' in the schema cache
+
+🏫 Pennsylvania State University, University Park - PSU - (30 sororities)
+  ✗ Error creating university "Pennsylvania State University, University Park - PSU -": Could not find the 'country' column of 'universities' in the schema cache
+
+🏫 Southern Methodist University - SMU - (11 sororities)
+  ✓ Matched university: "Southern Methodist University - SMU -" → "Southern Methodist University"

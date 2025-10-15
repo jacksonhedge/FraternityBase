@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { PRICING } from '../config/pricing';
 import CreditNotificationService from '../services/CreditNotificationService';
+import AdminNotificationService from '../services/AdminNotificationService';
 
 const router = Router();
 
@@ -11,6 +12,7 @@ let stripe: Stripe;
 let supabase: ReturnType<typeof createClient>;
 let supabaseAdmin: ReturnType<typeof createClient>;
 let creditNotificationService: CreditNotificationService | null = null;
+let adminNotificationService: AdminNotificationService | null = null;
 
 function getStripe() {
   if (!stripe) {
@@ -70,6 +72,16 @@ function getCreditNotificationService(): CreditNotificationService | null {
     }
   }
   return creditNotificationService;
+}
+
+function getAdminNotificationService(): AdminNotificationService {
+  if (!adminNotificationService) {
+    adminNotificationService = new AdminNotificationService(
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+    );
+  }
+  return adminNotificationService;
 }
 
 // Note: GET /balance is now handled directly in server.ts before this router is mounted
@@ -611,6 +623,29 @@ router.post('/webhook', async (req, res) => {
             await grantSubscriptionBenefits(companyId, tier, subscription.id, currentPeriodEnd, true);
 
             console.log(`✅ Activated ${tier} subscription for company ${companyId}`);
+
+            // Get company info for notification
+            const { data: company } = await supabase
+              .from('companies')
+              .select('name')
+              .eq('id', companyId)
+              .single();
+
+            // Create admin notification for new subscription
+            const adminService = getAdminNotificationService();
+            adminService.createNotification({
+              type: 'subscription',
+              title: '⭐ New Subscription',
+              message: `${company?.name || 'A company'} subscribed to the ${tier} plan`,
+              data: {
+                companyId,
+                companyName: company?.name,
+                tier,
+                subscriptionId: subscription.id,
+                currentPeriodEnd: currentPeriodEnd.toISOString()
+              },
+              relatedCompanyId: companyId
+            }).catch(err => console.error('Failed to create admin notification:', err));
           }
 
         } else {
@@ -668,6 +703,26 @@ router.post('/webhook', async (req, res) => {
                 description: `Stripe payment processed`
               }).catch(err => console.error('Failed to send credit notification:', err));
             }
+
+            // Create admin notification for payment
+            const adminService = getAdminNotificationService();
+            adminService.createNotification({
+              type: 'payment',
+              title: '💳 Payment Received',
+              message: `${company?.name || 'A company'} added $${amountDollars.toFixed(2)} to their account`,
+              data: {
+                companyId,
+                companyName: company?.name,
+                amount: amountDollars,
+                balanceBefore: balanceBeforeAmount,
+                balanceAfter: balanceAfterAmount,
+                transactionType,
+                stripePaymentIntentId: typeof session.payment_intent === 'string'
+                  ? session.payment_intent
+                  : session.payment_intent?.id || undefined
+              },
+              relatedCompanyId: companyId
+            }).catch(err => console.error('Failed to create admin notification:', err));
 
             // If payment method was saved, update the account_balance record
             if (session.setup_intent || session.payment_intent) {
@@ -1052,6 +1107,40 @@ router.post('/warm-intro/request', async (req, res) => {
       console.error('Error creating warm intro request:', requestError);
       return res.status(500).json({ error: 'Failed to create request' });
     }
+
+    // Get company and chapter info for notification
+    const { data: company } = await getSupabase()
+      .from('companies')
+      .select('name')
+      .eq('id', companyId)
+      .single();
+
+    const { data: chapter } = await getSupabase()
+      .from('chapters')
+      .select('chapter_name, universities(name)')
+      .eq('id', chapterId)
+      .single();
+
+    // Create admin notification
+    const adminNotificationService = getAdminNotificationService();
+    adminNotificationService.createNotification({
+      type: 'intro_request',
+      title: '🤝 New Introduction Request',
+      message: `${company?.name || 'A company'} requested a warm introduction to ${chapter?.chapter_name || 'a chapter'} at ${chapter?.universities?.name || 'a university'}`,
+      data: {
+        companyId,
+        companyName: company?.name,
+        chapterId,
+        chapterName: chapter?.chapter_name,
+        universityName: chapter?.universities?.name,
+        message,
+        preferredContactMethod,
+        urgency: urgency || 'normal',
+        amountPaid: PRICING.WARM_INTRO,
+        requestId: request.id
+      },
+      relatedCompanyId: companyId
+    }).catch(err => console.error('Failed to create admin notification:', err));
 
     res.json({
       success: true,

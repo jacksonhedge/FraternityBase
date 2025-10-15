@@ -6,7 +6,7 @@ export const DURATIONS = {
   normal: 400,
   slow: 600,
   verySlow: 1200,
-  tickertape: 45000, // 45 seconds for full scroll cycle (slowed down)
+  tickertape: 120000, // 2 minutes for full scroll cycle (very slow)
 } as const;
 
 export const EASINGS = {

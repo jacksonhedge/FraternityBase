@@ -32,9 +32,9 @@ const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
     const tickertape = tickertapeRef.current;
     const totalWidth = tickertape.scrollWidth / 2; // Divide by 2 because we duplicate content
 
-    // Create infinite scroll animation
+    // Create infinite scroll animation (right to left)
     animationRef.current = animate(tickertape, {
-      translateX: [-totalWidth, 0],
+      translateX: [0, -totalWidth],
       duration: DURATIONS.tickertape,
       ease: 'linear',
       loop: true,

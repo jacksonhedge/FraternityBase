@@ -4,9 +4,17 @@
  */
 
 export const PRICING = {
-  // Chapter access (in credits)
-  CHAPTER_UNLOCK: 10, // Standard chapter unlock
-  FIVE_STAR_UNLOCK: 30, // 5-star chapter unlock
+  // Chapter access (in credits) - Dynamic pricing based on rating
+  // Note: Actual pricing is calculated dynamically in server.ts based on five_star_rating
+  // These values are deprecated in favor of grade-based pricing:
+  // 5.0: 5 credits / $4.99
+  // 4.5-4.9: 7 credits / $6.99
+  // 4.0-4.4: 5 credits / $4.99
+  // 3.5-3.9: 3 credits / $2.99
+  // 3.0-3.4: 2 credits / $1.99
+  // <3.0: 1 credit / $0.99
+  CHAPTER_UNLOCK: 3, // Average chapter unlock (deprecated)
+  FIVE_STAR_UNLOCK: 5, // 5.0 star chapter unlock
 
   // Premium services (in credits)
   WARM_INTRO: 200,
@@ -26,7 +34,7 @@ export const PRICING = {
 
   // Dollar values for services (for analytics tracking)
   DOLLAR_VALUES: {
-    FIVE_STAR_UNLOCK: 9.99,
+    FIVE_STAR_UNLOCK: 4.99,
     CHAPTER_UNLOCK: 2.99,
     WARM_INTRO: 59.99,
     AMBASSADOR_REFERRAL: 99.99,

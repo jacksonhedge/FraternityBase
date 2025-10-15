@@ -126,7 +126,26 @@ function AnimatedRoutes() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/pending-approval" element={<PendingApprovalPage />} />
           <Route path="/admin-login" element={<AdminLoginPage />} />
-          <Route path="/admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+
+          {/* Admin Routes - Nested with specific paths */}
+          <Route path="/admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>}>
+            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          </Route>
+          <Route path="/admin/dashboard" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/companies" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/fraternities" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/colleges" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/chapters" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/ambassadors" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/users" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/waitlist" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/payments" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/unlocks" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/credits" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/intelligence" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/analytics" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/activity" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/roadmap" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/csv-upload" element={<AdminRoute><AdminCSVUploadPage /></AdminRoute>} />
           <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />
 
@@ -141,8 +160,8 @@ function AnimatedRoutes() {
             <Route index element={<Navigate to="/app/map" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="my-unlocked" element={<MyUnlockedPage />} />
-            <Route path="my-chapters" element={<MyChaptersPage />} />
-            <Route path="my-chapters/:id" element={<ChapterDetailPage />} />
+            <Route path="my-unlocked" element={<MyChaptersPage />} />
+            <Route path="my-unlocked/:id" element={<ChapterDetailPage />} />
             <Route path="requested-introductions" element={<RequestedIntroductionsPage />} />
             <Route path="my-ambassadors" element={<MyAmbassadorsPage />} />
             <Route path="my-colleges" element={<MyCollegesPage />} />

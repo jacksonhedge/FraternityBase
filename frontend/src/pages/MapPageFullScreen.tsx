@@ -166,7 +166,7 @@ const MapPageFullScreen = () => {
     { name: 'My Dashboard', href: '/app/my-dashboard', icon: Home, count: 0 },
     { name: 'My Map', href: '/app/my-map', icon: MapPin, count: 0 },
     { name: 'My Colleges', href: '/app/my-colleges', icon: Building2, count: 0 },
-    { name: 'My Chapters', href: '/app/my-chapters', icon: GraduationCap, count: 0 },
+    { name: 'My Chapters', href: '/app/my-unlocked', icon: GraduationCap, count: 0 },
     { name: 'My Fraternities', href: '/app/my-fraternities', icon: UsersIcon, count: 0 },
     { name: 'My Team', href: '/app/my-team', icon: UsersIcon, count: 0 },
   ];
@@ -1515,8 +1515,8 @@ const MapPageFullScreen = () => {
 
                       if (isUnlocked) {
                         // Unlocked chapter - full display
-                        // Use /app/my-chapters/:id when in mychapters mode, otherwise /app/chapters/:id
-                        const chapterLink = divisionFilter === 'mychapters' ? `/app/my-chapters/${chapter.id}` : `/app/chapters/${chapter.id}`;
+                        // Use /app/my-unlocked/:id when in mychapters mode, otherwise /app/chapters/:id
+                        const chapterLink = divisionFilter === 'mychapters' ? `/app/my-unlocked/${chapter.id}` : `/app/chapters/${chapter.id}`;
                         return (
                           <Link
                             key={chapter.id}

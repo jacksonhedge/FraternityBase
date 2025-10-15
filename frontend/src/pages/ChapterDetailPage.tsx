@@ -34,7 +34,7 @@ const ChapterDetailPage = () => {
   const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
 
   // Determine back link based on current path
-  const backLink = location.pathname.includes('/my-chapters/') ? '/app/my-chapters' : '/app/chapters';
+  const backLink = location.pathname.includes('/my-unlocked/') ? '/app/my-unlocked' : '/app/chapters';
 
   // Credit unlock system
   const [unlockStatus, setUnlockStatus] = useState<string[]>([]);
@@ -193,6 +193,56 @@ const ChapterDetailPage = () => {
     return unlockStatus.includes(unlockType);
   };
 
+  /**
+   * Calculate unlock pricing based on chapter rank (matches backend logic)
+   */
+  const calculateUnlockPricing = (rank: number) => {
+    let credits = 5;
+    let dollarValue = 4.99;
+    let tierLabel = 'Good';
+    let tierBadge = '';
+
+    if (rank >= 5.0) {
+      // 5.0 star chapter - Premium tier
+      credits = 9;
+      dollarValue = 8.99;
+      tierLabel = 'Premium';
+      tierBadge = '⭐ Top Rated';
+    } else if (rank >= 4.5) {
+      // 4.5-4.9 star chapter - Quality tier (Most Popular)
+      credits = 7;
+      dollarValue = 6.99;
+      tierLabel = 'Quality';
+      tierBadge = '🔥 Most Popular';
+    } else if (rank >= 4.0) {
+      // 4.0-4.4 star chapter - Good tier (Best Value)
+      credits = 5;
+      dollarValue = 4.99;
+      tierLabel = 'Good';
+      tierBadge = '💎 Best Value';
+    } else if (rank >= 3.5) {
+      // 3.5-3.9 star chapter - Standard tier
+      credits = 3;
+      dollarValue = 2.99;
+      tierLabel = 'Standard';
+      tierBadge = '';
+    } else if (rank >= 3.0) {
+      // 3.0-3.4 star chapter - Basic tier
+      credits = 2;
+      dollarValue = 1.99;
+      tierLabel = 'Basic';
+      tierBadge = '';
+    } else {
+      // Below 3.0 or no rank - Budget tier (impulse purchase)
+      credits = 1;
+      dollarValue = 0.99;
+      tierLabel = 'Budget';
+      tierBadge = '🎯 Best Deal';
+    }
+
+    return { credits, dollarValue, tierLabel, tierBadge };
+  };
+
   // Show loading state
   if (loading) {
     return (
@@ -247,7 +297,7 @@ const ChapterDetailPage = () => {
     house: chapterData.house_address || '',
     website: chapterData.website || '',
     instagram: chapterData.instagram_handle || '',
-    greekRank: 4.2, // TODO: Add to database
+    greekRank: chapterData.rank || 4.0, // Use database rank, fallback to 4.0 for Good tier pricing
     nationalRank: 15, // TODO: Add to database
     lastUpdated: chapterData.updated_at || new Date().toISOString(),
     yearData: {
@@ -328,6 +378,9 @@ const ChapterDetailPage = () => {
 
   // Check if chapter has complete data (house address, officers, etc.)
   const hasCompleteData = chapter.house && chapter.house.trim() !== '' && currentYearData.president;
+
+  // Calculate dynamic unlock pricing based on chapter rank
+  const unlockPricing = calculateUnlockPricing(chapter.greekRank);
 
   return (
     <div className="space-y-6">
@@ -421,27 +474,39 @@ const ChapterDetailPage = () => {
               <div className="flex items-start gap-3">
                 <Lock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-1">🔓 See Partial Info • Unlock for Full Details</h3>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-gray-900">🔓 See Partial Info • Unlock for Full Details</h3>
+                    {unlockPricing.tierBadge && (
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                        {unlockPricing.tierBadge}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-gray-700 mb-3">
                     You can see partial officer names and contact info below. Unlock to reveal complete emails, phone numbers, and names for direct outreach.
                   </p>
-                  <button
-                    onClick={() => handleUnlock('full', 20)}
-                    disabled={isUnlocking}
-                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isUnlocking ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Unlocking...
-                      </>
-                    ) : (
-                      <>
-                        <Unlock className="w-4 h-4" />
-                        Unlock Full Access for 20 Credits
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handleUnlock('full', unlockPricing.credits)}
+                      disabled={isUnlocking}
+                      className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isUnlocking ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Unlocking...
+                        </>
+                      ) : (
+                        <>
+                          <Unlock className="w-4 h-4" />
+                          Unlock for {unlockPricing.credits} Credits
+                        </>
+                      )}
+                    </button>
+                    <div className="text-sm text-gray-600">
+                      <span className="text-xs text-gray-500">{unlockPricing.tierLabel} tier</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -664,6 +729,74 @@ const ChapterDetailPage = () => {
           </div>
         </div>
 
+        {/* Chapter Roster Section */}
+        <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-gray-900">Chapter Roster</h2>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Users className="w-4 h-4" />
+              {regularMembers.length} members
+            </div>
+          </div>
+
+          {regularMembers.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {regularMembers.map((member) => {
+                const maskingTier = getMaskingTier(
+                  isUnlocked('roster_access'),
+                  subscriptionTier
+                );
+                const indicator = getMaskingIndicator(maskingTier);
+                const memberName = member.name || (member.first_name && member.last_name ? `${member.first_name} ${member.last_name}` : 'Member');
+
+                return (
+                  <div key={member.id} className="border rounded-lg p-4 hover:border-primary-300 transition-colors">
+                    <div className="flex items-start gap-3">
+                      {chapterData?.universities && (
+                        <img
+                          src={chapterData.universities.logo_url || getCollegeLogoWithFallback(chapterData.universities.name)}
+                          alt={chapterData.universities.name}
+                          className="w-10 h-10 object-contain flex-shrink-0 bg-white rounded border border-gray-100 p-1"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-gray-900 font-medium truncate">
+                          {maskName(memberName, maskingTier)}
+                          {maskingTier !== 'unlocked' && (
+                            <span className="ml-1 text-xs">{indicator}</span>
+                          )}
+                        </p>
+                        {member.major && (
+                          <p className="text-sm text-gray-600 truncate">{member.major}</p>
+                        )}
+                        {member.graduation_year && (
+                          <p className="text-xs text-gray-500">Class of {member.graduation_year}</p>
+                        )}
+                        {member.linkedin_url && maskingTier === 'unlocked' && (
+                          <a
+                            href={member.linkedin_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-1"
+                          >
+                            LinkedIn
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              <Users className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+              <p>Chapter roster information coming soon</p>
+            </div>
+          )}
+        </div>
+
         {/* Warm Introduction Section */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -769,7 +902,7 @@ const ChapterDetailPage = () => {
 
                       if (!response.ok) {
                         if (response.status === 402) {
-                          alert(`Insufficient balance. You need $${data.required} but only have $${data.available}.`);
+                          alert(`Insufficient credits. You need ${data.required} credits but only have ${data.available}.`);
                         } else {
                           alert(data.error || 'Failed to submit request');
                         }
@@ -778,7 +911,7 @@ const ChapterDetailPage = () => {
 
                       // Success!
                       setIntroSubmitted(true);
-                      setBalance(balance - 59.99); // Update local balance
+                      setBalance(balance - 100); // Update local balance (100 credits for warm intro)
                     } catch (error) {
                       console.error('Error submitting intro request:', error);
                       alert('Failed to submit request. Please try again.');

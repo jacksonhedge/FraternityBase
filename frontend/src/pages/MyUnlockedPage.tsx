@@ -130,7 +130,7 @@ const MyUnlockedPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* My Chapters */}
             <Link
-              to="/app/my-chapters"
+              to="/app/my-unlocked"
               className="group bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg p-4 border border-blue-200 transition-all duration-200 hover:shadow-lg"
             >
               <div className="flex items-center gap-3">
@@ -229,7 +229,7 @@ const MyUnlockedPage = () => {
               return (
                 <Link
                   key={chapter.id}
-                  to={`/app/my-chapters/${chapter.id}`}
+                  to={`/app/my-unlocked/${chapter.id}`}
                   className="relative border border-gray-200 rounded-xl p-5 hover:shadow-lg hover:border-blue-300 transition-all bg-white overflow-hidden group"
                 >
                   {/* Background gradient */}

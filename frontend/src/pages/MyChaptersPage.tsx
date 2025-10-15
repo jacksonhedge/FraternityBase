@@ -251,7 +251,7 @@ const MyChaptersPage = () => {
             {unlockedChapters.map((chapter) => (
               <Link
                 key={chapter.id}
-                to={`/app/my-chapters/${chapter.id}`}
+                to={`/app/my-unlocked/${chapter.id}`}
                 className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
               >
                 <div className="flex items-start justify-between mb-3">

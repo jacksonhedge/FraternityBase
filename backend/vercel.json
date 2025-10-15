@@ -17,8 +17,8 @@
   },
   "crons": [
     {
-      "path": "/api/cron/send-daily-reports",
-      "schedule": "0 13 * * *"
+      "path": "/api/cron/send-enhanced-daily-reports",
+      "schedule": "0 14 * * *"
     }
   ]
 }

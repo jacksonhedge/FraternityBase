@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Plus,
   Building2,
@@ -94,7 +94,7 @@ interface Chapter {
   grade?: number;
   is_favorite?: boolean;
   is_viewable?: boolean;
-  greek_organizations?: { name: string };
+  greek_organizations?: { name: string; organization_type: 'fraternity' | 'sorority' };
   universities?: { name: string; state: string };
 }
 
@@ -113,7 +113,7 @@ interface User {
   is_pinned?: boolean;
   chapters?: {
     chapter_name: string;
-    greek_organizations: { name: string };
+    greek_organizations: { name: string; organization_type: 'fraternity' | 'sorority' };
     universities: { name: string };
   };
 }
@@ -139,7 +139,7 @@ interface ChapterUnlock {
   unlocked_at: string;
   chapters?: {
     chapter_name: string;
-    greek_organizations: { name: string };
+    greek_organizations: { name: string; organization_type: 'fraternity' | 'sorority' };
     universities: { name: string };
   };
 }
@@ -192,10 +192,12 @@ interface CompanyDetail extends Company {
 
 const AdminPageV4 = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<
+  const location = useLocation();
+
+  // Derive active tab from URL path
+  const activeTab = (location.pathname.split('/')[2] || 'dashboard') as
     'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
-    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap'
-  >('dashboard');
+    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap';
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -233,6 +235,7 @@ const AdminPageV4 = () => {
   const [selectedUniversityId, setSelectedUniversityId] = useState('');
   const [universitySearchTerm, setUniversitySearchTerm] = useState('');
   const [chapterSearchTerm, setChapterSearchTerm] = useState('');
+  const [orgTypeFilter, setOrgTypeFilter] = useState<'all' | 'fraternity' | 'sorority'>('all');
 
   // Form states
   const [fraternityForm, setFraternityForm] = useState({
@@ -279,6 +282,9 @@ const AdminPageV4 = () => {
     is_favorite: false,
     is_viewable: false
   });
+
+  const [quickAddText, setQuickAddText] = useState('');
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
 
   const [userForm, setUserForm] = useState({
     chapter_id: '',
@@ -682,10 +688,65 @@ const AdminPageV4 = () => {
           is_viewable: false
         });
         fetchData();
+      } else {
+        const errorData = await res.json();
+        alert(`❌ Error: ${errorData.error || 'Failed to create chapter'}`);
       }
     } catch (error) {
       console.error('Error:', error);
+      alert('❌ Network error. Please check your connection and try again.');
     }
+  };
+
+  const handleQuickAddChapter = async () => {
+    const lines = quickAddText.trim().split('\n').filter(line => line.trim());
+
+    for (const line of lines) {
+      // Expected format: "Organization at University" or "Organization, University" or "Organization | University"
+      const separators = [' at ', ', ', ' | ', ' - '];
+      let parts: string[] = [];
+
+      for (const sep of separators) {
+        if (line.includes(sep)) {
+          parts = line.split(sep).map(p => p.trim());
+          break;
+        }
+      }
+
+      if (parts.length !== 2) {
+        alert(`Invalid format for line: "${line}". Please use format: "Organization at University"`);
+        continue;
+      }
+
+      const [organization_name, university_name] = parts;
+
+      try {
+        const res = await fetch(`${API_URL}/admin/chapters/quick-add`, {
+          method: 'POST',
+          headers: getAdminHeaders(),
+          body: JSON.stringify({
+            organization_name,
+            university_name
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          console.log(`✅ Created: ${data.message}`);
+        } else {
+          alert(`❌ Error for "${line}": ${data.error}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert(`❌ Network error for "${line}"`);
+      }
+    }
+
+    showSuccessMsg('Quick add complete! Check console for details.');
+    setQuickAddText('');
+    setShowQuickAdd(false);
+    fetchData();
   };
 
   const handleChapterEdit = (chapter: Chapter) => {
@@ -1465,11 +1526,20 @@ const AdminPageV4 = () => {
     });
 
   const filteredChapters = chapters
-    .filter(ch =>
-      ch.chapter_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ch.greek_organizations?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ch.universities?.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter(ch => {
+      const matchesSearch =
+        ch.chapter_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ch.greek_organizations?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ch.universities?.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+      // Filter by organization type - use embedded data
+      if (orgTypeFilter !== 'all') {
+        const matchesType = ch.greek_organizations?.organization_type === orgTypeFilter;
+        return matchesSearch && matchesType;
+      }
+
+      return matchesSearch;
+    })
     .sort((a, b) => {
       // First, sort by favorite status (favorites first)
       const aFav = a.is_favorite || false;
@@ -1548,7 +1618,7 @@ const AdminPageV4 = () => {
         <nav className="flex-1 px-4 py-6 space-y-1">
           <button
             onClick={() => {
-              setActiveTab('dashboard');
+              navigate('/admin/dashboard');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1564,7 +1634,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('companies');
+              navigate('/admin/companies');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1583,7 +1653,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('colleges');
+              navigate('/admin/colleges');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1602,7 +1672,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('chapters');
+              navigate('/admin/chapters');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1621,7 +1691,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('ambassadors');
+              navigate('/admin/ambassadors');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1637,7 +1707,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('users');
+              navigate('/admin/users');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1656,7 +1726,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('waitlist');
+              navigate('/admin/waitlist');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1674,7 +1744,7 @@ const AdminPageV4 = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('roadmap')}
+            onClick={() => navigate('/admin/roadmap')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
               activeTab === 'roadmap'
                 ? 'bg-primary-600 text-white'
@@ -1698,7 +1768,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('fraternities');
+              navigate('/admin/fraternities');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1722,7 +1792,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('payments');
+              navigate('/admin/payments');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1738,7 +1808,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('unlocks');
+              navigate('/admin/unlocks');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1754,7 +1824,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('credits');
+              navigate('/admin/credits');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1770,7 +1840,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('intelligence');
+              navigate('/admin/intelligence');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1786,7 +1856,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('analytics');
+              navigate('/admin/analytics');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1802,7 +1872,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('activity');
+              navigate('/admin/activity');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -1866,9 +1936,22 @@ const AdminPageV4 = () => {
 
       {/* Success Message */}
       {showSuccess && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 z-50 animate-in slide-in-from-top">
-          <Save className="w-5 h-5" />
-          <span>{successMessage}</span>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 animate-in fade-in zoom-in">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <Save className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Success!</h3>
+              <p className="text-gray-600 mb-6">{successMessage}</p>
+              <button
+                onClick={() => setShowSuccess(false)}
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -3293,6 +3376,63 @@ const AdminPageV4 = () => {
           {/* Chapters Tab Content */}
           {activeTab === 'chapters' && (
             <>
+              {/* Quick Add Section */}
+              <div className="mb-6 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-2 border-blue-200">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <Plus className="w-5 h-5 text-blue-600" />
+                      Quick Add Chapters
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Just paste "Organization at University" - we'll match them automatically!
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowQuickAdd(!showQuickAdd)}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    {showQuickAdd ? 'Hide' : 'Show'} Quick Add
+                  </button>
+                </div>
+
+                {showQuickAdd && (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Paste chapters (one per line):
+                      </label>
+                      <textarea
+                        value={quickAddText}
+                        onChange={(e) => setQuickAddText(e.target.value)}
+                        placeholder={"Sigma Chi at Penn State\nPhi Delta Theta, Ohio State\nKappa Sigma | University of Michigan"}
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                        rows={6}
+                      />
+                      <p className="text-xs text-gray-500 mt-2">
+                        Supported formats: "Org at Uni", "Org, Uni", "Org | Uni", "Org - Uni"
+                      </p>
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={handleQuickAddChapter}
+                        disabled={!quickAddText.trim()}
+                        className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        <Plus className="w-5 h-5" />
+                        Create All Chapters
+                      </button>
+                      <button
+                        onClick={() => { setQuickAddText(''); setShowQuickAdd(false); }}
+                        className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {showForm && (
                 <form onSubmit={handleChapterSubmit} className="mb-6 p-6 bg-gray-50 rounded-lg border-2 border-primary-200">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">{editingId ? 'Edit' : 'Add New'} Chapter</h3>
@@ -3448,6 +3588,47 @@ const AdminPageV4 = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Organization Type Toggle - BIG BUTTONS */}
+              <div className="mb-6 flex flex-col gap-3">
+                <h3 className="text-base font-semibold text-gray-900">Filter Chapters</h3>
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setOrgTypeFilter('fraternity')}
+                    className={`flex-1 px-8 py-4 text-lg font-bold rounded-xl transition-all shadow-md hover:shadow-lg ${
+                      orgTypeFilter === 'fraternity'
+                        ? 'bg-blue-600 text-white scale-105'
+                        : 'bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50'
+                    }`}
+                  >
+                    🏛️ FRATERNITIES
+                    <div className="text-sm font-normal mt-1">
+                      ({chapters.filter(ch => ch.greek_organizations?.organization_type === 'fraternity').length} chapters)
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setOrgTypeFilter('sorority')}
+                    className={`flex-1 px-8 py-4 text-lg font-bold rounded-xl transition-all shadow-md hover:shadow-lg ${
+                      orgTypeFilter === 'sorority'
+                        ? 'bg-pink-600 text-white scale-105'
+                        : 'bg-white text-pink-600 border-2 border-pink-600 hover:bg-pink-50'
+                    }`}
+                  >
+                    💎 SORORITIES
+                    <div className="text-sm font-normal mt-1">
+                      ({chapters.filter(ch => ch.greek_organizations?.organization_type === 'sorority').length} chapters)
+                    </div>
+                  </button>
+                </div>
+                {orgTypeFilter !== 'all' && (
+                  <button
+                    onClick={() => setOrgTypeFilter('all')}
+                    className="text-sm text-gray-600 hover:text-gray-900 underline"
+                  >
+                    Show All Chapters ({chapters.length})
+                  </button>
+                )}
               </div>
 
               {/* Order By Dropdown */}
