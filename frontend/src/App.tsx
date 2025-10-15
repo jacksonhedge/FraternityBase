@@ -59,6 +59,7 @@ import ProductRoadmapPage from './pages/ProductRoadmapPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import SharePage from './pages/SharePage';
+import CreditSystemPage from './pages/CreditSystemPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -184,6 +185,7 @@ function AnimatedRoutes() {
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="credits" element={<CreditsPage />} />
+            <Route path="credit-system" element={<CreditSystemPage />} />
             <Route path="subscription" element={<SubscriptionPage />} />
             <Route path="roadmap" element={<ProductRoadmapPage />} />
           </Route>
