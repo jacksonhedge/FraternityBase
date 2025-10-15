@@ -218,14 +218,20 @@ async function grantSubscriptionBenefits(
   // Define benefits by tier
   const benefits = {
     monthly: {
-      monthly_credit_refresh: 100, // Monthly plan gets 100 credits per month
-      monthly_chapter_unlocks: 10, // 10 chapter unlocks per month
-      monthly_warm_intros: 1, // 1 warm intro per month
+      monthly_credit_refresh: 0, // No automatic credits - must purchase separately
+      monthly_unlocks_5_star: 5, // 5 unlocks for 5.0⭐ chapters per month
+      monthly_unlocks_4_star: 5, // 5 unlocks for 4.0-4.9⭐ chapters per month
+      monthly_unlocks_3_star: 10, // 10 unlocks for 3.0-3.9⭐ chapters per month
+      monthly_warm_intros: 1, // 1 warm intro per month (first 3 months only)
+      max_team_seats: 3,
     },
     enterprise: {
-      monthly_credit_refresh: 1000,
-      monthly_chapter_unlocks: -1, // -1 means unlimited
-      monthly_warm_intros: 3,
+      monthly_credit_refresh: 1000, // 1000 credits per month
+      monthly_unlocks_5_star: -1, // -1 means unlimited
+      monthly_unlocks_4_star: -1, // -1 means unlimited
+      monthly_unlocks_3_star: -1, // -1 means unlimited
+      monthly_warm_intros: 3, // 3 warm intros per month
+      max_team_seats: 10,
     }
   };
 
@@ -239,11 +245,21 @@ async function grantSubscriptionBenefits(
     subscription_current_period_end: currentPeriodEnd.toISOString(),
     last_benefit_reset_at: new Date().toISOString(),
     monthly_credit_refresh: tierBenefits.monthly_credit_refresh,
-    monthly_chapter_unlocks: tierBenefits.monthly_chapter_unlocks,
+    monthly_unlocks_5_star: tierBenefits.monthly_unlocks_5_star,
+    monthly_unlocks_4_star: tierBenefits.monthly_unlocks_4_star,
+    monthly_unlocks_3_star: tierBenefits.monthly_unlocks_3_star,
     monthly_warm_intros: tierBenefits.monthly_warm_intros,
-    chapter_unlocks_remaining: tierBenefits.monthly_chapter_unlocks,
+    unlocks_5_star_remaining: tierBenefits.monthly_unlocks_5_star,
+    unlocks_4_star_remaining: tierBenefits.monthly_unlocks_4_star,
+    unlocks_3_star_remaining: tierBenefits.monthly_unlocks_3_star,
     warm_intros_remaining: tierBenefits.monthly_warm_intros,
+    max_team_seats: tierBenefits.max_team_seats,
   };
+
+  // Set subscription_started_at if this is the initial subscription
+  if (isInitial) {
+    updateData.subscription_started_at = new Date().toISOString();
+  }
 
   await supabase
     .from('account_balance')
@@ -845,10 +861,15 @@ router.post('/webhook', async (req, res) => {
             subscription_tier: 'trial',
             subscription_status: 'canceled',
             monthly_credit_refresh: 0,
-            monthly_chapter_unlocks: 0,
+            monthly_unlocks_5_star: 0,
+            monthly_unlocks_4_star: 0,
+            monthly_unlocks_3_star: 0,
             monthly_warm_intros: 0,
-            chapter_unlocks_remaining: 0,
+            unlocks_5_star_remaining: 0,
+            unlocks_4_star_remaining: 0,
+            unlocks_3_star_remaining: 0,
             warm_intros_remaining: 0,
+            max_team_seats: 1,
           })
           .eq('company_id', account.company_id);
 
@@ -909,10 +930,15 @@ router.get('/subscription/status', async (req, res) => {
         subscription_current_period_end,
         last_benefit_reset_at,
         monthly_credit_refresh,
-        monthly_chapter_unlocks,
+        monthly_unlocks_5_star,
+        monthly_unlocks_4_star,
+        monthly_unlocks_3_star,
         monthly_warm_intros,
-        chapter_unlocks_remaining,
-        warm_intros_remaining
+        unlocks_5_star_remaining,
+        unlocks_4_star_remaining,
+        unlocks_3_star_remaining,
+        warm_intros_remaining,
+        max_team_seats
       `)
       .eq('company_id', companyId)
       .single();
@@ -941,11 +967,16 @@ router.get('/subscription/status', async (req, res) => {
       },
       benefits: {
         monthlyCredits: account.monthly_credit_refresh,
-        monthlyChapterUnlocks: account.monthly_chapter_unlocks,
+        monthlyUnlocks5Star: account.monthly_unlocks_5_star,
+        monthlyUnlocks4Star: account.monthly_unlocks_4_star,
+        monthlyUnlocks3Star: account.monthly_unlocks_3_star,
         monthlyWarmIntros: account.monthly_warm_intros,
+        maxTeamSeats: account.max_team_seats,
       },
       remaining: {
-        chapterUnlocks: account.chapter_unlocks_remaining,
+        unlocks5Star: account.unlocks_5_star_remaining,
+        unlocks4Star: account.unlocks_4_star_remaining,
+        unlocks3Star: account.unlocks_3_star_remaining,
         warmIntros: account.warm_intros_remaining,
       }
     });

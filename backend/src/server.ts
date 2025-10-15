@@ -1023,6 +1023,25 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       console.log(`💰 Full unlock pricing: ${credits} credits ($${dollarValue}) for rank ${rank}`);
     }
 
+    // Get account balance with subscription unlock allowances
+    const { data: accountData, error: accountError } = await supabaseAdmin
+      .from('account_balance')
+      .select(`
+        subscription_tier,
+        unlocks_5_star_remaining,
+        unlocks_4_star_remaining,
+        unlocks_3_star_remaining,
+        warm_intros_remaining,
+        subscription_started_at
+      `)
+      .eq('company_id', profile.company_id)
+      .single();
+
+    if (accountError) {
+      console.error('❌ Error fetching account data:', accountError);
+      return res.status(500).json({ error: 'Failed to fetch account data' });
+    }
+
     // Check if already unlocked
     console.log(`🔍 Checking if chapter already unlocked for company: ${profile.company_id}`);
     const { data: existingUnlock } = await supabaseAdmin
@@ -1044,7 +1063,62 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       });
     }
 
-    // Call deduct_credits function
+    // Check if we can use subscription unlocks instead of credits
+    let useSubscriptionUnlock = false;
+    let unlockColumn = '';
+    let transactionId = null;
+
+    if (unlockType === 'warm_introduction') {
+      // Check warm intro allowance
+      if (accountData.warm_intros_remaining > 0) {
+        // For monthly tier, check if within first 3 months
+        if (accountData.subscription_tier === 'monthly') {
+          if (accountData.subscription_started_at) {
+            const startDate = new Date(accountData.subscription_started_at);
+            const monthsElapsed = (Date.now() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+            if (monthsElapsed <= 3) {
+              useSubscriptionUnlock = true;
+              unlockColumn = 'warm_intros_remaining';
+              console.log(`🎁 Using monthly subscription warm intro (within first 3 months)`);
+            } else {
+              console.log(`⏰ Monthly subscription warm intro expired (${Math.floor(monthsElapsed)} months since start)`);
+            }
+          }
+        } else if (accountData.subscription_tier === 'enterprise') {
+          // Enterprise always gets warm intros
+          useSubscriptionUnlock = true;
+          unlockColumn = 'warm_intros_remaining';
+          console.log(`🎁 Using enterprise subscription warm intro`);
+        }
+      }
+    } else {
+      // Full chapter unlock - check tier-specific allowances
+      if (rank >= 5.0) {
+        // 5.0⭐ chapter
+        if (accountData.unlocks_5_star_remaining === -1 || accountData.unlocks_5_star_remaining > 0) {
+          useSubscriptionUnlock = true;
+          unlockColumn = 'unlocks_5_star_remaining';
+          console.log(`🎁 Using subscription unlock for 5.0⭐ chapter (remaining: ${accountData.unlocks_5_star_remaining === -1 ? 'unlimited' : accountData.unlocks_5_star_remaining})`);
+        }
+      } else if (rank >= 4.0 && rank < 5.0) {
+        // 4.0-4.9⭐ chapter
+        if (accountData.unlocks_4_star_remaining === -1 || accountData.unlocks_4_star_remaining > 0) {
+          useSubscriptionUnlock = true;
+          unlockColumn = 'unlocks_4_star_remaining';
+          console.log(`🎁 Using subscription unlock for 4.0-4.9⭐ chapter (remaining: ${accountData.unlocks_4_star_remaining === -1 ? 'unlimited' : accountData.unlocks_4_star_remaining})`);
+        }
+      } else if (rank >= 3.0 && rank < 4.0) {
+        // 3.0-3.9⭐ chapter
+        if (accountData.unlocks_3_star_remaining === -1 || accountData.unlocks_3_star_remaining > 0) {
+          useSubscriptionUnlock = true;
+          unlockColumn = 'unlocks_3_star_remaining';
+          console.log(`🎁 Using subscription unlock for 3.0-3.9⭐ chapter (remaining: ${accountData.unlocks_3_star_remaining === -1 ? 'unlimited' : accountData.unlocks_3_star_remaining})`);
+        }
+      }
+      // Below 3.0⭐ chapters have no subscription unlocks, must use credits
+    }
+
+    // Call deduct_credits function or use subscription unlock
     let transactionType, description;
 
     if (unlockType === 'warm_introduction') {
@@ -1064,28 +1138,69 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       description = `Unlocked ${rankLabel} chapter: ${chapterData.chapter_name}`;
     }
 
-    console.log(`💰 Calling deduct_credits RPC with ${credits} credits ($${dollarValue}) for company ${profile.company_id}`);
-    const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
-      p_company_id: profile.company_id,
-      p_credits: credits,
-      p_dollars: dollarValue,
-      p_transaction_type: transactionType,
-      p_description: description,
-      p_chapter_id: chapterId
-    });
+    if (useSubscriptionUnlock) {
+      // Use subscription unlock instead of credits
+      console.log(`🎁 Using subscription unlock - decrementing ${unlockColumn}`);
 
-    console.log(`💳 Deduct credits result:`, { transactionId, deductError });
+      // Decrement the subscription unlock counter (unless it's -1 for unlimited)
+      const currentValue = accountData[unlockColumn as keyof typeof accountData] as number;
+      const newValue = currentValue === -1 ? -1 : currentValue - 1;
 
-    if (deductError) {
-      console.error('❌ Error deducting credits:', deductError);
-      if (deductError.message?.includes('Insufficient credits')) {
-        return res.status(402).json({
-          error: 'Insufficient credits',
-          message: deductError.message,
-          required: credits
-        });
+      const { error: updateError } = await supabaseAdmin
+        .from('account_balance')
+        .update({ [unlockColumn]: newValue })
+        .eq('company_id', profile.company_id);
+
+      if (updateError) {
+        console.error('❌ Error updating subscription unlock counter:', updateError);
+        return res.status(500).json({ error: 'Failed to update subscription unlock' });
       }
-      return res.status(500).json({ error: 'Failed to unlock chapter' });
+
+      // Create a transaction record for tracking (0 credits, 0 dollars since it's from subscription)
+      const { data: txData, error: txError } = await supabaseAdmin
+        .from('balance_transactions')
+        .insert({
+          company_id: profile.company_id,
+          credits: 0,
+          dollars: 0,
+          transaction_type: useSubscriptionUnlock && unlockType === 'warm_introduction'
+            ? 'subscription_warm_intro'
+            : 'subscription_unlock',
+          description: `${description} (subscription)`,
+          chapter_id: chapterId
+        })
+        .select('id')
+        .single();
+
+      transactionId = txData?.id || null;
+      console.log(`✅ Subscription unlock used successfully. New ${unlockColumn}: ${newValue === -1 ? 'unlimited' : newValue}`);
+    } else {
+      // Fall back to deducting credits
+      console.log(`💰 Calling deduct_credits RPC with ${credits} credits ($${dollarValue}) for company ${profile.company_id}`);
+      const { data: rpcTransactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
+        p_company_id: profile.company_id,
+        p_credits: credits,
+        p_dollars: dollarValue,
+        p_transaction_type: transactionType,
+        p_description: description,
+        p_chapter_id: chapterId
+      });
+
+      console.log(`💳 Deduct credits result:`, { transactionId: rpcTransactionId, deductError });
+
+      if (deductError) {
+        console.error('❌ Error deducting credits:', deductError);
+        if (deductError.message?.includes('Insufficient credits')) {
+          return res.status(402).json({
+            error: 'Insufficient credits',
+            message: deductError.message,
+            required: credits
+          });
+        }
+        return res.status(500).json({ error: 'Failed to unlock chapter' });
+      }
+
+      transactionId = rpcTransactionId;
     }
 
     // Create unlock record

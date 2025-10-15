@@ -298,6 +298,7 @@ const ChapterDetailPage = () => {
     website: chapterData.website || '',
     instagram: chapterData.instagram_handle || '',
     greekRank: chapterData.rank || 4.0, // Use database rank, fallback to 4.0 for Good tier pricing
+    isPlatinum: chapterData.is_platinum || false, // Platinum status for chapters with partner intros
     nationalRank: 15, // TODO: Add to database
     lastUpdated: chapterData.updated_at || new Date().toISOString(),
     yearData: {
@@ -800,16 +801,27 @@ const ChapterDetailPage = () => {
         {/* Warm Introduction Section */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Handshake className="w-6 h-6 text-emerald-600" />
+            <Handshake className={`w-6 h-6 ${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'}`} />
             Personal Introduction
+            {chapter.isPlatinum && <span className="text-2xl">💎</span>}
           </h2>
 
           {!isUnlocked('warm_introduction') ? (
-            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-lg p-6">
+            <div className={`bg-gradient-to-r ${chapter.isPlatinum ? 'from-blue-50 to-indigo-100 border-2 border-blue-300' : 'from-emerald-50 to-teal-50 border-2 border-emerald-200'} rounded-lg p-6`}>
               <div className="flex items-start gap-3">
-                <Lock className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <Lock className={`w-5 h-5 ${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} flex-shrink-0 mt-0.5`} />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-2">🤝 Get a Personal Introduction</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                    {chapter.isPlatinum && <span className="text-xl">💎</span>}
+                    {chapter.isPlatinum ? 'Platinum Chapter - Priority Introduction' : '🤝 Get a Personal Introduction'}
+                  </h3>
+                  {chapter.isPlatinum && (
+                    <div className="mb-3 p-2 bg-blue-100 border border-blue-200 rounded-md">
+                      <p className="text-xs font-semibold text-blue-900">
+                        ⭐ This is a Platinum chapter with verified contact data and existing partner relationships
+                      </p>
+                    </div>
+                  )}
                   <p className="text-sm text-gray-700 mb-4">
                     Skip the cold outreach! We'll personally introduce you to the chapter's leadership team,
                     leveraging our network and credibility to facilitate a warm connection. Perfect for
@@ -819,27 +831,33 @@ const ChapterDetailPage = () => {
                     <p className="text-xs font-medium text-gray-700 mb-2">What's included:</p>
                     <ul className="text-xs text-gray-600 space-y-1">
                       <li className="flex items-start gap-2">
-                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Personal email introduction from our team to chapter president</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Your company background and partnership proposal shared</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Follow-up coordination to ensure connection is made</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-emerald-600 mt-0.5">✓</span>
+                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Higher response rate vs. cold email (~70% vs. ~10%)</span>
                       </li>
+                      {chapter.isPlatinum && (
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-600 mt-0.5">✓</span>
+                          <span className="font-semibold">Complete roster data and verified officer contacts</span>
+                        </li>
+                      )}
                     </ul>
                   </div>
                   <button
-                    onClick={() => handleUnlock('warm_introduction', 100)}
+                    onClick={() => handleUnlock('warm_introduction', chapter.isPlatinum ? 20 : 100)}
                     disabled={isUnlocking}
-                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`inline-flex items-center gap-2 ${chapter.isPlatinum ? 'bg-blue-600 hover:bg-blue-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     {isUnlocking ? (
                       <>
@@ -848,13 +866,14 @@ const ChapterDetailPage = () => {
                       </>
                     ) : (
                       <>
+                        {chapter.isPlatinum && <span className="text-xl">💎</span>}
                         <Handshake className="w-4 h-4" />
-                        Request Introduction for 100 Credits
+                        Request Introduction for {chapter.isPlatinum ? '20' : '100'} Credits
                       </>
                     )}
                   </button>
                   <p className="text-xs text-gray-500 mt-2">
-                    Significantly increases partnership success rate
+                    {chapter.isPlatinum ? '💎 Platinum tier - Premium partner with complete data' : 'Significantly increases partnership success rate'}
                   </p>
                 </div>
               </div>

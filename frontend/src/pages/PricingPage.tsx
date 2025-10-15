@@ -87,16 +87,17 @@ const PricingPage = () => {
     },
     {
       id: 'billing',
-      name: 'Billing',
+      name: 'Add On Credits',
       price: 'Pay as you go',
       description: 'Unlock individual chapters',
       icon: Sparkles,
       color: 'from-yellow-400 via-yellow-500 to-amber-500',
       bgColor: 'from-amber-50 via-yellow-50 to-amber-100',
       features: [
-        'Chapter Unlock: $9.99',
-        'Warm Introduction: $59.99',
-        'Ambassador Referral: $99.99',
+        'Full Roster + Contact Info: 25 credits',
+        'Unlock POC: 10 credits',
+        'Warm Introduction: 60 credits',
+        'Ambassador Referral: 100 credits',
         'Buy credits anytime',
         'No monthly commitment',
         'Credits never expire'
@@ -113,16 +114,7 @@ const PricingPage = () => {
       icon: Building2,
       color: 'from-gray-700 to-gray-800',
       bgColor: 'from-gray-50 to-gray-100',
-      features: [
-        'UNLIMITED credits & unlocks',
-        'Unlimited warm intros',
-        'White-label platform',
-        'Dedicated account manager',
-        'Custom integrations',
-        'SLA guarantees',
-        'Custom onboarding & training',
-        'Priority feature requests'
-      ],
+      features: [],
       limitations: [],
       buttonText: 'Contact Sales',
       buttonStyle: 'border-2 border-gray-800 text-gray-800 hover:bg-gray-100 hover:border-gray-900 transition-all duration-200'
