@@ -3337,7 +3337,7 @@ app.get('/api/admin/officers', requireAdmin, async (req, res) => {
   try {
     const { chapter_id } = req.query;
 
-    let query = supabase
+    let query = supabaseAdmin
       .from('chapter_officers')
       .select(`
         *,
@@ -3378,7 +3378,7 @@ app.post('/api/admin/officers', requireAdmin, async (req, res) => {
       is_primary_contact
     } = req.body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('chapter_officers')
       .insert({
         chapter_id,
@@ -3416,7 +3416,7 @@ app.put('/api/admin/officers/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('chapter_officers')
       .update(updates)
       .eq('id', id)
@@ -3443,7 +3443,7 @@ app.delete('/api/admin/officers/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('chapter_officers')
       .delete()
       .eq('id', id);
