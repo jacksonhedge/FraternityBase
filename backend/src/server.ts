@@ -10,8 +10,13 @@ import { parse } from 'csv-parse/sync';
 import creditsRouter from './routes/credits';
 import activityTrackingRouter from './routes/activityTracking';
 import roadmapRouter from './routes/roadmap';
+import adminNotificationsRouter from './routes/adminNotifications';
+import sharesRouter from './routes/shares';
 import CreditNotificationService from './services/CreditNotificationService';
+import AdminNotificationService from './services/AdminNotificationService';
 import DailyReportService from './services/DailyReportService';
+import { EnhancedDailyReportService } from './services/EnhancedDailyReportService';
+import { fetchInstagramData, getInstagramHandle } from './utils/instagram';
 
 dotenv.config();
 
@@ -72,6 +77,19 @@ function getCreditNotificationService(): CreditNotificationService | null {
     }
   }
   return creditNotificationService;
+}
+
+// Initialize Admin Notification Service
+let adminNotificationService: AdminNotificationService | null = null;
+function getAdminNotificationService(): AdminNotificationService {
+  if (!adminNotificationService) {
+    adminNotificationService = new AdminNotificationService(
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+    );
+    console.log('✅ Admin Notification Service initialized');
+  }
+  return adminNotificationService;
 }
 
 // Middleware
@@ -443,6 +461,8 @@ app.get('/api/user/profile', async (req, res) => {
 app.use('/api/credits', creditsRouter);
 app.use('/api/activity', activityTrackingRouter);
 app.use('/api/roadmap', roadmapRouter);
+app.use('/api/admin/notifications', adminNotificationsRouter);
+app.use('/api/shares', sharesRouter);
 
 // Admin authentication middleware (temporarily disabled for debugging)
 const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -925,28 +945,37 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     }
 
     // Determine credits cost based on five_star_rating (rating out of 5.0)
+    // Behavioral Economics Pricing - .99 charm pricing with graduated tiers
     // Higher rank = more expensive (better chapters cost more)
     const rank = chapterData.five_star_rating || 0;
     const is5Star = rank >= 5.0;
-    let credits = 20; // Default for low-ranked chapters
-    let dollarValue = 5.99;
+    let credits = 1; // Default for lowest-ranked chapters
+    let dollarValue = 0.99;
 
     if (rank >= 5.0) {
-      // 5.0 star chapter - premium
-      credits = 40;
-      dollarValue = 11.99;
+      // 5.0 star chapter - Premium tier
+      credits = 5;
+      dollarValue = 4.99;
+    } else if (rank >= 4.5) {
+      // 4.5-4.9 star chapter - Quality tier (Most Popular)
+      credits = 7;
+      dollarValue = 6.99;
     } else if (rank >= 4.0) {
-      // 4.0-4.9 star chapter
-      credits = 25;
-      dollarValue = 7.49;
+      // 4.0-4.4 star chapter - Good tier (Best Value)
+      credits = 5;
+      dollarValue = 4.99;
     } else if (rank >= 3.5) {
-      // 3.5-3.9 star chapter
-      credits = 20;
-      dollarValue = 5.99;
+      // 3.5-3.9 star chapter - Standard tier
+      credits = 3;
+      dollarValue = 2.99;
+    } else if (rank >= 3.0) {
+      // 3.0-3.4 star chapter - Basic tier
+      credits = 2;
+      dollarValue = 1.99;
     } else {
-      // Below 3.5 or no rank - cheapest
-      credits = 20;
-      dollarValue = 5.99;
+      // Below 3.0 or no rank - Budget tier (impulse purchase)
+      credits = 1;
+      dollarValue = 0.99;
     }
 
     console.log(`💰 Pricing determined: ${credits} credits ($${dollarValue}) for rank ${rank}`);
@@ -988,8 +1017,13 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     }
 
     // Call deduct_credits function
-    const rankLabel = rank >= 5.0 ? '5.0⭐' : rank >= 4.0 ? '4.0⭐' : rank >= 3.5 ? '3.5⭐' : 'Standard';
-    console.log(`💳 Calling deduct_credits RPC with ${credits} credits for company ${profile.company_id}`);
+    const rankLabel = rank >= 5.0 ? 'Premium (5.0⭐)' :
+                      rank >= 4.5 ? 'Quality (4.5⭐)' :
+                      rank >= 4.0 ? 'Good (4.0⭐)' :
+                      rank >= 3.5 ? 'Standard (3.5⭐)' :
+                      rank >= 3.0 ? 'Basic (3.0⭐)' :
+                      'Budget (<3.0⭐)';
+    console.log(`💰 Calling deduct_credits RPC with ${credits} credits ($${dollarValue}) for company ${profile.company_id}`);
     const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
       p_company_id: profile.company_id,
       p_credits: credits,
@@ -1074,6 +1108,27 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
         universityName: (chapterData?.universities as any)?.name
       }
     });
+
+    // Create admin notification
+    const adminService = getAdminNotificationService();
+    adminService.createNotification({
+      type: 'unlock',
+      title: `🔓 Chapter Unlocked${is5Star ? ' (5-Star)' : ''}`,
+      message: `${company?.company_name || 'A company'} unlocked ${chapterData?.chapter_name || 'a chapter'} at ${(chapterData?.universities as any)?.name || 'a university'} for ${credits} credits ($${dollarValue})`,
+      data: {
+        companyId: profile.company_id,
+        companyName: company?.company_name,
+        chapterId,
+        chapterName: chapterData?.chapter_name,
+        universityName: (chapterData?.universities as any)?.name,
+        unlockType,
+        creditsSpent: credits,
+        dollarValue: dollarValue,
+        is5Star: is5Star,
+        transactionId
+      },
+      relatedCompanyId: profile.company_id
+    }).catch(err => console.error('Failed to create admin notification:', err));
 
     res.json({
       success: true,
@@ -1160,6 +1215,71 @@ app.get('/api/chapters/:id/unlock-status', async (req, res) => {
   } catch (error: any) {
     console.error('Unlock status endpoint error:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get Instagram data for a chapter (with caching)
+app.get('/api/chapters/:id/instagram', async (req, res) => {
+  try {
+    const { id: chapterId } = req.params;
+    console.log('📸 === INSTAGRAM DATA ENDPOINT HIT ===');
+    console.log('📍 Chapter ID:', chapterId);
+
+    // Fetch chapter data to get Instagram handle
+    const { data: chapter, error: chapterError } = await supabaseAdmin
+      .from('chapters')
+      .select('instagram_handle, instagram_handle_official')
+      .eq('id', chapterId)
+      .single();
+
+    if (chapterError || !chapter) {
+      console.log('❌ Chapter not found');
+      return res.status(404).json({ error: 'Chapter not found' });
+    }
+
+    // Get the Instagram handle (prefer official over regular)
+    const instagramHandle = getInstagramHandle(
+      chapter.instagram_handle,
+      chapter.instagram_handle_official
+    );
+
+    if (!instagramHandle) {
+      console.log('❌ No Instagram handle found for chapter');
+      return res.status(404).json({
+        error: 'No Instagram handle available for this chapter',
+        has_handle: false
+      });
+    }
+
+    console.log('📱 Instagram handle:', instagramHandle);
+
+    // Fetch Instagram data from API
+    const instagramData = await fetchInstagramData(instagramHandle, 6);
+
+    if (!instagramData) {
+      console.log('❌ Failed to fetch Instagram data');
+      return res.status(500).json({
+        error: 'Failed to fetch Instagram data',
+        has_handle: true,
+        handle: instagramHandle
+      });
+    }
+
+    console.log('✅ Instagram data fetched successfully');
+    console.log('📊 Profile:', instagramData.profile.username, 'Followers:', instagramData.profile.follower_count);
+    console.log('📸 Posts:', instagramData.recent_posts.length);
+
+    res.json({
+      success: true,
+      data: instagramData,
+      handle: instagramHandle
+    });
+  } catch (error: any) {
+    console.error('Instagram endpoint error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
+    });
   }
 });
 
@@ -1471,7 +1591,9 @@ app.patch('/api/admin/signups/:id', requireAdmin, async (req, res) => {
 // Public endpoint - Browse all chapters (for company dashboard)
 app.get('/api/chapters', async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const { universityName } = req.query;
+
+    let query = supabase
       .from('chapters')
       .select(`
         *,
@@ -1479,7 +1601,23 @@ app.get('/api/chapters', async (req, res) => {
         universities(id, name, location, state, student_count, logo_url)
       `)
       .eq('status', 'active')
-      .eq('is_viewable', true)
+      .eq('is_viewable', true);
+
+    // Filter by university name if provided
+    if (universityName && typeof universityName === 'string') {
+      // First get the university ID
+      const { data: university, error: universityError } = await supabase
+        .from('universities')
+        .select('id')
+        .ilike('name', universityName)
+        .single();
+
+      if (university && !universityError) {
+        query = query.eq('university_id', university.id);
+      }
+    }
+
+    const { data, error } = await query
       .order('is_favorite', { ascending: false, nullsFirst: false })
       .order('member_count', { ascending: false });
 
@@ -2651,6 +2789,43 @@ app.post('/api/cron/send-daily-reports', async (req, res) => {
   }
 });
 
+// Cron job to send enhanced daily reports with partnerships and revenue metrics
+app.post('/api/cron/send-enhanced-daily-reports', async (req, res) => {
+  try {
+    // Verify cron secret
+    const cronSecret = req.headers['x-cron-secret'];
+    if (cronSecret !== process.env.CRON_SECRET) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    console.log('📊 Starting enhanced daily report generation...');
+
+    // Initialize the enhanced daily report service
+    const reportService = new EnhancedDailyReportService(
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+      process.env.RESEND_API_KEY || '',
+      process.env.FROM_EMAIL || 'updates@fraternitybase.com'
+    );
+
+    // Send all enhanced daily reports
+    const result = await reportService.sendAllEnhancedDailyReports();
+
+    console.log(`✅ Enhanced daily reports complete: ${result.sent} sent, ${result.failed} failed`);
+
+    res.json({
+      success: true,
+      message: `Enhanced daily reports sent to ${result.sent} companies`,
+      sent: result.sent,
+      failed: result.failed,
+      total: result.sent + result.failed
+    });
+  } catch (error: any) {
+    console.error('❌ Error sending enhanced daily reports:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Greek Organizations (Fraternities/Sororities)
 app.get('/api/admin/greek-organizations', requireAdmin, async (req, res) => {
   try {
@@ -2863,7 +3038,8 @@ app.get('/api/admin/chapters', requireAdmin, async (req, res) => {
         greek_organizations(id, name, organization_type),
         universities(id, name, state)
       `)
-      .order('created_at', { ascending: false });
+      .order('is_favorite', { ascending: false, nullsFirst: false })
+      .order('member_count', { ascending: false });
 
     if (error) throw error;
     res.json({ success: true, data });
@@ -4252,6 +4428,163 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
 
   } catch (error: any) {
     console.error('Error uploading roster CSV:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// CSV PASTE endpoint - accepts CSV text directly in body
+app.post('/api/admin/chapters/:chapterId/paste-roster', requireAdmin, async (req, res) => {
+  try {
+    const { chapterId } = req.params;
+    const { csvText } = req.body;
+
+    if (!csvText || typeof csvText !== 'string') {
+      return res.status(400).json({ success: false, error: 'No CSV text provided' });
+    }
+
+    // Verify chapter exists
+    const { data: rosterChapter, error: chapterError } = await supabaseAdmin
+      .from('chapters')
+      .select(`
+        id,
+        chapter_name,
+        universities (id, name),
+        greek_organizations (id, name)
+      `)
+      .eq('id', chapterId)
+      .single();
+
+    if (chapterError || !rosterChapter) {
+      return res.status(404).json({ success: false, error: 'Chapter not found' });
+    }
+
+    // Parse CSV text
+    const records = parse(csvText, {
+      columns: true,
+      skip_empty_lines: true,
+      trim: true
+    }) as Array<Record<string, string>>;
+
+    console.log(`📋 Pasting ${records.length} members for chapter: ${rosterChapter.chapter_name}`);
+
+    let insertedCount = 0;
+    let updatedCount = 0;
+    let skippedCount = 0;
+    const errors: string[] = [];
+
+    // Process each record
+    for (const record of records) {
+      try {
+        // Validate required fields
+        if (!record.name || record.name.trim() === '') {
+          skippedCount++;
+          errors.push(`Skipped row: missing name`);
+          continue;
+        }
+
+        // Prepare member data
+        const memberData = {
+          chapter_id: chapterId,
+          name: record.name.trim(),
+          position: record.position?.trim() || null,
+          email: record.email?.trim() || null,
+          phone: record.phone?.trim() || null,
+          linkedin_url: record.linkedin?.trim() || null,
+          graduation_year: record.graduation_year ? parseInt(record.graduation_year) : null,
+          major: record.major?.trim() || null,
+          member_type: record.member_type?.trim() || 'member',
+          is_primary_contact: record.is_primary_contact?.toLowerCase() === 'true',
+          updated_at: new Date().toISOString()
+        };
+
+        // Upsert (insert or update if email already exists for this chapter)
+        if (memberData.email) {
+          // Check if member exists with this email in this chapter
+          const { data: existing } = await supabaseAdmin
+            .from('chapter_members')
+            .select('id')
+            .eq('chapter_id', chapterId)
+            .eq('email', memberData.email)
+            .single();
+
+          if (existing) {
+            // Update existing
+            const { error: updateError } = await supabaseAdmin
+              .from('chapter_members')
+              .update(memberData)
+              .eq('id', existing.id);
+
+            if (updateError) {
+              errors.push(`Error updating ${memberData.name}: ${updateError.message}`);
+              skippedCount++;
+            } else {
+              updatedCount++;
+            }
+          } else {
+            // Insert new
+            const { error: insertError } = await supabaseAdmin
+              .from('chapter_members')
+              .insert(memberData);
+
+            if (insertError) {
+              errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
+              skippedCount++;
+            } else {
+              insertedCount++;
+            }
+          }
+        } else {
+          // No email - just insert (can't check for duplicates)
+          const { error: insertError } = await supabaseAdmin
+            .from('chapter_members')
+            .insert(memberData);
+
+          if (insertError) {
+            errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
+            skippedCount++;
+          } else {
+            insertedCount++;
+          }
+        }
+      } catch (recordError: any) {
+        errors.push(`Error processing ${record.name}: ${recordError.message}`);
+        skippedCount++;
+      }
+    }
+
+    console.log(`✅ Roster paste complete: ${insertedCount} inserted, ${updatedCount} updated, ${skippedCount} skipped`);
+
+    // Log activity
+    await supabaseAdmin.rpc('log_admin_activity', {
+      p_event_type: 'admin_paste',
+      p_event_title: `Roster pasted: ${rosterChapter.chapter_name}`,
+      p_event_description: `${insertedCount} members inserted, ${updatedCount} updated`,
+      p_reference_id: chapterId,
+      p_reference_type: 'chapter',
+      p_metadata: {
+        totalRecords: records.length,
+        insertedCount,
+        updatedCount,
+        skippedCount,
+        chapterName: rosterChapter.chapter_name,
+        universityName: (rosterChapter as any).universities?.name,
+        greekOrgName: (rosterChapter as any).greek_organizations?.name
+      }
+    });
+
+    res.json({
+      success: true,
+      chapterId,
+      chapterName: rosterChapter.chapter_name,
+      totalRecords: records.length,
+      insertedCount,
+      updatedCount,
+      skippedCount,
+      errors: errors.slice(0, 10) // Return first 10 errors only
+    });
+
+  } catch (error: any) {
+    console.error('Error pasting roster CSV:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
