@@ -70,6 +70,12 @@ const ChaptersPage = () => {
   const [balance, setBalance] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
+  const [isUnlocking, setIsUnlocking] = useState(false);
+  const [unlocks, setUnlocks] = useState<{
+    fiveStar: { remaining: number; monthly: number; isUnlimited: boolean };
+    fourStar: { remaining: number; monthly: number; isUnlimited: boolean };
+    threeStar: { remaining: number; monthly: number; isUnlimited: boolean };
+  } | null>(null);
 
   // Fetch chapters from database
   useEffect(() => {
@@ -113,20 +119,50 @@ const ChaptersPage = () => {
     fetchUnlockedChapters();
   }, []);
 
-  // Fetch credit balance
+  // Fetch credit balance and unlock counts
   useEffect(() => {
     const fetchBalance = async () => {
       try {
         const token = localStorage.getItem('token');
-        if (!token) return;
+        if (!token) {
+          console.log('❌ No token found, skipping balance fetch');
+          return;
+        }
 
+        console.log('💰 Fetching balance from:', `${API_URL}/credits/balance`);
         const res = await fetch(`${API_URL}/credits/balance`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
-        setBalance(data.balance || 0);
+
+        console.log('💰 Raw API response:', data);
+        console.log('💰 Balance fields:', {
+          'data.balance': data.balance,
+          'data.balanceCredits': data.balanceCredits,
+          'data.credits': data.credits
+        });
+        console.log('💰 Unlocks data:', {
+          'data.unlocks': data.unlocks,
+          'data.subscriptionUnlocks': data.subscriptionUnlocks,
+          'data.remainingSubscriptionUnlocks': data.remainingSubscriptionUnlocks
+        });
+
+        // Try multiple possible field names for balance
+        const balanceValue = data.balance || data.balanceCredits || data.credits || 0;
+        console.log('💰 Setting balance to:', balanceValue);
+        setBalance(balanceValue);
+
+        // Try multiple possible field names for unlocks
+        const unlocksValue = data.unlocks || data.subscriptionUnlocks || data.remainingSubscriptionUnlocks || null;
+        console.log('💰 Setting unlocks to:', unlocksValue);
+        setUnlocks(unlocksValue);
+
+        console.log('✅ Balance fetch complete:', {
+          balance: balanceValue,
+          unlocks: unlocksValue
+        });
       } catch (error) {
-        console.error('Error fetching balance:', error);
+        console.error('❌ Error fetching balance:', error);
       }
     };
 
@@ -193,7 +229,7 @@ const ChaptersPage = () => {
 
   // Handle unlock action
   const handleUnlock = async () => {
-    if (!selectedChapter) return;
+    if (!selectedChapter || isUnlocking) return;
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -201,9 +237,12 @@ const ChaptersPage = () => {
       return;
     }
 
+    setIsUnlocking(true);
     const pricing = calculateUnlockPricing(selectedChapter.grade);
 
     try {
+      console.log('🔓 Unlocking chapter:', selectedChapter.id);
+
       const response = await fetch(`${API_URL}/chapters/${selectedChapter.id}/unlock`, {
         method: 'POST',
         headers: {
@@ -214,18 +253,46 @@ const ChaptersPage = () => {
       });
 
       const data = await response.json();
+      console.log('🔓 Unlock response:', data);
 
       if (response.ok) {
         setUnlockedChapterIds(prev => new Set(prev).add(selectedChapter.id));
         setBalance(data.balance || balance - pricing.credits);
-        // Navigate to the chapter detail page after successful unlock
+
+        // Update unlock counts if subscription unlock was used
+        if (data.usedSubscriptionUnlock && data.remainingSubscriptionUnlocks) {
+          const remaining = data.remainingSubscriptionUnlocks;
+          setUnlocks(prev => prev ? {
+            ...prev,
+            fiveStar: { ...prev.fiveStar, remaining: remaining.fiveStar },
+            fourStar: { ...prev.fourStar, remaining: remaining.fourStar },
+            threeStar: { ...prev.threeStar, remaining: remaining.threeStar }
+          } : null);
+        }
+
+        // Dispatch custom event to notify Layout component to refresh balance/unlocks
+        window.dispatchEvent(new CustomEvent('balanceUpdated', {
+          detail: {
+            balance: data.balance,
+            unlocks: data.remainingSubscriptionUnlocks,
+            usedSubscription: data.usedSubscriptionUnlock
+          }
+        }));
+        console.log('📢 Dispatched balanceUpdated event');
+
+        // Close modal and navigate on success
+        setIsModalOpen(false);
+        setSelectedChapter(null);
         navigate(`/app/chapters/${selectedChapter.id}`);
       } else {
+        console.error('❌ Unlock failed:', data.error);
         alert(`❌ ${data.error || 'Failed to unlock chapter'}`);
       }
     } catch (error) {
-      console.error('Error unlocking chapter:', error);
+      console.error('❌ Error unlocking chapter:', error);
       alert('Error unlocking chapter. Please try again.');
+    } finally {
+      setIsUnlocking(false);
     }
   };
 
@@ -678,21 +745,77 @@ const ChaptersPage = () => {
       )}
 
       {/* Unlock Confirmation Modal */}
-      {selectedChapter && (
-        <UnlockConfirmationModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedChapter(null);
-          }}
-          onConfirm={handleUnlock}
-          chapterName={`${selectedChapter.greek_organizations?.name} - ${selectedChapter.chapter_name}`}
-          credits={calculateUnlockPricing(selectedChapter.grade).credits}
-          balance={balance}
-          tierLabel={calculateUnlockPricing(selectedChapter.grade).tierLabel}
-          tierBadge={calculateUnlockPricing(selectedChapter.grade).tierBadge}
-        />
-      )}
+      {selectedChapter && (() => {
+        const grade = selectedChapter.grade || 3.0;
+        let subscriptionUnlocksRemaining = 0;
+        let isUnlimitedUnlocks = false;
+        let willUseSubscriptionUnlock = false;
+
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('🎯 MODAL RENDER - Chapter Selected:', selectedChapter.chapter_name);
+        console.log('🎯 Grade:', grade, '(type:', typeof grade, ')');
+        console.log('🎯 Current balance state:', balance);
+        console.log('🎯 Current unlocks state:', unlocks);
+        console.log('🎯 Modal open:', isModalOpen);
+
+        if (unlocks) {
+          console.log('✅ Unlocks object exists, checking tier...');
+
+          if (grade >= 5.0) {
+            console.log('⭐ This is a 5.0 star chapter');
+            console.log('⭐ unlocks.fiveStar:', unlocks.fiveStar);
+            subscriptionUnlocksRemaining = unlocks.fiveStar?.remaining || 0;
+            isUnlimitedUnlocks = unlocks.fiveStar?.isUnlimited || false;
+            console.log('⭐ Extracted values:', { subscriptionUnlocksRemaining, isUnlimitedUnlocks });
+          } else if (grade >= 4.0) {
+            console.log('💎 This is a 4.0 star chapter');
+            console.log('💎 unlocks.fourStar:', unlocks.fourStar);
+            subscriptionUnlocksRemaining = unlocks.fourStar?.remaining || 0;
+            isUnlimitedUnlocks = unlocks.fourStar?.isUnlimited || false;
+            console.log('💎 Extracted values:', { subscriptionUnlocksRemaining, isUnlimitedUnlocks });
+          } else if (grade >= 3.0) {
+            console.log('🟢 This is a 3.0 star chapter');
+            console.log('🟢 unlocks.threeStar:', unlocks.threeStar);
+            subscriptionUnlocksRemaining = unlocks.threeStar?.remaining || 0;
+            isUnlimitedUnlocks = unlocks.threeStar?.isUnlimited || false;
+            console.log('🟢 Extracted values:', { subscriptionUnlocksRemaining, isUnlimitedUnlocks });
+          }
+
+          willUseSubscriptionUnlock = isUnlimitedUnlocks || subscriptionUnlocksRemaining > 0;
+          console.log('🔍 Calculation: isUnlimitedUnlocks =', isUnlimitedUnlocks, '|| subscriptionUnlocksRemaining =', subscriptionUnlocksRemaining, '> 0');
+          console.log('✅ willUseSubscriptionUnlock:', willUseSubscriptionUnlock);
+        } else {
+          console.log('❌ No unlocks data available - unlocks is null/undefined');
+          console.log('❌ This will default to credit unlock');
+        }
+
+        const modalProps = {
+          isOpen: isModalOpen,
+          onClose: () => {
+            if (!isUnlocking) {
+              setIsModalOpen(false);
+              setSelectedChapter(null);
+            }
+          },
+          onConfirm: handleUnlock,
+          chapterName: `${selectedChapter.greek_organizations?.name} - ${selectedChapter.chapter_name}`,
+          credits: calculateUnlockPricing(selectedChapter.grade).credits,
+          balance: balance,
+          tierLabel: calculateUnlockPricing(selectedChapter.grade).tierLabel,
+          tierBadge: calculateUnlockPricing(selectedChapter.grade).tierBadge,
+          isUnlocking: isUnlocking,
+          subscriptionUnlocksRemaining: subscriptionUnlocksRemaining,
+          isUnlimitedUnlocks: isUnlimitedUnlocks,
+          willUseSubscriptionUnlock: willUseSubscriptionUnlock
+        };
+
+        console.log('📤 Props being passed to UnlockConfirmationModal:', modalProps);
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+        return (
+          <UnlockConfirmationModal {...modalProps} />
+        );
+      })()}
     </div>
   );
 };

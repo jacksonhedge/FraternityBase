@@ -239,9 +239,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const isAdmin = profile?.role === 'admin';
 
-  // Auto-logout after 5 minutes of inactivity
+  // Auto-logout after 30 minutes of inactivity
   useIdleTimeout({
-    timeoutMs: 5 * 60 * 1000, // 5 minutes
+    timeoutMs: 30 * 60 * 1000, // 30 minutes
     onIdle: async () => {
       if (user) {
         console.log('🔒 Auto-logout due to inactivity');

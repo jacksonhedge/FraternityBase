@@ -1,13 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
-import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap } from 'lucide-react';
+import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap, Unlock, Star, Users, Sparkles } from 'lucide-react';
 
 interface AccountBalance {
   balance: number;
   lifetimeSpent: number;
   lifetimeAdded: number;
   subscription_tier?: string;
+  subscriptionStatus?: string;
+  subscriptionPeriodEnd?: string;
+  subscriptionStartedAt?: string;
+  unlocks?: {
+    fiveStar: { remaining: number; monthly: number; isUnlimited: boolean };
+    fourStar: { remaining: number; monthly: number; isUnlimited: boolean };
+    threeStar: { remaining: number; monthly: number; isUnlimited: boolean };
+  };
+  warmIntros?: {
+    remaining: number;
+    monthly: number;
+    expiresAt?: string;
+  };
+  team?: {
+    currentSeats: number;
+    maxSeats: number;
+    available: number;
+  };
   autoReload: {
     enabled: boolean;
     threshold: number;
@@ -64,13 +82,32 @@ export default function CreditsPage() {
       }
 
       const data = await response.json();
+
+      // DEBUG LOGGING
+      console.log('🔍 Raw API response:', data);
+      console.log('🔍 subscriptionTier:', data.subscriptionTier);
+      console.log('🔍 unlocks object:', data.unlocks);
+      console.log('🔍 Has unlocks?', !!data.unlocks);
+
       // Map API response fields to component state
       setAccountData({
         balance: data.balanceCredits || data.balance || 0,
         lifetimeSpent: data.lifetimeSpentCredits || 0,
         lifetimeAdded: data.lifetimeEarnedCredits || 0,
         subscription_tier: data.subscriptionTier,
+        subscriptionStatus: data.subscriptionStatus,
+        subscriptionPeriodEnd: data.subscriptionPeriodEnd,
+        subscriptionStartedAt: data.subscriptionStartedAt,
+        unlocks: data.unlocks,
+        warmIntros: data.warmIntros,
+        team: data.team,
         autoReload: data.autoReload
+      });
+
+      console.log('✅ accountData set:', {
+        tier: data.subscriptionTier,
+        hasUnlocks: !!data.unlocks,
+        unlocksData: data.unlocks
       });
       setAutoReloadSettings(data.autoReload);
     } catch (error) {
@@ -205,14 +242,33 @@ export default function CreditsPage() {
       case 'auto_reload':
         return 'Auto-reload';
       case 'chapter_unlock':
+      case 'five_star_unlock':
         return 'Chapter unlock';
+      case 'subscription_unlock':
+        return 'Chapter unlock (Subscription)';
       case 'warm_intro':
+      case 'warm_introduction':
         return 'Warm introduction';
+      case 'subscription_warm_intro':
+        return 'Warm intro (Subscription)';
       case 'ambassador_referral':
         return 'Ambassador referral';
+      case 'subscription_initial_grant':
+        return 'Subscription activated';
+      case 'subscription_renewal':
+        return 'Subscription renewed';
       default:
         return type;
     }
+  };
+
+  const getTransactionBadgeColor = (type: string) => {
+    // Subscription-based transactions get purple badges
+    if (type.startsWith('subscription_')) {
+      return 'bg-purple-100 text-purple-800';
+    }
+    // Regular unlocks get blue badges
+    return 'bg-blue-100 text-blue-800';
   };
 
   if (!accountData) {
@@ -294,6 +350,207 @@ export default function CreditsPage() {
           </a>
         </div>
       </div>
+
+      {/* Subscription Benefits Section - Only show for paid tiers */}
+      {(() => {
+        const tier = accountData?.subscription_tier?.toLowerCase();
+        const hasUnlocks = !!accountData?.unlocks;
+        const shouldShow = (tier === 'monthly' || tier === 'team' || tier === 'enterprise') && hasUnlocks;
+        console.log('🎨 Subscription Benefits Render Check:', {
+          tier,
+          hasUnlocks,
+          shouldShow,
+          accountData
+        });
+        return shouldShow;
+      })() && (
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm border border-blue-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">📊 Subscription Benefits</h2>
+          <p className="text-sm text-gray-600 mb-6">
+            Your subscription includes monthly unlock allowances. When these are exhausted, unlocks will use credits from your balance.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* 5-Star Chapter Unlocks */}
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="p-2 bg-gradient-to-r from-yellow-500 to-amber-600 rounded-lg">
+                  <Crown className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="font-semibold text-gray-900 text-sm">5.0⭐ Premium</h3>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-2xl font-bold text-gray-900">
+                    {accountData.unlocks.fiveStar.isUnlimited ? '∞' : accountData.unlocks.fiveStar.remaining}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    / {accountData.unlocks.fiveStar.isUnlimited ? '∞' : accountData.unlocks.fiveStar.monthly}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-gradient-to-r from-yellow-500 to-amber-600 h-2 rounded-full transition-all"
+                    style={{
+                      width: accountData.unlocks.fiveStar.isUnlimited
+                        ? '100%'
+                        : `${Math.min((accountData.unlocks.fiveStar.remaining / accountData.unlocks.fiveStar.monthly) * 100, 100)}%`
+                    }}
+                  />
+                </div>
+                <p className="text-xs text-gray-600">
+                  {accountData.unlocks.fiveStar.isUnlimited ? 'Unlimited unlocks' : 'unlocks remaining'}
+                </p>
+              </div>
+            </div>
+
+            {/* 4-Star Chapter Unlocks */}
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
+                  <Star className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="font-semibold text-gray-900 text-sm">4.0-4.9⭐ Quality</h3>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-2xl font-bold text-gray-900">
+                    {accountData.unlocks.fourStar.isUnlimited ? '∞' : accountData.unlocks.fourStar.remaining}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    / {accountData.unlocks.fourStar.isUnlimited ? '∞' : accountData.unlocks.fourStar.monthly}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all"
+                    style={{
+                      width: accountData.unlocks.fourStar.isUnlimited
+                        ? '100%'
+                        : `${Math.min((accountData.unlocks.fourStar.remaining / accountData.unlocks.fourStar.monthly) * 100, 100)}%`
+                    }}
+                  />
+                </div>
+                <p className="text-xs text-gray-600">
+                  {accountData.unlocks.fourStar.isUnlimited ? 'Unlimited unlocks' : 'unlocks remaining'}
+                </p>
+              </div>
+            </div>
+
+            {/* 3-Star Chapter Unlocks */}
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="p-2 bg-gradient-to-r from-green-500 to-green-600 rounded-lg">
+                  <Unlock className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="font-semibold text-gray-900 text-sm">3.0-3.9⭐ Standard</h3>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-2xl font-bold text-gray-900">
+                    {accountData.unlocks.threeStar.isUnlimited ? '∞' : accountData.unlocks.threeStar.remaining}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    / {accountData.unlocks.threeStar.isUnlimited ? '∞' : accountData.unlocks.threeStar.monthly}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all"
+                    style={{
+                      width: accountData.unlocks.threeStar.isUnlimited
+                        ? '100%'
+                        : `${Math.min((accountData.unlocks.threeStar.remaining / accountData.unlocks.threeStar.monthly) * 100, 100)}%`
+                    }}
+                  />
+                </div>
+                <p className="text-xs text-gray-600">
+                  {accountData.unlocks.threeStar.isUnlimited ? 'Unlimited unlocks' : 'unlocks remaining'}
+                </p>
+              </div>
+            </div>
+
+            {/* Warm Intros */}
+            {accountData?.warmIntros && (
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="p-2 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Warm Intros</h3>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl font-bold text-gray-900">
+                      {accountData.warmIntros.remaining}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      / {accountData.warmIntros.monthly}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all"
+                      style={{
+                        width: accountData.warmIntros.monthly > 0
+                          ? `${Math.min((accountData.warmIntros.remaining / accountData.warmIntros.monthly) * 100, 100)}%`
+                          : '0%'
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    {accountData.warmIntros.expiresAt
+                      ? `Expires ${new Date(accountData.warmIntros.expiresAt).toLocaleDateString()}`
+                      : 'intros remaining'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Team Seats Info */}
+          {accountData?.team && (
+            <div className="mt-4 bg-white rounded-lg p-4 border border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg">
+                    <Users className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Team Seats</h3>
+                    <p className="text-sm text-gray-600">
+                      {accountData.team.currentSeats} of {accountData.team.maxSeats} seats used
+                      {accountData.team.available > 0 && ` • ${accountData.team.available} available`}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-gray-900">
+                    {accountData.team.currentSeats}/{accountData.team.maxSeats}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${Math.min((accountData.team.currentSeats / accountData.team.maxSeats) * 100, 100)}%`
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Reset Info */}
+          {accountData?.subscriptionPeriodEnd && (
+            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-md p-3">
+              <p className="text-sm text-blue-900">
+                ℹ️ Your subscription unlocks will reset on <strong>{new Date(accountData.subscriptionPeriodEnd).toLocaleDateString()}</strong>
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
         {/* Credit Balance Card */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
@@ -543,15 +800,21 @@ export default function CreditsPage() {
                         {formatDate(transaction.created_at)}
                       </td>
                       <td className="py-3 px-2">
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTransactionBadgeColor(transaction.transaction_type)}`}>
                           {getTransactionLabel(transaction.transaction_type)}
                         </span>
                       </td>
                       <td className="py-3 px-2 text-sm text-gray-700">
                         {transaction.description}
                       </td>
-                      <td className="py-3 px-2 text-sm text-red-600 text-right font-medium">
-                        -${Math.abs(transaction.amount_dollars).toFixed(2)}
+                      <td className={`py-3 px-2 text-sm text-right font-medium ${
+                        transaction.transaction_type.startsWith('subscription_') && transaction.amount_dollars === 0
+                          ? 'text-purple-600'
+                          : 'text-red-600'
+                      }`}>
+                        {transaction.transaction_type.startsWith('subscription_') && transaction.amount_dollars === 0
+                          ? 'Included'
+                          : `-$${Math.abs(transaction.amount_dollars).toFixed(2)}`}
                       </td>
                     </tr>
                   ))}

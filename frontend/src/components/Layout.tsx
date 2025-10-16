@@ -53,6 +53,11 @@ const Layout = () => {
   const [credits, setCredits] = useState<number>(0);
   const [companyName, setCompanyName] = useState<string>('');
   const [unlockedChaptersCount, setUnlockedChaptersCount] = useState<number>(0);
+  const [unlocks, setUnlocks] = useState<{
+    fiveStar: { remaining: number; isUnlimited: boolean };
+    fourStar: { remaining: number; isUnlimited: boolean };
+    threeStar: { remaining: number; isUnlimited: boolean };
+  } | null>(null);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const subscriptionDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -94,6 +99,8 @@ const Layout = () => {
           setSubscriptionTier(data.subscriptionTier || 'trial');
           setCredits(data.balanceCredits || 0);
           setCompanyName(data.companyName || '');
+          setUnlocks(data.unlocks || null);
+          console.log('💰 Balance updated in Layout:', { credits: data.balanceCredits, unlocks: data.unlocks });
         }
       } catch (error) {
         console.error('Failed to fetch account balance:', error);
@@ -101,9 +108,22 @@ const Layout = () => {
     };
 
     fetchAccountBalance();
+
+    // Listen for balance update events from other components
+    const handleBalanceUpdate = (event: CustomEvent) => {
+      console.log('📢 Received balanceUpdated event in Layout:', event.detail);
+      fetchAccountBalance(); // Refresh immediately
+    };
+
+    window.addEventListener('balanceUpdated', handleBalanceUpdate as EventListener);
+
     // Refresh every 30 seconds
     const interval = setInterval(fetchAccountBalance, 30000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('balanceUpdated', handleBalanceUpdate as EventListener);
+    };
   }, []);
 
   // Fetch unlocked chapters count
@@ -578,9 +598,18 @@ const Layout = () => {
                     <span className="text-sm font-medium">
                       {companyName || user?.company?.name || user?.companyName || 'Company'}
                     </span>
-                    <span className="text-xs text-gray-500">
-                      {credits.toLocaleString()} credits
-                    </span>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <span>{credits.toLocaleString()} credits</span>
+                      {unlocks && (unlocks.fiveStar.remaining > 0 || unlocks.fourStar.remaining > 0 || unlocks.threeStar.remaining > 0 || unlocks.fiveStar.isUnlimited) && (
+                        <>
+                          <span>•</span>
+                          <span className="text-purple-600 font-medium">
+                            {unlocks.fiveStar.isUnlimited ? '∞' :
+                             `${unlocks.fiveStar.remaining + unlocks.fourStar.remaining + unlocks.threeStar.remaining}`} unlocks
+                          </span>
+                        </>
+                      )}
+                    </div>
                   </div>
                   <ChevronDown className={`w-4 h-4 transition-transform ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>

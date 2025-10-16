@@ -1,4 +1,5 @@
-import { X, Lock, Unlock, Award } from 'lucide-react';
+import { X, Lock, Unlock, Award, Crown, Sparkles } from 'lucide-react';
+import { createPortal } from 'react-dom';
 
 interface UnlockConfirmationModalProps {
   isOpen: boolean;
@@ -9,6 +10,10 @@ interface UnlockConfirmationModalProps {
   balance: number;
   tierLabel: string;
   tierBadge?: string;
+  subscriptionUnlocksRemaining?: number;
+  isUnlimitedUnlocks?: boolean;
+  willUseSubscriptionUnlock?: boolean;
+  isUnlocking?: boolean;
 }
 
 const UnlockConfirmationModal = ({
@@ -19,20 +24,42 @@ const UnlockConfirmationModal = ({
   credits,
   balance,
   tierLabel,
-  tierBadge
+  tierBadge,
+  subscriptionUnlocksRemaining = 0,
+  isUnlimitedUnlocks = false,
+  willUseSubscriptionUnlock = false,
+  isUnlocking = false
 }: UnlockConfirmationModalProps) => {
   if (!isOpen) return null;
 
-  const hasEnoughCredits = balance >= credits;
+  console.log('🔍 Modal props:', {
+    chapterName,
+    credits,
+    balance,
+    tierLabel,
+    subscriptionUnlocksRemaining,
+    isUnlimitedUnlocks,
+    willUseSubscriptionUnlock,
+    isUnlocking
+  });
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 flex items-center justify-between">
+  const hasEnoughCredits = balance >= credits;
+  const canUnlock = willUseSubscriptionUnlock || hasEnoughCredits;
+
+  const modalContent = (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full overflow-hidden" style={{ maxWidth: '28rem' }}>
+        {/* Header - Purple gradient for subscription, Blue gradient for credits */}
+        <div className={`px-6 py-4 flex items-center justify-between ${
+          willUseSubscriptionUnlock
+            ? 'bg-gradient-to-r from-purple-600 to-purple-700'
+            : 'bg-gradient-to-r from-blue-600 to-blue-700'
+        }`}>
           <div className="flex items-center gap-2 text-white">
             <Unlock className="w-5 h-5" />
-            <h3 className="text-lg font-bold">Unlock Chapter</h3>
+            <h3 className="text-lg font-bold">
+              {willUseSubscriptionUnlock ? '✨ Subscription Unlock' : 'Unlock Chapter'}
+            </h3>
           </div>
           <button
             onClick={onClose}
@@ -55,37 +82,102 @@ const UnlockConfirmationModal = ({
             </div>
           )}
 
+          {/* Subscription Unlock Notification */}
+          {willUseSubscriptionUnlock && (
+            <div className="bg-gradient-to-r from-purple-50 to-purple-100 border-2 border-purple-300 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <Crown className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-base font-bold text-purple-900 mb-2">
+                    ✨ Using Subscription Unlock - No Credits Charged!
+                  </p>
+                  <p className="text-sm text-purple-800 mb-2">
+                    {isUnlimitedUnlocks
+                      ? '🎉 You have unlimited unlocks for this tier - completely free!'
+                      : `You have ${subscriptionUnlocksRemaining} subscription unlock${subscriptionUnlocksRemaining !== 1 ? 's' : ''} remaining for ${tierLabel} chapters this month.`}
+                  </p>
+                  <div className="bg-white/60 rounded px-3 py-2 mt-2">
+                    <p className="text-xs font-medium text-purple-900">
+                      💰 You're saving {credits} credits (${(credits * 0.99).toFixed(2)}) by using your subscription!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="bg-gray-50 rounded-lg p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Tier</span>
-              <span className="font-semibold text-gray-900">{tierLabel}</span>
+              <span className="text-sm text-gray-600">Chapter Tier</span>
+              <span className="font-semibold text-gray-900">
+                {tierLabel}
+                {tierLabel === 'Premium' && ' (5.0⭐)'}
+                {tierLabel === 'Quality' && ' (4.5⭐)'}
+                {tierLabel === 'Good' && ' (4.0⭐)'}
+                {tierLabel === 'Standard' && ' (3.5⭐)'}
+                {tierLabel === 'Basic' && ' (3.0⭐)'}
+              </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Cost</span>
-              <span className="font-bold text-blue-600 text-lg">{credits} Credits</span>
+              <span className="text-sm text-gray-600">
+                {willUseSubscriptionUnlock ? 'Regular Cost (Without Subscription)' : 'Cost'}
+              </span>
+              <span className={`font-bold text-lg ${willUseSubscriptionUnlock ? 'text-gray-400 line-through' : 'text-blue-600'}`}>
+                {credits} Credits
+              </span>
             </div>
-            <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-              <span className="text-sm text-gray-600">Current Balance</span>
-              <div className="flex items-center gap-1">
-                <Award className="w-4 h-4 text-gray-600" />
-                <span className="font-semibold text-gray-900">{balance} Credits</span>
+
+            {willUseSubscriptionUnlock && (
+              <div className="flex items-center justify-between pt-2 border-t border-purple-200 bg-purple-50 -mx-4 px-4 py-2 rounded-b-lg">
+                <span className="text-sm font-medium text-purple-900">Your Cost Today</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-purple-600">$0.00</span>
+                  <span className="text-xs text-purple-700 bg-purple-100 px-2 py-1 rounded-full">FREE</span>
+                </div>
               </div>
-            </div>
-            {hasEnoughCredits && (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">After Unlock</span>
-                <span className="font-semibold text-green-600">{balance - credits} Credits</span>
-              </div>
+            )}
+
+            {willUseSubscriptionUnlock ? (
+              <>
+                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                  <span className="text-sm text-gray-600">Subscription Unlocks</span>
+                  <span className="font-semibold text-purple-600">
+                    {isUnlimitedUnlocks ? '∞ Unlimited' : `${subscriptionUnlocksRemaining} remaining`}
+                  </span>
+                </div>
+                {!isUnlimitedUnlocks && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">After Unlock</span>
+                    <span className="font-semibold text-green-600">{subscriptionUnlocksRemaining - 1} remaining</span>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                  <span className="text-sm text-gray-600">Current Balance</span>
+                  <div className="flex items-center gap-1">
+                    <Award className="w-4 h-4 text-gray-600" />
+                    <span className="font-semibold text-gray-900">{balance} Credits</span>
+                  </div>
+                </div>
+                {hasEnoughCredits && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">After Unlock</span>
+                    <span className="font-semibold text-green-600">{balance - credits} Credits</span>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
-          {!hasEnoughCredits && (
+          {!canUnlock && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
               <p className="text-sm font-medium text-red-900">
                 ❌ Insufficient Credits
               </p>
               <p className="text-xs text-red-700 mt-1">
-                You need {credits - balance} more credits to unlock this chapter.
+                You need {credits - balance} more credits to unlock this chapter. Purchase credits or upgrade your subscription for monthly unlock allowances.
               </p>
             </div>
           )}
@@ -110,24 +202,42 @@ const UnlockConfirmationModal = ({
           </button>
           <button
             onClick={() => {
-              if (hasEnoughCredits) {
+              console.log('🎯 Unlock button clicked', { canUnlock, isUnlocking });
+              if (canUnlock && !isUnlocking) {
+                console.log('✅ Calling onConfirm');
                 onConfirm();
-                onClose();
+              } else {
+                console.log('❌ Cannot unlock', { canUnlock, isUnlocking });
               }
             }}
-            disabled={!hasEnoughCredits}
+            disabled={!canUnlock || isUnlocking}
             className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
-              hasEnoughCredits
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
+              canUnlock && !isUnlocking
+                ? willUseSubscriptionUnlock
+                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >
-            {hasEnoughCredits ? `Unlock for ${credits} Credits` : 'Insufficient Credits'}
+            {isUnlocking ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>Unlocking...</span>
+              </div>
+            ) : canUnlock ? (
+              willUseSubscriptionUnlock
+                ? '✨ Unlock FREE with Subscription'
+                : `Unlock for ${credits} Credits ($${(credits * 0.99).toFixed(2)})`
+            ) : (
+              'Insufficient Credits'
+            )}
           </button>
         </div>
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 export default UnlockConfirmationModal;

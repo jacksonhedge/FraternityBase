@@ -3,7 +3,38 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+    // Storage adapter for localStorage
+    storage: window.localStorage,
+  },
+});
+
+// Auto-refresh session on user activity to prevent logout during testing
+let lastActivity = Date.now();
+const ACTIVITY_REFRESH_INTERVAL = 5 * 60 * 1000; // Refresh every 5 minutes of activity
+
+const refreshSessionOnActivity = () => {
+  const now = Date.now();
+  if (now - lastActivity > ACTIVITY_REFRESH_INTERVAL) {
+    console.log('🔄 Refreshing session due to user activity');
+    supabase.auth.refreshSession();
+    lastActivity = now;
+  }
+};
+
+// Track user activity
+['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+  document.addEventListener(event, () => {
+    lastActivity = Date.now();
+  }, { passive: true });
+});
+
+// Check and refresh session every minute if user has been active
+setInterval(refreshSessionOnActivity, 60 * 1000);
 
 // Database types
 export interface Profile {

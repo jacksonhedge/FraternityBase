@@ -189,6 +189,8 @@ const MapPage = () => {
   const [campusChapters, setCampusChapters] = useState<any[]>([]);
   const [hasEnterpriseAccess, setHasEnterpriseAccess] = useState(false);
   const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
+  const [realCollegeData, setRealCollegeData] = useState<any>({});
+  const [dataLoading, setDataLoading] = useState(true);
   // Force rebuild - timestamp: 2025-10-10
 
   // Check subscription status for Enterprise access
@@ -323,6 +325,98 @@ const MapPage = () => {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }, [subscriptionTier]);
 
+  // Fetch real college data from API to replace hardcoded COLLEGE_LOCATIONS
+  useEffect(() => {
+    const fetchRealCollegeData = async () => {
+      try {
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('🏫 [MapPage] FETCHING REAL COLLEGE DATA FROM API');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+        // Fetch all universities
+        const token = localStorage.getItem('token');
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        console.log('📡 Fetching universities from:', `${API_URL}/admin/universities`);
+        const universitiesRes = await fetch(`${API_URL}/admin/universities`, { headers });
+        const universitiesData = await universitiesRes.json();
+
+        console.log('📡 Fetching chapters from:', `${API_URL}/chapters`);
+        const chaptersRes = await fetch(`${API_URL}/chapters`, { headers });
+        const chaptersData = await chaptersRes.json();
+
+        if (!universitiesData.success || !chaptersData.success) {
+          console.error('❌ Failed to fetch data');
+          setDataLoading(false);
+          return;
+        }
+
+        console.log(`✅ Loaded ${universitiesData.data.length} universities`);
+        console.log(`✅ Loaded ${chaptersData.data.length} chapters`);
+
+        // Aggregate chapter counts per university
+        const collegeDataMap: any = {};
+
+        universitiesData.data.forEach((uni: any) => {
+          // Get chapters for this university
+          const uniChapters = chaptersData.data.filter((ch: any) => ch.university_id === uni.id);
+
+          const fraternities = uniChapters.filter((ch: any) =>
+            ch.greek_organizations?.organization_type === 'fraternity'
+          );
+          const sororities = uniChapters.filter((ch: any) =>
+            ch.greek_organizations?.organization_type === 'sorority'
+          );
+
+          const maleMembers = fraternities.reduce((sum: number, f: any) => sum + (f.member_count || 0), 0);
+          const femaleMembers = sororities.reduce((sum: number, s: any) => sum + (s.member_count || 0), 0);
+
+          // Match the COLLEGE_LOCATIONS structure but with real data
+          collegeDataMap[uni.name] = {
+            lat: uni.latitude || COLLEGE_LOCATIONS[uni.name]?.lat || 0,
+            lng: uni.longitude || COLLEGE_LOCATIONS[uni.name]?.lng || 0,
+            state: uni.state,
+            fraternities: fraternities.length,
+            sororities: sororities.length,
+            totalMembers: maleMembers + femaleMembers,
+            conference: uni.conference || COLLEGE_LOCATIONS[uni.name]?.conference || '',
+            division: COLLEGE_LOCATIONS[uni.name]?.division || 'D1'
+          };
+        });
+
+        console.log(`✅ Created real college data map with ${Object.keys(collegeDataMap).length} entries`);
+        console.log('📊 Sample data:', Object.entries(collegeDataMap).slice(0, 3).map(([name, data]) => ({
+          name,
+          fraternities: (data as any).fraternities,
+          sororities: (data as any).sororities
+        })));
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+        setRealCollegeData(collegeDataMap);
+        setDataLoading(false);
+      } catch (error) {
+        console.error('❌ Error fetching real college data:', error);
+        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        setDataLoading(false);
+      }
+    };
+
+    fetchRealCollegeData();
+  }, []);
+
+  // Get merged college data (real + fallback to hardcoded)
+  const getCollegeData = () => {
+    // Use real data if available, otherwise fall back to COLLEGE_LOCATIONS
+    return Object.keys(realCollegeData).length > 0 ? realCollegeData : COLLEGE_LOCATIONS;
+  };
+
   // Load GeoJSON data
   useEffect(() => {
     fetch('/us-states.json')
@@ -334,7 +428,8 @@ const MapPage = () => {
             abbr => STATE_COORDINATES[abbr as keyof typeof STATE_COORDINATES].name === feature.properties.name
           );
 
-          const collegesInState = Object.values(COLLEGE_LOCATIONS).filter(
+          const collegeData = getCollegeData();
+          const collegesInState = Object.values(collegeData).filter(
             college => college.state === stateAbbr
           );
 
@@ -354,7 +449,7 @@ const MapPage = () => {
         });
       })
       .catch(error => console.error('Error loading states data:', error));
-  }, []);
+  }, [realCollegeData]); // Re-run when real college data is loaded
 
   // Get consistent color for each state
   const getStateColor = (stateName: string) => {
@@ -390,7 +485,8 @@ const MapPage = () => {
     const stateAbbr = feature.properties.abbr;
     if (!stateAbbr) return;
 
-    const collegesInState = Object.entries(COLLEGE_LOCATIONS)
+    const collegeData = getCollegeData();
+    const collegesInState = Object.entries(collegeData)
       .filter(([_, college]) => college.state === stateAbbr)
       .map(([name, data]) => ({ name, ...data }));
 
@@ -499,7 +595,8 @@ const MapPage = () => {
     }
 
     // Search for college
-    const collegeMatch = Object.entries(COLLEGE_LOCATIONS).find(
+    const collegeData = getCollegeData();
+    const collegeMatch = Object.entries(collegeData).find(
       ([name, _]) => name.toLowerCase().includes(searchLower)
     );
 
@@ -512,7 +609,8 @@ const MapPage = () => {
 
   // Get statistics
   const getStatistics = () => {
-    const allColleges = Object.values(COLLEGE_LOCATIONS);
+    const collegeData = getCollegeData();
+    const allColleges = Object.values(collegeData);
     const statesWithColleges = new Set(allColleges.map(c => c.state)).size;
     const totalChapters = allColleges.reduce((sum, c) => sum + c.fraternities + c.sororities, 0);
     const totalMembers = allColleges.reduce((sum, c) => sum + c.totalMembers, 0);
@@ -576,12 +674,18 @@ const MapPage = () => {
         console.log('📊 CHAPTER DATA PROCESSING');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('   Total chapters received:', data.data.length);
+
+        // Filter to show ONLY fraternities (no sororities)
+        const fraternitiesOnly = data.data.filter((chapter: any) =>
+          chapter.greek_organizations?.organization_type === 'fraternity'
+        );
+        console.log('   Fraternities only:', fraternitiesOnly.length);
         console.log('   hasEnterpriseAccess value:', hasEnterpriseAccess);
         console.log('   Will set unlocked to:', hasEnterpriseAccess);
         console.log('   Will set cost to:', hasEnterpriseAccess ? 0 : 100);
 
         // Map chapters to include position offsets for display on map
-        const chaptersWithPositions = data.data.map((chapter: any, index: number) => {
+        const chaptersWithPositions = fraternitiesOnly.map((chapter: any, index: number) => {
           const newChapter = {
             ...chapter,
             // Create a circle pattern around the campus center
@@ -1134,7 +1238,8 @@ const MapPage = () => {
           </h3>
           <div className="space-y-2">
             {(() => {
-              const counts = Object.entries(COLLEGE_LOCATIONS).reduce((acc: { [key: string]: number }, [_, college]) => {
+              const collegeData = getCollegeData();
+              const counts = Object.entries(collegeData).reduce((acc: { [key: string]: number }, [_, college]) => {
                 acc[college.state] = (acc[college.state] || 0) + 1;
                 return acc;
               }, {});

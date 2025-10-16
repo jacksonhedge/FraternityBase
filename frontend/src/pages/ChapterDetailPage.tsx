@@ -423,7 +423,7 @@ const ChapterDetailPage = () => {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -436,25 +436,12 @@ const ChapterDetailPage = () => {
         <div className="bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-gray-900">{chapter.greekRank}</p>
-              <p className="text-sm text-gray-600">Greek Rank</p>
+              <p className="text-2xl font-bold text-gray-900">{chapter.greekRank.toFixed(1)}⭐</p>
+              <p className="text-sm text-gray-600">Chapter Rating</p>
             </div>
             <Award className="w-8 h-8 text-yellow-500" />
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-2xl font-bold text-gray-900">
-                {currentYearData.gpa?.chapter || 'N/A'}
-              </p>
-              <p className="text-sm text-gray-600">Chapter GPA</p>
-            </div>
-            <TrendingUp className="w-8 h-8 text-green-500" />
-          </div>
-        </div>
-        {/* Raised stat card removed - was showing hardcoded philanthropy dummy data */}
-        {/* Partners stat card removed - was showing dummy data */}
       </div>
 
       {/* Main Content Grid */}
@@ -1093,35 +1080,7 @@ const ChapterDetailPage = () => {
 
       {/* Philanthropy section removed - was displaying hardcoded dummy data */}
 
-      {/* Academic Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {currentYearData.gpa && (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Academic Performance</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Chapter GPA</span>
-                <span className="font-semibold text-primary-600">{currentYearData.gpa.chapter}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">New Member GPA</span>
-                <span className="font-semibold">{currentYearData.gpa.newMember}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">All Men's Average</span>
-                <span className="font-semibold">{currentYearData.gpa.allMensAverage}</span>
-              </div>
-              <div className="mt-2 pt-2 border-t">
-                <p className="text-sm text-green-600">
-                  {currentYearData.gpa.chapter > currentYearData.gpa.allMensAverage
-                    ? `+${(currentYearData.gpa.chapter - currentYearData.gpa.allMensAverage).toFixed(2)} above average`
-                    : `${(currentYearData.gpa.chapter - currentYearData.gpa.allMensAverage).toFixed(2)} below average`}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      {/* Academic Performance section removed - Chapter GPA should not be displayed per user requirements */}
 
       {/* Major Events section removed - was displaying hardcoded dummy data (Derby Days, Winter Formal, Spring Philanthropy Week) */}
 

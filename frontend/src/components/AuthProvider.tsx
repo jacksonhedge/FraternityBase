@@ -43,7 +43,20 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     };
 
+    // Verify token immediately on mount
     verifyToken();
+
+    // Keep session alive by verifying token every 10 minutes
+    // This prevents logout during active testing/usage
+    const keepAliveInterval = setInterval(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        console.log('🔄 Keeping session alive...');
+        verifyToken();
+      }
+    }, 10 * 60 * 1000); // 10 minutes
+
+    return () => clearInterval(keepAliveInterval);
   }, [dispatch]);
 
   return <>{children}</>;

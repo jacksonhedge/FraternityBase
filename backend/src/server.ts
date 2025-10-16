@@ -239,7 +239,32 @@ app.get('/api/credits/balance', async (req, res) => {
     // Query the new account_balance table using service_role to bypass RLS
     const { data: balanceRows, error } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier, last_monthly_credit_grant_at, auto_reload_enabled, auto_reload_threshold, auto_reload_amount, company_id')
+      .select(`
+        balance_credits,
+        balance_dollars,
+        lifetime_spent_credits,
+        lifetime_spent_dollars,
+        lifetime_earned_credits,
+        lifetime_added_dollars,
+        subscription_tier,
+        subscription_status,
+        subscription_current_period_end,
+        subscription_started_at,
+        last_monthly_credit_grant_at,
+        unlocks_5_star_remaining,
+        unlocks_4_star_remaining,
+        unlocks_3_star_remaining,
+        monthly_unlocks_5_star,
+        monthly_unlocks_4_star,
+        monthly_unlocks_3_star,
+        warm_intros_remaining,
+        monthly_warm_intros,
+        max_team_seats,
+        auto_reload_enabled,
+        auto_reload_threshold,
+        auto_reload_amount,
+        company_id
+      `)
       .eq('company_id', profile.company_id)
       .order('created_at', { ascending: false })
       .limit(1);
@@ -260,6 +285,16 @@ app.get('/api/credits/balance', async (req, res) => {
       } else {
         companyData = company;
       }
+    }
+
+    // Get current team member count
+    let currentTeamCount = 0;
+    if (profile.company_id) {
+      const { count } = await supabaseAdmin
+        .from('team_members')
+        .select('*', { count: 'exact', head: true })
+        .eq('company_id', profile.company_id);
+      currentTeamCount = count || 0;
     }
 
     console.log('💵 Balance rows returned:', balanceRows?.length || 0);
@@ -302,6 +337,22 @@ app.get('/api/credits/balance', async (req, res) => {
       });
     }
 
+    // Calculate if warm intros are available for monthly tier (first 3 months only)
+    let warmIntrosAvailable = data?.warm_intros_remaining || 0;
+    let warmIntroExpiry = null;
+
+    if (data?.subscription_tier === 'monthly' && data?.subscription_started_at) {
+      const startDate = new Date(data.subscription_started_at);
+      const threeMonthsLater = new Date(startDate);
+      threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3);
+      warmIntroExpiry = threeMonthsLater.toISOString();
+
+      const monthsElapsed = (Date.now() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+      if (monthsElapsed > 3) {
+        warmIntrosAvailable = 0; // Expired
+      }
+    }
+
     const response = {
       balance: data?.balance_credits || 0,
       balanceCredits: data?.balance_credits || 0,
@@ -311,10 +362,41 @@ app.get('/api/credits/balance', async (req, res) => {
       lifetimeEarnedCredits: data?.lifetime_earned_credits || 0,
       lifetimeAddedDollars: data?.lifetime_added_dollars || 0,
       subscriptionTier: data?.subscription_tier || 'trial',
+      subscriptionStatus: data?.subscription_status || null,
+      subscriptionPeriodEnd: data?.subscription_current_period_end || null,
+      subscriptionStartedAt: data?.subscription_started_at || null,
       lastMonthlyGrant: data?.last_monthly_credit_grant_at || null,
       companyName: companyData?.name || null,
       companyId: companyData?.id || profile.company_id || null,
       companyCreatedAt: companyData?.created_at || null,
+      // Tier-specific unlock allowances
+      unlocks: {
+        fiveStar: {
+          remaining: data?.unlocks_5_star_remaining || 0,
+          monthly: data?.monthly_unlocks_5_star || 0,
+          isUnlimited: data?.unlocks_5_star_remaining === -1
+        },
+        fourStar: {
+          remaining: data?.unlocks_4_star_remaining || 0,
+          monthly: data?.monthly_unlocks_4_star || 0,
+          isUnlimited: data?.unlocks_4_star_remaining === -1
+        },
+        threeStar: {
+          remaining: data?.unlocks_3_star_remaining || 0,
+          monthly: data?.monthly_unlocks_3_star || 0,
+          isUnlimited: data?.unlocks_3_star_remaining === -1
+        }
+      },
+      warmIntros: {
+        remaining: warmIntrosAvailable,
+        monthly: data?.monthly_warm_intros || 0,
+        expiresAt: warmIntroExpiry // For monthly tier only
+      },
+      team: {
+        currentSeats: currentTeamCount,
+        maxSeats: data?.max_team_seats || 1,
+        available: (data?.max_team_seats || 1) - currentTeamCount
+      },
       autoReload: {
         enabled: data?.auto_reload_enabled || false,
         threshold: data?.auto_reload_threshold || 10.00,
@@ -935,7 +1017,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     console.log(`🔓 Unlock request for chapter: ${chapterId}`);
     const { data: chapterData, error: chapterError } = await supabaseAdmin
       .from('chapters')
-      .select('five_star_rating, chapter_name, is_platinum, universities(name)')
+      .select('grade, five_star_rating, chapter_name, is_platinum, universities(name)')
       .eq('id', chapterId)
       .single();
 
@@ -971,7 +1053,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     const isEnterprise = accountBalance?.subscription_tier === 'enterprise';
 
     // Determine credits cost based on unlock type
-    const rank = chapterData.five_star_rating || 0;
+    const rank = parseFloat(chapterData.grade) || 0;
     const is5Star = rank >= 5.0;
     const isPlatinum = chapterData.is_platinum || false;
     let credits = 1; // Default for lowest-ranked chapters
@@ -1042,6 +1124,14 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       return res.status(500).json({ error: 'Failed to fetch account data' });
     }
 
+    console.log('📊 Account Data:', {
+      tier: accountData.subscription_tier,
+      unlocks_5_star: accountData.unlocks_5_star_remaining,
+      unlocks_4_star: accountData.unlocks_4_star_remaining,
+      unlocks_3_star: accountData.unlocks_3_star_remaining,
+      warm_intros: accountData.warm_intros_remaining
+    });
+
     // Check if already unlocked
     console.log(`🔍 Checking if chapter already unlocked for company: ${profile.company_id}`);
     const { data: existingUnlock } = await supabaseAdmin
@@ -1093,30 +1183,44 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       }
     } else {
       // Full chapter unlock - check tier-specific allowances
+      console.log(`🔍 Checking subscription unlock eligibility: rank=${rank}`);
       if (rank >= 5.0) {
         // 5.0⭐ chapter
+        console.log(`⭐ 5.0⭐ chapter detected. Checking unlocks_5_star_remaining: ${accountData.unlocks_5_star_remaining}`);
         if (accountData.unlocks_5_star_remaining === -1 || accountData.unlocks_5_star_remaining > 0) {
           useSubscriptionUnlock = true;
           unlockColumn = 'unlocks_5_star_remaining';
-          console.log(`🎁 Using subscription unlock for 5.0⭐ chapter (remaining: ${accountData.unlocks_5_star_remaining === -1 ? 'unlimited' : accountData.unlocks_5_star_remaining})`);
+          console.log(`🎁 ✅ Using subscription unlock for 5.0⭐ chapter (remaining: ${accountData.unlocks_5_star_remaining === -1 ? 'unlimited' : accountData.unlocks_5_star_remaining})`);
+        } else {
+          console.log(`❌ NO 5⭐ subscription unlocks remaining (${accountData.unlocks_5_star_remaining}), will use credits`);
         }
       } else if (rank >= 4.0 && rank < 5.0) {
         // 4.0-4.9⭐ chapter
+        console.log(`💎 4.0-4.9⭐ chapter detected. Checking unlocks_4_star_remaining: ${accountData.unlocks_4_star_remaining}`);
         if (accountData.unlocks_4_star_remaining === -1 || accountData.unlocks_4_star_remaining > 0) {
           useSubscriptionUnlock = true;
           unlockColumn = 'unlocks_4_star_remaining';
-          console.log(`🎁 Using subscription unlock for 4.0-4.9⭐ chapter (remaining: ${accountData.unlocks_4_star_remaining === -1 ? 'unlimited' : accountData.unlocks_4_star_remaining})`);
+          console.log(`🎁 ✅ Using subscription unlock for 4.0-4.9⭐ chapter (remaining: ${accountData.unlocks_4_star_remaining === -1 ? 'unlimited' : accountData.unlocks_4_star_remaining})`);
+        } else {
+          console.log(`❌ NO 4⭐ subscription unlocks remaining (${accountData.unlocks_4_star_remaining}), will use credits`);
         }
       } else if (rank >= 3.0 && rank < 4.0) {
         // 3.0-3.9⭐ chapter
+        console.log(`🟢 3.0-3.9⭐ chapter detected. Checking unlocks_3_star_remaining: ${accountData.unlocks_3_star_remaining}`);
         if (accountData.unlocks_3_star_remaining === -1 || accountData.unlocks_3_star_remaining > 0) {
           useSubscriptionUnlock = true;
           unlockColumn = 'unlocks_3_star_remaining';
-          console.log(`🎁 Using subscription unlock for 3.0-3.9⭐ chapter (remaining: ${accountData.unlocks_3_star_remaining === -1 ? 'unlimited' : accountData.unlocks_3_star_remaining})`);
+          console.log(`🎁 ✅ Using subscription unlock for 3.0-3.9⭐ chapter (remaining: ${accountData.unlocks_3_star_remaining === -1 ? 'unlimited' : accountData.unlocks_3_star_remaining})`);
+        } else {
+          console.log(`❌ NO 3⭐ subscription unlocks remaining (${accountData.unlocks_3_star_remaining}), will use credits`);
         }
+      } else {
+        console.log(`⚠️ Below 3.0⭐ chapter (rank: ${rank}), no subscription unlocks available`);
       }
       // Below 3.0⭐ chapters have no subscription unlocks, must use credits
     }
+
+    console.log(`🎯 DECISION: useSubscriptionUnlock=${useSubscriptionUnlock}, unlockColumn=${unlockColumn}`);
 
     // Call deduct_credits function or use subscription unlock
     let transactionType, description;
@@ -1204,11 +1308,13 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     }
 
     // Create unlock record
+    const finalAmountPaid = useSubscriptionUnlock ? 0 : credits;
     console.log('💾 Attempting to insert unlock record:', {
       company_id: profile.company_id,
       chapter_id: chapterId,
       unlock_type: unlockType,
-      amount_paid: credits,
+      amount_paid: finalAmountPaid,
+      useSubscriptionUnlock,
       transaction_id: transactionId
     });
 
@@ -1218,7 +1324,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
         company_id: profile.company_id,
         chapter_id: chapterId,
         unlock_type: unlockType,
-        amount_paid: credits, // Store credits amount
+        amount_paid: finalAmountPaid, // 0 for subscription unlocks, credits for credit unlocks
         transaction_id: transactionId
       })
       .select();
@@ -1239,10 +1345,18 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       .eq('id', profile.company_id)
       .single();
 
-    // Get updated balance
+    // Get updated balance and subscription unlocks
     const { data: balanceData } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_credits, balance_dollars')
+      .select(`
+        balance_credits,
+        balance_dollars,
+        unlocks_5_star_remaining,
+        unlocks_4_star_remaining,
+        unlocks_3_star_remaining,
+        warm_intros_remaining,
+        subscription_tier
+      `)
       .eq('company_id', profile.company_id)
       .single();
 
@@ -1250,18 +1364,19 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     await supabaseAdmin.rpc('log_admin_activity', {
       p_event_type: 'unlock',
       p_event_title: `${is5Star ? '5-star' : 'Standard'} chapter unlocked: ${chapterData?.chapter_name || 'Chapter'}`,
-      p_event_description: `${company?.company_name || 'User'} unlocked ${unlockType} for ${credits} credits ($${dollarValue} value)`,
+      p_event_description: `${company?.company_name || 'User'} unlocked ${unlockType} ${useSubscriptionUnlock ? 'using subscription' : `for ${credits} credits ($${dollarValue} value)`}`,
       p_company_id: profile.company_id,
       p_company_name: company?.company_name,
       p_reference_id: chapterId,
       p_reference_type: 'chapter',
       p_metadata: {
         unlockType,
-        creditsSpent: credits,
+        creditsSpent: useSubscriptionUnlock ? 0 : credits,
         dollarValue: dollarValue,
         is5Star: is5Star,
         chapterName: chapterData?.chapter_name,
-        universityName: (chapterData?.universities as any)?.name
+        universityName: (chapterData?.universities as any)?.name,
+        usedSubscriptionUnlock: useSubscriptionUnlock
       }
     });
 
@@ -1270,7 +1385,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     adminService.createNotification({
       type: 'unlock',
       title: `🔓 Chapter Unlocked${is5Star ? ' (5-Star)' : ''}`,
-      message: `${company?.company_name || 'A company'} unlocked ${chapterData?.chapter_name || 'a chapter'} at ${(chapterData?.universities as any)?.name || 'a university'} for ${credits} credits ($${dollarValue})`,
+      message: `${company?.company_name || 'A company'} unlocked ${chapterData?.chapter_name || 'a chapter'} at ${(chapterData?.universities as any)?.name || 'a university'} ${useSubscriptionUnlock ? 'using subscription' : `for ${credits} credits ($${dollarValue})`}`,
       data: {
         companyId: profile.company_id,
         companyName: company?.company_name,
@@ -1278,10 +1393,11 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
         chapterName: chapterData?.chapter_name,
         universityName: (chapterData?.universities as any)?.name,
         unlockType,
-        creditsSpent: credits,
+        creditsSpent: useSubscriptionUnlock ? 0 : credits,
         dollarValue: dollarValue,
         is5Star: is5Star,
-        transactionId
+        transactionId,
+        usedSubscriptionUnlock: useSubscriptionUnlock
       },
       relatedCompanyId: profile.company_id
     }).catch(err => console.error('Failed to create admin notification:', err));
@@ -1289,11 +1405,21 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     res.json({
       success: true,
       balance: balanceData?.balance_credits || 0,
-      creditsSpent: credits,
+      creditsSpent: useSubscriptionUnlock ? 0 : credits,
       dollarValue: dollarValue,
       is5Star: is5Star,
       unlockType,
-      transactionId
+      transactionId,
+      // New fields to inform user about subscription usage
+      usedSubscriptionUnlock: useSubscriptionUnlock,
+      paymentMethod: useSubscriptionUnlock ? 'subscription' : 'credits',
+      remainingSubscriptionUnlocks: {
+        fiveStar: balanceData?.unlocks_5_star_remaining || 0,
+        fourStar: balanceData?.unlocks_4_star_remaining || 0,
+        threeStar: balanceData?.unlocks_3_star_remaining || 0,
+        isUnlimited: balanceData?.unlocks_5_star_remaining === -1
+      },
+      remainingWarmIntros: balanceData?.warm_intros_remaining || 0
     });
   } catch (error: any) {
     console.error('Unlock endpoint error:', error);
@@ -2462,6 +2588,7 @@ app.get('/api/admin/companies', requireAdmin, async (req, res) => {
             *,
             chapters(
               chapter_name,
+              grade,
               greek_organizations(name),
               universities(name)
             )

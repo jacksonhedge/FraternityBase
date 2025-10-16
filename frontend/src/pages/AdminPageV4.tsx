@@ -31,7 +31,9 @@ import {
   Unlock,
   Handshake,
   FileUp,
-  Rocket
+  Rocket,
+  ChevronDown,
+  Loader
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
@@ -135,10 +137,11 @@ interface ChapterUnlock {
   id: string;
   chapter_id: string;
   unlock_type: string;
-  credits_spent: number;
+  amount_paid: number;
   unlocked_at: string;
   chapters?: {
     chapter_name: string;
+    grade?: number;
     greek_organizations: { name: string; organization_type: 'fraternity' | 'sorority' };
     universities: { name: string };
   };
@@ -212,7 +215,9 @@ const AdminPageV4 = () => {
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([]);
   const [activityFilter, setActivityFilter] = useState<string>('all');
+  const [activityVisibleCount, setActivityVisibleCount] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoadingData, setIsLoadingData] = useState(false);
   const [showCSVImport, setShowCSVImport] = useState(false);
   const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
   const [collegeFilter, setCollegeFilter] = useState<string>('all');
@@ -304,6 +309,11 @@ const AdminPageV4 = () => {
     fetchData();
   }, [activeTab]);
 
+  // 🔧 FIX: Clear search when tab changes to prevent search state persistence
+  useEffect(() => {
+    setSearchTerm('');
+  }, [activeTab]);
+
   // Check AI status on mount
   useEffect(() => {
     const checkAIStatus = async () => {
@@ -320,6 +330,7 @@ const AdminPageV4 = () => {
   }, []);
 
   const fetchData = async () => {
+    setIsLoadingData(true);
     try {
       if (activeTab === 'dashboard') {
         // Fetch summary stats for dashboard
@@ -387,6 +398,8 @@ const AdminPageV4 = () => {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      setIsLoadingData(false);
     }
   };
 
@@ -1828,14 +1841,17 @@ const AdminPageV4 = () => {
               setShowForm(false);
               setEditingId(null);
             }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
               activeTab === 'credits'
                 ? 'bg-primary-600 text-white'
                 : 'text-gray-300 hover:bg-gray-800'
             }`}
           >
-            <CreditCard className="w-5 h-5" />
-            <span className="font-medium">Credits & Pricing</span>
+            <div className="flex items-center space-x-3">
+              <CreditCard className="w-5 h-5" />
+              <span className="font-medium">Credits & Pricing</span>
+            </div>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
           </button>
 
           <button
@@ -1844,14 +1860,17 @@ const AdminPageV4 = () => {
               setShowForm(false);
               setEditingId(null);
             }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
               activeTab === 'intelligence'
                 ? 'bg-primary-600 text-white'
                 : 'text-gray-300 hover:bg-gray-800'
             }`}
           >
-            <TrendingUp className="w-5 h-5" />
-            <span className="font-medium">Company Intelligence</span>
+            <div className="flex items-center space-x-3">
+              <TrendingUp className="w-5 h-5" />
+              <span className="font-medium">Company Intelligence</span>
+            </div>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
           </button>
 
           <button
@@ -1860,14 +1879,17 @@ const AdminPageV4 = () => {
               setShowForm(false);
               setEditingId(null);
             }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
               activeTab === 'analytics'
                 ? 'bg-primary-600 text-white'
                 : 'text-gray-300 hover:bg-gray-800'
             }`}
           >
-            <BarChart3 className="w-5 h-5" />
-            <span className="font-medium">Business Analytics</span>
+            <div className="flex items-center space-x-3">
+              <BarChart3 className="w-5 h-5" />
+              <span className="font-medium">Business Analytics</span>
+            </div>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
           </button>
 
           <button
@@ -2160,7 +2182,7 @@ const AdminPageV4 = () => {
             <div className="space-y-3">
               {activityLog
                 .filter(log => activityFilter === 'all' || log.event_type === activityFilter)
-                .slice(0, 10)
+                .slice(0, activityVisibleCount)
                 .map((log) => {
                   const getEventIcon = () => {
                     switch (log.event_type) {
@@ -2214,6 +2236,19 @@ const AdminPageV4 = () => {
                 </div>
               )}
             </div>
+
+            {/* Load More Button */}
+            {activityLog.filter(log => activityFilter === 'all' || log.event_type === activityFilter).length > activityVisibleCount && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => setActivityVisibleCount(prev => prev + 10)}
+                  className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors inline-flex items-center gap-2"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                  Load More Activity ({activityLog.filter(log => activityFilter === 'all' || log.event_type === activityFilter).length - activityVisibleCount} remaining)
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -2338,7 +2373,7 @@ const AdminPageV4 = () => {
                       <button
                         onClick={() => {
                           alert(`Unlocked Chapters:\n\n${company.unlocks?.map(u =>
-                            `• ${u.chapters?.universities.name} - ${u.chapters?.greek_organizations.name} (${u.chapters?.chapter_name})\n  ${u.unlock_type} - ${u.credits_spent} credits`
+                            `• ${u.chapters?.universities.name} - ${u.chapters?.greek_organizations.name} (${u.chapters?.chapter_name})\n  ${u.amount_paid === 0 ? '✨ Subscription Unlock - $0.00' : `💳 ${u.amount_paid} credits - $${(u.amount_paid * 0.99).toFixed(2)}`}`
                           ).join('\n\n') || 'No unlocks yet'}`);
                         }}
                         className="flex items-center space-x-1 text-blue-600 hover:text-blue-800"
@@ -2607,8 +2642,32 @@ const AdminPageV4 = () => {
                               {unlock.chapters?.universities?.name} - {unlock.chapters?.greek_organizations?.name}
                             </p>
                             <p className="text-sm text-gray-600">{unlock.chapters?.chapter_name}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {unlock.unlock_type} · {unlock.credits_spent} credits · {new Date(unlock.unlocked_at).toLocaleDateString()}
+                            <p className="text-xs mt-1 flex items-center gap-2">
+                              {unlock.amount_paid === 0 ? (
+                                <>
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                                    ✨ Subscription Unlock
+                                  </span>
+                                  {unlock.chapters?.grade && (
+                                    <span className="text-gray-600">
+                                      {unlock.chapters.grade >= 5.0 ? '5.0⭐' :
+                                       unlock.chapters.grade >= 4.0 ? '4.0⭐' :
+                                       unlock.chapters.grade >= 3.0 ? '3.0⭐' :
+                                       `${unlock.chapters.grade}⭐`}
+                                    </span>
+                                  )}
+                                  <span className="text-gray-500">· $0.00</span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                    💳 Credits
+                                  </span>
+                                  <span className="text-gray-600">{unlock.amount_paid} credits</span>
+                                  <span className="text-gray-500">· ${(unlock.amount_paid * 0.99).toFixed(2)}</span>
+                                </>
+                              )}
+                              <span className="text-gray-400">· {new Date(unlock.unlocked_at).toLocaleDateString()}</span>
                             </p>
                           </div>
                         </div>
@@ -2810,69 +2869,67 @@ const AdminPageV4 = () => {
             </div>
           </div>
 
-          {/* AI Assistant Bar - Always Visible */}
-          <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-200 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">🤖</span>
-                  <h3 className="text-sm font-semibold text-gray-900">AI Data Assistant</h3>
-                  {aiStatus && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                      aiStatus.connected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                    }`}>
-                      {aiStatus.connected ? 'Online' : 'Offline'}
+          {/* AI Assistant Bar - Only show when connected */}
+          {aiStatus?.connected && (
+            <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-200 shadow-sm">
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🤖</span>
+                    <h3 className="text-sm font-semibold text-gray-900">AI Data Assistant</h3>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">
+                      Online
                     </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey && aiPrompt.trim()) {
+                          handleAIAssist();
+                        }
+                      }}
+                      placeholder='Ask AI to help with data... (e.g., "Add top 10 Big Ten universities" or "Find all chapters in California")'
+                      className="flex-1 px-3 py-2 text-sm border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                    <button
+                      onClick={handleAIAssist}
+                      disabled={aiLoading || !aiPrompt.trim()}
+                      className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                    >
+                      {aiLoading ? (
+                        <>
+                          <span className="animate-spin">⚙️</span>
+                          <span>Processing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>✨</span>
+                          <span>Ask AI</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  {aiResponse && (
+                    <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <p className="text-xs font-semibold text-purple-700">AI Response:</p>
+                        <button
+                          onClick={() => setAiResponse('')}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                      <p className="text-sm text-gray-700 whitespace-pre-wrap">{aiResponse}</p>
+                    </div>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={aiPrompt}
-                    onChange={(e) => setAiPrompt(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey && aiPrompt.trim()) {
-                        handleAIAssist();
-                      }
-                    }}
-                    placeholder='Ask AI to help with data... (e.g., "Add top 10 Big Ten universities" or "Find all chapters in California")'
-                    className="flex-1 px-3 py-2 text-sm border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  />
-                  <button
-                    onClick={handleAIAssist}
-                    disabled={aiLoading || !aiPrompt.trim()}
-                    className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                  >
-                    {aiLoading ? (
-                      <>
-                        <span className="animate-spin">⚙️</span>
-                        <span>Processing...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>✨</span>
-                        <span>Ask AI</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-                {aiResponse && (
-                  <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <p className="text-xs font-semibold text-purple-700">AI Response:</p>
-                      <button
-                        onClick={() => setAiResponse('')}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{aiResponse}</p>
-                  </div>
-                )}
               </div>
             </div>
-          </div>
+          )}
 
           {/* Fraternity Tab Content */}
           {activeTab === 'fraternities' && (
@@ -2959,7 +3016,15 @@ const AdminPageV4 = () => {
               )}
 
               {/* Data Table */}
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
+                {isLoadingData && (
+                  <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                    <div className="flex flex-col items-center gap-3">
+                      <Loader className="w-8 h-8 text-primary-600 animate-spin" />
+                      <p className="text-sm text-gray-600">Loading data...</p>
+                    </div>
+                  </div>
+                )}
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
@@ -2971,40 +3036,52 @@ const AdminPageV4 = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredGreekOrgs.map((org) => (
-                      <tr key={org.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{org.name}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-600">{org.greek_letters || '-'}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            org.organization_type === 'fraternity' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
-                          }`}>
-                            {org.organization_type}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {org.founded_year || '-'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button
-                            onClick={() => handleFraternityEdit(org)}
-                            className="text-primary-600 hover:text-primary-900 mr-3"
-                          >
-                            <Edit className="w-4 h-4 inline" />
-                          </button>
-                          <button
-                            onClick={() => handleFraternityDelete(org.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <Trash2 className="w-4 h-4 inline" />
-                          </button>
+                    {filteredGreekOrgs.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-6 py-12 text-center">
+                          <div className="text-gray-400">
+                            <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                            <p className="text-sm font-medium">No fraternities or sororities found</p>
+                            <p className="text-xs mt-1">Try adjusting your search criteria</p>
+                          </div>
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      filteredGreekOrgs.map((org) => (
+                        <tr key={org.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">{org.name}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-600">{org.greek_letters || '-'}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                              org.organization_type === 'fraternity' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
+                            }`}>
+                              {org.organization_type}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {org.founded_year || '-'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button
+                              onClick={() => handleFraternityEdit(org)}
+                              className="text-primary-600 hover:text-primary-900 mr-3"
+                            >
+                              <Edit className="w-4 h-4 inline" />
+                            </button>
+                            <button
+                              onClick={() => handleFraternityDelete(org.id)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              <Trash2 className="w-4 h-4 inline" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -3304,7 +3381,15 @@ const AdminPageV4 = () => {
               )}
 
               {/* Data Table */}
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
+                {isLoadingData && (
+                  <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                    <div className="flex flex-col items-center gap-3">
+                      <Loader className="w-8 h-8 text-primary-600 animate-spin" />
+                      <p className="text-sm text-gray-600">Loading data...</p>
+                    </div>
+                  </div>
+                )}
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
@@ -3318,8 +3403,19 @@ const AdminPageV4 = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredUniversities.map((uni) => (
-                      <tr key={uni.id} className="hover:bg-gray-50">
+                    {filteredUniversities.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-12 text-center">
+                          <div className="text-gray-400">
+                            <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                            <p className="text-sm font-medium">No colleges or universities found</p>
+                            <p className="text-xs mt-1">Try adjusting your search or filter criteria</p>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredUniversities.map((uni) => (
+                        <tr key={uni.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             {uni.logo_url ? (
@@ -3366,7 +3462,8 @@ const AdminPageV4 = () => {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -3661,7 +3758,18 @@ const AdminPageV4 = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredChapters.map((ch) => (
+                    {filteredChapters.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-12 text-center">
+                          <div className="text-gray-400">
+                            <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                            <p className="text-sm font-medium">No chapters found</p>
+                            <p className="text-xs mt-1">Try adjusting your search or filter criteria</p>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredChapters.map((ch) => (
                       <tr key={ch.id} className="hover:bg-gray-50">
                         <td className="px-3 py-4 whitespace-nowrap text-center">
                           <button
@@ -3748,7 +3856,8 @@ const AdminPageV4 = () => {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

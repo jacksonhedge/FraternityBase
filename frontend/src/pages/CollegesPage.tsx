@@ -18,6 +18,11 @@ interface College {
   greekMembers: number;
   image: string;
   chapter_count: number;
+  fraternities: number;
+  sororities: number;
+  fiveStarFrats: number;
+  fourStarFrats: number;
+  threeStarFrats: number;
   logo_url?: string;
   topOrgs?: string[];
   nextEvent?: string;
@@ -32,10 +37,13 @@ const CollegesPage = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [colleges, setColleges] = useState<College[]>([]);
   const [loading, setLoading] = useState(true);
+  const [realChapterCounts, setRealChapterCounts] = useState<{ [universityId: string]: number }>({});
 
-  // Fetch colleges from database
+  // Fetch colleges from database AND real chapter counts
   useEffect(() => {
-    console.log('🏛️ [CollegesPage] Component mounted, fetching colleges from database...');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🏛️ [CollegesPage] Component mounted, fetching colleges AND chapters...');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
     const fetchColleges = async () => {
       try {
@@ -45,44 +53,112 @@ const CollegesPage = () => {
         };
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
-          console.log('🔐 [CollegesPage] Auth token found, making authenticated request');
-        } else {
-          console.log('⚠️ [CollegesPage] No auth token found, making unauthenticated request');
+          console.log('🔐 [CollegesPage] Auth token found');
         }
 
-        console.log(`🌐 [CollegesPage] Fetching from: ${API_URL}/admin/universities`);
-        const res = await fetch(`${API_URL}/admin/universities`, { headers });
-        const data = await res.json();
+        // Fetch universities
+        console.log(`🌐 [CollegesPage] Fetching universities from: ${API_URL}/admin/universities`);
+        const universitiesRes = await fetch(`${API_URL}/admin/universities`, { headers });
+        const universitiesData = await universitiesRes.json();
 
-        console.log(`📊 [CollegesPage] API Response:`, {
-          success: data.success,
-          dataCount: data.data?.length || 0,
-          status: res.status
+        // Fetch ALL chapters to count them properly
+        console.log(`🌐 [CollegesPage] Fetching chapters from: ${API_URL}/chapters`);
+        const chaptersRes = await fetch(`${API_URL}/chapters`, { headers });
+        const chaptersData = await chaptersRes.json();
+
+        console.log(`📊 [CollegesPage] Universities Response:`, {
+          success: universitiesData.success,
+          count: universitiesData.data?.length || 0
+        });
+        console.log(`📊 [CollegesPage] Chapters Response:`, {
+          success: chaptersData.success,
+          count: chaptersData.data?.length || 0
         });
 
-        if (data.success && data.data) {
-          const formattedColleges = data.data.map((uni: any) => ({
-            id: uni.id,
-            name: uni.name,
-            location: uni.state,
-            state: uni.state,
-            division: 'Division I', // Can be enhanced later
-            conference: uni.conference || 'Independent',
-            students: uni.student_count || 0,
-            greekLife: uni.chapter_count || 0,
-            greekPercentage: uni.greek_percentage || 15, // Default to 15% if not available
-            greekMembers: uni.greek_members || 0,
-            image: uni.logo_url || getCollegeLogoWithFallback(uni.name),
-            chapter_count: uni.chapter_count || 0,
-            logo_url: uni.logo_url,
-            partnershipOpportunities: uni.chapter_count // Just show chapter count as opportunities
-          }));
+        if (universitiesData.success && universitiesData.data && chaptersData.success && chaptersData.data) {
+          // Calculate REAL chapter counts per university (separate fraternities and sororities)
+          const chapterCountsMap: { [universityId: string]: number } = {};
+          const fraternitiesMap: { [universityId: string]: number } = {};
+          const sororitiesMap: { [universityId: string]: number } = {};
+          const fiveStarFratsMap: { [universityId: string]: number } = {};
+          const fourStarFratsMap: { [universityId: string]: number } = {};
+          const threeStarFratsMap: { [universityId: string]: number } = {};
 
-          console.log(`✅ [CollegesPage] Successfully formatted ${formattedColleges.length} colleges`);
+          universitiesData.data.forEach((uni: any) => {
+            const uniChapters = chaptersData.data.filter((ch: any) => ch.university_id === uni.id);
+
+            const fraternities = uniChapters.filter((ch: any) =>
+              ch.greek_organizations?.organization_type === 'fraternity'
+            );
+            const sororities = uniChapters.filter((ch: any) =>
+              ch.greek_organizations?.organization_type === 'sorority'
+            );
+
+            // Count fraternities by rating (using 'grade' field)
+            const fiveStarFrats = fraternities.filter((ch: any) => ch.grade === 5.0 || ch.grade === 5);
+            const fourStarFrats = fraternities.filter((ch: any) => ch.grade >= 4.0 && ch.grade < 5.0);
+            const threeStarFrats = fraternities.filter((ch: any) => ch.grade >= 3.0 && ch.grade < 4.0);
+
+            chapterCountsMap[uni.id] = uniChapters.length;
+            fraternitiesMap[uni.id] = fraternities.length;
+            sororitiesMap[uni.id] = sororities.length;
+            fiveStarFratsMap[uni.id] = fiveStarFrats.length;
+            fourStarFratsMap[uni.id] = fourStarFrats.length;
+            threeStarFratsMap[uni.id] = threeStarFrats.length;
+          });
+
+          console.log('✅ [CollegesPage] Calculated real chapter counts for', Object.keys(chapterCountsMap).length, 'universities');
+          console.log('📊 [CollegesPage] Sample fraternity/sorority counts:',
+            Object.keys(fraternitiesMap).slice(0, 3).map(id => ({
+              id,
+              fraternities: fraternitiesMap[id],
+              sororities: sororitiesMap[id],
+              fiveStarFrats: fiveStarFratsMap[id],
+              fourStarFrats: fourStarFratsMap[id],
+              threeStarFrats: threeStarFratsMap[id]
+            }))
+          );
+
+          setRealChapterCounts(chapterCountsMap);
+
+          const formattedColleges = universitiesData.data.map((uni: any) => {
+            const realCount = chapterCountsMap[uni.id] || 0;
+            const fraternityCount = fraternitiesMap[uni.id] || 0;
+            const sororityCount = sororitiesMap[uni.id] || 0;
+            const fiveStarCount = fiveStarFratsMap[uni.id] || 0;
+            const fourStarCount = fourStarFratsMap[uni.id] || 0;
+            const threeStarCount = threeStarFratsMap[uni.id] || 0;
+
+            return {
+              id: uni.id,
+              name: uni.name,
+              location: uni.state,
+              state: uni.state,
+              division: 'Division I', // Can be enhanced later
+              conference: uni.conference || 'Independent',
+              students: uni.student_count || 0,
+              greekLife: realCount, // ✅ USING REAL COUNT
+              greekPercentage: uni.greek_percentage || 15,
+              greekMembers: uni.greek_members || 0,
+              image: uni.logo_url || getCollegeLogoWithFallback(uni.name),
+              chapter_count: realCount, // ✅ USING REAL COUNT
+              fraternities: fraternityCount, // ✅ SEPARATE FRATERNITY COUNT
+              sororities: sororityCount, // ✅ SEPARATE SORORITY COUNT
+              fiveStarFrats: fiveStarCount, // ✅ 5.0⭐ FRATERNITY COUNT
+              fourStarFrats: fourStarCount, // ✅ 4.0⭐ FRATERNITY COUNT
+              threeStarFrats: threeStarCount, // ✅ 3.0⭐ FRATERNITY COUNT
+              logo_url: uni.logo_url,
+              partnershipOpportunities: realCount // ✅ USING REAL COUNT
+            };
+          });
+
+          console.log(`✅ [CollegesPage] Successfully formatted ${formattedColleges.length} colleges with REAL chapter counts`);
           console.log(`📍 [CollegesPage] Sample college:`, formattedColleges[0]);
+          console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
           setColleges(formattedColleges);
         } else {
-          console.error('❌ [CollegesPage] API returned unsuccessful response:', data);
+          console.error('❌ [CollegesPage] API returned unsuccessful response');
         }
       } catch (error) {
         console.error('❌ [CollegesPage] Error fetching colleges:', error);
@@ -119,7 +195,7 @@ const CollegesPage = () => {
     }
 
     return matchesSearch && matchesState && matchesDivision;
-  }).sort((a, b) => b.chapter_count - a.chapter_count); // Sort by chapter count (most to least)
+  }).sort((a, b) => b.fraternities - a.fraternities); // Sort by fraternity count (most to least)
 
   return (
     <div className="space-y-6">
@@ -273,30 +349,40 @@ const CollegesPage = () => {
                   <div>
                     <div className="flex items-center text-gray-600">
                       <Building2 className="w-4 h-4 mr-1" />
-                      <span className="text-sm">Chapters</span>
+                      <span className="text-sm">Fraternities</span>
                     </div>
-                    <p className="text-lg font-semibold text-gray-900">{college.chapter_count}</p>
+                    <p className="text-lg font-semibold text-blue-600">{college.fraternities}</p>
                   </div>
                   <div>
                     <div className="flex items-center text-gray-600">
-                      <Users className="w-4 h-4 mr-1" />
-                      <span className="text-sm">Greek Life %</span>
+                      <Building2 className="w-4 h-4 mr-1" />
+                      <span className="text-sm">Sororities</span>
                     </div>
-                    <p className="text-lg font-semibold text-gray-900">{college.greekPercentage}%</p>
+                    <p className="text-lg font-semibold text-purple-600">{college.sororities}</p>
                   </div>
                 </div>
 
-                {/* Top Organizations - removed, was hardcoded dummy data */}
-                {/* Next Event - removed, was hardcoded dummy data */}
+                {/* Fraternity Rating Breakdown */}
+                <div className="mb-4">
+                  <h4 className="text-xs font-semibold text-gray-700 mb-2">Fraternity Ratings</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">5.0⭐ Chapters</span>
+                      <span className="font-semibold text-yellow-600">{college.fiveStarFrats}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">4.0⭐ Chapters</span>
+                      <span className="font-semibold text-blue-600">{college.fourStarFrats}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">3.0⭐ Chapters</span>
+                      <span className="font-semibold text-gray-600">{college.threeStarFrats}</span>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Award className="w-5 h-5 text-yellow-500 mr-2" />
-                    <span className="text-sm font-medium text-gray-900">
-                      {college.partnershipOpportunities} Opportunities
-                    </span>
-                  </div>
+                <div className="flex items-center justify-end">
                   <Link
                     to={`/app/colleges/${college.id}`}
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium text-center">
@@ -322,16 +408,19 @@ const CollegesPage = () => {
                   Division
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Chapters
+                  Fraternities
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Greek Life %
+                  Sororities
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Opportunities
+                  5.0⭐
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Avg Deal
+                  4.0⭐
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  3.0⭐
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -364,26 +453,19 @@ const CollegesPage = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-blue-600">{college.chapter_count}</span>
+                    <span className="text-sm font-semibold text-blue-600">{college.fraternities}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full"
-                          style={{ width: `${Math.min(college.greekPercentage * 2, 100)}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-sm text-gray-900">{college.greekPercentage}%</span>
-                    </div>
+                    <span className="text-sm font-semibold text-purple-600">{college.sororities}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      {college.partnershipOpportunities}
-                    </span>
+                    <span className="text-sm font-semibold text-yellow-600">{college.fiveStarFrats}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-green-600">{college.avgDealSize}</span>
+                    <span className="text-sm font-semibold text-blue-600">{college.fourStarFrats}</span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-sm font-semibold text-gray-600">{college.threeStarFrats}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Link

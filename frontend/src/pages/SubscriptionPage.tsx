@@ -152,27 +152,48 @@ const SubscriptionPage = () => {
       return;
     }
 
-    // TODO: Implement Stripe subscription checkout
+    // Get company ID from profile
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/subscriptions/checkout`, {
+      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const profile = await profileResponse.json();
+
+      if (!profile.company_id) {
+        alert('Unable to find company profile. Please try logging in again.');
+        return;
+      }
+
+      // Create Stripe subscription checkout
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/credits/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          plan: tierId,
-          billingPeriod
+          tier: tierId,
+          companyId: profile.company_id
         })
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create checkout session');
+      }
+
       const data = await response.json();
       if (data.url) {
+        // Redirect to Stripe checkout
         window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL received from server');
       }
     } catch (error) {
       console.error('Failed to initiate subscription:', error);
-      alert('Failed to process subscription. Please try again.');
+      alert(`Failed to process subscription: ${error instanceof Error ? error.message : 'Please try again.'}`);
     }
   };
 

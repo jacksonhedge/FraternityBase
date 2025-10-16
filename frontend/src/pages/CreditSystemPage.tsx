@@ -210,7 +210,7 @@ const CreditSystemPage = () => {
             </span>
           </h1>
           <p className="text-gray-600 mb-4 max-w-2xl mx-auto">
-            Understand how credits work and what each service costs. Credits are our universal currency for unlocking chapters, requesting introductions, and more.
+            Understand how credits work and what each service costs. Paid subscribers get monthly unlock allowances that are used first - credits are only consumed when your subscription unlocks are exhausted.
           </p>
 
           {/* Current Tier Badge */}
@@ -221,6 +221,76 @@ const CreditSystemPage = () => {
               <span className="text-sm opacity-90">- Enjoy 50% off 5.0⭐ chapters!</span>
             </div>
           )}
+        </div>
+
+        {/* Subscription Unlocks Section */}
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-lg border border-blue-200 p-6 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <Crown className="w-6 h-6 text-purple-600" />
+            Subscription Unlock Allowances
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Paid subscribers (Monthly & Enterprise) get monthly unlock allowances that auto-renew each billing cycle.
+            These are always used first - you only spend credits when your subscription unlocks are exhausted!
+          </p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
+              <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-blue-600" />
+                Monthly Subscription ($29.99/mo)
+              </h3>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>5× 5.0⭐ Premium chapter unlocks per month</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>5× 4.0-4.9⭐ Quality chapter unlocks per month</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>10× 3.0-3.9⭐ Standard chapter unlocks per month</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>1× Warm introduction (first 3 months only)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>3 team seats</span>
+                </li>
+              </ul>
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-purple-200">
+              <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Crown className="w-5 h-5 text-purple-600" />
+                Enterprise Subscription
+              </h3>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span><strong>Unlimited</strong> chapter unlocks (all tiers)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>1000 credits per month</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>3× Warm introductions per month</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>10 team seats</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>Priority support</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         {/* How It Works */}
@@ -236,7 +306,7 @@ const CreditSystemPage = () => {
               </div>
               <div>
                 <h3 className="font-bold text-gray-900 mb-1">Purchase Credits</h3>
-                <p className="text-sm text-gray-600">Buy credit packages or get monthly credits with your subscription</p>
+                <p className="text-sm text-gray-600">Buy credit packages anytime - subscription unlocks are always used first</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -254,7 +324,7 @@ const CreditSystemPage = () => {
               </div>
               <div>
                 <h3 className="font-bold text-gray-900 mb-1">Pay for Value</h3>
-                <p className="text-sm text-gray-600">Only spend credits on chapters and services you actually use</p>
+                <p className="text-sm text-gray-600">Only spend credits when subscription unlocks are exhausted</p>
               </div>
             </div>
           </div>
@@ -328,9 +398,15 @@ const CreditSystemPage = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-4">💡 Pro Tips</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-white rounded-lg p-4 border border-gray-100">
+              <h3 className="font-bold text-gray-900 mb-2">Subscription Unlocks First</h3>
+              <p className="text-sm text-gray-600">
+                With a Monthly or Enterprise subscription, your monthly unlock allowances are always used first. Credits are only consumed when you've exhausted your subscription unlocks for that tier.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
               <h3 className="font-bold text-gray-900 mb-2">Graduated Pricing = Fair Value</h3>
               <p className="text-sm text-gray-600">
-                Pay based on chapter quality. Top-tier 5.0⭐ chapters cost more because they have verified, comprehensive data. Smaller chapters cost as little as 1 credit.
+                Pay based on chapter quality. Top-tier 5.0⭐ chapters cost 10 credits (or use 1 subscription unlock), while smaller chapters cost as little as 1 credit.
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
@@ -340,15 +416,21 @@ const CreditSystemPage = () => {
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-2">Enterprise Discount</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Enterprise Unlimited</h3>
               <p className="text-sm text-gray-600">
-                Enterprise subscribers get 50% off premium 5.0⭐ chapter unlocks (5 credits instead of 10), plus 1000 monthly credits included.
+                Enterprise subscribers get unlimited chapter unlocks (all tiers), 1000 monthly credits, 3 warm intros per month, and 10 team seats.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
+              <h3 className="font-bold text-gray-900 mb-2">Monthly Tier Benefits</h3>
+              <p className="text-sm text-gray-600">
+                Monthly subscribers get 5× 5.0⭐, 5× 4.0-4.9⭐, and 10× 3.0-3.9⭐ chapter unlocks each month. Plus 1 warm intro during the first 3 months!
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
               <h3 className="font-bold text-gray-900 mb-2">Credits Never Expire</h3>
               <p className="text-sm text-gray-600">
-                Buy credits anytime and use them when you're ready. No rush, no pressure, no expiration dates.
+                Buy credits anytime and use them when you're ready. Perfect as a backup when you've used all your subscription unlocks. No rush, no pressure, no expiration dates.
               </p>
             </div>
           </div>
