@@ -95,11 +95,12 @@ const DashboardPage = () => {
         }).then(res => res.json()).catch(() => ({ data: [] })),
         fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json()).catch(() => ({ data: [] })),
         fetch(`${API_URL}/chapters/recent`).then(res => res.json()).catch(() => ({ data: [] })),
-        fetch(`${API_URL}/dashboard/coming-soon`).then(res => res.json()).catch(() => ({ data: [] }))
+        fetch(`${API_URL}/admin/coming-tomorrow`).then(res => res.json()).catch(() => ({ data: [] }))
       ])
-        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData, recentChaptersData, comingSoonData]) => {
+        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData, recentChaptersData, comingTomorrowData]) => {
           console.log('[Dashboard] Recent chapters API response:', recentChaptersData);
           console.log('[Dashboard] Recent chapters data array:', recentChaptersData.data);
+          console.log('[Dashboard] Coming tomorrow data:', comingTomorrowData);
 
           setAccountBalance(creditsData.balance || 0);
           setLifetimeSpent(creditsData.lifetimeSpent || 0);
@@ -107,7 +108,7 @@ const DashboardPage = () => {
           setSubscriptionTier(creditsData.subscriptionTier || 'trial');
           setUnlockedChapters(chaptersData.data || []);
           setActivityFeed(activityData.data || []);
-          setComingSoonItems(comingSoonData.data || []);
+          setComingSoonItems(comingTomorrowData.data || []);
 
           const formattedChapters = (recentChaptersData.data || []).map((item: any) => ({ ...item, metadata: item }));
           console.log('[Dashboard] Formatted chapters for tickertape:', formattedChapters);
@@ -206,7 +207,7 @@ const DashboardPage = () => {
           </div>
           <button
             onClick={() => setShowSuccessMessage(false)}
-            className="text-green-600 hover:text-green-800 transition-colors"
+            className="text-green-600 hover:text-green-800 transition-colors active:scale-95"
           >
             <X className="w-5 h-5" />
           </button>
@@ -232,7 +233,11 @@ const DashboardPage = () => {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} data-animate-card className="bg-white rounded-lg shadow-sm p-6">
+            <div
+              key={index}
+              data-animate-card
+              className="bg-white rounded-lg shadow-sm p-6 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:bg-opacity-95"
+            >
               <div className="flex items-center justify-between mb-4">
                 <div className={`w-12 h-12 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}>
                   <Icon className={`w-6 h-6 text-${stat.color}-600`} />
@@ -262,56 +267,8 @@ const DashboardPage = () => {
         })}
       </div>
 
+      {/* Newly Added & Coming Tomorrow - Side by Side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity - Only show if there are activities */}
-        {recentActivities.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                <Activity className="w-5 h-5 mr-2 text-primary-600" />
-                Recent Credit Activity
-              </h2>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {recentActivities.map((activity, index) => (
-                <div key={index} className="flex items-start justify-between">
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0">
-                      {activity.type === 'unlock' && (
-                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                          <CheckCircle className="w-5 h-5 text-purple-600" />
-                        </div>
-                      )}
-                      {activity.type === 'purchase' && (
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                          <ArrowUp className="w-5 h-5 text-green-600" />
-                        </div>
-                      )}
-                      {activity.type === 'export' && (
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <DollarSign className="w-5 h-5 text-blue-600" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900 font-medium">{activity.title}</p>
-                      <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
-                    </div>
-                  </div>
-                  <div className={`text-sm font-semibold ${activity.credits > 0 ? 'text-green-600' : 'text-gray-600'}`}>
-                    {activity.credits > 0 ? '+' : ''}{activity.credits}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button className="mt-4 text-primary-600 text-sm font-medium hover:text-primary-700">
-              View all transactions →
-            </button>
-          </div>
-        </div>
-        )}
-
         {/* Newly Added Section */}
         <div className="bg-white rounded-lg shadow-sm">
           <div className="p-6 border-b border-gray-200">
@@ -323,7 +280,7 @@ const DashboardPage = () => {
           <div className={`p-6 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
             <div className="space-y-4">
               {/* New School Example */}
-              <div className="border-l-4 border-green-500 pl-4 hover:bg-gray-50 transition-colors">
+              <div className="border-l-4 border-green-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
                 <div className="flex items-start gap-3">
                   <img
                     src={getCollegeLogoWithFallback('Lehigh University')}
@@ -331,7 +288,13 @@ const DashboardPage = () => {
                     className="w-12 h-12 object-contain flex-shrink-0"
                   />
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">Lehigh University</h4>
+                    <div className="flex items-start justify-between">
+                      <h4 className="font-medium text-gray-900">Lehigh University</h4>
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        Oct 15
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-600">New school added to database</p>
                     <span className="inline-block mt-2 text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
                       🏫 New School
@@ -341,7 +304,7 @@ const DashboardPage = () => {
               </div>
 
               {/* New Chapter Example */}
-              <div className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
+              <div className="border-l-4 border-blue-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
                 <div className="flex items-start gap-3">
                   <img
                     src={getCollegeLogoWithFallback('Penn State University')}
@@ -349,7 +312,13 @@ const DashboardPage = () => {
                     className="w-12 h-12 object-contain flex-shrink-0"
                   />
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">Penn State SAE</h4>
+                    <div className="flex items-start justify-between">
+                      <h4 className="font-medium text-gray-900">Penn State SAE</h4>
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        Oct 16
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-600">Penn State University</p>
                     <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
                       🆕 New Chapter
@@ -359,7 +328,7 @@ const DashboardPage = () => {
               </div>
 
               {/* New Roster Example */}
-              <div className="border-l-4 border-purple-500 pl-4 hover:bg-gray-50 transition-colors">
+              <div className="border-l-4 border-purple-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
                 <div className="flex items-start gap-3">
                   <img
                     src={getCollegeLogoWithFallback('Purdue University')}
@@ -367,7 +336,13 @@ const DashboardPage = () => {
                     className="w-12 h-12 object-contain flex-shrink-0"
                   />
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">Purdue Sigma Chi Roster</h4>
+                    <div className="flex items-start justify-between">
+                      <h4 className="font-medium text-gray-900">Purdue Sigma Chi Roster</h4>
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        Oct 17
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-600">Purdue University • 94 members</p>
                     <span className="inline-block mt-2 text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">
                       📋 Updated Roster
@@ -376,6 +351,75 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Coming Tomorrow Section */}
+        <div className="bg-white rounded-lg shadow-sm">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+              <TrendingUp className="w-5 h-5 mr-2 text-orange-600" />
+              Coming Tomorrow
+            </h2>
+          </div>
+          <div className={`p-6 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
+            {comingSoonItems.length > 0 ? (
+              <div className="space-y-4">
+                {comingSoonItems.map((item) => {
+                  const borderColor = item.update_type === 'new_chapter' ? 'orange-500' :
+                                     item.update_type === 'roster_update' ? 'yellow-500' :
+                                     'pink-500';
+                  const scoreColor = item.update_type === 'new_chapter' ? 'orange-600' :
+                                    item.update_type === 'roster_update' ? 'yellow-600' :
+                                    'pink-600';
+                  const badgeBg = item.update_type === 'new_chapter' ? 'orange-100' :
+                                 item.update_type === 'roster_update' ? 'yellow-100' :
+                                 'pink-100';
+                  const badgeText = item.update_type === 'new_chapter' ? 'orange-700' :
+                                   item.update_type === 'roster_update' ? 'yellow-700' :
+                                   'pink-700';
+                  const badgeLabel = item.update_type === 'new_chapter' ? '🚀 New Chapter Tomorrow' :
+                                    item.update_type === 'roster_update' ? '📋 Roster Update Tomorrow' :
+                                    '🚀 New Sorority Tomorrow';
+
+                  return (
+                    <div key={item.id} className={`border-l-4 border-${borderColor} pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1`}>
+                      <div className="flex items-start gap-3">
+                        <img
+                          src={getCollegeLogoWithFallback(item.college_name)}
+                          alt={item.college_name}
+                          className="w-12 h-12 object-contain flex-shrink-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between">
+                            <h4 className="font-medium text-gray-900">
+                              {item.chapter_name ? `${item.college_name} ${item.chapter_name}` : item.college_name}
+                            </h4>
+                            {item.anticipated_score && (
+                              <span className={`text-xs text-${scoreColor} font-semibold flex items-center gap-1`}>
+                                <Award className="w-3 h-3" />
+                                {item.anticipated_score}⭐
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            {item.college_name}
+                            {item.expected_member_count && ` • Expected ${item.expected_member_count} members`}
+                          </p>
+                          <span className={`inline-block mt-2 text-xs px-2 py-1 bg-${badgeBg} text-${badgeText} rounded-full`}>
+                            {badgeLabel}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No upcoming additions scheduled
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -389,7 +433,7 @@ const DashboardPage = () => {
           </h2>
           <div className={`space-y-4 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
             {comingSoonItems.map((item) => (
-              <div key={item.id} className="border-l-4 border-blue-500 pl-4 hover:bg-gray-50 transition-colors">
+              <div key={item.id} className="border-l-4 border-blue-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
                 <div className="flex items-start gap-3">
                   <img
                     src={getCollegeLogoWithFallback(item.university_name)}

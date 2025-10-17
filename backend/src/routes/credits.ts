@@ -1216,6 +1216,104 @@ router.get('/warm-intro/requests', async (req, res) => {
   }
 });
 
+// GET /warm-intro/admin/all - Get ALL introduction requests (admin only)
+router.get('/warm-intro/admin/all', async (req, res) => {
+  try {
+    // Admin authentication check
+    const adminToken = req.headers['x-admin-token'];
+    if (!adminToken || adminToken !== process.env.ADMIN_TOKEN) {
+      return res.status(403).json({ error: 'Unauthorized - admin access required' });
+    }
+
+    const { data: requests, error } = await getSupabaseAdmin()
+      .from('warm_intro_requests')
+      .select(`
+        *,
+        chapters(
+          chapter_name,
+          universities(name),
+          greek_organizations(name)
+        ),
+        companies!company_id(
+          id,
+          company_name
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    // Add user/contact info for each request
+    const enrichedRequests = await Promise.all(
+      (requests || []).map(async (request) => {
+        // Get the user who made the request from team_members
+        const { data: teamMember } = await getSupabaseAdmin()
+          .from('team_members')
+          .select('user_id, users:user_id(email), user_profiles!user_id(first_name, last_name)')
+          .eq('company_id', request.company_id)
+          .limit(1)
+          .single();
+
+        return {
+          ...request,
+          requestedBy: teamMember ? {
+            firstName: teamMember.user_profiles?.first_name,
+            lastName: teamMember.user_profiles?.last_name,
+            email: teamMember.users?.email
+          } : null
+        };
+      })
+    );
+
+    res.json({ success: true, requests: enrichedRequests });
+  } catch (error: any) {
+    console.error('Error fetching all intro requests:', error);
+    res.status(500).json({ error: 'Failed to fetch requests', details: error.message });
+  }
+});
+
+// PATCH /warm-intro/admin/:id/status - Update request status (admin only)
+router.patch('/warm-intro/admin/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { status, adminNotes } = req.body;
+
+  // Admin authentication check
+  const adminToken = req.headers['x-admin-token'];
+  if (!adminToken || adminToken !== process.env.ADMIN_TOKEN) {
+    return res.status(403).json({ error: 'Unauthorized - admin access required' });
+  }
+
+  if (!['pending', 'in_progress', 'completed', 'cancelled'].includes(status)) {
+    return res.status(400).json({ error: 'Invalid status' });
+  }
+
+  try {
+    const updateData: any = { status };
+
+    if (status === 'completed') {
+      updateData.completed_at = new Date().toISOString();
+    }
+
+    if (adminNotes !== undefined) {
+      updateData.admin_notes = adminNotes;
+    }
+
+    const { data, error } = await getSupabaseAdmin()
+      .from('warm_intro_requests')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ success: true, request: data });
+  } catch (error: any) {
+    console.error('Error updating request status:', error);
+    res.status(500).json({ error: 'Failed to update status', details: error.message });
+  }
+});
+
 // Create ambassador referral request ($99.99)
 router.post('/ambassador/request', async (req, res) => {
   const { companyId, chapterId, campaignDescription, budgetRange, timeline } = req.body;

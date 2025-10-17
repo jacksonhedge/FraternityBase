@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-10-16T09:12:20.923Z",
+  "fraternities": {
+    "added": 43,
+    "skipped": 0,
+    "errors": 0
+  },
+  "chapters": {
+    "added": 0,
+    "skipped": 1716,
+    "errors": 0,
+    "defaultGrade": 3
+  },
+  "errors": {
+    "fraternities": [],
+    "chapters": []
+  }
+}

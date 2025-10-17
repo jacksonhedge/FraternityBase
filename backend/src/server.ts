@@ -569,6 +569,69 @@ const requireAdmin = (req: express.Request, res: express.Response, next: express
   // }
 };
 
+// Wizard Admin middleware - checks if user is a platform super admin
+const checkWizardAdmin = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  try {
+    // Check for admin token first (for admin panel compatibility)
+    const adminToken = req.headers['x-admin-token'];
+    const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '***REMOVED***';
+
+    if (adminToken && adminToken === ADMIN_TOKEN) {
+      // Admin token is valid - check wizard status for the admin email
+      const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'jacksonfitzgerald25@gmail.com';
+
+      const { data: adminUser } = await supabaseAdmin.auth.admin.listUsers();
+      const user = adminUser?.users?.find(u => u.email === ADMIN_EMAIL);
+
+      if (user) {
+        const { data: profile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('is_wizard_admin')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profile?.is_wizard_admin) {
+          console.log('✅ Wizard admin auth via admin token:', ADMIN_EMAIL);
+          (req as any).wizardUser = user;
+          return next();
+        }
+      }
+      return res.status(403).json({ error: 'Forbidden: Wizard admin access required' });
+    }
+
+    // Fall back to Supabase Bearer token auth
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Check if user is wizard admin
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('is_wizard_admin')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.is_wizard_admin) {
+      return res.status(403).json({ error: 'Forbidden: Wizard admin access required' });
+    }
+
+    // Attach user to request for downstream use
+    (req as any).wizardUser = user;
+    next();
+  } catch (error: any) {
+    console.error('Wizard admin auth error:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Credit packages
 const CREDIT_PACKAGES: Record<string, any> = {
   trial: { credits: 10, price: 0.99, priceId: process.env.VITE_STRIPE_PRICE_TRIAL || 'price_trial' },
@@ -4107,6 +4170,323 @@ app.get('/api/admin/waitlist', requireAdmin, async (req, res) => {
   } catch (error: any) {
     console.error('Error fetching waitlist:', error);
     res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Coming Tomorrow Management Routes
+app.get('/api/admin/coming-tomorrow', requireAdmin, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('coming_tomorrow')
+      .select(`
+        *,
+        university:universities(id, name, state)
+      `)
+      .eq('is_displayed', true)
+      .order('scheduled_date', { ascending: true });
+
+    if (error) throw error;
+
+    console.log(`✅ Retrieved ${data?.length || 0} coming tomorrow items`);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error fetching coming tomorrow items:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/api/admin/coming-tomorrow', requireAdmin, async (req, res) => {
+  try {
+    const {
+      college_name,
+      university_id,
+      anticipated_score,
+      update_type,
+      expected_member_count,
+      chapter_name,
+      scheduled_date
+    } = req.body;
+
+    const { data, error } = await supabase
+      .from('coming_tomorrow')
+      .insert({
+        college_name,
+        university_id,
+        anticipated_score,
+        update_type,
+        expected_member_count,
+        chapter_name,
+        scheduled_date: scheduled_date || new Date(Date.now() + 86400000).toISOString().split('T')[0], // tomorrow
+        is_displayed: true
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Created coming tomorrow item: ${college_name} - ${chapter_name || update_type}`);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error creating coming tomorrow item:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.put('/api/admin/coming-tomorrow/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    const { data, error } = await supabase
+      .from('coming_tomorrow')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Updated coming tomorrow item: ${id}`);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error updating coming tomorrow item:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/admin/coming-tomorrow/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { error } = await supabase
+      .from('coming_tomorrow')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    console.log(`✅ Deleted coming tomorrow item: ${id}`);
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error('Error deleting coming tomorrow item:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ==================== WIZARD ADMIN ROUTES ====================
+// Platform super admin routes for account impersonation and management
+
+// Get wizard admin status
+app.get('/api/wizard/status', async (req, res) => {
+  try {
+    // Check for admin token first (for admin panel compatibility)
+    const adminToken = req.headers['x-admin-token'];
+    const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '***REMOVED***';
+
+    console.log('🔍 Wizard status check:', {
+      hasToken: !!adminToken,
+      tokensMatch: adminToken === ADMIN_TOKEN
+    });
+
+    if (adminToken && adminToken === ADMIN_TOKEN) {
+      // Admin token is valid - check wizard status for the admin email
+      const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'jacksonfitzgerald25@gmail.com';
+      console.log('🔑 Admin token valid, checking email:', ADMIN_EMAIL);
+
+      const { data: adminUser, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+      console.log('👥 List users result:', {
+        userCount: adminUser?.users?.length,
+        error: listError?.message
+      });
+
+      const user = adminUser?.users?.find(u => u.email === ADMIN_EMAIL);
+      console.log('👤 Found user:', { found: !!user, userId: user?.id });
+
+      if (user) {
+        const { data: profile, error: profileError } = await supabaseAdmin
+          .from('user_profiles')
+          .select('is_wizard_admin')
+          .eq('user_id', user.id)
+          .single();
+
+        console.log('📋 Profile query result:', {
+          profile,
+          error: profileError?.message
+        });
+
+        console.log('✅ Wizard status check via admin token:', {
+          email: ADMIN_EMAIL,
+          userId: user.id,
+          isWizard: profile?.is_wizard_admin || false
+        });
+
+        return res.json({
+          isWizardAdmin: profile?.is_wizard_admin || false,
+          userId: user.id,
+          authMethod: 'admin-token'
+        });
+      } else {
+        console.log('❌ User not found for email:', ADMIN_EMAIL);
+      }
+    }
+
+    // Fall back to Supabase Bearer token auth
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.json({ isWizardAdmin: false });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.json({ isWizardAdmin: false });
+    }
+
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('is_wizard_admin')
+      .eq('user_id', user.id)
+      .single();
+
+    res.json({
+      isWizardAdmin: profile?.is_wizard_admin || false,
+      userId: user.id,
+      authMethod: 'supabase-token'
+    });
+  } catch (error: any) {
+    console.error('Error checking wizard status:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all companies (wizard admin only)
+app.get('/api/wizard/companies', checkWizardAdmin, async (req, res) => {
+  try {
+    const { data: companies, error } = await supabase
+      .from('companies')
+      .select(`
+        id,
+        name,
+        created_at,
+        team_members:team_members(count),
+        balance:account_balance(balance_dollars, balance_credits)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({ success: true, companies });
+  } catch (error: any) {
+    console.error('Error fetching companies:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Start impersonation session
+app.post('/api/wizard/impersonate', checkWizardAdmin, async (req, res) => {
+  try {
+    const { companyId } = req.body;
+    const wizardUser = (req as any).wizardUser;
+
+    if (!companyId) {
+      return res.status(400).json({ error: 'Company ID is required' });
+    }
+
+    // Verify company exists
+    const { data: company, error: companyError } = await supabase
+      .from('companies')
+      .select('id, name')
+      .eq('id', companyId)
+      .single();
+
+    if (companyError || !company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    // End any existing active session
+    await supabase
+      .from('wizard_sessions')
+      .update({ is_active: false, ended_at: new Date().toISOString() })
+      .eq('wizard_user_id', wizardUser.id)
+      .eq('is_active', true);
+
+    // Create new impersonation session
+    const { data: session, error: sessionError } = await supabase
+      .from('wizard_sessions')
+      .insert({
+        wizard_user_id: wizardUser.id,
+        impersonated_company_id: companyId,
+        ip_address: req.ip,
+        user_agent: req.headers['user-agent'] || null,
+        is_active: true
+      })
+      .select()
+      .single();
+
+    if (sessionError) throw sessionError;
+
+    console.log(`🧙 Wizard ${wizardUser.email} started impersonating company: ${company.name}`);
+    res.json({
+      success: true,
+      session,
+      company
+    });
+  } catch (error: any) {
+    console.error('Error starting impersonation:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// End impersonation session
+app.post('/api/wizard/end-impersonation', checkWizardAdmin, async (req, res) => {
+  try {
+    const wizardUser = (req as any).wizardUser;
+
+    const { data, error } = await supabase
+      .from('wizard_sessions')
+      .update({ is_active: false, ended_at: new Date().toISOString() })
+      .eq('wizard_user_id', wizardUser.id)
+      .eq('is_active', true)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`🧙 Wizard ${wizardUser.email} ended impersonation`);
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error('Error ending impersonation:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get active impersonation session
+app.get('/api/wizard/current-session', checkWizardAdmin, async (req, res) => {
+  try {
+    const wizardUser = (req as any).wizardUser;
+
+    const { data: session, error } = await supabase
+      .from('wizard_sessions')
+      .select(`
+        *,
+        company:companies(id, name)
+      `)
+      .eq('wizard_user_id', wizardUser.id)
+      .eq('is_active', true)
+      .single();
+
+    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+      throw error;
+    }
+
+    res.json({
+      success: true,
+      session: session || null
+    });
+  } catch (error: any) {
+    console.error('Error fetching current session:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

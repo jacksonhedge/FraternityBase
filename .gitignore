@@ -100,4 +100,4 @@ docs/.cache-loader/
 
 # Misc
 .vercel
-.netlify
+.netlify*.env.*.production

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
-import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap, Unlock, Star, Users, Sparkles } from 'lucide-react';
+import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap, Unlock, Star, Users, Sparkles, Check, TrendingUp } from 'lucide-react';
 
 interface AccountBalance {
   balance: number;
@@ -42,15 +42,88 @@ interface Transaction {
   chapter_id?: string;
 }
 
-const TOP_UP_PRESETS = [25, 50, 100, 250, 500];
+// Credit packages matching backend configuration (server.ts:574-579)
+const CREDIT_PACKAGES = [
+  {
+    id: 'trial',
+    name: 'Trial',
+    credits: 10,
+    price: 0.99,
+    pricePerCredit: 0.099,
+    popular: false,
+    features: [
+      'Perfect for testing the platform',
+      '10 chapter unlocks (budget tier)',
+      'Credits never expire'
+    ]
+  },
+  {
+    id: 'starter',
+    name: 'Starter',
+    credits: 100,
+    price: 59,
+    pricePerCredit: 0.59,
+    popular: false,
+    features: [
+      'Great for small campaigns',
+      '10-20 quality chapter unlocks',
+      'Best for individual use',
+      'Credits never expire'
+    ]
+  },
+  {
+    id: 'popular',
+    name: 'Popular',
+    credits: 500,
+    price: 275,
+    pricePerCredit: 0.55,
+    popular: true,
+    features: [
+      'Most popular choice',
+      '50+ chapter unlocks',
+      'Perfect for growing teams',
+      '7% savings vs Starter',
+      'Credits never expire'
+    ]
+  },
+  {
+    id: 'professional',
+    name: 'Professional',
+    credits: 1000,
+    price: 500,
+    pricePerCredit: 0.50,
+    popular: false,
+    features: [
+      'Best value for frequent users',
+      '100+ chapter unlocks',
+      'Ideal for active campaigns',
+      '15% savings vs Starter',
+      'Credits never expire'
+    ]
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    credits: 5000,
+    price: 2000,
+    pricePerCredit: 0.40,
+    popular: false,
+    features: [
+      'Maximum value & flexibility',
+      '500+ chapter unlocks',
+      'Perfect for large organizations',
+      '32% savings vs Starter',
+      'Priority support included'
+    ]
+  }
+];
 
 export default function CreditsPage() {
   const { user } = useSelector((state: RootState) => state.auth);
   const [accountData, setAccountData] = useState<AccountBalance | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
-  const [customAmount, setCustomAmount] = useState('');
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(50);
+  const [selectedPackage, setSelectedPackage] = useState<string>('popular');
   const [autoReloadSettings, setAutoReloadSettings] = useState({
     enabled: false,
     threshold: 10,
@@ -143,26 +216,17 @@ export default function CreditsPage() {
     }
   };
 
-  const handleBuyCredits = async () => {
-    const amount = customAmount ? parseFloat(customAmount) : selectedAmount;
-
-    if (!amount || amount < 10) {
-      alert('Minimum top-up is $10');
+  const handleBuyCredits = async (packageId: string) => {
+    const pkg = CREDIT_PACKAGES.find(p => p.id === packageId);
+    if (!pkg) {
+      alert('Invalid package selected');
       return;
     }
 
     setLoading(true);
 
     try {
-      // Get company_id from user profile
-      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const profile = await profileResponse.json();
-
-      // Create checkout session
+      // Create checkout session with package ID
       const response = await fetch(`${import.meta.env.VITE_API_URL}/credits/checkout`, {
         method: 'POST',
         headers: {
@@ -170,10 +234,8 @@ export default function CreditsPage() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          amount,
-          companyId: profile.company_id,
-          userEmail: user?.email,
-          savePaymentMethod: autoReloadSettings.enabled
+          packageId: packageId,
+          priceId: pkg.id // Backend will map this to the Stripe price ID
         })
       });
 
@@ -552,172 +614,121 @@ export default function CreditsPage() {
         </div>
       )}
 
-        {/* Credit Balance Card */}
+        {/* Credit Balance Display */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Credit balance</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Current Balance</h2>
+          <div className="flex items-baseline gap-3">
+            <div className="text-5xl font-bold text-gray-900">
+              {Math.floor(accountData?.balance ?? 0)}
+            </div>
+            <div className="text-lg text-gray-600">credits</div>
+          </div>
+          <p className="text-sm text-gray-500 mt-2">
+            Credits are used when subscription unlocks are exhausted
+          </p>
+        </div>
+
+        {/* Credit Packages Grid */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Buy Credit Packages</h2>
           <p className="text-sm text-gray-600 mb-6">
-            Your credit balance will be consumed with chapter unlocks, warm introductions, and ambassador referrals. You can buy credits directly or set up auto-reload thresholds.
+            Choose the package that best fits your needs. All credits never expire and can be used anytime.
           </p>
 
-          <div className="flex items-start gap-6">
-            {/* Balance Display */}
-            <div className="flex-shrink-0 bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg p-8 min-w-[200px]">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-gray-900 mb-2">
-                  {Math.floor(accountData?.balance ?? 0)} credits
-                </div>
-                <div className="text-sm text-gray-600">Remaining Balance</div>
-              </div>
-            </div>
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+            {CREDIT_PACKAGES.map((pkg) => (
+              <div
+                key={pkg.id}
+                className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                  selectedPackage === pkg.id
+                    ? 'border-blue-600 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                } ${pkg.popular ? 'ring-2 ring-yellow-400' : ''}`}
+                onClick={() => setSelectedPackage(pkg.id)}
+              >
+                {pkg.popular && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                      MOST POPULAR
+                    </div>
+                  </div>
+                )}
 
-            {/* Payment Method & Auto-reload */}
-            <div className="flex-1">
-              {/* Top-up Amount Selection */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Select top-up amount
-                </label>
-                <div className="grid grid-cols-5 gap-2 mb-3">
-                  {TOP_UP_PRESETS.map((amount) => (
-                    <button
-                      key={amount}
-                      onClick={() => {
-                        setSelectedAmount(amount);
-                        setCustomAmount('');
-                      }}
-                      className={`px-4 py-2 text-sm font-medium rounded-md border-2 transition-colors ${
-                        selectedAmount === amount && !customAmount
-                          ? 'border-gray-900 bg-gray-900 text-white'
-                          : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-                      }`}
-                    >
-                      ${amount}
-                    </button>
-                  ))}
-                </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-gray-500">$</span>
-                  <input
-                    type="number"
-                    min="10"
-                    step="5"
-                    placeholder="Custom amount (min $10)"
-                    value={customAmount}
-                    onChange={(e) => {
-                      setCustomAmount(e.target.value);
-                      setSelectedAmount(null);
-                    }}
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  />
-                </div>
-              </div>
+                <div className="text-center">
+                  <div className="text-sm font-semibold text-gray-900 mb-2">{pkg.name}</div>
+                  <div className="text-3xl font-bold text-gray-900 mb-1">
+                    {pkg.credits}
+                  </div>
+                  <div className="text-xs text-gray-500 mb-3">credits</div>
 
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <CreditCard className="w-4 h-4" />
-                  <span>Charged to</span>
-                  <span className="font-medium">Link by Stripe</span>
-                </div>
-                <button
-                  onClick={handleBuyCredits}
-                  disabled={loading}
-                  className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50"
-                >
-                  {loading ? 'Processing...' : 'Buy credits'}
-                </button>
-              </div>
-
-              {/* Auto-reload Notice */}
-              <div className="bg-amber-50 border border-amber-200 rounded-md p-3 flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm text-amber-900">
-                    {autoReloadSettings.enabled ? (
-                      <>
-                        Auto reload is enabled. We will reload to ${autoReloadSettings.amount} when the balance reaches ${autoReloadSettings.threshold}.
-                      </>
-                    ) : (
-                      <>
-                        Auto reload is not enabled. Set up auto-reload to never run out of credits.
-                      </>
-                    )}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowAutoReloadEdit(!showAutoReloadEdit)}
-                  className="px-3 py-1 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-md transition-colors flex-shrink-0"
-                >
-                  Edit
-                </button>
-              </div>
-
-              {/* Auto-reload Edit Panel */}
-              {showAutoReloadEdit && (
-                <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md space-y-4">
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      checked={autoReloadSettings.enabled}
-                      onChange={(e) => setAutoReloadSettings({ ...autoReloadSettings, enabled: e.target.checked })}
-                      className="w-4 h-4 rounded border-gray-300"
-                    />
-                    <label className="text-sm font-medium text-gray-900">Enable auto-reload</label>
+                  <div className="text-2xl font-bold text-blue-600 mb-1">
+                    ${pkg.price}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    ${pkg.pricePerCredit.toFixed(2)}/credit
                   </div>
 
-                  {autoReloadSettings.enabled && (
-                    <>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Reload threshold (minimum $5)
-                        </label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-2 text-gray-500">$</span>
-                          <input
-                            type="number"
-                            min="5"
-                            step="5"
-                            value={autoReloadSettings.threshold}
-                            onChange={(e) => setAutoReloadSettings({ ...autoReloadSettings, threshold: parseFloat(e.target.value) })}
-                            className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Reload amount (minimum $25)
-                        </label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-2 text-gray-500">$</span>
-                          <input
-                            type="number"
-                            min="25"
-                            step="25"
-                            value={autoReloadSettings.amount}
-                            onChange={(e) => setAutoReloadSettings({ ...autoReloadSettings, amount: parseFloat(e.target.value) })}
-                            className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md text-sm"
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="flex gap-2 pt-2">
-                    <button
-                      onClick={handleUpdateAutoReload}
-                      className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-md transition-colors"
-                    >
-                      Save settings
-                    </button>
-                    <button
-                      onClick={() => setShowAutoReloadEdit(false)}
-                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 text-sm font-medium rounded-md transition-colors"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <ul className="mt-4 space-y-2 text-left">
+                    {pkg.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-green-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-xs text-gray-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              onClick={() => handleBuyCredits(selectedPackage)}
+              disabled={loading}
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-5 h-5" />
+                  Buy {CREDIT_PACKAGES.find(p => p.id === selectedPackage)?.credits} Credits for ${CREDIT_PACKAGES.find(p => p.id === selectedPackage)?.price}
+                </>
               )}
+            </button>
+          </div>
+        </div>
+
+        {/* How Credits Work */}
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm border border-blue-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-blue-600" />
+            How Credits Work
+          </h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-lg p-4">
+              <div className="text-3xl mb-2">💳</div>
+              <h3 className="font-semibold text-gray-900 mb-2">One-Time Purchase</h3>
+              <p className="text-sm text-gray-600">
+                Buy credits once and use them whenever you need. No recurring charges.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4">
+              <div className="text-3xl mb-2">♾️</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Never Expire</h3>
+              <p className="text-sm text-gray-600">
+                Credits remain in your account forever. No rush, no pressure.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4">
+              <div className="text-3xl mb-2">💎</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Volume Savings</h3>
+              <p className="text-sm text-gray-600">
+                Larger packages offer better value - save up to 32% with Enterprise.
+              </p>
             </div>
           </div>
         </div>

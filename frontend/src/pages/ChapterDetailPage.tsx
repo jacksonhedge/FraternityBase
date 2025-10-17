@@ -875,19 +875,71 @@ const ChapterDetailPage = () => {
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-3">📝 Introduction Request Form</h3>
                 {introSubmitted ? (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-                    <div className="text-green-600 text-4xl mb-3">✅</div>
-                    <h4 className="font-semibold text-green-900 mb-2">Request Submitted!</h4>
-                    <p className="text-sm text-green-800">
-                      Our team will reach out to facilitate the connection within 24-48 hours.
-                    </p>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <div className="text-center mb-4">
+                      <div className="text-green-600 text-4xl mb-3">✅</div>
+                      <h4 className="font-semibold text-green-900 mb-2">Request Submitted Successfully!</h4>
+                      <p className="text-sm text-green-800 mb-4">
+                        Our team will review your request and reach out within 24-48 hours to facilitate the introduction.
+                      </p>
+                    </div>
+                    <div className="p-4 bg-white border border-green-200 rounded-lg space-y-2">
+                      <h5 className="font-semibold text-gray-900 text-sm mb-2">What happens next?</h5>
+                      <div className="space-y-2 text-sm text-gray-700">
+                        <div className="flex items-start gap-2">
+                          <span className="text-green-600 font-bold">1.</span>
+                          <span>We'll review your partnership proposal and company profile</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-green-600 font-bold">2.</span>
+                          <span>Our team will reach out to the chapter leadership on your behalf</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-green-600 font-bold">3.</span>
+                          <span>We'll coordinate a direct introduction via your preferred contact method</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-green-600 font-bold">4.</span>
+                          <span>You'll receive an email with next steps and contact details</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-4 text-center">
+                      <p className="text-xs text-gray-600">
+                        Track this request in your <a href="/app/requested-introductions" className="text-blue-600 hover:underline font-medium">Requested Introductions</a> page
+                      </p>
+                    </div>
                   </div>
                 ) : (
-                  <form className="space-y-4" onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (!user?.companyId || !id) return;
+                  <>
+                    {/* Preview what admin will see */}
+                    <div className="mb-4 p-4 bg-indigo-100 border border-indigo-200 rounded-lg">
+                      <p className="text-xs text-indigo-700 font-semibold uppercase tracking-wide mb-1">
+                        Preview - What our team will see
+                      </p>
+                      <div className="text-sm space-y-1">
+                        <p className="text-indigo-900">
+                          <strong>Company:</strong> {user?.companyName || 'Your Company'}
+                        </p>
+                        <p className="text-indigo-900">
+                          <strong>Requesting:</strong> Introduction to {chapter.fraternity} - {chapter.chapterName}
+                        </p>
+                        <p className="text-indigo-900">
+                          <strong>At:</strong> {chapter.university}
+                        </p>
+                      </div>
+                    </div>
+                    <form className="space-y-4" onSubmit={async (e) => {
+                      e.preventDefault();
+                      if (!user?.companyId || !id) return;
 
-                    setIsSubmittingIntro(true);
+                      // Validation: Ensure message has enough content
+                      if (introFormData.message.trim().length < 50) {
+                        alert('Please provide a more detailed partnership proposal (at least 50 characters)');
+                        return;
+                      }
+
+                      setIsSubmittingIntro(true);
                     try {
                       const response = await fetch(`${API_URL}/credits/warm-intro/request`, {
                         method: 'POST',
@@ -917,7 +969,8 @@ const ChapterDetailPage = () => {
 
                       // Success!
                       setIntroSubmitted(true);
-                      setBalance(balance - 100); // Update local balance (100 credits for warm intro)
+                      const deductedAmount = chapter.isPlatinum ? 20 : 100;
+                      setBalance(balance - deductedAmount);
                     } catch (error) {
                       console.error('Error submitting intro request:', error);
                       alert('Failed to submit request. Please try again.');
@@ -952,9 +1005,14 @@ const ChapterDetailPage = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Partnership Proposal *
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Partnership Proposal *
+                        </label>
+                        <span className={`text-xs ${introFormData.message.length >= 50 ? 'text-green-600' : 'text-gray-500'}`}>
+                          {introFormData.message.length}/50 minimum
+                        </span>
+                      </div>
                       <textarea
                         required
                         rows={4}
@@ -963,6 +1021,9 @@ const ChapterDetailPage = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                         placeholder="Briefly describe your partnership opportunity, what you're offering, and what you're looking for..."
                       />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Be specific about what you're offering and how it benefits the chapter
+                      </p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">

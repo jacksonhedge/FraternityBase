@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>FraternityBase OG Image</title>
+</head>
+<body style="margin: 0; padding: 20px; background: #f0f0f0;">
+    <h1>FraternityBase Open Graph Image</h1>
+    <p>1200x630px image with your logo</p>
+    <canvas id="canvas" width="1200" height="630" style="border: 2px solid #ccc; background: white; max-width: 100%;"></canvas>
+    <br><br>
+    <button onclick="download()" style="padding: 12px 24px; font-size: 16px; background: #1E3A8A; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        Download Image
+    </button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // White/off-white background
+        ctx.fillStyle = '#FAFAF9';
+        ctx.fillRect(0, 0, 1200, 630);
+
+        // Draw the green baseball cap
+        function drawCap(centerX, centerY, scale) {
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.scale(scale, scale);
+
+            const capGreen = '#1D7550';
+            const capLight = '#2E8B57';
+
+            // Main cap body/crown
+            ctx.beginPath();
+            ctx.ellipse(0, -10, 50, 40, 0, 0, Math.PI * 2);
+            ctx.fillStyle = capGreen;
+            ctx.fill();
+
+            // Top panels with white stitching
+            ctx.beginPath();
+            ctx.moveTo(-45, -10);
+            ctx.quadraticCurveTo(-25, -50, 0, -55);
+            ctx.quadraticCurveTo(25, -50, 45, -10);
+            ctx.fillStyle = capGreen;
+            ctx.fill();
+
+            // White panel lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 2;
+
+            // Left panel line
+            ctx.beginPath();
+            ctx.moveTo(-35, -15);
+            ctx.quadraticCurveTo(-18, -45, 0, -50);
+            ctx.stroke();
+
+            // Right panel line
+            ctx.beginPath();
+            ctx.moveTo(0, -50);
+            ctx.quadraticCurveTo(18, -45, 35, -15);
+            ctx.stroke();
+
+            // Top button
+            ctx.beginPath();
+            ctx.arc(0, -53, 5, 0, Math.PI * 2);
+            ctx.fillStyle = capLight;
+            ctx.fill();
+
+            // Brim
+            ctx.beginPath();
+            ctx.ellipse(20, 5, 70, 18, -0.1, 0, Math.PI, true);
+            ctx.fillStyle = capGreen;
+            ctx.fill();
+
+            // Brim stitching lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(-45, 0);
+            ctx.quadraticCurveTo(-10, 8, 25, 10);
+            ctx.quadraticCurveTo(60, 8, 90, 0);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-45, -4);
+            ctx.quadraticCurveTo(-10, 4, 25, 6);
+            ctx.quadraticCurveTo(60, 4, 90, -4);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // Draw "Fraternity Base" text in the exact style
+        function drawText(x, y) {
+            // Shadow for depth
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 4;
+            ctx.shadowOffsetY = 4;
+
+            // "Fraternity" - italic script style
+            ctx.font = 'italic bold 140px "Brush Script MT", cursive, serif';
+            ctx.fillStyle = '#1E3A8A'; // Deep blue
+            ctx.textAlign = 'center';
+            ctx.fillText('Fraternity', x, y);
+
+            // "Base" - italic script style
+            ctx.font = 'italic bold 160px "Brush Script MT", cursive, serif';
+            ctx.fillText('Base', x, y + 140);
+
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+        }
+
+        // Position everything centered
+        const capX = 600;
+        const capY = 160;
+        const textX = 600;
+        const textY = 380;
+
+        // Draw cap
+        drawCap(capX, capY, 3);
+
+        // Draw text
+        drawText(textX, textY);
+
+        function download() {
+            const link = document.createElement('a');
+            link.download = 'fraternitybase-og-logo.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        }
+
+        // Auto download after 1 second
+        setTimeout(() => {
+            download();
+        }, 1000);
+    </script>
+</body>
+</html>

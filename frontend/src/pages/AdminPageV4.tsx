@@ -33,7 +33,9 @@ import {
   FileUp,
   Rocket,
   ChevronDown,
-  Loader
+  Loader,
+  Sparkles,
+  AlertCircle
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
@@ -200,7 +202,7 @@ const AdminPageV4 = () => {
   // Derive active tab from URL path
   const activeTab = (location.pathname.split('/')[2] || 'dashboard') as
     'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
-    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap';
+    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' | 'wizard-admin' | 'college-clubs' | 'intro-requests';
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -213,11 +215,23 @@ const AdminPageV4 = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
+  const [comingTomorrowItems, setComingTomorrowItems] = useState<any[]>([]);
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([]);
   const [activityFilter, setActivityFilter] = useState<string>('all');
   const [activityVisibleCount, setActivityVisibleCount] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoadingData, setIsLoadingData] = useState(false);
+
+  // Introduction requests state
+  const [introRequests, setIntroRequests] = useState<any[]>([]);
+  const [introRequestsLoading, setIntroRequestsLoading] = useState(false);
+  const [introRequestsFilter, setIntroRequestsFilter] = useState<string>('all');
+
+  // Wizard admin states
+  const [isWizardAdmin, setIsWizardAdmin] = useState(false);
+  const [wizardCompanies, setWizardCompanies] = useState<any[]>([]);
+  const [wizardSession, setWizardSession] = useState<any>(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState('');
   const [showCSVImport, setShowCSVImport] = useState(false);
   const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
   const [collegeFilter, setCollegeFilter] = useState<string>('all');
@@ -304,6 +318,16 @@ const AdminPageV4 = () => {
     is_primary_contact: false
   });
 
+  const [comingTomorrowForm, setComingTomorrowForm] = useState({
+    college_name: '',
+    university_id: '',
+    anticipated_score: '',
+    update_type: 'new_chapter' as 'new_chapter' | 'roster_update' | 'new_sorority',
+    expected_member_count: '',
+    chapter_name: '',
+    scheduled_date: ''
+  });
+
   // Fetch data on mount and tab change
   useEffect(() => {
     fetchData();
@@ -327,6 +351,22 @@ const AdminPageV4 = () => {
       }
     };
     checkAIStatus();
+  }, []);
+
+  // Check wizard admin status
+  useEffect(() => {
+    const checkWizardStatus = async () => {
+      try {
+        const response = await fetch(`${API_URL}/wizard/status`, {
+          headers: getAdminHeaders()
+        });
+        const data = await response.json();
+        setIsWizardAdmin(data.isWizardAdmin);
+      } catch (error) {
+        console.error('Error checking wizard status:', error);
+      }
+    };
+    checkWizardStatus();
   }, []);
 
   const fetchData = async () => {
@@ -395,9 +435,41 @@ const AdminPageV4 = () => {
         const res = await fetch(`${API_URL}/admin/waitlist`, { headers: getAdminHeaders() });
         const data = await res.json();
         setWaitlistEntries(data.data || []);
+      } else if (activeTab === 'coming-tomorrow') {
+        const [comingRes, unisRes] = await Promise.all([
+          fetch(`${API_URL}/admin/coming-tomorrow`, { headers: getAdminHeaders() }),
+          fetch(`${API_URL}/admin/universities`, { headers: getAdminHeaders() })
+        ]);
+        const [comingData, unisData] = await Promise.all([
+          comingRes.json(),
+          unisRes.json()
+        ]);
+        setComingTomorrowItems(comingData.data || []);
+        setUniversities(unisData.data || []);
+      } else if (activeTab === 'wizard-admin' && isWizardAdmin) {
+        // Fetch companies and current session
+        const [companiesRes, sessionRes] = await Promise.all([
+          fetch(`${API_URL}/wizard/companies`, {
+            headers: getAdminHeaders()
+          }),
+          fetch(`${API_URL}/wizard/current-session`, {
+            headers: getAdminHeaders()
+          })
+        ]);
+        const companiesData = await companiesRes.json();
+        const sessionData = await sessionRes.json();
+        setWizardCompanies(companiesData.companies || []);
+        setWizardSession(sessionData.session);
+      } else if (activeTab === 'intro-requests') {
+        setIntroRequestsLoading(true);
+        const res = await fetch(`${API_URL}/credits/warm-intro/admin/all`, { headers: getAdminHeaders() });
+        const data = await res.json();
+        setIntroRequests(data.requests || []);
+        setIntroRequestsLoading(false);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+      setIntroRequestsLoading(false);
     } finally {
       setIsLoadingData(false);
     }
@@ -1757,6 +1829,39 @@ const AdminPageV4 = () => {
           </button>
 
           <button
+            onClick={() => {
+              navigate('/admin/coming-tomorrow');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'coming-tomorrow'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <TrendingUp className="w-5 h-5" />
+            <span className="font-medium">Coming Tomorrow</span>
+            {comingTomorrowItems.length > 0 && (
+              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{comingTomorrowItems.length}</span>
+            )}
+          </button>
+
+          {isWizardAdmin && (
+            <button
+              onClick={() => navigate('/admin/wizard-admin')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'wizard-admin'
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
+                  : 'text-gray-300 hover:bg-gray-800'
+              }`}
+            >
+              <Sparkles className="w-5 h-5" />
+              <span className="font-medium">Wizard Admin</span>
+            </button>
+          )}
+
+          <button
             onClick={() => navigate('/admin/roadmap')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
               activeTab === 'roadmap'
@@ -1766,6 +1871,18 @@ const AdminPageV4 = () => {
           >
             <Rocket className="w-5 h-5" />
             <span className="font-medium">Product Roadmap</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/admin/college-clubs')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'college-clubs'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <GraduationCap className="w-5 h-5" />
+            <span className="font-medium">College Clubs</span>
           </button>
 
           <a
@@ -1907,6 +2024,27 @@ const AdminPageV4 = () => {
             <Activity className="w-5 h-5" />
             <span className="font-medium">User Activity</span>
           </button>
+
+          <button
+            onClick={() => {
+              navigate('/admin/intro-requests');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'intro-requests'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Handshake className="w-5 h-5" />
+            <span className="font-medium">Introduction Requests</span>
+            {introRequests.filter(r => r.status === 'pending').length > 0 && (
+              <span className="ml-auto bg-yellow-500 text-yellow-900 px-2 py-1 rounded-full text-xs font-semibold">
+                {introRequests.filter(r => r.status === 'pending').length}
+              </span>
+            )}
+          </button>
         </nav>
 
         {/* Bottom Section */}
@@ -1946,6 +2084,8 @@ const AdminPageV4 = () => {
               {activeTab === 'ambassadors' && 'Manage ambassador profiles and partnerships'}
               {activeTab === 'users' && 'Manage chapter users and contacts'}
               {activeTab === 'waitlist' && 'View and manage waitlist signups'}
+              {activeTab === 'coming-tomorrow' && 'Manage upcoming chapters and roster updates for Dashboard'}
+              {activeTab === 'wizard-admin' && 'Platform super admin - impersonate any company account'}
               {activeTab === 'payments' && 'Track revenue, transactions, and financial analytics'}
               {activeTab === 'unlocks' && 'Analyze chapter unlock trends and popular content'}
               {activeTab === 'credits' && 'Monitor credit usage and pricing performance'}
@@ -1953,6 +2093,8 @@ const AdminPageV4 = () => {
               {activeTab === 'analytics' && 'Business intelligence and growth analytics'}
               {activeTab === 'activity' && 'Track user clicks and interaction analytics'}
               {activeTab === 'roadmap' && 'Manage product roadmap features and data coverage'}
+              {activeTab === 'college-clubs' && 'Manage college investment groups, blockchain groups, and poker clubs'}
+              {activeTab === 'intro-requests' && 'View and manage all warm introduction requests from companies'}
             </p>
           </div>
 
@@ -2778,7 +2920,7 @@ const AdminPageV4 = () => {
       )}
 
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'ambassadors' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity' || activeTab === 'roadmap') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'ambassadors' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'coming-tomorrow' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity' || activeTab === 'roadmap') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
@@ -4007,7 +4149,8 @@ const AdminPageV4 = () => {
                           </button>
                         </td>
                       </tr>
-                    )))}
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -4053,6 +4196,320 @@ const AdminPageV4 = () => {
             </div>
           )}
 
+          {/* Coming Tomorrow Tab */}
+          {activeTab === 'coming-tomorrow' && (
+            <div className="space-y-6">
+              {/* Add New Item Form */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Add New "Coming Tomorrow" Item</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">College Name *</label>
+                    <input
+                      type="text"
+                      value={comingTomorrowForm.college_name}
+                      onChange={(e) => setComingTomorrowForm({ ...comingTomorrowForm, college_name: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="e.g., Michigan"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Chapter Name</label>
+                    <input
+                      type="text"
+                      value={comingTomorrowForm.chapter_name}
+                      onChange={(e) => setComingTomorrowForm({ ...comingTomorrowForm, chapter_name: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="e.g., Delta Tau Delta"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Anticipated Score *</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="5"
+                      value={comingTomorrowForm.anticipated_score}
+                      onChange={(e) => setComingTomorrowForm({ ...comingTomorrowForm, anticipated_score: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="e.g., 4.8"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Update Type *</label>
+                    <select
+                      value={comingTomorrowForm.update_type}
+                      onChange={(e) => setComingTomorrowForm({ ...comingTomorrowForm, update_type: e.target.value as any })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    >
+                      <option value="new_chapter">New Chapter</option>
+                      <option value="roster_update">Roster Update</option>
+                      <option value="new_sorority">New Sorority</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Expected Member Count</label>
+                    <input
+                      type="number"
+                      value={comingTomorrowForm.expected_member_count}
+                      onChange={(e) => setComingTomorrowForm({ ...comingTomorrowForm, expected_member_count: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="e.g., 112"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Scheduled Date</label>
+                    <input
+                      type="date"
+                      value={comingTomorrowForm.scheduled_date}
+                      onChange={(e) => setComingTomorrowForm({ ...comingTomorrowForm, scheduled_date: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(`${API_URL}/admin/coming-tomorrow`, {
+                        method: 'POST',
+                        headers: getAdminHeaders(),
+                        body: JSON.stringify({
+                          college_name: comingTomorrowForm.college_name,
+                          anticipated_score: parseFloat(comingTomorrowForm.anticipated_score),
+                          update_type: comingTomorrowForm.update_type,
+                          expected_member_count: comingTomorrowForm.expected_member_count ? parseInt(comingTomorrowForm.expected_member_count) : null,
+                          chapter_name: comingTomorrowForm.chapter_name || null,
+                          scheduled_date: comingTomorrowForm.scheduled_date || null
+                        })
+                      });
+                      const data = await res.json();
+                      if (data.success) {
+                        setSuccessMessage('Coming tomorrow item added successfully!');
+                        setShowSuccess(true);
+                        setComingTomorrowForm({
+                          college_name: '',
+                          university_id: '',
+                          anticipated_score: '',
+                          update_type: 'new_chapter',
+                          expected_member_count: '',
+                          chapter_name: '',
+                          scheduled_date: ''
+                        });
+                        fetchData();
+                      }
+                    } catch (error) {
+                      console.error('Error adding coming tomorrow item:', error);
+                    }
+                  }}
+                  className="mt-4 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
+                  <Plus className="w-5 h-5" />
+                  Add Item
+                </button>
+              </div>
+
+              {/* Existing Items Table */}
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">College</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Members</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Scheduled</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {comingTomorrowItems.map((item) => (
+                      <tr key={item.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.college_name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.chapter_name || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.anticipated_score}⭐</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          <span className={`inline-block px-2 py-1 rounded-full text-xs ${
+                            item.update_type === 'new_chapter' ? 'bg-orange-100 text-orange-700' :
+                            item.update_type === 'roster_update' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-pink-100 text-pink-700'
+                          }`}>
+                            {item.update_type === 'new_chapter' ? 'New Chapter' :
+                             item.update_type === 'roster_update' ? 'Roster Update' :
+                             'New Sorority'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.expected_member_count || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {new Date(item.scheduled_date).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          <button
+                            onClick={async () => {
+                              if (confirm('Delete this item?')) {
+                                try {
+                                  await fetch(`${API_URL}/admin/coming-tomorrow/${item.id}`, {
+                                    method: 'DELETE',
+                                    headers: getAdminHeaders()
+                                  });
+                                  fetchData();
+                                } catch (error) {
+                                  console.error('Error deleting item:', error);
+                                }
+                              }
+                            }}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {comingTomorrowItems.length === 0 && (
+                  <div className="text-center py-12 text-gray-500">
+                    No coming tomorrow items yet
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Wizard Admin Tab */}
+          {activeTab === 'wizard-admin' && isWizardAdmin && (
+            <div className="space-y-6">
+              <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-6 text-white">
+                <div className="flex items-center gap-3 mb-2">
+                  <Sparkles className="w-6 h-6" />
+                  <h2 className="text-2xl font-bold">Wizard Admin</h2>
+                </div>
+                <p className="opacity-90">Platform super admin with access to all company accounts</p>
+              </div>
+
+              {wizardSession && (
+                <div className="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <AlertCircle className="w-5 h-5 text-yellow-600" />
+                        <h3 className="font-bold text-yellow-900">Active Impersonation</h3>
+                      </div>
+                      <p className="text-yellow-800">Currently impersonating: <span className="font-semibold">{wizardSession.company?.name}</span></p>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        await fetch(`${API_URL}/wizard/end-impersonation`, {
+                          method: 'POST',
+                          headers: getAdminHeaders()
+                        });
+                        setWizardSession(null);
+                        window.location.reload();
+                      }}
+                      className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+                    >
+                      End Impersonation
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Impersonate Company</h3>
+                <div className="flex gap-4">
+                  <select
+                    value={selectedCompanyId}
+                    onChange={(e) => setSelectedCompanyId(e.target.value)}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="">Select a company...</option>
+                    {wizardCompanies.map((company: any) => (
+                      <option key={company.id} value={company.id}>
+                        {company.name} ({company.balance?.[0]?.balance_credits || 0} credits)
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={async () => {
+                      if (!selectedCompanyId) return;
+                      const res = await fetch(`${API_URL}/wizard/impersonate`, {
+                        method: 'POST',
+                        headers: getAdminHeaders(),
+                        body: JSON.stringify({ companyId: selectedCompanyId })
+                      });
+                      const data = await res.json();
+                      if (data.success) {
+                        setWizardSession(data.session);
+                        window.location.reload();
+                      }
+                    }}
+                    disabled={!selectedCompanyId}
+                    className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Start Impersonation
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                  <h3 className="text-lg font-bold text-gray-900">All Companies</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b border-gray-200">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Company</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Credits</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Team Size</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {wizardCompanies.map((company: any) => (
+                        <tr key={company.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4">
+                            <div className="font-medium text-gray-900">{company.name}</div>
+                          </td>
+                          <td className="px-6 py-4 text-gray-600">
+                            {company.balance?.[0]?.balance_credits || 0}
+                          </td>
+                          <td className="px-6 py-4 text-gray-600">
+                            {company.team_members?.[0]?.count || 0}
+                          </td>
+                          <td className="px-6 py-4 text-gray-600">
+                            {new Date(company.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="px-6 py-4">
+                            <button
+                              onClick={async () => {
+                                const res = await fetch(`${API_URL}/wizard/impersonate`, {
+                                  method: 'POST',
+                                  headers: getAdminHeaders(),
+                                  body: JSON.stringify({ companyId: company.id })
+                                });
+                                const data = await res.json();
+                                if (data.success) {
+                                  setWizardSession(data.session);
+                                  window.location.reload();
+                                }
+                              }}
+                              className="text-purple-600 hover:text-purple-800 font-medium"
+                            >
+                              Impersonate
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Payments & Revenue Tab */}
           {activeTab === 'payments' && <PaymentsRevenueTab />}
 
@@ -4095,11 +4552,358 @@ const AdminPageV4 = () => {
           {/* User Activity Tab */}
           {activeTab === 'activity' && <ActivityLogsTab />}
 
+          {/* Introduction Requests Tab */}
+          {activeTab === 'intro-requests' && (
+            <div className="space-y-6">
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-3xl font-bold text-gray-900">{introRequests.length}</p>
+                      <p className="text-sm text-gray-600 mt-1">Total Requests</p>
+                    </div>
+                    <Handshake className="w-10 h-10 text-emerald-500" />
+                  </div>
+                </div>
+                <div className="bg-yellow-50 rounded-lg shadow-sm border border-yellow-200 p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-3xl font-bold text-yellow-900">
+                        {introRequests.filter(r => r.status === 'pending').length}
+                      </p>
+                      <p className="text-sm text-yellow-700 mt-1">Pending</p>
+                    </div>
+                    <AlertCircle className="w-10 h-10 text-yellow-500" />
+                  </div>
+                </div>
+                <div className="bg-blue-50 rounded-lg shadow-sm border border-blue-200 p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-3xl font-bold text-blue-900">
+                        {introRequests.filter(r => r.status === 'in_progress').length}
+                      </p>
+                      <p className="text-sm text-blue-700 mt-1">In Progress</p>
+                    </div>
+                    <Loader className="w-10 h-10 text-blue-500" />
+                  </div>
+                </div>
+                <div className="bg-green-50 rounded-lg shadow-sm border border-green-200 p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-3xl font-bold text-green-900">
+                        {introRequests.filter(r => r.status === 'completed').length}
+                      </p>
+                      <p className="text-sm text-green-700 mt-1">Completed</p>
+                    </div>
+                    <Star className="w-10 h-10 text-green-500" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Filter */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <div className="flex items-center gap-4">
+                  <label className="text-sm font-medium text-gray-700">Filter by status:</label>
+                  <select
+                    value={introRequestsFilter}
+                    onChange={(e) => setIntroRequestsFilter(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    <option value="all">All Requests</option>
+                    <option value="pending">Pending</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Requests List */}
+              {introRequestsLoading ? (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                  <Loader className="w-12 h-12 text-gray-400 mx-auto mb-4 animate-spin" />
+                  <p className="text-gray-600">Loading introduction requests...</p>
+                </div>
+              ) : introRequests.filter(r => introRequestsFilter === 'all' || r.status === introRequestsFilter).length === 0 ? (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                  <Handshake className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600">
+                    {introRequestsFilter === 'all'
+                      ? 'No introduction requests yet'
+                      : `No ${introRequestsFilter} requests`}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {introRequests
+                    .filter(r => introRequestsFilter === 'all' || r.status === introRequestsFilter)
+                    .map((request) => {
+                      const [isUpdating, setIsUpdating] = useState(false);
+                      const [adminNotes, setAdminNotes] = useState(request.admin_notes || '');
+                      const [showNotesInput, setShowNotesInput] = useState(false);
+
+                      const updateStatus = async (newStatus: string) => {
+                        if (!confirm(`Update request status to "${newStatus}"?`)) return;
+
+                        setIsUpdating(true);
+                        try {
+                          const response = await fetch(
+                            `${API_URL}/credits/warm-intro/admin/${request.id}/status`,
+                            {
+                              method: 'PATCH',
+                              headers: getAdminHeaders(),
+                              body: JSON.stringify({ status: newStatus, adminNotes })
+                            }
+                          );
+
+                          if (!response.ok) {
+                            throw new Error('Failed to update status');
+                          }
+
+                          // Refresh data
+                          fetchData();
+                          setShowNotesInput(false);
+                        } catch (error) {
+                          console.error('Error updating status:', error);
+                          alert('Failed to update status');
+                        } finally {
+                          setIsUpdating(false);
+                        }
+                      };
+
+                      const getStatusBadge = (status: string) => {
+                        const styles = {
+                          pending: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+                          in_progress: 'bg-blue-100 text-blue-800 border-blue-300',
+                          completed: 'bg-green-100 text-green-800 border-green-300',
+                          cancelled: 'bg-red-100 text-red-800 border-red-300'
+                        };
+                        return styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-800 border-gray-300';
+                      };
+
+                      return (
+                        <div
+                          key={request.id}
+                          className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                        >
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <h3 className="text-lg font-semibold text-gray-900">
+                                  {request.chapters?.chapter_name || 'Chapter'}
+                                </h3>
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(request.status)}`}>
+                                  {request.status.replace('_', ' ').toUpperCase()}
+                                </span>
+                                {request.chapters?.universities && (
+                                  <span className="text-sm text-gray-600">
+                                    @ {request.chapters.universities.name}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-4 text-sm text-gray-600">
+                                <span className="flex items-center gap-1">
+                                  <Building2 className="w-4 h-4" />
+                                  {request.companies?.company_name || 'Unknown Company'}
+                                </span>
+                                {request.requestedBy && (
+                                  <span className="flex items-center gap-1">
+                                    <Mail className="w-4 h-4" />
+                                    {request.requestedBy.firstName} {request.requestedBy.lastName} ({request.requestedBy.email})
+                                  </span>
+                                )}
+                                <span className="flex items-center gap-1">
+                                  <DollarSign className="w-4 h-4" />
+                                  ${request.amount_paid}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  {new Date(request.created_at).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  })}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Request Message */}
+                          {request.message && (
+                            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                              <p className="text-xs text-blue-600 uppercase tracking-wide font-medium mb-1">
+                                Partnership Proposal
+                              </p>
+                              <p className="text-sm text-gray-700 whitespace-pre-wrap">{request.message}</p>
+                            </div>
+                          )}
+
+                          {/* Request Details */}
+                          <div className="grid grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 rounded-lg">
+                            <div>
+                              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                                Contact Method
+                              </p>
+                              <p className="text-sm text-gray-900 capitalize">
+                                {request.preferred_contact_method}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                                Greek Organization
+                              </p>
+                              <p className="text-sm text-gray-900">
+                                {request.chapters?.greek_organizations?.name || 'N/A'}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Admin Notes Section */}
+                          {(request.admin_notes || showNotesInput) && (
+                            <div className="mb-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                              <p className="text-xs text-purple-600 uppercase tracking-wide font-medium mb-2">
+                                Admin Notes
+                              </p>
+                              {showNotesInput ? (
+                                <textarea
+                                  value={adminNotes}
+                                  onChange={(e) => setAdminNotes(e.target.value)}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                  rows={3}
+                                  placeholder="Add internal notes about this request..."
+                                />
+                              ) : (
+                                <p className="text-sm text-gray-700 whitespace-pre-wrap">{request.admin_notes}</p>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {request.status === 'pending' && (
+                              <>
+                                <button
+                                  onClick={() => updateStatus('in_progress')}
+                                  disabled={isUpdating}
+                                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm font-medium"
+                                >
+                                  Start Processing
+                                </button>
+                                <button
+                                  onClick={() => updateStatus('cancelled')}
+                                  disabled={isUpdating}
+                                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 text-sm font-medium"
+                                >
+                                  Cancel
+                                </button>
+                              </>
+                            )}
+                            {request.status === 'in_progress' && (
+                              <>
+                                <button
+                                  onClick={() => updateStatus('completed')}
+                                  disabled={isUpdating}
+                                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-sm font-medium"
+                                >
+                                  Mark as Completed
+                                </button>
+                                <button
+                                  onClick={() => updateStatus('pending')}
+                                  disabled={isUpdating}
+                                  className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 text-sm font-medium"
+                                >
+                                  Move to Pending
+                                </button>
+                              </>
+                            )}
+                            {request.status === 'completed' && (
+                              <button
+                                onClick={() => updateStatus('in_progress')}
+                                disabled={isUpdating}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm font-medium"
+                              >
+                                Reopen
+                              </button>
+                            )}
+                            {!showNotesInput && (
+                              <button
+                                onClick={() => setShowNotesInput(true)}
+                                className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors text-sm font-medium"
+                              >
+                                {request.admin_notes ? 'Edit Notes' : 'Add Notes'}
+                              </button>
+                            )}
+                            {showNotesInput && (
+                              <button
+                                onClick={() => {
+                                  updateStatus(request.status);
+                                }}
+                                disabled={isUpdating}
+                                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 text-sm font-medium"
+                              >
+                                Save Notes
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Completion Info */}
+                          {request.status === 'completed' && request.completed_at && (
+                            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
+                              <Star className="w-5 h-5 text-green-600" />
+                              <span className="text-sm text-green-900">
+                                Completed on {new Date(request.completed_at).toLocaleDateString('en-US', {
+                                  month: 'long',
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                })}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Ambassadors Tab */}
           {activeTab === 'ambassadors' && <AmbassadorsAdmin />}
 
           {/* Product Roadmap Tab */}
           {activeTab === 'roadmap' && <RoadmapAdmin />}
+
+          {/* College Clubs Tab */}
+          {activeTab === 'college-clubs' && (
+            <div className="space-y-6">
+              {/* Investment Groups Section */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Investment Groups</h3>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+                  <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600">No investment groups added yet</p>
+                </div>
+              </div>
+
+              {/* Blockchain Groups Section */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Blockchain Groups</h3>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+                  <Handshake className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600">No blockchain groups added yet</p>
+                </div>
+              </div>
+
+              {/* Poker Clubs Section */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Poker Clubs</h3>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+                  <Star className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600">No poker clubs added yet</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
         </div>

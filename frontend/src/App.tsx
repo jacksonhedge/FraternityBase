@@ -147,6 +147,9 @@ function AnimatedRoutes() {
           <Route path="/admin/analytics" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/activity" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/roadmap" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/coming-tomorrow" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/wizard-admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/college-clubs" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/csv-upload" element={<AdminRoute><AdminCSVUploadPage /></AdminRoute>} />
           <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />
 

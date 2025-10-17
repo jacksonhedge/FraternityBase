@@ -191,6 +191,8 @@ const MapPage = () => {
   const [subscriptionTier, setSubscriptionTier] = useState<string>('trial');
   const [realCollegeData, setRealCollegeData] = useState<any>({});
   const [dataLoading, setDataLoading] = useState(true);
+  const [filterTransitioning, setFilterTransitioning] = useState(false);
+  const [organizationType, setOrganizationType] = useState<'fraternity' | 'sorority'>('fraternity');
   // Force rebuild - timestamp: 2025-10-10
 
   // Check subscription status for Enterprise access
@@ -324,6 +326,29 @@ const MapPage = () => {
     console.log('   Type:', typeof subscriptionTier);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }, [subscriptionTier]);
+
+  // Handle filter transitions with fade animations
+  useEffect(() => {
+    // Skip animation on initial mount
+    if (!mapReady) return;
+
+    // Trigger fade-out animation
+    setFilterTransitioning(true);
+
+    // After fade-out completes, show new markers with fade-in
+    const timer = setTimeout(() => {
+      setFilterTransitioning(false);
+    }, 350); // Duration matches markerFadeOut animation (0.35s)
+
+    return () => clearTimeout(timer);
+  }, [activeFilter, mapReady]);
+
+  // Refetch chapters when organization type changes in campus view
+  useEffect(() => {
+    if (viewMode === 'campus' && selectedCollege) {
+      handleCollegeClick(selectedCollege.name, selectedCollege);
+    }
+  }, [organizationType]);
 
   // Fetch real college data from API to replace hardcoded COLLEGE_LOCATIONS
   useEffect(() => {
@@ -675,17 +700,17 @@ const MapPage = () => {
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('   Total chapters received:', data.data.length);
 
-        // Filter to show ONLY fraternities (no sororities)
-        const fraternitiesOnly = data.data.filter((chapter: any) =>
-          chapter.greek_organizations?.organization_type === 'fraternity'
+        // Filter to show selected organization type only
+        const filteredChapters = data.data.filter((chapter: any) =>
+          chapter.greek_organizations?.organization_type === organizationType
         );
-        console.log('   Fraternities only:', fraternitiesOnly.length);
+        console.log(`   ${organizationType === 'fraternity' ? 'Fraternities' : 'Sororities'} only:`, filteredChapters.length);
         console.log('   hasEnterpriseAccess value:', hasEnterpriseAccess);
         console.log('   Will set unlocked to:', hasEnterpriseAccess);
         console.log('   Will set cost to:', hasEnterpriseAccess ? 0 : 100);
 
         // Map chapters to include position offsets for display on map
-        const chaptersWithPositions = fraternitiesOnly.map((chapter: any, index: number) => {
+        const chaptersWithPositions = filteredChapters.map((chapter: any, index: number) => {
           const newChapter = {
             ...chapter,
             // Create a circle pattern around the campus center
@@ -780,14 +805,62 @@ const MapPage = () => {
 
       {/* Map Container */}
       <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
+        {/* Search Bar */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[1000] w-full max-w-md px-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="Search states or colleges..."
+              className="w-full pl-10 pr-12 py-3 bg-white rounded-lg shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-400" />
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Filter Buttons */}
-        <div className="absolute top-4 left-4 z-[1000] flex gap-2 flex-wrap max-w-2xl">
+        <div className="absolute top-20 left-4 z-[1000] flex gap-2 flex-wrap max-w-2xl">
           {hasEnterpriseAccess && (
             <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-lg shadow-lg flex items-center gap-2">
               <Unlock className="w-4 h-4" />
               <span className="font-semibold text-sm">Enterprise: All Filters Unlocked</span>
             </div>
           )}
+
+          {/* Fraternity/Sorority Toggle */}
+          <div className="flex gap-1 bg-white rounded-lg shadow-lg p-1">
+            <button
+              onClick={() => setOrganizationType('fraternity')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                organizationType === 'fraternity'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              Fraternities
+            </button>
+            <button
+              onClick={() => setOrganizationType('sorority')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                organizationType === 'sorority'
+                  ? 'bg-pink-600 text-white'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              Sororities
+            </button>
+          </div>
+
           <button
             onClick={() => {
               console.log('🔘 [MapPage] "Big 10" filter clicked');
@@ -972,16 +1045,18 @@ const MapPage = () => {
               color="#FFFFFF"
               weight={3}
               fillOpacity={0.9}
+              className={filterTransitioning ? 'filter-transitioning' : 'filter-entering'}
               eventHandlers={{
                 click: () => handleCollegeClick(college.name, college),
                 mouseover: (e) => {
                   const marker = e.target;
-                  marker.setRadius(14);
+                  marker.setRadius(18); // Larger scale-up
                   marker.setStyle({
                     fillColor: '#7C3AED',
                     color: '#FFFFFF',
-                    weight: 4,
+                    weight: 5,
                     fillOpacity: 1,
+                    className: 'marker-glow' // Add glow class
                   });
                   marker.bringToFront();
                   marker.openTooltip();
@@ -994,6 +1069,7 @@ const MapPage = () => {
                     color: '#FFFFFF',
                     weight: 3,
                     fillOpacity: 0.9,
+                    className: ''
                   });
                 }
               }}
@@ -1004,7 +1080,7 @@ const MapPage = () => {
                     {college.name}
                   </div>
                   <div className="text-sm" style={{ color: '#4B5563', marginTop: '4px' }}>
-                    <div>🏛️ {college.fraternities} Fraternities • {college.sororities} Sororities</div>
+                    <div>🏛️ {organizationType === 'fraternity' ? college.fraternities : college.sororities} {organizationType === 'fraternity' ? 'Fraternities' : 'Sororities'}</div>
                     <div>👥 {college.totalMembers.toLocaleString()} Total Members</div>
                   </div>
                 </div>
@@ -1022,6 +1098,7 @@ const MapPage = () => {
               color="#FFFFFF"
               weight={3}
               fillOpacity={0.9}
+              className={filterTransitioning ? 'filter-transitioning' : 'filter-entering'}
               eventHandlers={{
                 click: () => {
                   setSelectedChapter(chapter);
@@ -1029,10 +1106,12 @@ const MapPage = () => {
                 },
                 mouseover: (e) => {
                   const marker = e.target;
-                  marker.setRadius(15);
+                  marker.setRadius(16); // Larger scale-up
                   marker.setStyle({
                     fillColor: chapter.unlocked ? '#059669' : '#7C3AED',
-                    weight: 4,
+                    weight: 5,
+                    fillOpacity: 1,
+                    className: 'marker-glow' // Add glow effect
                   });
                   marker.bringToFront();
                   marker.openTooltip();
@@ -1043,6 +1122,8 @@ const MapPage = () => {
                   marker.setStyle({
                     fillColor: chapter.unlocked ? '#10B981' : '#8B5CF6',
                     weight: 3,
+                    fillOpacity: 0.9,
+                    className: ''
                   });
                 }
               }}
@@ -1126,14 +1207,12 @@ const MapPage = () => {
                       <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-all group-hover:translate-x-1 flex-shrink-0" />
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 mt-2 text-sm">
-                      <div className="text-center p-2 bg-blue-50 rounded group-hover:bg-blue-100 transition-colors">
-                        <p className="font-bold text-blue-600">{college.fraternities}</p>
-                        <p className="text-xs text-gray-600">Fraternities</p>
-                      </div>
-                      <div className="text-center p-2 bg-pink-50 rounded group-hover:bg-pink-100 transition-colors">
-                        <p className="font-bold text-pink-600">{college.sororities}</p>
-                        <p className="text-xs text-gray-600">Sororities</p>
+                    <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+                      <div className={`text-center p-2 rounded group-hover:${organizationType === 'fraternity' ? 'bg-blue-100' : 'bg-pink-100'} transition-colors ${organizationType === 'fraternity' ? 'bg-blue-50' : 'bg-pink-50'}`}>
+                        <p className={`font-bold ${organizationType === 'fraternity' ? 'text-blue-600' : 'text-pink-600'}`}>
+                          {organizationType === 'fraternity' ? college.fraternities : college.sororities}
+                        </p>
+                        <p className="text-xs text-gray-600">{organizationType === 'fraternity' ? 'Fraternities' : 'Sororities'}</p>
                       </div>
                       <div className="text-center p-2 bg-green-50 rounded group-hover:bg-green-100 transition-colors">
                         <p className="font-bold text-green-600">{college.totalMembers.toLocaleString()}</p>
@@ -1168,14 +1247,12 @@ const MapPage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 mt-3">
-              <div className="text-center p-2 bg-blue-50 rounded">
-                <p className="font-bold text-blue-600">{selectedCollege.fraternities}</p>
-                <p className="text-xs text-gray-600">Fraternities</p>
-              </div>
-              <div className="text-center p-2 bg-pink-50 rounded">
-                <p className="font-bold text-pink-600">{selectedCollege.sororities}</p>
-                <p className="text-xs text-gray-600">Sororities</p>
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              <div className={`text-center p-2 rounded ${organizationType === 'fraternity' ? 'bg-blue-50' : 'bg-pink-50'}`}>
+                <p className={`font-bold ${organizationType === 'fraternity' ? 'text-blue-600' : 'text-pink-600'}`}>
+                  {organizationType === 'fraternity' ? selectedCollege.fraternities : selectedCollege.sororities}
+                </p>
+                <p className="text-xs text-gray-600">{organizationType === 'fraternity' ? 'Fraternities' : 'Sororities'}</p>
               </div>
               <div className="text-center p-2 bg-green-50 rounded">
                 <p className="font-bold text-green-600">{selectedCollege.totalMembers.toLocaleString()}</p>
@@ -1188,27 +1265,52 @@ const MapPage = () => {
 
       {/* Legend and Info */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Map Legend */}
+        {/* Enhanced Map Legend */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
             <Info className="w-4 h-4 mr-2" />
-            Map Information
+            Map Legend
           </h3>
-          <div className="space-y-3">
-            <div className="text-sm text-gray-600">
-              <p className="mb-2">🎨 <strong>Hover</strong> over any state to see its unique color</p>
-              <p className="mb-2">🖱️ <strong>Click</strong> on a state to view detailed information</p>
-              <p className="mb-2">📍 <strong>College markers</strong> show Greek life locations</p>
+          <div className="space-y-4">
+            {/* Marker Types */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Markers</p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-purple-600 rounded-full border-2 border-white shadow-md"></div>
+                  <span className="text-sm text-gray-700">College/University</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow-md"></div>
+                  <span className="text-sm text-gray-700">Unlocked Chapter</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-purple-600 rounded-full border-2 border-white shadow-md relative">
+                    <Lock className="w-3 h-3 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{ fontSize: '10px' }} />
+                  </div>
+                  <span className="text-sm text-gray-700">Locked Chapter</span>
+                </div>
+              </div>
             </div>
+
+            {/* State Colors */}
             <div className="pt-3 border-t border-gray-200">
-              <p className="text-xs text-gray-500">
-                Each state is assigned a unique color from our rainbow palette when you hover over it.
-              </p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">States</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="w-4 h-4 bg-gray-400 border border-gray-300 rounded"></div>
+                <span className="text-xs text-gray-600">Default</span>
+                <div className="w-4 h-4 bg-gray-500 border border-white rounded"></div>
+                <span className="text-xs text-gray-600">Hover</span>
+              </div>
             </div>
-            <div className="pt-2 border-t">
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 bg-red-600 rounded-full border-2 border-white shadow"></div>
-                <span className="text-sm text-gray-700">College Location</span>
+
+            {/* Interactions */}
+            <div className="pt-3 border-t border-gray-200">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Interactions</p>
+              <div className="text-xs text-gray-600 space-y-1">
+                <p>• <strong>Hover:</strong> See state/college info</p>
+                <p>• <strong>Click:</strong> Zoom to location</p>
+                <p>• <strong>Search:</strong> Find instantly</p>
               </div>
             </div>
           </div>
@@ -1475,13 +1577,51 @@ style.textContent = `
 
   /* Enhanced college marker animations */
   .leaflet-interactive.leaflet-circle {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy easing */
     cursor: pointer;
   }
 
-  /* Create a pulsing shadow effect on hover */
-  .leaflet-interactive.leaflet-circle:hover {
-    filter: drop-shadow(0 0 12px rgba(30, 64, 175, 0.6));
+  /* Enhanced glow effect on hover */
+  .leaflet-interactive.leaflet-circle:hover,
+  .marker-glow {
+    filter: drop-shadow(0 0 16px rgba(124, 58, 237, 0.8)) drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
+  }
+
+  /* Fade-in animation for markers */
+  @keyframes markerFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Fade-out animation for markers */
+  @keyframes markerFadeOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+  }
+
+  .leaflet-interactive.leaflet-circle {
+    animation: markerFadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Filter transition animations */
+  .leaflet-interactive.leaflet-circle.filter-transitioning {
+    animation: markerFadeOut 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .leaflet-interactive.leaflet-circle.filter-entering {
+    animation: markerFadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 
   /* Subtle pulse animation for college markers */
