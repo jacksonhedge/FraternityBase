@@ -86,7 +86,7 @@ const ChaptersPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'grade' | 'name' | 'university' | 'conference'>('grade');
   const [filterState, setFilterState] = useState('all');
-  const [filterConference, setFilterConference] = useState('Power 5'); // Default to Power 5
+  const [filterConference, setFilterConference] = useState('all'); // Show all conferences by default
   const [filterDivision, setFilterDivision] = useState('all');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [chapters, setChapters] = useState<Chapter[]>([]);
