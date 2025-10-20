@@ -77,6 +77,7 @@ interface University {
   bars_nearby?: number;
   unlock_count?: number;
   conference?: string;
+  show_in_dashboard?: boolean;
 }
 
 interface Chapter {
@@ -99,6 +100,7 @@ interface Chapter {
   is_favorite?: boolean;
   is_viewable?: boolean;
   coming_soon_date?: string;
+  show_in_dashboard?: boolean;
   greek_organizations?: { name: string; organization_type: 'fraternity' | 'sorority' };
   universities?: { name: string; state: string };
 }

@@ -481,7 +481,6 @@ const MapPage = () => {
 
           const collegeData = getCollegeData();
           const collegesInState = Object.values(collegeData).filter(
-            // @ts-expect-error - TypeScript cannot infer college type from Object.values
             college => college.state === stateAbbr
           );
 
@@ -539,9 +538,7 @@ const MapPage = () => {
 
     const collegeData = getCollegeData();
     const collegesInState = Object.entries(collegeData)
-      // @ts-expect-error - TypeScript cannot infer college type from Object.entries
       .filter(([_, college]) => college.state === stateAbbr)
-      // @ts-expect-error - TypeScript cannot infer data spread type
       .map(([name, data]) => ({ name, ...data }));
 
     if (collegesInState.length > 0) {
@@ -656,9 +653,7 @@ const MapPage = () => {
 
     if (collegeMatch) {
       const [name, data] = collegeMatch;
-      // @ts-expect-error - TypeScript cannot infer data properties from Object.entries result
       mapRef.current?.setView([data.lat, data.lng], 13);
-      // @ts-expect-error - TypeScript cannot infer data spread type
       setSelectedCollege({ name, ...data });
     }
   };
@@ -667,11 +662,8 @@ const MapPage = () => {
   const getStatistics = () => {
     const collegeData = getCollegeData();
     const allColleges = Object.values(collegeData);
-    // @ts-expect-error - TypeScript cannot infer college properties from Object.values
     const statesWithColleges = new Set(allColleges.map(c => c.state)).size;
-    // @ts-expect-error - TypeScript cannot infer college properties from Object.values
     const totalChapters = allColleges.reduce((sum, c) => sum + c.fraternities + c.sororities, 0);
-    // @ts-expect-error - TypeScript cannot infer college properties from Object.values
     const totalMembers = allColleges.reduce((sum, c) => sum + c.totalMembers, 0);
 
     return {
@@ -1376,7 +1368,6 @@ const MapPage = () => {
             {(() => {
               const collegeData = getCollegeData();
               const counts = Object.entries(collegeData).reduce((acc: { [key: string]: number }, [_, college]) => {
-                // @ts-expect-error - TypeScript cannot infer college properties from Object.entries
                 acc[college.state] = (acc[college.state] || 0) + 1;
                 return acc;
               }, {});

@@ -192,8 +192,6 @@ export const useMapTransition = (mapRef: React.RefObject<any>) => {
       animate: true,
       duration: duration / 1000,
       easeLinearity: 0.2,
-      // Use custom easing function
-      animate: true,
     });
   };
 
