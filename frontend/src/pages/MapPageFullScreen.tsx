@@ -144,6 +144,7 @@ const MapPageFullScreen = () => {
   const [unlockedCollegeIds, setUnlockedCollegeIds] = useState<Set<string>>(new Set());
   const [hasEnterpriseAccess, setHasEnterpriseAccess] = useState(false); // Enterprise = unlimited chapter unlocks
   const [collegeClickCount, setCollegeClickCount] = useState(0); // Track clicks for non-authenticated users
+  const [navbarMinimized, setNavbarMinimized] = useState(false); // Track if navbar is minimized
   const mapRef = useRef<any>(null);
 
   const handleLogout = () => {
@@ -1040,129 +1041,192 @@ const MapPageFullScreen = () => {
         <MenuIcon className="w-6 h-6" />
       </button>
 
-      {/* Light/Dark Mode Toggle Switch & Reset Button */}
-      <div className="absolute bottom-32 right-4 z-[1001] flex items-center gap-3 bg-white rounded-lg shadow-lg p-2">
-        <span className={`text-xl transition-colors ${!isDarkMode ? 'text-yellow-500' : 'text-gray-400'}`}>
-          ☀️
-        </span>
-        <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-            isDarkMode ? 'bg-gray-700' : 'bg-blue-500'
-          }`}
-          title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        >
-          <span
-            className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-              isDarkMode ? 'translate-x-7' : 'translate-x-1'
-            }`}
-          />
-        </button>
-        <span className={`text-xl transition-colors ${isDarkMode ? 'text-blue-400' : 'text-gray-400'}`}>
-          🌙
-        </span>
-
-        {/* Divider */}
-        <div className="h-8 w-px bg-gray-300" />
-
-        {/* Reset Button */}
-        <button
-          onClick={() => {
-            setViewMode('usa');
-            setSelectedState(null);
-            setSelectedCollege(null);
-            setDivisionFilter('all');
-            if (mapRef.current) {
-              mapRef.current.setView([39.8283, -98.5795], 5);
-            }
-          }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors"
-          title="Reset to default view"
-        >
-          <RotateCcw className="w-4 h-4 text-gray-600" />
-          <span className="text-sm font-medium text-gray-700">Reset</span>
-        </button>
-      </div>
-
-      {/* Division Filter Buttons */}
-      <div className="absolute top-4 right-4 z-[1001] flex flex-wrap items-center justify-end gap-2 bg-white rounded-lg shadow-lg p-2 max-w-md">
-        <button
-          onClick={() => setDivisionFilter('big10')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
-            divisionFilter === 'big10'
-              ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          Big 10
-        </button>
-        <button
-          onClick={() => setDivisionFilter('mychapters')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap flex items-center gap-1.5 ${
-            divisionFilter === 'mychapters'
-              ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          My Chapters
-          {unlockedChapters.length > 0 && (
-            <span className="inline-flex items-center justify-center px-1.5 py-0.5 ml-1 text-[10px] font-bold bg-yellow-400 text-yellow-900 rounded-full min-w-[18px]">
-              {unlockedChapters.length}
+      {/* Filter Navbar - Redesigned at Top */}
+      {!navbarMinimized ? (
+        <div className={`absolute top-20 left-1/2 transform -translate-x-1/2 z-[1001] transition-all duration-300 ${
+          isDarkMode ? 'bg-gray-900/95 border-gray-700' : 'bg-white/95'
+        } backdrop-blur-md rounded-2xl shadow-2xl border-2 ${
+          isDarkMode ? 'border-cyan-500/50 shadow-cyan-500/20' : 'border-gray-200 shadow-gray-500/20'
+        }`}>
+          <div className="flex items-center gap-3 px-6 py-3">
+          {/* Light/Dark Mode Toggle */}
+          <div className={`flex items-center gap-2 pr-3 border-r-2 ${
+            isDarkMode ? 'border-gray-700' : 'border-gray-200'
+          }`}>
+            <span className={`text-sm transition-colors ${!isDarkMode ? 'text-yellow-500' : 'text-gray-500'}`}>
+              ☀️
             </span>
-          )}
-        </button>
-        <button
-          onClick={() => setDivisionFilter('power4')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
-            divisionFilter === 'power4'
-              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          <Lock className="w-3 h-3 inline mr-1" />
-          Power 5
-        </button>
-        <button
-          onClick={() => setDivisionFilter('d1')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
-            divisionFilter === 'd1'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          All D1
-        </button>
-        <button
-          onClick={() => setDivisionFilter('d2')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
-            divisionFilter === 'd2'
-              ? 'bg-green-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          All D2
-        </button>
-        <button
-          onClick={() => setDivisionFilter('d3')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
-            divisionFilter === 'd3'
-              ? 'bg-orange-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          All D3
-        </button>
-        <button
-          onClick={() => setDivisionFilter('all')}
-          className={`px-3 py-1.5 rounded-md font-semibold text-xs transition-all whitespace-nowrap ${
-            divisionFilter === 'all'
-              ? 'bg-gray-800 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          All
-        </button>
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+                isDarkMode ? 'bg-cyan-600' : 'bg-blue-500'
+              }`}
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              <span
+                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                  isDarkMode ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+            <span className={`text-sm transition-colors ${isDarkMode ? 'text-cyan-400' : 'text-gray-500'}`}>
+              🌙
+            </span>
+          </div>
+
+          {/* Filter Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setDivisionFilter('big10')}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all whitespace-nowrap ${
+                divisionFilter === 'big10'
+                  ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg transform scale-105'
+                  : isDarkMode
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Big 10
+            </button>
+            <button
+              onClick={() => setDivisionFilter('mychapters')}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all whitespace-nowrap flex items-center gap-2 ${
+                divisionFilter === 'mychapters'
+                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg transform scale-105'
+                  : isDarkMode
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              My Chapters
+              {unlockedChapters.length > 0 && (
+                <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold bg-yellow-400 text-yellow-900 rounded-full min-w-[20px]">
+                  {unlockedChapters.length}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setDivisionFilter('power4')}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all whitespace-nowrap ${
+                divisionFilter === 'power4'
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg transform scale-105'
+                  : isDarkMode
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              <Lock className="w-3.5 h-3.5 inline mr-1.5" />
+              Power 5
+            </button>
+            <button
+              onClick={() => setDivisionFilter('d1')}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all whitespace-nowrap ${
+                divisionFilter === 'd1'
+                  ? 'bg-blue-600 text-white shadow-lg transform scale-105'
+                  : isDarkMode
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              All D1
+            </button>
+            <button
+              onClick={() => setDivisionFilter('d2')}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all whitespace-nowrap ${
+                divisionFilter === 'd2'
+                  ? 'bg-green-600 text-white shadow-lg transform scale-105'
+                  : isDarkMode
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              All D2
+            </button>
+            <button
+              onClick={() => setDivisionFilter('d3')}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all whitespace-nowrap ${
+                divisionFilter === 'd3'
+                  ? 'bg-orange-600 text-white shadow-lg transform scale-105'
+                  : isDarkMode
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              All D3
+            </button>
+            <button
+              onClick={() => setDivisionFilter('all')}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all whitespace-nowrap ${
+                divisionFilter === 'all'
+                  ? 'bg-gray-800 text-white shadow-lg transform scale-105'
+                  : isDarkMode
+                    ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              All
+            </button>
+          </div>
+
+          {/* Reset Button */}
+          <div className={`pl-3 border-l-2 ${
+            isDarkMode ? 'border-gray-700' : 'border-gray-200'
+          }`}>
+            <button
+              onClick={() => {
+                setViewMode('usa');
+                setSelectedState(null);
+                setSelectedCollege(null);
+                setDivisionFilter('big10');
+                if (mapRef.current) {
+                  mapRef.current.setView([39.8283, -98.5795], 5);
+                }
+              }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                isDarkMode
+                  ? 'bg-gray-800 text-cyan-400 hover:bg-gray-700'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title="Reset to default view"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Reset</span>
+            </button>
+          </div>
+
+          {/* Minimize Button */}
+          <div className={`pl-3 border-l-2 ${
+            isDarkMode ? 'border-gray-700' : 'border-gray-200'
+          }`}>
+            <button
+              onClick={() => setNavbarMinimized(true)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                isDarkMode
+                  ? 'bg-gray-800 text-cyan-400 hover:bg-gray-700'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title="Hide navbar"
+            >
+              <Minus className="w-4 h-4" />
+              <span>Hide</span>
+            </button>
+          </div>
+        </div>
       </div>
+      ) : (
+        <button
+          onClick={() => setNavbarMinimized(false)}
+          className={`absolute top-20 left-1/2 transform -translate-x-1/2 z-[1001] flex items-center gap-2 px-4 py-2 rounded-lg transition-all shadow-lg font-medium text-sm ${
+            isDarkMode
+              ? 'bg-gray-900/95 border-2 border-cyan-500/50 text-cyan-400 hover:bg-gray-800'
+              : 'bg-white/95 border-2 border-gray-200 text-gray-700 hover:bg-gray-50'
+          } backdrop-blur-md`}
+          title="Show filters"
+        >
+          <MenuIcon className="w-5 h-5" />
+          <span>Filter</span>
+        </button>
+      )}
 
       {/* Lock Overlay */}
       {showLockOverlay && divisionFilter !== 'big10' && (
@@ -1699,15 +1763,16 @@ const MapPageFullScreen = () => {
 
       {/* Hovered College Info (Bottom Center) */}
       {hoveredCollege && (
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[1000] bg-black/95 backdrop-blur-md border-2 border-cyan-500 rounded-lg shadow-2xl shadow-cyan-500/50 p-4 min-w-[350px]">
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[1000] bg-black/95 backdrop-blur-md border-2 border-cyan-500 rounded-lg shadow-2xl shadow-cyan-500/50 p-4 min-w-[350px] max-w-[500px]">
           <div className="flex items-start gap-3">
             <img
               src={getCollegeLogo(hoveredCollege.name)}
               alt={hoveredCollege.name}
               className="w-16 h-16 object-contain flex-shrink-0"
+              title=""
             />
-            <div>
-              <div className="font-bold text-lg text-cyan-400 mb-2">
+            <div className="flex-1">
+              <div className="font-bold text-lg text-cyan-400 mb-2 whitespace-normal break-words" title="">
                 {hoveredCollege.name}
               </div>
               <div className="text-sm text-cyan-300/90">

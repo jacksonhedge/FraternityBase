@@ -10,6 +10,14 @@ import {
 import { STATE_COORDINATES, STATE_BOUNDS, COLLEGE_LOCATIONS } from '../data/statesGeoData';
 import { getCollegeLogo, getCollegeInitials } from '../utils/collegeLogos';
 import { useAuth } from '../contexts/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  SPRING_CONFIGS,
+  slideUpVariants,
+  scaleVariants,
+  staggerVariants,
+  fadeVariants
+} from '../config/animations';
 
 // Fix for default markers in React-Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -91,30 +99,44 @@ const MapControls = ({ map, onResetView, showResetButton }: {
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      {showResetButton && (
-        <button
-          onClick={onResetView}
-          className="bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-primary-700 transition-colors font-semibold flex items-center gap-2"
-          title="Zoom out to USA"
-        >
-          <Maximize2 className="w-4 h-4" />
-          Zoom to USA
-        </button>
-      )}
-      <button
+      <AnimatePresence>
+        {showResetButton && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={SPRING_CONFIGS.snappy}
+            onClick={onResetView}
+            className="bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-primary-700 transition-colors font-semibold flex items-center gap-2"
+            title="Zoom out to USA"
+          >
+            <Maximize2 className="w-4 h-4" />
+            Zoom to USA
+          </motion.button>
+        )}
+      </AnimatePresence>
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        transition={SPRING_CONFIGS.snappy}
         onClick={handleZoomIn}
         className="bg-white p-2 rounded-lg shadow-lg hover:bg-gray-50 transition-colors"
         title="Zoom In"
       >
         <ZoomIn className="w-5 h-5" />
-      </button>
-      <button
+      </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        transition={SPRING_CONFIGS.snappy}
         onClick={handleZoomOut}
         className="bg-white p-2 rounded-lg shadow-lg hover:bg-gray-50 transition-colors"
         title="Zoom Out"
       >
         <ZoomOut className="w-5 h-5" />
-      </button>
+      </motion.button>
     </div>
   );
 };
@@ -172,7 +194,7 @@ const CoordinateDisplay = () => {
   );
 };
 
-const MapPage = () => {
+const SuperMapPage = () => {
   const { session } = useAuth();
   const [statesData, setStatesData] = useState<any>(null);
   const [selectedState, setSelectedState] = useState<SelectedState | null>(null);
@@ -193,7 +215,7 @@ const MapPage = () => {
   const [dataLoading, setDataLoading] = useState(true);
   const [filterTransitioning, setFilterTransitioning] = useState(false);
   const [organizationType, setOrganizationType] = useState<'fraternity' | 'sorority'>('fraternity');
-  // Force rebuild - timestamp: 2025-10-10
+  // SUPERMAP - Enhanced version - Force rebuild - timestamp: 2025-10-10
 
   // Check subscription status for Enterprise access
   useEffect(() => {
@@ -809,10 +831,10 @@ const MapPage = () => {
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
             <MapPin className="w-8 h-8 text-primary-600" />
-            Interactive US Fraternity & Sorority Map
+            🚀 SUPERMAP - Interactive US Fraternity & Sorority Map
           </h1>
           <p className="text-gray-600 mt-2">
-            Explore Greek life across America with precise locations and real-time coordinates
+            <span className="bg-yellow-200 px-2 py-1 rounded font-semibold">BETA VERSION</span> Explore Greek life across America with precise locations and real-time coordinates
           </p>
         </div>
 
@@ -873,7 +895,10 @@ const MapPage = () => {
 
           {/* Fraternity/Sorority Toggle */}
           <div className="flex gap-1 bg-white rounded-lg shadow-lg p-1">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={SPRING_CONFIGS.snappy}
               onClick={() => setOrganizationType('fraternity')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 organizationType === 'fraternity'
@@ -882,8 +907,11 @@ const MapPage = () => {
               }`}
             >
               Fraternities
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={SPRING_CONFIGS.snappy}
               onClick={() => setOrganizationType('sorority')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 organizationType === 'sorority'
@@ -892,10 +920,13 @@ const MapPage = () => {
               }`}
             >
               Sororities
-            </button>
+            </motion.button>
           </div>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={SPRING_CONFIGS.snappy}
             onClick={() => {
               console.log('🔘 [MapPage] "Big 10" filter clicked');
               setActiveFilter('big10');
@@ -907,8 +938,11 @@ const MapPage = () => {
             }`}
           >
             Big 10
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={SPRING_CONFIGS.snappy}
             onClick={() => {
               console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
               console.log('🔘 [MapPage] "My Chapters" filter clicked');
@@ -928,8 +962,11 @@ const MapPage = () => {
           >
             {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             My Chapters
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={SPRING_CONFIGS.snappy}
             onClick={() => {
               console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
               console.log('🔘 [MapPage] "All D1" filter clicked');
@@ -949,8 +986,11 @@ const MapPage = () => {
           >
             {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             All D1
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={SPRING_CONFIGS.snappy}
             onClick={() => {
               setActiveFilter('d2');
               if (!hasEnterpriseAccess) {
@@ -965,8 +1005,11 @@ const MapPage = () => {
           >
             {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             All D2
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={SPRING_CONFIGS.snappy}
             onClick={() => {
               setActiveFilter('d3');
               if (!hasEnterpriseAccess) {
@@ -981,8 +1024,11 @@ const MapPage = () => {
           >
             {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             All D3
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={SPRING_CONFIGS.snappy}
             onClick={() => {
               setActiveFilter('power5');
               if (!hasEnterpriseAccess) {
@@ -997,44 +1043,69 @@ const MapPage = () => {
           >
             {!hasEnterpriseAccess && <Lock className="w-4 h-4 inline mr-1" />}
             Power 5
-          </button>
+          </motion.button>
         </div>
 
         {/* Lock Overlay */}
-        {showLockOverlay && activeFilter !== 'big10' && (
-          <div className="absolute inset-0 z-[999] bg-black bg-opacity-60 flex items-center justify-center">
-            <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 text-center">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-8 h-8 text-primary-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Unlock {activeFilter === 'power5' ? 'Power 5' : activeFilter === 'mychapters' ? 'My Chapters' : `All ${activeFilter.toUpperCase()}`}</h3>
-              <p className="text-gray-600 mb-6">
-                This filter requires an unlock. Add credits to your account to access this view.
-              </p>
-              <div className="flex gap-3 justify-center">
-                <button
-                  onClick={() => {
-                    setShowLockOverlay(false);
-                    setActiveFilter('big10');
-                  }}
-                  className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+        <AnimatePresence>
+          {showLockOverlay && activeFilter !== 'big10' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-0 z-[999] bg-black bg-opacity-60 flex items-center justify-center"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={SPRING_CONFIGS.gentle}
+                className="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 text-center"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ ...SPRING_CONFIGS.elastic, delay: 0.1 }}
+                  className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4"
                 >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    // Navigate to billing/credits page
-                    window.location.href = '/app/credits';
-                  }}
-                  className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
-                >
-                  <Coins className="w-4 h-4" />
-                  Add Credits
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+                  <Lock className="w-8 h-8 text-primary-600" />
+                </motion.div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Unlock {activeFilter === 'power5' ? 'Power 5' : activeFilter === 'mychapters' ? 'My Chapters' : `All ${activeFilter.toUpperCase()}`}</h3>
+                <p className="text-gray-600 mb-6">
+                  This filter requires an unlock. Add credits to your account to access this view.
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={SPRING_CONFIGS.snappy}
+                    onClick={() => {
+                      setShowLockOverlay(false);
+                      setActiveFilter('big10');
+                    }}
+                    className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={SPRING_CONFIGS.snappy}
+                    onClick={() => {
+                      // Navigate to billing/credits page
+                      window.location.href = '/app/credits';
+                    }}
+                    className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
+                  >
+                    <Coins className="w-4 h-4" />
+                    Add Credits
+                  </motion.button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <MapContainer
           center={[37.5, -98.5795]}
@@ -1194,36 +1265,65 @@ const MapPage = () => {
         </MapContainer>
 
         {/* Selected State Panel */}
-        {selectedState && (
-          <div className="absolute top-0 right-0 h-full w-96 bg-white shadow-2xl overflow-y-auto z-[1001]">
-            <div className="sticky top-0 bg-white border-b p-4">
-              <button
-                onClick={() => {
-                  setSelectedState(null);
-                  mapRef.current?.setView([37.5, -98.5795], 4);
-                }}
-                className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full"
-              >
-                <X className="w-5 h-5" />
-              </button>
+        <AnimatePresence>
+          {selectedState && (
+            <motion.div
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={SPRING_CONFIGS.default}
+              className="absolute top-0 right-0 h-full w-96 bg-white shadow-2xl overflow-y-auto z-[1001]"
+            >
+              <div className="sticky top-0 bg-white border-b p-4">
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={SPRING_CONFIGS.snappy}
+                  onClick={() => {
+                    setSelectedState(null);
+                    mapRef.current?.setView([37.5, -98.5795], 4);
+                  }}
+                  className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full"
+                >
+                  <X className="w-5 h-5" />
+                </motion.button>
 
-              <h2 className="text-2xl font-bold text-gray-900">{selectedState.name}</h2>
-              <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-                <span>{selectedState.colleges.length} Colleges</span>
-                <span>•</span>
-                <span>{selectedState.totalChapters} Chapters</span>
-                <span>•</span>
-                <span>{selectedState.totalMembers.toLocaleString()} Members</span>
+                <motion.h2
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...SPRING_CONFIGS.gentle, delay: 0.1 }}
+                  className="text-2xl font-bold text-gray-900"
+                >
+                  {selectedState.name}
+                </motion.h2>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex items-center gap-4 mt-2 text-sm text-gray-600"
+                >
+                  <span>{selectedState.colleges.length} Colleges</span>
+                  <span>•</span>
+                  <span>{selectedState.totalChapters} Chapters</span>
+                  <span>•</span>
+                  <span>{selectedState.totalMembers.toLocaleString()} Members</span>
+                </motion.div>
               </div>
-            </div>
 
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-900 mb-3">Colleges & Universities</h3>
-              <div className="space-y-3">
-                {selectedState.colleges.map((college) => (
-                  <div
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-3">Colleges & Universities</h3>
+                <div className="space-y-3">
+                  {selectedState.colleges.map((college, index) => (
+                  <motion.div
                     key={college.name}
-                    className="group border rounded-lg p-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:border-blue-300 cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md"
+                    custom={index}
+                    initial="hidden"
+                    animate="visible"
+                    variants={staggerVariants}
+                    whileHover={{ scale: 1.02, x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={SPRING_CONFIGS.snappy}
+                    className="group border rounded-lg p-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:border-blue-300 cursor-pointer transition-all hover:shadow-md"
                     onClick={() => {
                       mapRef.current?.setView([college.lat, college.lng], 13);
                       setSelectedCollege(college);
@@ -1253,22 +1353,33 @@ const MapPage = () => {
                         <p className="text-xs text-gray-600">Members</p>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Selected College Popup */}
-        {selectedCollege && (
-          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[1002] bg-white rounded-lg shadow-2xl p-4 max-w-sm">
-            <button
-              onClick={() => setSelectedCollege(null)}
-              className="absolute top-2 right-2 p-1 hover:bg-gray-100 rounded-full"
+        <AnimatePresence>
+          {selectedCollege && (
+            <motion.div
+              initial={{ y: 50, opacity: 0, scale: 0.9 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 50, opacity: 0, scale: 0.9 }}
+              transition={SPRING_CONFIGS.gentle}
+              className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[1002] bg-white rounded-lg shadow-2xl p-4 max-w-sm"
             >
-              <X className="w-4 h-4" />
-            </button>
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                transition={SPRING_CONFIGS.snappy}
+                onClick={() => setSelectedCollege(null)}
+                className="absolute top-2 right-2 p-1 hover:bg-gray-100 rounded-full"
+              >
+                <X className="w-4 h-4" />
+              </motion.button>
 
             <div className="flex items-start gap-3 mb-3">
               <CollegeLogo collegeName={selectedCollege.name} />
@@ -1293,8 +1404,9 @@ const MapPage = () => {
                 <p className="text-xs text-gray-600">Members</p>
               </div>
             </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Legend and Info */}
@@ -1558,7 +1670,7 @@ const MapPage = () => {
   );
 };
 
-export default MapPage;
+export default SuperMapPage;
 
 // Add custom styles for cleaner tooltips and college markers
 const style = document.createElement('style');

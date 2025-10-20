@@ -52,12 +52,12 @@ async function grantSubscription(userEmail, tier = 'monthly') {
       monthly: {
         subscription_tier: 'monthly',
         subscription_status: 'active',
-        monthly_unlocks_5_star: 5,
-        monthly_unlocks_4_star: 5,
+        monthly_unlocks_5_star: 2,
+        monthly_unlocks_4_star: 8,
         monthly_unlocks_3_star: 10,
         monthly_warm_intros: 1,
-        unlocks_5_star_remaining: 5,
-        unlocks_4_star_remaining: 5,
+        unlocks_5_star_remaining: 2,
+        unlocks_4_star_remaining: 8,
         unlocks_3_star_remaining: 10,
         warm_intros_remaining: 1,
         max_team_seats: 3,
@@ -68,11 +68,11 @@ async function grantSubscription(userEmail, tier = 'monthly') {
       enterprise: {
         subscription_tier: 'enterprise',
         subscription_status: 'active',
-        monthly_unlocks_5_star: -1, // unlimited
-        monthly_unlocks_4_star: -1,
-        monthly_unlocks_3_star: -1,
+        monthly_unlocks_5_star: 12, // 12 premium unlocks per month
+        monthly_unlocks_4_star: -1, // unlimited quality unlocks
+        monthly_unlocks_3_star: -1, // unlimited standard unlocks
         monthly_warm_intros: 3,
-        unlocks_5_star_remaining: -1,
+        unlocks_5_star_remaining: 12,
         unlocks_4_star_remaining: -1,
         unlocks_3_star_remaining: -1,
         warm_intros_remaining: 3,

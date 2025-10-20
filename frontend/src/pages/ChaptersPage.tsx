@@ -21,7 +21,9 @@ import {
   Mail,
   Phone,
   Download,
-  UserPlus
+  UserPlus,
+  Star,
+  Building2
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 import UnlockConfirmationModal from '../components/UnlockConfirmationModal';
@@ -41,6 +43,7 @@ interface Chapter {
   phone?: string;
   header_image_url?: string;
   grade?: number;
+  coming_soon_date?: string;
   greek_organizations?: {
     id: string;
     name: string;
@@ -54,18 +57,42 @@ interface Chapter {
     state: string;
     student_count?: number;
     logo_url?: string;
+    conference?: string;
+    division?: string;
   };
 }
+
+// Power 5 Conferences (matches database format - uppercase)
+const POWER_5_CONFERENCES = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+
+// All major conferences
+const CONFERENCES = [
+  'Big Ten',
+  'SEC',
+  'ACC',
+  'Big 12',
+  'Pac-12',
+  'American',
+  'Mountain West',
+  'Conference USA',
+  'MAC',
+  'Sun Belt',
+  'Independent',
+  'Ivy League'
+];
 
 const ChaptersPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'grade' | 'name' | 'university'>('grade');
+  const [sortBy, setSortBy] = useState<'grade' | 'name' | 'university' | 'conference'>('grade');
   const [filterState, setFilterState] = useState('all');
+  const [filterConference, setFilterConference] = useState('Power 5'); // Default to Power 5
+  const [filterDivision, setFilterDivision] = useState('all');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(true);
   const [requestedIntros, setRequestedIntros] = useState<Set<string>>(new Set());
+  const [interestedChapterIds, setInterestedChapterIds] = useState<Set<string>>(new Set());
   const [unlockedChapterIds, setUnlockedChapterIds] = useState<Set<string>>(new Set());
   const [balance, setBalance] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,6 +103,7 @@ const ChaptersPage = () => {
     fourStar: { remaining: number; monthly: number; isUnlimited: boolean };
     threeStar: { remaining: number; monthly: number; isUnlimited: boolean };
   } | null>(null);
+  const [hideUnlocked, setHideUnlocked] = useState(false);
 
   // Fetch chapters from database
   useEffect(() => {
@@ -191,6 +219,20 @@ const ChaptersPage = () => {
     }
   };
 
+  const handleToggleInterested = (e: React.MouseEvent, chapterId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setInterestedChapterIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(chapterId)) {
+        newSet.delete(chapterId);
+      } else {
+        newSet.add(chapterId);
+      }
+      return newSet;
+    });
+  };
+
   // Calculate unlock pricing based on chapter grade
   const calculateUnlockPricing = (grade?: number) => {
     const rank = grade || 4.0;
@@ -303,6 +345,8 @@ const ChaptersPage = () => {
       const universityName = chapter.universities?.name || '';
       const chapterName = chapter.chapter_name || '';
       const state = chapter.universities?.state || '';
+      const conference = chapter.universities?.conference || '';
+      const division = chapter.universities?.division || '';
       const orgType = chapter.greek_organizations?.organization_type;
 
       // Only show fraternities on this page
@@ -315,7 +359,24 @@ const ChaptersPage = () => {
 
       const matchesState = filterState === 'all' || state === filterState;
 
-      return isFraternity && matchesSearch && matchesState;
+      // Conference filter - matches CollegesPage.tsx logic exactly
+      let matchesConference = true;
+      if (filterConference === 'all') {
+        matchesConference = true;
+      } else if (filterConference === 'Power 5') {
+        // Filter by Power 4 conferences (SEC, Big 10, Big 12, ACC) - same as CollegesPage
+        const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+        matchesConference = power4Conferences.includes(conference);
+      } else {
+        matchesConference = conference === filterConference;
+      }
+
+      const matchesDivision = filterDivision === 'all' || division === filterDivision;
+
+      // Hide unlocked chapters filter
+      const matchesUnlockedFilter = !hideUnlocked || !unlockedChapterIds.has(chapter.id);
+
+      return isFraternity && matchesSearch && matchesState && matchesConference && matchesDivision && matchesUnlockedFilter;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -325,6 +386,8 @@ const ChaptersPage = () => {
           return (a.greek_organizations?.name || '').localeCompare(b.greek_organizations?.name || '');
         case 'university':
           return (a.universities?.name || '').localeCompare(b.universities?.name || '');
+        case 'conference':
+          return (a.universities?.conference || '').localeCompare(b.universities?.conference || '');
         default:
           return 0;
       }
@@ -335,6 +398,12 @@ const ChaptersPage = () => {
 
   // Get unique states for filter
   const states = [...new Set(fraternityChapters.map(c => c.universities?.state).filter(Boolean))].sort();
+
+  // Get unique conferences for filter
+  const activeConferences = [...new Set(fraternityChapters.map(c => c.universities?.conference).filter(Boolean))].sort();
+
+  // Get unique divisions for filter
+  const activeDivisions = [...new Set(fraternityChapters.map(c => c.universities?.division).filter(Boolean))].sort();
 
   return (
     <div className="space-y-6">
@@ -436,6 +505,7 @@ const ChaptersPage = () => {
             <option value="grade">Sort by Grade</option>
             <option value="name">Sort by Name</option>
             <option value="university">Sort by College</option>
+            <option value="conference">Sort by Conference</option>
           </select>
           <select
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -447,7 +517,52 @@ const ChaptersPage = () => {
               <option key={state} value={state}>{state}</option>
             ))}
           </select>
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            value={filterConference}
+            onChange={(e) => setFilterConference(e.target.value)}
+          >
+            <option value="all">All Conferences</option>
+            <option value="Power 5">⭐ Power 5</option>
+            {activeConferences.map(conference => (
+              <option key={conference} value={conference}>{conference}</option>
+            ))}
+          </select>
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            value={filterDivision}
+            onChange={(e) => setFilterDivision(e.target.value)}
+          >
+            <option value="all">All Divisions</option>
+            {activeDivisions.map(division => (
+              <option key={division} value={division}>{division}</option>
+            ))}
+          </select>
         </div>
+      </div>
+
+      {/* Hide Unlocked Button */}
+      <div className="flex justify-end">
+        <button
+          onClick={() => setHideUnlocked(!hideUnlocked)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            hideUnlocked
+              ? 'bg-green-600 text-white hover:bg-green-700 shadow-md'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+          }`}
+        >
+          {hideUnlocked ? (
+            <>
+              <CheckCircle className="w-4 h-4" />
+              <span>Show Unlocked</span>
+            </>
+          ) : (
+            <>
+              <Unlock className="w-4 h-4" />
+              <span>Hide Unlocked</span>
+            </>
+          )}
+        </button>
       </div>
 
       {/* Chapters List or Grid */}
@@ -501,10 +616,28 @@ const ChaptersPage = () => {
                     <tr key={chapter.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          <Lock className="w-4 h-4 text-gray-400" />
-                          <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                            Locked
-                          </span>
+                          {unlockedChapterIds.has(chapter.id) ? (
+                            <>
+                              <Unlock className="w-4 h-4 text-green-500" />
+                              <span className="text-xs font-medium text-green-700 bg-green-50 px-2 py-1 rounded">
+                                Unlocked
+                              </span>
+                            </>
+                          ) : chapter.coming_soon_date ? (
+                            <>
+                              <Clock className="w-4 h-4 text-blue-500" />
+                              <span className="text-xs font-medium text-blue-700 bg-blue-50 px-2 py-1 rounded">
+                                Coming {new Date(chapter.coming_soon_date).toLocaleDateString()}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <Lock className="w-4 h-4 text-gray-400" />
+                              <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                                Locked
+                              </span>
+                            </>
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -608,6 +741,11 @@ const ChaptersPage = () => {
                       <Unlock className="w-3.5 h-3.5 text-white" />
                       <span className="text-xs font-semibold text-white">Unlocked</span>
                     </div>
+                  ) : chapter.coming_soon_date ? (
+                    <div className="bg-blue-500/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-blue-600">
+                      <Clock className="w-3.5 h-3.5 text-white" />
+                      <span className="text-xs font-semibold text-white">Coming {new Date(chapter.coming_soon_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
                   ) : (
                     <button
                       onClick={(e) => {
@@ -649,94 +787,104 @@ const ChaptersPage = () => {
                   <MapPin className="w-4 h-4 mr-2 text-gray-400" />
                   {chapter.universities?.name || '-'}
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Users className="w-4 h-4 mr-2 text-gray-400" />
-                  50+ members
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                  Founded {chapter.founded_date ? new Date(chapter.founded_date).getFullYear() : '-'}
-                </div>
-              </div>
-
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm">
-                      {unlockedChapterIds.has(chapter.id) ? (
-                        <>
-                          <p className="font-medium text-green-700">Contact Unlocked</p>
-                          <p className="text-gray-500">View chapter details</p>
-                        </>
-                      ) : (
-                        <>
-                          <p className="font-medium text-gray-900">Contact Locked</p>
-                          <p className="text-gray-500">Unlock to view</p>
-                        </>
-                      )}
-                    </div>
-                    <div className="flex items-center">
-                      <Award className="w-4 h-4 text-yellow-500 mr-1" />
-                      {chapter.grade ? (
-                        <span className={`text-sm font-bold px-2 py-1 rounded ${
-                          chapter.grade >= 5.0 ? 'bg-green-100 text-green-800' :
-                          chapter.grade >= 4.0 ? 'bg-yellow-100 text-yellow-800' :
-                          chapter.grade >= 3.0 ? 'bg-orange-100 text-orange-800' :
-                          'bg-gray-100 text-gray-600'
-                        }`}>
-                          {chapter.grade.toFixed(1)}
-                        </span>
-                      ) : (
-                        <span className="text-sm font-semibold text-gray-400">-</span>
-                      )}
-                    </div>
+                {/* Member Icons with Fan Effect */}
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span className="flex items-center">
+                    <Users className="w-4 h-4 mr-2 text-gray-400" />
+                    Members
+                  </span>
+                  <div className="relative h-6 w-16 group">
+                    {[...Array(5)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-5 h-5 bg-blue-100 border border-blue-300 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-blue-200"
+                        style={{
+                          left: `${i * 8}px`,
+                          transform: `translateY(0px) rotate(0deg)`,
+                          zIndex: 5 - i,
+                        }}
+                        onMouseEnter={(e) => {
+                          const angle = (i - 2) * 15;
+                          const yOffset = Math.abs(i - 2) * 6;
+                          e.currentTarget.style.transform = `translateY(-${yOffset}px) rotate(${angle}deg)`;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = `translateY(0px) rotate(0deg)`;
+                        }}
+                      >
+                        <Users className="w-2.5 h-2.5 text-blue-600" />
+                      </div>
+                    ))}
                   </div>
                 </div>
-
-                {(chapter.instagram_handle || (chapter.grade && chapter.grade >= 4.0)) && (
-                  <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between gap-4">
-                    {chapter.instagram_handle && (
-                      <div
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          window.open(`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`, '_blank', 'noopener,noreferrer');
-                        }}
-                        className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline cursor-pointer"
-                      >
-                        <Instagram className="w-4 h-4 mr-2" />
-                        {chapter.instagram_handle.startsWith('@') ? chapter.instagram_handle : `@${chapter.instagram_handle}`}
-                        <ExternalLink className="w-3 h-3 ml-1" />
-                      </div>
-                    )}
-                    {chapter.grade && chapter.grade >= 4.0 && (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleRequestIntro(chapter);
-                        }}
-                        disabled={requestedIntros.has(chapter.id)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                          requestedIntros.has(chapter.id)
-                            ? 'bg-green-100 text-green-700 cursor-not-allowed'
-                            : 'bg-primary-600 text-white hover:bg-primary-700'
-                        }`}
-                      >
-                        {requestedIntros.has(chapter.id) ? (
-                          <>
-                            <CheckCircle className="w-4 h-4" />
-                            Requested
-                          </>
-                        ) : (
-                          <>
-                            <UserPlus className="w-4 h-4" />
-                            Request an Intro
-                          </>
-                        )}
-                      </button>
-                    )}
+                {chapter.house_address && (
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Building2 className="w-4 h-4 mr-2 text-gray-400" />
+                    {chapter.house_address}
                   </div>
                 )}
+              </div>
+
+                {/* Grade Badge */}
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  <div className="flex items-center">
+                    <Award className="w-4 h-4 text-yellow-500 mr-1" />
+                    {chapter.grade ? (
+                      <span className={`text-sm font-bold px-2 py-1 rounded ${
+                        chapter.grade >= 5.0 ? 'bg-green-100 text-green-800' :
+                        chapter.grade >= 4.0 ? 'bg-yellow-100 text-yellow-800' :
+                        chapter.grade >= 3.0 ? 'bg-orange-100 text-orange-800' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {chapter.grade.toFixed(1)}
+                      </span>
+                    ) : (
+                      <span className="text-sm font-semibold text-gray-400">-</span>
+                    )}
+                  </div>
+                  {chapter.instagram_handle && (
+                    <div
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.open(`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`, '_blank', 'noopener,noreferrer');
+                      }}
+                      className="flex items-center text-sm text-primary-600 hover:text-primary-700 hover:underline cursor-pointer"
+                    >
+                      <Instagram className="w-4 h-4 mr-1" />
+                      <ExternalLink className="w-3 h-3" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2 pt-4">
+                  {!isUnlocked && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedChapter(chapter);
+                        setIsModalOpen(true);
+                      }}
+                      className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-1.5"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      Click to Unlock
+                    </button>
+                  )}
+                  <button
+                    onClick={(e) => handleToggleInterested(e, chapter.id)}
+                    className={`flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-1.5 ${
+                      interestedChapterIds.has(chapter.id)
+                        ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    <Star className={`w-3.5 h-3.5 ${interestedChapterIds.has(chapter.id) ? 'fill-white' : ''}`} />
+                    {interestedChapterIds.has(chapter.id) ? 'Interested' : 'Mark Interested'}
+                  </button>
+                </div>
               </div>
             </Link>
             );

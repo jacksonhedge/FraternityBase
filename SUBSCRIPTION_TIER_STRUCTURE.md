@@ -2,15 +2,16 @@
 
 ## Final Configuration (Updated: October 2025)
 
-### 💳 Monthly Tier - $29/month
+### 💳 Monthly/Team Tier - $29/month
 **Unlock Allowances (per month):**
-- ⭐⭐⭐⭐⭐ **5× 5.0-star chapters** (Premium chapters)
-- ⭐⭐⭐⭐ **5× 4.0-4.9-star chapters** (High-quality chapters)
-- ⭐⭐⭐ **0× 3.0-3.9-star chapters** (Must use credits)
+- ⭐⭐⭐⭐⭐ **2× 5.0-star chapters** (Premium chapters)
+- ⭐⭐⭐⭐ **8× 4.0-4.9-star chapters** (Quality chapters)
+- ⭐⭐⭐ **10× 3.0-3.9-star chapters** (Standard chapters)
 - 🤝 **1× Warm Introduction** (first 3 months only)
+- 👥 **3 Team seats**
 
 **Target Market:** Individual recruiters, small companies
-**Value Proposition:** Access to top-tier chapters without per-unlock fees
+**Value Proposition:** Balanced access with focus on quality chapters
 
 ---
 
@@ -32,15 +33,17 @@
 
 ---
 
-### 🚀 Enterprise Tier - Custom Pricing
+### 🚀 Enterprise Tier - $299.99/month
 **Unlock Allowances:**
-- ⭐⭐⭐⭐⭐ **Unlimited 5.0-star chapters**
-- ⭐⭐⭐⭐ **Unlimited 4.0-4.9-star chapters**
-- ⭐⭐⭐ **Unlimited 3.0-3.9-star chapters**
-- 🤝 **Unlimited Warm Introductions**
+- ⭐⭐⭐⭐⭐ **12× 5.0-star chapters per month** (Premium chapters)
+- ⭐⭐⭐⭐ **Unlimited 4.0-4.9-star chapters** (Quality chapters)
+- ⭐⭐⭐ **Unlimited 3.0-3.9-star chapters** (Standard chapters)
+- 🤝 **3× Warm Introductions per month**
+- 💰 **1000 monthly credits included**
+- 👥 **10 Team seats**
 
-**Target Market:** Large enterprises, staffing firms
-**Value Proposition:** No limits, full access to entire network
+**Target Market:** Large enterprises, staffing firms, high-volume recruiters
+**Value Proposition:** Unlimited quality and standard unlocks + substantial premium allowance
 
 ---
 
@@ -100,23 +103,19 @@ if (rank >= 5.0) {
 When a company's subscription tier is set or changed, the trigger automatically sets:
 
 ```sql
--- Monthly tier
-unlocks_5_star_remaining = 5
-unlocks_4_star_remaining = 5
-unlocks_3_star_remaining = 0
+-- Monthly/Team tier
+unlocks_5_star_remaining = 2
+unlocks_4_star_remaining = 8
+unlocks_3_star_remaining = 10
 warm_intros_remaining = 1
-
--- Annual tier
-unlocks_5_star_remaining = 12
-unlocks_4_star_remaining = 12
-unlocks_3_star_remaining = 50
-warm_intros_remaining = 3
+max_team_seats = 3
 
 -- Enterprise tier
-unlocks_5_star_remaining = -1  (unlimited)
+unlocks_5_star_remaining = 12
 unlocks_4_star_remaining = -1  (unlimited)
 unlocks_3_star_remaining = -1  (unlimited)
-warm_intros_remaining = -1     (unlimited)
+warm_intros_remaining = 3
+max_team_seats = 10
 ```
 
 ---
@@ -128,24 +127,24 @@ warm_intros_remaining = -1     (unlimited)
 
 ### Manual Reset Query
 ```sql
--- Reset monthly tier unlocks
+-- Reset monthly/team tier unlocks
 UPDATE account_balance
 SET
-  unlocks_5_star_remaining = 5,
-  unlocks_4_star_remaining = 5,
-  unlocks_3_star_remaining = 0,
+  unlocks_5_star_remaining = 2,
+  unlocks_4_star_remaining = 8,
+  unlocks_3_star_remaining = 10,
   warm_intros_remaining = 1
 WHERE subscription_tier = 'monthly'
   AND subscription_period_end < NOW();
 
--- Reset annual tier unlocks
+-- Reset enterprise tier unlocks
 UPDATE account_balance
 SET
   unlocks_5_star_remaining = 12,
-  unlocks_4_star_remaining = 12,
-  unlocks_3_star_remaining = 50,
+  unlocks_4_star_remaining = -1,
+  unlocks_3_star_remaining = -1,
   warm_intros_remaining = 3
-WHERE subscription_tier = 'annual'
+WHERE subscription_tier = 'enterprise'
   AND subscription_period_end < NOW();
 ```
 
@@ -191,36 +190,47 @@ Subscription Unlocks:
 
 ## 📝 Testing Scenarios
 
-### Scenario 1: Monthly User Unlocks 5-star Chapter
+### Scenario 1: Team User Unlocks 5-star Chapter
 1. User clicks unlock on 5.0⭐ chapter
-2. Backend checks: `unlocks_5_star_remaining = 5`
+2. Backend checks: `unlocks_5_star_remaining = 2`
 3. Uses subscription unlock (free)
-4. Decrements: `unlocks_5_star_remaining = 4`
+4. Decrements: `unlocks_5_star_remaining = 1`
 5. Credits unchanged
 6. Database stores: `amount_paid: 0`
 7. Admin sees: Purple "✨ Subscription Unlock" badge
 
-### Scenario 2: Monthly User Exhausts 5-star Unlocks
-1. User unlocks 5 different 5.0⭐ chapters (uses all 5 unlocks)
+### Scenario 2: Team User Exhausts 5-star Unlocks
+1. User unlocks 2 different 5.0⭐ chapters (uses all 2 unlocks)
 2. `unlocks_5_star_remaining = 0`
-3. User tries to unlock 6th 5.0⭐ chapter
+3. User tries to unlock 3rd 5.0⭐ chapter
 4. Backend checks: `unlocks_5_star_remaining = 0` (exhausted)
 5. Falls back to credits: deducts 10 credits
 6. Database stores: `amount_paid: 10`
 7. Admin sees: Gray "💳 Credits" badge with "10 credits ($9.90)"
 
-### Scenario 3: Monthly User Tries 3-star Chapter
+### Scenario 3: Team User Uses 3-star Chapter
 1. User clicks unlock on 3.5⭐ chapter
-2. Backend checks: `unlocks_3_star_remaining = 0` (monthly tier has none)
-3. Immediately falls back to credits: deducts 3 credits
-4. Database stores: `amount_paid: 3`
-5. Admin sees: Gray "💳 Credits" badge
-
-### Scenario 4: Annual User Has Full Access
-1. Annual user unlocks 3.5⭐ chapter
-2. Backend checks: `unlocks_3_star_remaining = 50`
+2. Backend checks: `unlocks_3_star_remaining = 10`
 3. Uses subscription unlock (free)
-4. Decrements: `unlocks_3_star_remaining = 49`
+4. Decrements: `unlocks_3_star_remaining = 9`
+5. Credits unchanged
+6. Database stores: `amount_paid: 0`
+7. Admin sees: Purple "✨ Subscription Unlock" badge
+
+### Scenario 4: Enterprise User Unlocks Premium Chapter
+1. Enterprise user unlocks 5.0⭐ chapter
+2. Backend checks: `unlocks_5_star_remaining = 12`
+3. Uses subscription unlock (free)
+4. Decrements: `unlocks_5_star_remaining = 11`
+5. Credits unchanged
+6. Database stores: `amount_paid: 0`
+7. Admin sees: Purple "✨ Subscription Unlock" badge
+
+### Scenario 5: Enterprise User Unlocks Quality/Standard Chapters
+1. Enterprise user unlocks 4.5⭐ chapter
+2. Backend checks: `unlocks_4_star_remaining = -1` (unlimited)
+3. Uses subscription unlock (free)
+4. Remaining stays at -1 (unlimited)
 5. Credits unchanged
 6. Database stores: `amount_paid: 0`
 7. Admin sees: Purple "✨ Subscription Unlock" badge
@@ -254,23 +264,21 @@ Subscription Unlocks:
 
 ## 💡 Business Logic Summary
 
-**Monthly Tier Strategy:**
-- Focus on quality over quantity
-- Only top-tier chapters included
-- Forces credit purchases for volume recruiting
-- Lower barrier to entry ($29)
-
-**Annual Tier Strategy:**
-- Volume recruiting enabled
-- 50× 3-star unlocks = high-volume recruiting
-- Better value per unlock
-- Encourages annual commitment
+**Team Tier Strategy:**
+- Balanced approach with 20 total monthly unlocks (2+8+10)
+- Emphasis on quality chapters (8 Quality unlocks)
+- Includes standard chapters for volume recruiting
+- Lower barrier to entry ($29/month)
+- 3 team seats for collaboration
 
 **Enterprise Strategy:**
-- No limits
-- Custom pricing based on company size
-- White-glove service
-- API access (future)
+- 12 premium unlocks per month for top-tier chapters
+- Unlimited quality and standard chapters
+- 1000 monthly credits included for flexibility
+- 10 team seats for large teams
+- 3 warm introductions per month
+- Premium support and early access features
+- Fixed pricing at $299.99/month
 
 ---
 
@@ -323,6 +331,6 @@ LIMIT 20;
 
 ---
 
-**Last Updated:** October 16, 2025
+**Last Updated:** October 17, 2025
 **Status:** ✅ Production Ready
-**Version:** 2.0
+**Version:** 3.0 - Updated unlock allocations (Team: 2/8/10, Enterprise: 12/unlimited/unlimited)

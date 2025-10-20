@@ -48,6 +48,7 @@ const SubscriptionPage = () => {
     {
       id: 'trial',
       name: 'Basic',
+      level: 0,
       price: 4.99,
       description: '3-day free trial, then $4.99/mo',
       icon: Zap,
@@ -66,14 +67,17 @@ const SubscriptionPage = () => {
     {
       id: 'monthly',
       name: 'Team',
+      level: 1,
       price: 29.99,
       description: 'Full platform access',
       icon: Zap,
       color: 'from-blue-500 to-blue-600',
       bgColor: 'from-blue-50 to-blue-100',
       goldFeatures: [
-        '3 Premium Chapter Unlocks',
-        '1 Warm Introduction'
+        '1 Premium Unlock (5⭐)',
+        '4 Quality Unlocks (4⭐)',
+        '7 Standard Unlocks (3⭐)',
+        '1 Warm Introduction (new clients only)'
       ],
       features: [
         'Unlimited platform access',
@@ -92,11 +96,18 @@ const SubscriptionPage = () => {
     {
       id: 'enterprise',
       name: 'Enterprise Tier 1',
+      level: 2,
       price: 299.99,
       description: 'For large organizations',
       icon: Building2,
       color: 'from-purple-600 to-purple-700',
       bgColor: 'from-purple-50 to-purple-100',
+      goldFeatures: [
+        '3 Premium Unlocks (5⭐)',
+        '25 Quality Unlocks (4⭐)',
+        '60 Standard Unlocks (3⭐)',
+        '3 Warm Introductions/mo'
+      ],
       features: [
         'Everything in Team, plus:',
         '1000 monthly credits included',
@@ -105,7 +116,6 @@ const SubscriptionPage = () => {
         'Early Access to College Influencer marketplace',
         'Full Interactive Map Access',
         'Early Access to Venue Partnerships',
-        '3 Request Intros per month Included',
         'Early Access to Ambassadors'
       ],
       limitations: [],
@@ -115,6 +125,7 @@ const SubscriptionPage = () => {
     {
       id: 'super_enterprise',
       name: 'Enterprise Tier 2',
+      level: 3,
       price: 'Custom',
       description: 'Tailored solutions for your needs',
       icon: Rocket,
@@ -302,20 +313,28 @@ const SubscriptionPage = () => {
                 </div>
 
                 <div className="p-3 pt-2">
-                  {/* CTA Button */}
-                  <button
-                    onClick={() => handleSubscriptionChange(tier.id)}
-                    disabled={tier.isCurrent}
-                    className={`block w-full text-center py-1.5 px-3 rounded-lg font-bold transition-all duration-200 mb-2.5 text-xs ${
-                      tier.isCurrent
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : tier.highlighted
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl'
-                        : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
-                    }`}
-                  >
-                    {tier.buttonText}
-                  </button>
+                  {/* CTA Button - Only show for higher tiers (upselling) */}
+                  {(() => {
+                    const currentTierLevel = pricingTiers.find(t => t.id === currentTier)?.level || 0;
+                    const shouldShowButton = tier.level > currentTierLevel;
+
+                    if (!shouldShowButton) {
+                      return null;
+                    }
+
+                    return (
+                      <button
+                        onClick={() => handleSubscriptionChange(tier.id)}
+                        className={`block w-full text-center py-1.5 px-3 rounded-lg font-bold transition-all duration-200 mb-2.5 text-xs ${
+                          tier.highlighted
+                            ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl'
+                            : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                        }`}
+                      >
+                        {tier.buttonText}
+                      </button>
+                    );
+                  })()}
 
                   {/* Features */}
                   <div className="space-y-1.5">

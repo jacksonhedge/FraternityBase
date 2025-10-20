@@ -233,9 +233,14 @@ const CreditSystemPage = () => {
             Paid subscribers get monthly unlock allowances that auto-renew each billing cycle.
             These are always used first - you only spend credits when your subscription unlocks are exhausted!
           </p>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             {/* Team Plan */}
-            <div className="bg-white rounded-lg p-4 border border-gray-100">
+            <div className="relative bg-white rounded-lg p-4 border border-blue-200 ring-2 ring-blue-300">
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                  MOST POPULAR
+                </div>
+              </div>
               <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-blue-600" />
                 Team
@@ -244,67 +249,31 @@ const CreditSystemPage = () => {
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Monthly premium chapter unlocks</span>
+                  <span><strong>1 Premium (5.0⭐)</strong> unlock/mo</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Monthly quality chapter unlocks</span>
+                  <span><strong>4 Quality (4.0-4.9⭐)</strong> unlocks/mo</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Monthly standard chapter unlocks</span>
+                  <span><strong>7 Standard (3.0-3.9⭐)</strong> unlocks/mo</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Bonus credits included</span>
+                  <span>1 Warm Introduction (new clients only)</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Warm intro credits</span>
+                  <span>3 Team seats</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Team collaboration tools</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Premium Plan */}
-            <div className="relative bg-white rounded-lg p-4 border border-blue-200 ring-2 ring-blue-300">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                  MOST POPULAR
-                </div>
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
-                <Star className="w-5 h-5 text-blue-600" />
-                Premium
-              </h3>
-              <div className="text-2xl font-bold text-blue-600 mb-3">$299/mo</div>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span><strong>Significantly more</strong> chapter unlocks</span>
+                  <span>Advanced search & filters</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Increased premium unlock allowance</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Higher credit allotment</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Multiple warm intros monthly</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Expanded team seats</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Priority email support</span>
+                  <span>Email support</span>
                 </li>
               </ul>
             </div>
@@ -315,31 +284,43 @@ const CreditSystemPage = () => {
                 <Crown className="w-5 h-5 text-purple-600" />
                 Enterprise
               </h3>
-              <div className="text-lg font-bold text-purple-600 mb-3">Contact Sales</div>
+              <div className="text-2xl font-bold text-purple-600 mb-3">$299.99/mo</div>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span><strong>Unlimited</strong> chapter unlocks</span>
+                  <span><strong>3 Premium (5.0⭐)</strong> unlocks/mo</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Generous monthly credit allowance</span>
+                  <span><strong>25 Quality (4.0-4.9⭐)</strong> unlocks/mo</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Premium warm intro allocation</span>
+                  <span><strong>60 Standard (3.0-3.9⭐)</strong> unlocks/mo</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Unlimited team seats</span>
+                  <span>1000 monthly credits included</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Dedicated account manager</span>
+                  <span>3 Warm Introductions/mo</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span>Custom integrations & API access</span>
+                  <span>10 Team seats</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>FraternityBase API access</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>Priority support</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span>Early access features</span>
                 </li>
               </ul>
             </div>
@@ -453,7 +434,7 @@ const CreditSystemPage = () => {
             <div className="bg-white rounded-lg p-4 border border-gray-100">
               <h3 className="font-bold text-gray-900 mb-2">Subscription Unlocks First</h3>
               <p className="text-sm text-gray-600">
-                With a paid subscription (Team, Premium, or Enterprise), your monthly unlock allowances are always used first. Credits are only consumed when you've exhausted your subscription unlocks for that tier.
+                With a paid subscription (Team or Enterprise), your monthly unlock allowances are always used first. Credits are only consumed when you've exhausted your subscription unlocks for that tier.
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
@@ -469,15 +450,15 @@ const CreditSystemPage = () => {
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-2">Enterprise Unlimited</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Enterprise Benefits</h3>
               <p className="text-sm text-gray-600">
-                Enterprise subscribers get unlimited chapter unlocks across all quality tiers, generous monthly credit allowances, premium warm intro access, and unlimited team collaboration.
+                Enterprise subscribers get 3 Premium (5.0⭐), 25 Quality (4.0-4.9⭐), and 60 Standard (3.0-3.9⭐) chapter unlocks monthly, plus 1000 monthly credits, 3 warm intros, 10 team seats, and API access.
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-2">Team & Premium Benefits</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Team Plan Benefits</h3>
               <p className="text-sm text-gray-600">
-                Team and Premium subscribers get monthly unlock allowances for premium, quality, and standard chapters. Higher tiers unlock more chapters and include additional credits and warm intro allocations.
+                Team subscribers get 1 Premium (5.0⭐), 4 Quality (4.0-4.9⭐), and 7 Standard (3.0-3.9⭐) chapter unlocks monthly, plus 1 warm introduction (new clients only), 3 team seats, and advanced search.
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">

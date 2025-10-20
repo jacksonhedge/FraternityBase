@@ -311,87 +311,129 @@ const CollegesPage = () => {
 
           {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredColleges.map((college) => (
-            <div key={college.id} className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow">
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center">
-                    <img
-                      src={college.image}
-                      alt={college.name}
-                      className="w-16 h-16 rounded-lg mr-4"
-                    />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredColleges.map((college, index) => {
+            // Generate vibrant gradient colors
+            const gradients = [
+              'from-blue-500 via-blue-600 to-indigo-600',
+              'from-purple-500 via-purple-600 to-pink-600',
+              'from-green-500 via-emerald-600 to-teal-600',
+              'from-orange-500 via-red-500 to-pink-600',
+              'from-cyan-500 via-blue-600 to-purple-600',
+              'from-yellow-500 via-orange-500 to-red-600',
+              'from-pink-500 via-rose-600 to-purple-600',
+              'from-indigo-500 via-purple-600 to-pink-600',
+            ];
+            const gradient = gradients[index % gradients.length];
+
+            return (
+              <div
+                key={college.id}
+                className="group relative"
+              >
+                {/* Colorful Card */}
+                <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
+                  {/* Decorative circles */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+
+                  {/* Content */}
+                  <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                    {/* College Logo */}
+                    <div className="w-24 h-24 rounded-2xl bg-white shadow-xl p-3 transform group-hover:rotate-3 transition-transform duration-300">
+                      <img
+                        src={college.image}
+                        alt={college.name}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+
+                    {/* College Name */}
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">{college.name}</h3>
-                      <div className="flex items-center text-sm text-gray-600 mt-1">
-                        <MapPin className="w-4 h-4 mr-1" />
+                      <h3 className="font-bold text-white text-lg leading-tight mb-1">
+                        {college.name}
+                      </h3>
+                      <div className="flex items-center justify-center gap-1 text-white/90 text-sm">
+                        <MapPin className="w-4 h-4" />
                         {college.location}
                       </div>
-                      <div className="flex gap-2 mt-1">
-                        <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                          {college.division}
-                        </span>
-                        <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-full">
+                      <div className="flex gap-2 mt-2 justify-center">
+                        <span className="text-xs px-2 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full">
                           {college.conference}
                         </span>
                       </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-blue-600">{college.greekLife}</p>
-                    <p className="text-xs text-gray-500">Greek Orgs</p>
-                  </div>
-                </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-4 mb-4 py-4 border-y border-gray-100">
-                  <div>
-                    <div className="flex items-center text-gray-600">
-                      <Building2 className="w-4 h-4 mr-1" />
-                      <span className="text-sm">Fraternities</span>
-                    </div>
-                    <p className="text-lg font-semibold text-blue-600">{college.fraternities}</p>
-                  </div>
-                  <div>
-                    <div className="flex items-center text-gray-600">
-                      <Building2 className="w-4 h-4 mr-1" />
-                      <span className="text-sm">Sororities</span>
-                    </div>
-                    <p className="text-lg font-semibold text-purple-600">{college.sororities}</p>
-                  </div>
-                </div>
+                    {/* Stats */}
+                    <div className="w-full space-y-2 pt-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-white/90">Fraternities</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-white">{college.fraternities}</span>
+                          {college.fiveStarFrats > 0 && (
+                            <span className="text-xs px-1.5 py-0.5 bg-yellow-400/20 text-yellow-300 rounded font-semibold">
+                              {college.fiveStarFrats}x 5.0⭐
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-white/90">Sororities</span>
+                        <span className="font-bold text-white">{college.sororities}</span>
+                      </div>
+                      <div className="w-full h-px bg-white/20 my-2"></div>
 
-                {/* Fraternity Rating Breakdown */}
-                <div className="mb-4">
-                  <h4 className="text-xs font-semibold text-gray-700 mb-2">Fraternity Ratings</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">5.0⭐ Chapters</span>
-                      <span className="font-semibold text-yellow-600">{college.fiveStarFrats}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">4.0⭐ Chapters</span>
-                      <span className="font-semibold text-blue-600">{college.fourStarFrats}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">3.0⭐ Chapters</span>
-                      <span className="font-semibold text-gray-600">{college.threeStarFrats}</span>
-                    </div>
-                  </div>
-                </div>
+                      {/* Chapter Boxes */}
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-white/80">Chapters</span>
+                        <div className="relative h-8 w-20 group">
+                          {[...Array(Math.min(5, college.greekLife))].map((_, i) => (
+                            <div
+                              key={i}
+                              className="absolute w-5 h-6 bg-white/20 backdrop-blur-sm border border-white/30 rounded flex items-center justify-center transition-all duration-300 group-hover:bg-white/30 text-[8px] font-bold text-white"
+                              style={{
+                                left: `${i * 8}px`,
+                                transform: `translateY(0px) rotate(0deg)`,
+                                zIndex: 5 - i,
+                              }}
+                              onMouseEnter={(e) => {
+                                const angle = (i - 2) * 15; // -30, -15, 0, 15, 30 degrees
+                                const yOffset = Math.abs(i - 2) * 8; // Arc effect
+                                e.currentTarget.style.transform = `translateY(-${yOffset}px) rotate(${angle}deg)`;
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = `translateY(0px) rotate(0deg)`;
+                              }}
+                            >
+                              {i < college.greekLife && college.greekLife > 5 && i === 4 ? `+${college.greekLife - 4}` : i + 1}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
 
-                {/* Actions */}
-                <div className="flex items-center justify-end">
-                  <Link
-                    to={`/app/colleges/${college.id}`}
-                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium text-center">
-                    View Details
-                  </Link>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-white/80">4.0⭐ Chapters</span>
+                        <span className="font-semibold text-blue-200">{college.fourStarFrats}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-white/80">3.0⭐ Chapters</span>
+                        <span className="font-semibold text-white/70">{college.threeStarFrats}</span>
+                      </div>
+                    </div>
+
+                    {/* Button */}
+                    <Link
+                      to={`/app/colleges/${college.id}`}
+                      className="w-full mt-2 px-4 py-2.5 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-md flex items-center justify-center gap-2"
+                    >
+                      View Details
+                      <ChevronRight className="w-4 h-4" />
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

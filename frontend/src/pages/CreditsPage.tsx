@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
-import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap, Unlock, Star, Users, Sparkles, Check, TrendingUp } from 'lucide-react';
+import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap, Unlock, Star, Users, Sparkles, Check, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface AccountBalance {
   balance: number;
@@ -42,18 +42,19 @@ interface Transaction {
   chapter_id?: string;
 }
 
-// Credit packages matching backend configuration (server.ts:574-579)
+// Credit packages - Priced around Premium unlock value ($27 per unlock)
+// 100 credits (10 Premium unlocks) = $270 (matches Team→Enterprise tier difference)
 const CREDIT_PACKAGES = [
   {
     id: 'trial',
     name: 'Trial',
     credits: 10,
-    price: 0.99,
-    pricePerCredit: 0.099,
+    price: 30,
+    pricePerCredit: 3.00,
     popular: false,
     features: [
-      'Perfect for testing the platform',
-      '10 chapter unlocks (budget tier)',
+      'Perfect for testing',
+      '1 Premium unlock',
       'Credits never expire'
     ]
   },
@@ -61,59 +62,106 @@ const CREDIT_PACKAGES = [
     id: 'starter',
     name: 'Starter',
     credits: 100,
-    price: 59,
-    pricePerCredit: 0.59,
+    price: 270,
+    pricePerCredit: 2.70,
     popular: false,
     features: [
-      'Great for small campaigns',
-      '10-20 quality chapter unlocks',
-      'Best for individual use',
+      'Match Enterprise unlocks',
+      '10 Premium unlocks',
+      'Bridge Team→Enterprise gap',
       'Credits never expire'
     ]
   },
   {
     id: 'popular',
     name: 'Popular',
-    credits: 500,
-    price: 275,
-    pricePerCredit: 0.55,
+    credits: 200,
+    price: 500,
+    pricePerCredit: 2.50,
     popular: true,
     features: [
-      'Most popular choice',
-      '50+ chapter unlocks',
-      'Perfect for growing teams',
-      '7% savings vs Starter',
+      'Best value package',
+      '20 Premium unlocks',
+      '8% volume discount',
+      'Ideal for active recruiting',
       'Credits never expire'
     ]
   },
   {
     id: 'professional',
     name: 'Professional',
-    credits: 1000,
-    price: 500,
-    pricePerCredit: 0.50,
+    credits: 500,
+    price: 1150,
+    pricePerCredit: 2.30,
     popular: false,
     features: [
-      'Best value for frequent users',
-      '100+ chapter unlocks',
-      'Ideal for active campaigns',
-      '15% savings vs Starter',
+      'High-volume recruiting',
+      '50 Premium unlocks',
+      '15% volume discount',
+      'Perfect for agencies',
       'Credits never expire'
     ]
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    credits: 5000,
-    price: 2000,
-    pricePerCredit: 0.40,
+    credits: 1000,
+    price: 2100,
+    pricePerCredit: 2.10,
     popular: false,
     features: [
-      'Maximum value & flexibility',
-      '500+ chapter unlocks',
-      'Perfect for large organizations',
-      '32% savings vs Starter',
+      'Maximum flexibility',
+      '100 Premium unlocks',
+      '22% volume discount',
+      'Large organizations',
       'Priority support included'
+    ]
+  }
+];
+
+// Subscription tiers configuration
+const SUBSCRIPTION_TIERS = [
+  {
+    id: 'team',
+    name: 'Team',
+    monthlyPrice: 29.99,
+    annualPrice: 323.89, // 10% discount: $29.99 * 12 * 0.9
+    monthlyCredits: 0,
+    icon: Zap,
+    color: 'from-blue-500 to-blue-600',
+    bgColor: 'from-blue-50 to-blue-100',
+    popular: true,
+    features: [
+      '1 Premium (5.0⭐) unlock/mo',
+      '4 Quality (4.0-4.9⭐) unlocks/mo',
+      '7 Standard (3.0-3.9⭐) unlocks/mo',
+      '1 Warm Introduction (new clients only)',
+      '3 Team seats',
+      'Advanced search & filters',
+      'Email support',
+      'Purchase additional credits'
+    ]
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    monthlyPrice: 299.99,
+    annualPrice: 3239.89, // 10% discount: $299.99 * 12 * 0.9
+    monthlyCredits: 1000,
+    icon: Crown,
+    color: 'from-purple-600 to-purple-700',
+    bgColor: 'from-purple-50 to-purple-100',
+    popular: false,
+    features: [
+      '3 Premium (5.0⭐) unlocks/mo',
+      '25 Quality (4.0-4.9⭐) unlocks/mo',
+      '60 Standard (3.0-3.9⭐) unlocks/mo',
+      '1000 monthly credits included',
+      '3 Warm Introductions/mo',
+      '10 Team seats',
+      'FraternityBase API access',
+      'Priority support',
+      'Early access features'
     ]
   }
 ];
@@ -124,12 +172,14 @@ export default function CreditsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<string>('popular');
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
   const [autoReloadSettings, setAutoReloadSettings] = useState({
     enabled: false,
     threshold: 10,
     amount: 50
   });
   const [showAutoReloadEdit, setShowAutoReloadEdit] = useState(false);
+  const [subscriptionPlansCollapsed, setSubscriptionPlansCollapsed] = useState(false);
 
   useEffect(() => {
     fetchBalance();
@@ -259,6 +309,93 @@ export default function CreditsPage() {
     }
   };
 
+  const handleSubscriptionChange = async (tierId: string, period: 'monthly' | 'annual') => {
+    setLoading(true);
+    try {
+      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const profile = await profileResponse.json();
+
+      if (!profile.company_id) {
+        alert('Unable to find company profile. Please try logging in again.');
+        return;
+      }
+
+      // Check if user already has an active subscription (not trial/free)
+      const currentTier = accountData?.subscription_tier?.toLowerCase();
+      const hasActiveSubscription = currentTier && !['trial', 'free'].includes(currentTier);
+
+      if (hasActiveSubscription) {
+        // User already has subscription - use change/upgrade endpoint with proration
+        const confirmMessage = `You are upgrading/changing your subscription. You will be charged a prorated amount for the remainder of your billing period. Continue?`;
+        if (!window.confirm(confirmMessage)) {
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/credits/subscription/change`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            companyId: profile.company_id,
+            newTier: tierId,
+            newPeriod: period
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to change subscription');
+        }
+
+        const data = await response.json();
+
+        // Refresh the page data to show updated subscription
+        await fetchBalance();
+
+        alert(`Subscription updated successfully! ${data.proratedAmount ? `Prorated charge: $${data.proratedAmount.toFixed(2)}` : ''}`);
+      } else {
+        // New subscription - create Stripe checkout session
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/credits/subscribe`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            tier: tierId,
+            period: period,
+            companyId: profile.company_id
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to create checkout session');
+        }
+
+        const data = await response.json();
+        if (data.url) {
+          // Redirect to Stripe checkout
+          window.location.href = data.url;
+        } else {
+          throw new Error('No checkout URL received from server');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to initiate subscription:', error);
+      alert(`Failed to process subscription: ${error instanceof Error ? error.message : 'Please try again.'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleUpdateAutoReload = async () => {
     try {
       const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
@@ -319,6 +456,8 @@ export default function CreditsPage() {
         return 'Subscription activated';
       case 'subscription_renewal':
         return 'Subscription renewed';
+      case 'subscription_change':
+        return 'Subscription changed';
       default:
         return type;
     }
@@ -346,7 +485,7 @@ export default function CreditsPage() {
 
   // Separate transactions into purchases (top_ups) and unlocks (usage)
   const purchases = transactions.filter(t =>
-    ['top_up', 'auto_reload', 'manual_add'].includes(t.transaction_type)
+    ['top_up', 'auto_reload', 'manual_add', 'subscription_change', 'subscription_initial_grant', 'subscription_renewal'].includes(t.transaction_type)
   );
   const unlocks = transactions.filter(t =>
     ['chapter_unlock', 'warm_intro', 'ambassador_referral'].includes(t.transaction_type)
@@ -377,7 +516,18 @@ export default function CreditsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Scroll Indicator - Shows when there's more content below */}
+      <div className="sticky top-0 z-10 flex justify-center pointer-events-none">
+        <div className="bg-gradient-to-b from-transparent via-blue-50/50 to-transparent py-2 px-4 rounded-full">
+          <div className="flex items-center gap-2 text-xs text-gray-500 animate-bounce">
+            <ChevronDown className="w-3 h-3" />
+            <span>Scroll for more</span>
+            <ChevronDown className="w-3 h-3" />
+          </div>
+        </div>
+      </div>
+
       {/* Note: Header removed when embedded in TeamPage */}
 
       {/* Subscription Section */}
@@ -411,6 +561,205 @@ export default function CreditsPage() {
             Upgrade Plan
           </a>
         </div>
+      </div>
+
+      {/* Subscription Billing Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Subscription Plans</h2>
+            <p className="text-sm text-gray-600 mt-1">
+              Choose between monthly or annual billing. Annual plans save 10%.
+            </p>
+          </div>
+          <button
+            onClick={() => setSubscriptionPlansCollapsed(!subscriptionPlansCollapsed)}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            {subscriptionPlansCollapsed ? (
+              <>
+                <ChevronDown className="w-4 h-4" />
+                Expand
+              </>
+            ) : (
+              <>
+                <ChevronUp className="w-4 h-4" />
+                Collapse
+              </>
+            )}
+          </button>
+        </div>
+
+        {!subscriptionPlansCollapsed && (
+          <>
+
+        {/* Billing Period Toggle */}
+        <div className="flex justify-center mb-6">
+          <div className="inline-flex items-center bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setBillingPeriod('monthly')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                billingPeriod === 'monthly'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setBillingPeriod('annual')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                billingPeriod === 'annual'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span>Annual</span>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">
+                  Save 10%
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Subscription Tiers Grid */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {SUBSCRIPTION_TIERS.map((tier) => {
+            const Icon = tier.icon;
+            const price = billingPeriod === 'monthly' ? tier.monthlyPrice : tier.annualPrice;
+            const pricePerMonth = billingPeriod === 'annual' ? tier.annualPrice / 12 : tier.monthlyPrice;
+            const isCurrentTier = accountData?.subscription_tier?.toLowerCase() === tier.id;
+
+            return (
+              <div
+                key={tier.id}
+                className={`relative border-2 rounded-lg p-6 transition-all ${
+                  tier.popular
+                    ? 'border-blue-300 shadow-blue-100 shadow-lg'
+                    : 'border-gray-200 hover:border-gray-300'
+                } ${isCurrentTier ? 'ring-2 ring-green-500' : ''}`}
+              >
+                {tier.popular && !isCurrentTier && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
+                      RECOMMENDED
+                    </div>
+                  </div>
+                )}
+
+                {isCurrentTier && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-green-600 to-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+                      <Check className="w-3 h-3" />
+                      Current Plan
+                    </div>
+                  </div>
+                )}
+
+                {/* Header */}
+                <div className={`mb-4 pb-4 border-b border-gray-100`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xl font-bold text-gray-900">{tier.name}</h3>
+                    <div className={`p-2 rounded-lg bg-gradient-to-r ${tier.color}`}>
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-gray-900">
+                      ${pricePerMonth.toFixed(2)}
+                    </span>
+                    <span className="text-gray-600">/mo</span>
+                  </div>
+
+                  {billingPeriod === 'annual' && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">
+                        ${price.toFixed(2)} billed annually
+                      </p>
+                      <p className="text-xs text-green-600 font-medium">
+                        Save ${(tier.monthlyPrice * 12 - tier.annualPrice).toFixed(2)}/year
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Features */}
+                <ul className="space-y-3 mb-6">
+                  {tier.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-gray-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button - Only show for higher tiers (upselling) */}
+                {(() => {
+                  const currentTier = accountData?.subscription_tier?.toLowerCase();
+
+                  // Define tier hierarchy: trial/free < team/monthly < enterprise
+                  const getTierLevel = (tier: string) => {
+                    if (tier === 'enterprise') return 2;
+                    if (tier === 'monthly' || tier === 'team') return 1;
+                    return 0; // trial, free
+                  };
+
+                  const currentLevel = getTierLevel(currentTier || 'trial');
+                  const tierLevel = getTierLevel(tier.id);
+
+                  // Only show button if this tier is higher than current
+                  if (tierLevel <= currentLevel) {
+                    return null;
+                  }
+
+                  return (
+                    <button
+                      onClick={() => handleSubscriptionChange(tier.id, billingPeriod)}
+                      disabled={loading}
+                      className={`w-full py-3 px-4 rounded-lg font-semibold transition-all text-sm ${
+                        tier.popular
+                          ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl'
+                          : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                      }`}
+                    >
+                      {loading ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Processing...
+                        </div>
+                      ) : (() => {
+                        const hasActiveSubscription = currentTier && !['trial', 'free'].includes(currentTier);
+
+                        if (hasActiveSubscription) {
+                          // User has subscription - show upgrade/change text
+                          if (currentTier === 'monthly' && tier.id === 'enterprise') {
+                            return `Upgrade to ${tier.name}`;
+                          } else {
+                            return `Change to ${tier.name} (${billingPeriod})`;
+                          }
+                        } else {
+                          // New subscription
+                          return `Subscribe to ${tier.name}`;
+                        }
+                      })()}
+                    </button>
+                  );
+                })()}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-md p-4">
+          <p className="text-sm text-blue-900">
+            ℹ️ <strong>Note:</strong> Subscriptions include monthly unlock allowances and credits. When unlocks are used up, credits are deducted from your balance.
+          </p>
+        </div>
+        </>
+        )}
       </div>
 
       {/* Subscription Benefits Section - Only show for paid tiers */}

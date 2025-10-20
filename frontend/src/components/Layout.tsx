@@ -37,6 +37,8 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
+import { useInactivityWarning } from '../hooks/useInactivityWarning';
+import InactivityWarningModal from './InactivityWarningModal';
 
 const Layout = () => {
   const location = useLocation();
@@ -60,6 +62,12 @@ const Layout = () => {
   } | null>(null);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const subscriptionDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Inactivity warning system
+  const { showWarning, timeLeft, handleStayLoggedIn, handleLogout: handleInactivityLogout } = useInactivityWarning({
+    warningTime: 15 * 60 * 1000, // 15 minutes of inactivity
+    logoutTime: 2 * 60 * 1000, // 2 minutes warning period
+  });
 
   useEffect(() => {
     const checkApprovalStatus = async () => {
@@ -181,7 +189,8 @@ const Layout = () => {
     {
       items: [
         { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null, requiresTeamPlan: true },
-        { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW', alwaysAccessible: true },
+        { name: 'Map', href: '/app/map', icon: MapPin, badge: import.meta.env.PROD ? 'SOON' : null, comingSoon: import.meta.env.PROD, alwaysAccessible: true, iconColor: 'text-yellow-500' },
+        { name: 'SuperMap', href: '/app/supermap', icon: MapPin, badge: import.meta.env.PROD ? 'SOON' : 'BETA', comingSoon: true, alwaysAccessible: true },
       ]
     },
     {
@@ -284,7 +293,7 @@ const Layout = () => {
                         title={isSidebarCollapsed ? `${item.name} (${isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade Required'})` : (isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade to Team Plan')}
                       >
                         <div className="flex items-center">
-                          <Icon className={`w-5 h-5 flex-shrink-0 ${!isSidebarCollapsed ? 'mr-3' : ''}`} />
+                          <Icon className={`w-5 h-5 flex-shrink-0 ${!isSidebarCollapsed ? 'mr-3' : ''} ${(item as any).iconColor || ''}`} />
                           {!isSidebarCollapsed && <span>{item.name}</span>}
                         </div>
                         {!isSidebarCollapsed && (
@@ -307,7 +316,7 @@ const Layout = () => {
                         title={isSidebarCollapsed ? item.name : undefined}
                       >
                         <div className="flex items-center">
-                          <Icon className={`w-5 h-5 flex-shrink-0 ${!isSidebarCollapsed ? 'mr-3' : ''}`} />
+                          <Icon className={`w-5 h-5 flex-shrink-0 ${!isSidebarCollapsed ? 'mr-3' : ''} ${(item as any).iconColor || ''}`} />
                           {!isSidebarCollapsed && <span>{item.name}</span>}
                         </div>
                         {item.badge && !isSidebarCollapsed && (
@@ -406,17 +415,22 @@ const Layout = () => {
                         // Check if item is locked based on subscription tier
                         const isTrialPlan = subscriptionTier?.toLowerCase() === 'trial';
                         const isLockedByTier = isTrialPlan && item.requiresTeamPlan && !item.alwaysAccessible;
+                        const isComingSoon = (item as any).comingSoon;
 
-                        return (isPendingAndLocked || isLockedByTier) ? (
+                        return (isPendingAndLocked || isLockedByTier || isComingSoon) ? (
                           <div
                             key={item.name}
                             className="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg opacity-50 cursor-not-allowed"
                           >
                             <div className="flex items-center">
-                              <Icon className="w-5 h-5 mr-3 flex-shrink-0" />
+                              <Icon className={`w-5 h-5 mr-3 flex-shrink-0 ${(item as any).iconColor || ''}`} />
                               <span>{item.name}</span>
                             </div>
-                            <Lock className="w-4 h-4 text-yellow-600" />
+                            {isComingSoon ? (
+                              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full text-yellow-800 bg-yellow-200">SOON</span>
+                            ) : (
+                              <Lock className="w-4 h-4 text-yellow-600" />
+                            )}
                           </div>
                         ) : (
                           <Link
@@ -430,7 +444,7 @@ const Layout = () => {
                             }`}
                           >
                             <div className="flex items-center">
-                              <Icon className="w-5 h-5 mr-3 flex-shrink-0" />
+                              <Icon className={`w-5 h-5 mr-3 flex-shrink-0 ${(item as any).iconColor || ''}`} />
                               <span>{item.name}</span>
                             </div>
                             {item.badge && (
@@ -469,16 +483,16 @@ const Layout = () => {
       <div className={`transition-all duration-300 ${isSidebarCollapsed ? 'md:pl-20' : 'md:pl-64'}`}>
         <div className="flex flex-col flex-1">
           {/* Top bar */}
-          <header className="hidden md:flex items-center justify-end px-6 py-4 bg-white border-b border-gray-200">
-            <div className="flex items-center space-x-4">
+          <header className="hidden md:flex items-center justify-end px-8 py-4 bg-emerald-200 border-b border-emerald-300">
+            <div className="flex items-center gap-6">
               {/* Subscription Tier Badge Dropdown */}
               <div className="relative" ref={subscriptionDropdownRef}>
                 <button
                   onClick={() => setIsSubscriptionDropdownOpen(!isSubscriptionDropdownOpen)}
-                  className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold rounded-full hover:from-blue-600 hover:to-purple-700 transition-all flex items-center gap-1"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
                 >
                   {subscriptionTier?.charAt(0).toUpperCase() + subscriptionTier?.slice(1)}
-                  <ChevronDown className={`w-3 h-3 transition-transform ${isSubscriptionDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isSubscriptionDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Subscription Dropdown Menu */}
@@ -583,35 +597,45 @@ const Layout = () => {
                 )}
               </div>
 
-              <button className="p-2 text-gray-500 hover:text-gray-700 relative">
+              <button className="p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all relative">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
               </button>
 
               {/* Profile Dropdown */}
               <div className="relative" ref={profileDropdownRef}>
                 <button
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 rounded-lg transition-all"
                 >
-                  <div className="flex flex-col items-start">
-                    <span className="text-sm font-medium">
+                  <div className="flex flex-col items-end gap-1.5">
+                    <span className="text-base font-semibold text-gray-900">
                       {companyName || user?.company?.name || user?.companyName || 'Company'}
                     </span>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span>{credits.toLocaleString()} credits</span>
-                      {unlocks && (unlocks.fiveStar.remaining > 0 || unlocks.fourStar.remaining > 0 || unlocks.threeStar.remaining > 0 || unlocks.fiveStar.isUnlimited) && (
-                        <>
-                          <span>•</span>
-                          <span className="text-purple-600 font-medium">
-                            {unlocks.fiveStar.isUnlimited ? '∞' :
-                             `${unlocks.fiveStar.remaining + unlocks.fourStar.remaining + unlocks.threeStar.remaining}`} unlocks
-                          </span>
-                        </>
-                      )}
+                    <div className="text-sm text-gray-600 font-medium">
+                      {credits.toLocaleString()} credits
                     </div>
+                    {unlocks && (unlocks.fiveStar.remaining > 0 || unlocks.fourStar.remaining > 0 || unlocks.threeStar.remaining > 0 || unlocks.fiveStar.isUnlimited) && (
+                      <div className="flex items-center gap-1.5">
+                        {(unlocks.fiveStar.remaining > 0 || unlocks.fiveStar.isUnlimited) && (
+                          <span className="text-xs font-bold text-yellow-700 bg-yellow-100 px-2 py-1 rounded-md border border-yellow-200">
+                            {unlocks.fiveStar.isUnlimited ? '∞' : unlocks.fiveStar.remaining}×5⭐
+                          </span>
+                        )}
+                        {unlocks.fourStar.remaining > 0 && (
+                          <span className="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-1 rounded-md border border-blue-200">
+                            {unlocks.fourStar.remaining}×4⭐
+                          </span>
+                        )}
+                        {unlocks.threeStar.remaining > 0 && (
+                          <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-md border border-green-200">
+                            {unlocks.threeStar.remaining}×3⭐
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Dropdown Menu */}
@@ -719,6 +743,14 @@ const Layout = () => {
           </div>
         </div>
       )}
+
+      {/* Inactivity Warning Modal */}
+      <InactivityWarningModal
+        isOpen={showWarning}
+        timeLeft={timeLeft}
+        onStayLoggedIn={handleStayLoggedIn}
+        onLogout={handleInactivityLogout}
+      />
     </div>
   );
 };

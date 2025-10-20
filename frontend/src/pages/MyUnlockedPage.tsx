@@ -10,7 +10,8 @@ import {
   MapPin,
   ChevronDown,
   ChevronUp,
-  Star
+  Star,
+  Handshake
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
@@ -222,69 +223,90 @@ const MyUnlockedPage = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {unlockedChapters.map((chapter) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {unlockedChapters.map((chapter, index) => {
               const collegeLogo = getCollegeLogoWithFallback(chapter.university);
 
-              return (
-                <Link
-                  key={chapter.id}
-                  to={`/app/my-unlocked/${chapter.id}`}
-                  className="relative border border-gray-200 rounded-xl p-5 hover:shadow-lg hover:border-blue-300 transition-all bg-white overflow-hidden group"
-                >
-                  {/* Background gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              // Generate vibrant gradient colors
+              const gradients = [
+                'from-blue-500 via-blue-600 to-indigo-600',
+                'from-purple-500 via-purple-600 to-pink-600',
+                'from-green-500 via-emerald-600 to-teal-600',
+                'from-orange-500 via-red-500 to-pink-600',
+                'from-cyan-500 via-blue-600 to-purple-600',
+                'from-yellow-500 via-orange-500 to-red-600',
+                'from-pink-500 via-rose-600 to-purple-600',
+                'from-indigo-500 via-purple-600 to-pink-600',
+              ];
+              const gradient = gradients[index % gradients.length];
 
-                  {/* Content */}
-                  <div className="relative">
-                    {/* Header with Logo */}
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 border-gray-200 bg-white shadow-sm">
+              return (
+                <div
+                  key={chapter.id}
+                  className="group relative"
+                >
+                  {/* Colorful Card */}
+                  <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
+                    {/* Decorative circles */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+
+                    {/* Rating Badge - Top Left */}
+                    {chapter.chapterScore && (
+                      <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg border border-white/50">
+                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                        <span className="text-sm font-bold text-gray-900">{chapter.chapterScore.toFixed(1)}</span>
+                      </div>
+                    )}
+
+                    {/* Content */}
+                    <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                      {/* College Logo */}
+                      <div className="w-24 h-24 rounded-2xl bg-white shadow-xl p-3 transform group-hover:rotate-3 transition-transform duration-300">
                         <img
                           src={collegeLogo}
                           alt={chapter.university}
-                          className="w-full h-full object-contain p-1"
+                          className="w-full h-full object-contain"
                         />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <h3 className="font-bold text-gray-900 text-lg leading-tight">{chapter.name}</h3>
-                            <p className="text-sm text-gray-600 mt-0.5">{chapter.chapter}</p>
-                          </div>
-                          <Unlock className="w-5 h-5 text-green-600 flex-shrink-0" />
-                        </div>
+
+                      {/* College Name */}
+                      <div>
+                        <h3 className="font-bold text-white text-lg leading-tight mb-1">
+                          {chapter.university}
+                        </h3>
+                        <p className="text-white/90 text-sm font-medium">
+                          {chapter.name}
+                        </p>
+                      </div>
+
+                      {/* Buttons */}
+                      <div className="flex flex-col gap-2 w-full pt-2">
+                        <Link
+                          to={`/app/my-unlocked/${chapter.id}`}
+                          className="w-full px-4 py-2.5 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-md flex items-center justify-center gap-2"
+                        >
+                          View Details
+                          <ArrowRight className="w-4 h-4" />
+                        </Link>
+                        <Link
+                          to={`/app/my-unlocked/${chapter.id}#intro`}
+                          className="w-full px-4 py-2.5 bg-black hover:bg-gray-900 text-yellow-400 rounded-lg font-semibold transition-colors shadow-md flex items-center justify-center gap-2"
+                        >
+                          <Handshake className="w-4 h-4" />
+                          Request an Intro
+                        </Link>
+                        <Link
+                          to={`/app/map?state=${encodeURIComponent(chapter.state)}`}
+                          className="w-full px-4 py-2.5 bg-white/20 backdrop-blur-sm text-white rounded-lg font-semibold hover:bg-white/30 transition-colors border border-white/30 flex items-center justify-center gap-2"
+                        >
+                          <MapPin className="w-4 h-4" />
+                          View in Map
+                        </Link>
                       </div>
                     </div>
-
-                    {/* Info */}
-                    <div className="space-y-2.5 text-sm mb-4">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <Building2 className="w-4 h-4 text-gray-500" />
-                        <span className="truncate">{chapter.university}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <MapPin className="w-4 h-4 text-gray-500" />
-                        {chapter.state}
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-700 font-medium">
-                        <Users className="w-4 h-4 text-blue-600" />
-                        <span className="text-blue-700">{chapter.memberCount} members</span>
-                        <span className="text-xs text-gray-500 ml-auto">in database</span>
-                      </div>
-                    </div>
-
-                    {/* Score Badge */}
-                    {chapter.chapterScore != null && (
-                      <div className="flex items-center justify-end">
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full shadow-sm">
-                          <Star className="w-4 h-4 text-yellow-900 fill-yellow-900" />
-                          <span className="text-sm font-bold text-yellow-900">{chapter.chapterScore.toFixed(1)}</span>
-                        </div>
-                      </div>
-                    )}
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Plus,
@@ -98,6 +98,7 @@ interface Chapter {
   grade?: number;
   is_favorite?: boolean;
   is_viewable?: boolean;
+  coming_soon_date?: string;
   greek_organizations?: { name: string; organization_type: 'fraternity' | 'sorority' };
   universities?: { name: string; state: string };
 }
@@ -199,10 +200,14 @@ const AdminPageV4 = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Derive active tab from URL path
-  const activeTab = (location.pathname.split('/')[2] || 'dashboard') as
+  // Define tab type
+  type AdminTab =
     'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
-    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' | 'wizard-admin' | 'college-clubs' | 'intro-requests';
+    'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' |
+    'wizard-admin' | 'college-clubs' | 'intro-requests';
+
+  // Derive active tab from URL path
+  const activeTab: AdminTab = (location.pathname.split('/')[2] || 'dashboard') as AdminTab;
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -273,6 +278,7 @@ const AdminPageV4 = () => {
     name: '',
     location: '',
     state: '',
+    conference: '',
     student_count: '',
     greek_percentage: '',
     website: '',
@@ -299,7 +305,8 @@ const AdminPageV4 = () => {
     event_frequency: '20',
     grade: '',
     is_favorite: false,
-    is_viewable: false
+    is_viewable: false,
+    coming_soon_date: ''
   });
 
   const [quickAddText, setQuickAddText] = useState('');
@@ -388,6 +395,8 @@ const AdminPageV4 = () => {
       } else if (activeTab === 'colleges') {
         const res = await fetch(`${API_URL}/admin/universities`, { headers: getAdminHeaders() });
         const data = await res.json();
+        console.log('🏫 Loaded universities:', data.data?.length || 0);
+        console.log('🏫 USC check:', data.data?.find((u: any) => u.name.includes('Southern California')));
         setUniversities(data.data || []);
       } else if (activeTab === 'chapters') {
         console.log('[Chapters View] 📊 Fetching chapters data...');
@@ -644,6 +653,7 @@ const AdminPageV4 = () => {
           name: universityForm.name,
           location: universityForm.location,
           state: universityForm.state,
+          conference: universityForm.conference || null,
           student_count: universityForm.student_count ? parseInt(universityForm.student_count) : null,
           greek_percentage: universityForm.greek_percentage ? parseFloat(universityForm.greek_percentage) : null,
           website: universityForm.website || null,
@@ -661,6 +671,7 @@ const AdminPageV4 = () => {
           name: '',
           location: '',
           state: '',
+          conference: '',
           student_count: '',
           greek_percentage: '',
           website: '',
@@ -686,6 +697,7 @@ const AdminPageV4 = () => {
       name: uni.name,
       location: uni.location,
       state: uni.state,
+      conference: uni.conference || '',
       student_count: uni.student_count?.toString() || '',
       greek_percentage: uni.greek_percentage?.toString() || '',
       website: uni.website || '',
@@ -745,7 +757,8 @@ const AdminPageV4 = () => {
           event_frequency: chapterForm.event_frequency ? parseInt(chapterForm.event_frequency) : null,
           grade: chapterForm.grade ? parseFloat(chapterForm.grade) : null,
           is_favorite: chapterForm.is_favorite,
-          is_viewable: chapterForm.is_viewable
+          is_viewable: chapterForm.is_viewable,
+          coming_soon_date: chapterForm.coming_soon_date || null
         })
       });
 
@@ -770,7 +783,8 @@ const AdminPageV4 = () => {
           event_frequency: '20',
           grade: '',
           is_favorite: false,
-          is_viewable: false
+          is_viewable: false,
+          coming_soon_date: ''
         });
         fetchData();
       } else {
@@ -1432,6 +1446,104 @@ const AdminPageV4 = () => {
 
             successCount++;
             console.log(`[CSV Import] Row ${i} - ✅ SUCCESS! Total successes: ${successCount}`);
+          } else if (activeTab === 'coming-tomorrow') {
+            console.log(`[CSV Import] Row ${i} - Importing as COMING TOMORROW`);
+
+            // Coming Tomorrow CSV import
+            const collegeName = row.college_name || row['College Name'] || row['college name'];
+            const anticipatedScore = parseFloat(row.anticipated_score || row['Anticipated Score'] || row['anticipated score'] || '0');
+            const updateType = row.update_type || row['Update Type'] || row['update type'] || 'new_chapter';
+            const chapterName = row.chapter_name || row['Chapter Name'] || row['chapter name'] || null;
+            const expectedMemberCount = row.expected_member_count || row['Expected Member Count'] || row['expected member count'];
+            const scheduledDate = row.scheduled_date || row['Scheduled Date'] || row['scheduled date'] || null;
+
+            console.log(`[CSV Import] Row ${i} - Parsed fields:`, {
+              collegeName,
+              anticipatedScore,
+              updateType,
+              chapterName,
+              expectedMemberCount,
+              scheduledDate
+            });
+
+            // Validate required fields
+            if (!collegeName || !anticipatedScore || !updateType) {
+              const errorMsg = 'Missing required fields (college_name, anticipated_score, or update_type)';
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
+              errorDetails.push({row: i, data: row, error: errorMsg});
+              errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
+              continue;
+            }
+
+            // Validate update_type
+            const validUpdateTypes = ['new_chapter', 'roster_update', 'new_sorority'];
+            if (!validUpdateTypes.includes(updateType)) {
+              const errorMsg = `Invalid update_type: ${updateType}. Must be one of: ${validUpdateTypes.join(', ')}`;
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
+              errorDetails.push({row: i, data: row, error: errorMsg});
+              errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
+              continue;
+            }
+
+            // Look up university_id from college name
+            console.log(`[CSV Import] Row ${i} - 🔍 Fetching universities to find match for: ${collegeName}`);
+            const universitiesRes = await fetch(`${API_URL}/admin/universities`, {
+              headers: getAdminHeaders()
+            });
+            const universitiesResponse = await universitiesRes.json();
+            const universitiesData = universitiesResponse.data || universitiesResponse;
+            console.log(`[CSV Import] Row ${i} - Found ${universitiesData.length} total universities`);
+
+            const university = universitiesData.find((u: any) =>
+              u.name?.toLowerCase().includes(collegeName.toLowerCase()) ||
+              collegeName.toLowerCase().includes(u.name?.toLowerCase())
+            );
+
+            if (!university) {
+              const errorMsg = `Could not find university: ${collegeName}`;
+              console.error(`[CSV Import] Row ${i} - ❌ ${errorMsg}`);
+              console.log(`[CSV Import] Row ${i} - Available universities sample:`, universitiesData.slice(0, 5).map((u: any) => u.name));
+              errorDetails.push({row: i, data: row, error: errorMsg});
+              errorCount++;
+              console.log(`[CSV Import] Row ${i} - ERROR! Total errors: ${errorCount}`);
+              continue;
+            }
+
+            console.log(`[CSV Import] Row ${i} - ✅ Found university:`, {
+              id: university.id,
+              name: university.name
+            });
+
+            const comingTomorrowPayload = {
+              college_name: collegeName,
+              university_id: university.id,
+              anticipated_score: anticipatedScore,
+              update_type: updateType,
+              expected_member_count: expectedMemberCount ? parseInt(expectedMemberCount) : null,
+              chapter_name: chapterName,
+              scheduled_date: scheduledDate
+            };
+
+            console.log(`[CSV Import] Row ${i} - 🚀 Creating coming tomorrow item with payload:`, comingTomorrowPayload);
+
+            const comingTomorrowResponse = await fetch(`${API_URL}/admin/coming-tomorrow`, {
+              method: 'POST',
+              headers: getAdminHeaders(),
+              body: JSON.stringify(comingTomorrowPayload)
+            });
+
+            console.log(`[CSV Import] Row ${i} - API response status:`, comingTomorrowResponse.status);
+
+            if (!comingTomorrowResponse.ok) {
+              const errorText = await comingTomorrowResponse.text();
+              console.error(`[CSV Import] Row ${i} - ❌ API error:`, errorText);
+              throw new Error(`API returned ${comingTomorrowResponse.status}: ${errorText}`);
+            }
+
+            successCount++;
+            console.log(`[CSV Import] Row ${i} - ✅ SUCCESS! Total successes: ${successCount}`);
           }
         } catch (error) {
           const errorMsg = error instanceof Error ? error.message : String(error);
@@ -1565,6 +1677,17 @@ const AdminPageV4 = () => {
     'Rutgers University', 'University of Wisconsin', 'UCLA', 'USC', 'University of Oregon', 'University of Washington'
   ];
 
+  // Debug: Log filter state
+  React.useEffect(() => {
+    if (activeTab === 'colleges') {
+      console.log('🎛️ Filter State:', {
+        collegeFilter,
+        searchTerm,
+        totalUniversities: universities.length
+      });
+    }
+  }, [collegeFilter, searchTerm, universities.length, activeTab]);
+
   const filteredUniversities = universities
     .filter(uni => {
       // Search filter
@@ -1585,6 +1708,19 @@ const AdminPageV4 = () => {
         matchesFilter = uni.conference === 'BIG 12';
       } else if (collegeFilter === 'acc') {
         matchesFilter = uni.conference === 'ACC';
+      }
+
+      // Debug USC
+      if (uni.name.includes('Southern California')) {
+        console.log('🔍 USC Filter Debug:', {
+          name: uni.name,
+          searchTerm,
+          matchesSearch,
+          collegeFilter,
+          conference: uni.conference,
+          matchesFilter,
+          willShow: matchesSearch && matchesFilter
+        });
       }
 
       return matchesSearch && matchesFilter;
@@ -1609,6 +1745,18 @@ const AdminPageV4 = () => {
       }
       return 0;
     });
+
+  // Debug: Log filtered results
+  React.useEffect(() => {
+    if (activeTab === 'colleges' && universities.length > 0) {
+      console.log('📊 Filtered Results:', {
+        totalUniversities: universities.length,
+        filteredCount: filteredUniversities.length,
+        collegeFilter,
+        searchTerm
+      });
+    }
+  }, [filteredUniversities.length, universities.length, collegeFilter, searchTerm, activeTab]);
 
   const filteredChapters = chapters
     .filter(ch => {
@@ -3011,6 +3159,115 @@ const AdminPageV4 = () => {
             </div>
           </div>
 
+          {/* CSV Format Helper - Show Claude Prompt */}
+          {activeTab !== 'waitlist' && (activeTab === 'colleges' || activeTab === 'users' || activeTab === 'chapters' || activeTab === 'coming-tomorrow') && (
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">📋</div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">CSV Format Helper - Copy this prompt to Claude</h3>
+                  <div className="bg-white border border-blue-200 rounded-lg p-3 text-xs font-mono text-gray-700 overflow-x-auto">
+                    {activeTab === 'colleges' && (
+                      <pre className="whitespace-pre-wrap">
+{`Please format the following data into a CSV with these exact column headers:
+
+Required columns:
+- name (or Name): University name
+- location (or Location): City, State
+- state (or State): Two-letter state code
+
+Optional columns:
+- student_count (or Student Count): Number of students
+- greek_percentage (or Greek %): Percentage in Greek life
+- website (or Website): University website URL
+- logo_url (or Logo URL): URL to university logo image
+- conference (or Conference): Athletic conference (e.g., SEC, Big Ten)
+- bars_nearby (or Bars Nearby): Number of bars near campus
+- unlock_count (or Unlock Count): Number of chapter unlocks
+
+Example CSV format:
+name,location,state,student_count,greek_percentage,website,logo_url,conference
+University of Alabama,Tuscaloosa AL,AL,38100,27.5,https://www.ua.edu,https://...,SEC`}
+                      </pre>
+                    )}
+                    {activeTab === 'users' && (
+                      <pre className="whitespace-pre-wrap">
+{`Please format the following data into a CSV with these exact column headers:
+
+Required columns:
+- chapter (or Chapter): Chapter name (e.g., "Alpha Sigma")
+- university (or University or college or College): University name
+- name (or Name): Full name of member
+
+Optional columns:
+- position (or Position): Officer position (defaults to "Member")
+- member_type (or Member Type or type): Either "officer" or "member"
+- email (or Email): Email address
+- phone (or Phone): Phone number
+- linkedin (or LinkedIn or linkedin_profile): LinkedIn profile URL
+- graduation_year (or Graduation Year or grad_year): Year of graduation
+- major (or Major): Academic major
+- is_primary (or Primary Contact): "true" or "false"
+
+Example CSV format:
+chapter,university,name,position,member_type,email,phone,graduation_year,major
+Alpha Sigma,University of Florida,John Doe,President,officer,john@example.com,555-1234,2024,Business`}
+                      </pre>
+                    )}
+                    {activeTab === 'chapters' && (
+                      <pre className="whitespace-pre-wrap">
+{`Please format the following data into a CSV with these exact column headers:
+
+Required columns:
+- organization (or Organization): Greek organization name (e.g., "Sigma Chi", "Delta Gamma")
+- university (or University): University name
+- chapter_name (or Chapter Name or chapter or Chapter): Chapter designation (e.g., "Alpha Sigma", "Beta Chapter")
+
+Optional columns:
+- grade (or Grade): Chapter rating/grade (0.0-5.0, defaults to 3.0)
+
+Example CSV format:
+organization,university,chapter_name,grade
+Sigma Chi,University of Florida,Alpha Sigma,4.5
+Delta Gamma,Florida State University,Beta Chapter,4.2`}
+                      </pre>
+                    )}
+                    {activeTab === 'coming-tomorrow' && (
+                      <pre className="whitespace-pre-wrap">
+{`Please format the following data into a CSV with these exact column headers:
+
+Required columns:
+- college_name (or College Name): University/college name (e.g., "Michigan", "Florida State")
+- anticipated_score (or Anticipated Score): Expected chapter score/rating (0.0-5.0)
+- update_type (or Update Type): Type of update - must be one of: "new_chapter", "roster_update", or "new_sorority"
+
+Optional columns:
+- chapter_name (or Chapter Name): Chapter name if applicable (e.g., "Delta Tau Delta")
+- expected_member_count (or Expected Member Count): Number of expected members
+- scheduled_date (or Scheduled Date): Date in YYYY-MM-DD format (e.g., "2024-03-15")
+
+Example CSV format:
+college_name,anticipated_score,update_type,chapter_name,expected_member_count,scheduled_date
+Michigan,4.8,new_chapter,Delta Tau Delta,112,2024-03-15
+Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
+                      </pre>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => {
+                      const promptText = document.querySelector('.bg-white.border.border-blue-200 pre')?.textContent || '';
+                      navigator.clipboard.writeText(promptText);
+                      alert('Prompt copied to clipboard! Paste this into Claude with your data.');
+                    }}
+                    className="mt-3 px-3 py-1.5 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+                  >
+                    📋 Copy Prompt to Clipboard
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* AI Assistant Bar - Only show when connected */}
           {aiStatus?.connected && (
             <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-200 shadow-sm">
@@ -3272,6 +3529,32 @@ const AdminPageV4 = () => {
                         placeholder="e.g., PA"
                         maxLength={2}
                       />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Conference</label>
+                      <select
+                        value={universityForm.conference}
+                        onChange={(e) => setUniversityForm({ ...universityForm, conference: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                      >
+                        <option value="">Select Conference</option>
+                        <option value="ACC">ACC (Atlantic Coast Conference)</option>
+                        <option value="Big Ten">Big Ten</option>
+                        <option value="Big 12">Big 12</option>
+                        <option value="SEC">SEC (Southeastern Conference)</option>
+                        <option value="Pac-12">Pac-12</option>
+                        <option value="American">American Athletic Conference</option>
+                        <option value="Mountain West">Mountain West</option>
+                        <option value="Conference USA">Conference USA</option>
+                        <option value="MAC">MAC (Mid-American Conference)</option>
+                        <option value="Sun Belt">Sun Belt</option>
+                        <option value="Independent">Independent</option>
+                        <option value="FCS">FCS (Football Championship Subdivision)</option>
+                        <option value="Division II">Division II</option>
+                        <option value="Division III">Division III</option>
+                        <option value="NAIA">NAIA</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Student Count</label>
@@ -3541,13 +3824,14 @@ const AdminPageV4 = () => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapters</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bars</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unlocks</th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Show in Dashboard</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredUniversities.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center">
+                        <td colSpan={8} className="px-6 py-12 text-center">
                           <div className="text-gray-400">
                             <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
                             <p className="text-sm font-medium">No colleges or universities found</p>
@@ -3588,6 +3872,34 @@ const AdminPageV4 = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {uni.unlock_count || 0}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <button
+                            onClick={async () => {
+                              const newValue = !uni.show_in_dashboard;
+                              try {
+                                const res = await fetch(`${API_URL}/admin/universities/${uni.id}/dashboard-visibility`, {
+                                  method: 'PATCH',
+                                  headers: getAdminHeaders(),
+                                  body: JSON.stringify({ show_in_dashboard: newValue })
+                                });
+                                if (res.ok) {
+                                  fetchData();
+                                }
+                              } catch (error) {
+                                console.error('Error toggling dashboard visibility:', error);
+                              }
+                            }}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                              uni.show_in_dashboard ? 'bg-green-600' : 'bg-gray-200'
+                            }`}
+                          >
+                            <span
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                uni.show_in_dashboard ? 'translate-x-6' : 'translate-x-1'
+                              }`}
+                            />
+                          </button>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
@@ -3759,6 +4071,16 @@ const AdminPageV4 = () => {
                         <option value="3.0">3.0 - Social Links Only</option>
                       </select>
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Coming Soon Date</label>
+                      <input
+                        type="date"
+                        value={chapterForm.coming_soon_date}
+                        onChange={(e) => setChapterForm({ ...chapterForm, coming_soon_date: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">If set, shows "Coming [Date]" to clients when chapter is locked</p>
+                    </div>
                     <div className="flex items-center gap-3 pt-6">
                       <input
                         type="checkbox"
@@ -3896,13 +4218,14 @@ const AdminPageV4 = () => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">University</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Members</th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Show in Dashboard</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredChapters.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center">
+                        <td colSpan={8} className="px-6 py-12 text-center">
                           <div className="text-gray-400">
                             <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
                             <p className="text-sm font-medium">No chapters found</p>
@@ -3972,6 +4295,34 @@ const AdminPageV4 = () => {
                               </div>
                             );
                           })()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <button
+                            onClick={async () => {
+                              const newValue = !ch.show_in_dashboard;
+                              try {
+                                const res = await fetch(`${API_URL}/admin/chapters/${ch.id}/dashboard-visibility`, {
+                                  method: 'PATCH',
+                                  headers: getAdminHeaders(),
+                                  body: JSON.stringify({ show_in_dashboard: newValue })
+                                });
+                                if (res.ok) {
+                                  fetchData();
+                                }
+                              } catch (error) {
+                                console.error('Error toggling dashboard visibility:', error);
+                              }
+                            }}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                              ch.show_in_dashboard ? 'bg-green-600' : 'bg-gray-200'
+                            }`}
+                          >
+                            <span
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                ch.show_in_dashboard ? 'translate-x-6' : 'translate-x-1'
+                              }`}
+                            />
+                          </button>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
@@ -4378,6 +4729,7 @@ const AdminPageV4 = () => {
           )}
 
           {/* Wizard Admin Tab */}
+          {/* @ts-expect-error TypeScript type narrowing issue - activeTab does include 'wizard-admin' */}
           {activeTab === 'wizard-admin' && isWizardAdmin && (
             <div className="space-y-6">
               <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-6 text-white">
@@ -4553,6 +4905,7 @@ const AdminPageV4 = () => {
           {activeTab === 'activity' && <ActivityLogsTab />}
 
           {/* Introduction Requests Tab */}
+          {/* @ts-expect-error TypeScript type narrowing issue - activeTab does include 'intro-requests' */}
           {activeTab === 'intro-requests' && (
             <div className="space-y-6">
               {/* Stats Cards */}
@@ -4874,6 +5227,7 @@ const AdminPageV4 = () => {
           {activeTab === 'roadmap' && <RoadmapAdmin />}
 
           {/* College Clubs Tab */}
+          {/* @ts-expect-error TypeScript type narrowing issue - activeTab does include 'college-clubs' */}
           {activeTab === 'college-clubs' && (
             <div className="space-y-6">
               {/* Investment Groups Section */}

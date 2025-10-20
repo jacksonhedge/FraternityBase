@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { PRICING } from '../config/pricing';
 import CreditNotificationService from '../services/CreditNotificationService';
 import AdminNotificationService from '../services/AdminNotificationService';
+import { slack } from '../utils/slackNotifier';
 
 const router = Router();
 
@@ -146,10 +147,14 @@ router.post('/purchase', async (req, res) => {
 // Create Stripe subscription checkout
 router.post('/subscribe', async (req, res) => {
   try {
-    const { tier, companyId } = req.body;
+    const { tier, period, companyId } = req.body;
 
-    if (!['monthly', 'enterprise'].includes(tier) || !companyId) {
+    if (!['monthly', 'team', 'enterprise'].includes(tier) || !companyId) {
       return res.status(400).json({ error: 'Valid tier and company ID required' });
+    }
+
+    if (!['monthly', 'annual'].includes(period)) {
+      return res.status(400).json({ error: 'Valid billing period required (monthly or annual)' });
     }
 
     const stripe = getStripe();
@@ -162,23 +167,42 @@ router.post('/subscribe', async (req, res) => {
       .eq('id', companyId)
       .single();
 
+    // Normalize tier names (team -> monthly for backend consistency)
+    const normalizedTier = tier === 'team' ? 'monthly' : tier;
+
     // Define subscription prices
     const subscriptionPrices = {
       monthly: {
-        priceId: process.env.STRIPE_PRICE_MONTHLY || 'price_monthly',
-        amount: 29.99,
-        credits: 100,
-        name: 'Monthly Subscription'
+        monthly: {
+          priceId: process.env.STRIPE_PRICE_MONTHLY || 'price_monthly',
+          amount: 29.99,
+          credits: 100,
+          name: 'Team - Monthly'
+        },
+        annual: {
+          priceId: process.env.STRIPE_PRICE_MONTHLY_ANNUAL || 'price_monthly_annual',
+          amount: 323.89, // $29.99 * 12 * 0.9 (10% discount)
+          credits: 100,
+          name: 'Team - Annual'
+        }
       },
       enterprise: {
-        priceId: process.env.STRIPE_PRICE_ENTERPRISE || 'price_enterprise',
-        amount: 299.99,
-        credits: 800,
-        name: 'Enterprise Subscription'
+        monthly: {
+          priceId: process.env.STRIPE_PRICE_ENTERPRISE || 'price_enterprise',
+          amount: 299.99,
+          credits: 1000,
+          name: 'Enterprise - Monthly'
+        },
+        annual: {
+          priceId: process.env.STRIPE_PRICE_ENTERPRISE_ANNUAL || 'price_enterprise_annual',
+          amount: 3239.89, // $299.99 * 12 * 0.9 (10% discount)
+          credits: 1000,
+          name: 'Enterprise - Annual'
+        }
       }
     };
 
-    const subInfo = subscriptionPrices[tier as 'monthly' | 'enterprise'];
+    const subInfo = subscriptionPrices[normalizedTier as 'monthly' | 'enterprise'][period as 'monthly' | 'annual'];
 
     // Create Stripe checkout session for subscription
     const session = await stripe.checkout.sessions.create({
@@ -188,13 +212,14 @@ router.post('/subscribe', async (req, res) => {
         quantity: 1,
       }],
       mode: 'subscription',
-      success_url: `${process.env.FRONTEND_URL}/dashboard?subscription=success&tier=${tier}`,
+      success_url: `${process.env.FRONTEND_URL}/dashboard?subscription=success&tier=${tier}&period=${period}`,
       cancel_url: `${process.env.FRONTEND_URL}/pricing?subscription=cancelled`,
       metadata: {
         type: 'subscription',
         company_id: companyId,
         company_name: company?.name || 'Unknown',
-        tier,
+        tier: normalizedTier,
+        period,
       },
     });
 
@@ -219,17 +244,17 @@ async function grantSubscriptionBenefits(
   const benefits = {
     monthly: {
       monthly_credit_refresh: 0, // No automatic credits - must purchase separately
-      monthly_unlocks_5_star: 5, // 5 unlocks for 5.0⭐ chapters per month
-      monthly_unlocks_4_star: 5, // 5 unlocks for 4.0-4.9⭐ chapters per month
-      monthly_unlocks_3_star: 10, // 10 unlocks for 3.0-3.9⭐ chapters per month
-      monthly_warm_intros: 1, // 1 warm intro per month (first 3 months only)
+      monthly_unlocks_5_star: 1, // 1 Premium unlock (5.0⭐) per month
+      monthly_unlocks_4_star: 4, // 4 Quality unlocks (4.0-4.9⭐) per month
+      monthly_unlocks_3_star: 7, // 7 Standard unlocks (3.0-3.9⭐) per month
+      monthly_warm_intros: 1, // 1 warm intro (new clients only, one-time benefit)
       max_team_seats: 3,
     },
     enterprise: {
       monthly_credit_refresh: 1000, // 1000 credits per month
-      monthly_unlocks_5_star: -1, // -1 means unlimited
-      monthly_unlocks_4_star: -1, // -1 means unlimited
-      monthly_unlocks_3_star: -1, // -1 means unlimited
+      monthly_unlocks_5_star: 3, // 3 Premium unlocks (5.0⭐) per month
+      monthly_unlocks_4_star: 25, // 25 Quality unlocks (4.0-4.9⭐) per month
+      monthly_unlocks_3_star: 60, // 60 Standard unlocks (3.0-3.9⭐) per month
       monthly_warm_intros: 3, // 3 warm intros per month
       max_team_seats: 10,
     }
@@ -612,6 +637,43 @@ router.post('/webhook', async (req, res) => {
           });
 
           console.log(`✅ Added ${credits} credits to company ${companyId}`);
+
+          // Get updated balance and company/user info for Slack notification
+          const { data: updatedAccount } = await supabase
+            .from('account_balance')
+            .select('balance_credits')
+            .eq('company_id', companyId)
+            .single();
+
+          const { data: company } = await supabase
+            .from('companies')
+            .select('company_name')
+            .eq('id', companyId)
+            .single();
+
+          const { data: teamMember } = await supabase
+            .from('team_members')
+            .select('user_id, user_profiles(first_name, last_name)')
+            .eq('company_id', companyId)
+            .limit(1)
+            .single();
+
+          const userName = teamMember?.user_profiles
+            ? `${teamMember.user_profiles.first_name} ${teamMember.user_profiles.last_name}`
+            : 'Unknown User';
+
+          // Find the credit package to get the label
+          const creditPackage = PRICING.CREDIT_PACKAGES.find(pkg => pkg.credits === credits);
+
+          // Send Slack notification
+          await slack.notifyCreditPurchase({
+            userName,
+            company: company?.company_name || metadata.company_name || 'Unknown Company',
+            packageName: creditPackage?.label || `${credits} Credits`,
+            credits,
+            amount: dollarAmount,
+            newBalance: updatedAccount?.balance_credits || 0
+          });
 
         } else if (metadata?.type === 'subscription') {
           // New subscription created
@@ -1036,6 +1098,173 @@ router.post('/subscription/reset-benefits', async (req, res) => {
   } catch (error: any) {
     console.error('Benefit reset error:', error);
     res.status(500).json({ error: 'Failed to reset benefits', details: error.message });
+  }
+});
+
+// Change/upgrade subscription with proration
+router.post('/subscription/change', async (req, res) => {
+  try {
+    const { companyId, newTier, newPeriod } = req.body;
+
+    if (!companyId || !newTier || !newPeriod) {
+      return res.status(400).json({ error: 'Company ID, tier, and period required' });
+    }
+
+    if (!['monthly', 'team', 'enterprise'].includes(newTier)) {
+      return res.status(400).json({ error: 'Invalid tier. Must be team or enterprise' });
+    }
+
+    if (!['monthly', 'annual'].includes(newPeriod)) {
+      return res.status(400).json({ error: 'Invalid period. Must be monthly or annual' });
+    }
+
+    const supabase = getSupabaseAdmin();
+    const stripe = getStripe();
+
+    // Get current subscription info
+    const { data: account, error: accountError } = await supabase
+      .from('account_balance')
+      .select('stripe_subscription_id, subscription_tier, stripe_customer_id')
+      .eq('company_id', companyId)
+      .single();
+
+    if (accountError || !account || !account.stripe_subscription_id) {
+      return res.status(404).json({ error: 'No active subscription found' });
+    }
+
+    // Normalize tier names (team -> monthly for backend consistency)
+    const normalizedNewTier = newTier === 'team' ? 'monthly' : newTier;
+    const currentTier = account.subscription_tier || 'monthly';
+
+    // Define subscription prices
+    const subscriptionPrices = {
+      monthly: {
+        monthly: {
+          priceId: process.env.STRIPE_PRICE_MONTHLY || 'price_monthly',
+          amount: 29.99,
+          credits: 100,
+          name: 'Team - Monthly'
+        },
+        annual: {
+          priceId: process.env.STRIPE_PRICE_MONTHLY_ANNUAL || 'price_monthly_annual',
+          amount: 323.89,
+          credits: 100,
+          name: 'Team - Annual'
+        }
+      },
+      enterprise: {
+        monthly: {
+          priceId: process.env.STRIPE_PRICE_ENTERPRISE || 'price_enterprise',
+          amount: 299.99,
+          credits: 1000,
+          name: 'Enterprise - Monthly'
+        },
+        annual: {
+          priceId: process.env.STRIPE_PRICE_ENTERPRISE_ANNUAL || 'price_enterprise_annual',
+          amount: 3239.89,
+          credits: 1000,
+          name: 'Enterprise - Annual'
+        }
+      }
+    };
+
+    const newPriceInfo = subscriptionPrices[normalizedNewTier as 'monthly' | 'enterprise'][newPeriod as 'monthly' | 'annual'];
+
+    // Get the current subscription from Stripe
+    const subscription = await stripe.subscriptions.retrieve(account.stripe_subscription_id);
+
+    // Update the subscription with proration
+    const updatedSubscription = await stripe.subscriptions.update(
+      account.stripe_subscription_id,
+      {
+        items: [{
+          id: subscription.items.data[0].id,
+          price: newPriceInfo.priceId,
+        }],
+        proration_behavior: 'always_invoice', // Create invoice immediately for prorated amount
+        metadata: {
+          type: 'subscription',
+          company_id: companyId,
+          tier: normalizedNewTier,
+          period: newPeriod,
+          changed_from: currentTier,
+        }
+      }
+    );
+
+    // Update local database with new tier
+    await supabase
+      .from('account_balance')
+      .update({
+        subscription_tier: normalizedNewTier,
+        subscription_current_period_end: new Date(updatedSubscription.current_period_end * 1000).toISOString()
+      })
+      .eq('company_id', companyId);
+
+    // Grant new tier benefits immediately
+    const currentPeriodEnd = new Date(updatedSubscription.current_period_end * 1000);
+    await grantSubscriptionBenefits(
+      companyId,
+      normalizedNewTier,
+      updatedSubscription.id,
+      currentPeriodEnd,
+      false
+    );
+
+    // Get company info for notification
+    const { data: company } = await supabase
+      .from('companies')
+      .select('name')
+      .eq('id', companyId)
+      .single();
+
+    // Log subscription change in balance_transactions for history tracking
+    const proratedAmount = updatedSubscription.latest_invoice ?
+      (typeof updatedSubscription.latest_invoice === 'string' ? 0 : (updatedSubscription.latest_invoice.amount_due || 0) / 100) :
+      0;
+
+    await supabase
+      .from('balance_transactions')
+      .insert({
+        company_id: companyId,
+        amount_dollars: proratedAmount,
+        transaction_type: 'subscription_change',
+        description: `Subscription changed from ${currentTier} to ${normalizedNewTier} (${newPeriod})`,
+        stripe_payment_intent_id: updatedSubscription.id,
+        created_at: new Date().toISOString()
+      });
+
+    // Create admin notification for subscription change
+    const adminService = getAdminNotificationService();
+    adminService.createNotification({
+      type: 'subscription',
+      title: currentTier === 'monthly' && normalizedNewTier === 'enterprise' ? '⬆️ Subscription Upgraded' : '🔄 Subscription Changed',
+      message: `${company?.name || 'A company'} changed from ${currentTier} to ${normalizedNewTier} (${newPeriod})`,
+      data: {
+        companyId,
+        companyName: company?.name,
+        oldTier: currentTier,
+        newTier: normalizedNewTier,
+        period: newPeriod,
+        subscriptionId: updatedSubscription.id,
+        currentPeriodEnd: currentPeriodEnd.toISOString()
+      },
+      relatedCompanyId: companyId
+    }).catch(err => console.error('Failed to create admin notification:', err));
+
+    res.json({
+      success: true,
+      message: 'Subscription updated successfully',
+      newTier: normalizedNewTier,
+      newPeriod,
+      currentPeriodEnd: currentPeriodEnd.toISOString(),
+      proratedAmount: updatedSubscription.latest_invoice ?
+        (typeof updatedSubscription.latest_invoice === 'string' ? null : updatedSubscription.latest_invoice.amount_due / 100) :
+        null
+    });
+  } catch (error: any) {
+    console.error('Subscription change error:', error);
+    res.status(500).json({ error: 'Failed to change subscription', details: error.message });
   }
 });
 

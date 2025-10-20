@@ -198,10 +198,31 @@ export function getCollegeLogoWithFallback(collegeName: string): string {
 
   // Generate a data URL SVG with initials as fallback
   const initials = getCollegeInitials(collegeName);
+
+  // Generate consistent color based on college name hash
+  const { gradient, textColor } = getCollegeColors(collegeName);
+
   const svg = `
-    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" fill="#4F46E5"/>
-      <text x="50" y="50" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="central">
+    <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+      <defs>
+        <linearGradient id="grad-${initials}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:${gradient[0]};stop-opacity:1" />
+          <stop offset="100%" style="stop-color:${gradient[1]};stop-opacity:1" />
+        </linearGradient>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+          <feOffset dx="0" dy="2" result="offsetblur"/>
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="0.3"/>
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <rect width="120" height="120" rx="16" fill="url(#grad-${initials})" filter="url(#shadow)"/>
+      <text x="60" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="700" fill="${textColor}" text-anchor="middle" dominant-baseline="middle" letter-spacing="-1">
         ${initials}
       </text>
     </svg>
@@ -245,4 +266,43 @@ export function getCollegeInitials(collegeName: string): string {
     .slice(0, 3)
     .map(word => word[0].toUpperCase())
     .join('');
+}
+
+/**
+ * Generate consistent gradient colors based on college name
+ */
+export function getCollegeColors(collegeName: string): { gradient: [string, string]; textColor: string } {
+  // Beautiful gradient combinations
+  const gradients: Array<{ gradient: [string, string]; textColor: string }> = [
+    { gradient: ['#667eea', '#764ba2'], textColor: '#ffffff' }, // Purple
+    { gradient: ['#f093fb', '#f5576c'], textColor: '#ffffff' }, // Pink-Red
+    { gradient: ['#4facfe', '#00f2fe'], textColor: '#ffffff' }, // Blue-Cyan
+    { gradient: ['#43e97b', '#38f9d7'], textColor: '#1a202c' }, // Green-Teal
+    { gradient: ['#fa709a', '#fee140'], textColor: '#1a202c' }, // Pink-Yellow
+    { gradient: ['#30cfd0', '#330867'], textColor: '#ffffff' }, // Cyan-Purple
+    { gradient: ['#a8edea', '#fed6e3'], textColor: '#1a202c' }, // Light Blue-Pink
+    { gradient: ['#ff9a56', '#ff6a88'], textColor: '#ffffff' }, // Orange-Pink
+    { gradient: ['#fbc2eb', '#a6c1ee'], textColor: '#1a202c' }, // Pink-Blue
+    { gradient: ['#fdcbf1', '#e6dee9'], textColor: '#1a202c' }, // Light Pink
+    { gradient: ['#a1c4fd', '#c2e9fb'], textColor: '#1a202c' }, // Sky Blue
+    { gradient: ['#ffecd2', '#fcb69f'], textColor: '#1a202c' }, // Peach
+    { gradient: ['#ff6e7f', '#bfe9ff'], textColor: '#ffffff' }, // Red-Blue
+    { gradient: ['#e0c3fc', '#8ec5fc'], textColor: '#1a202c' }, // Purple-Blue
+    { gradient: ['#f8b500', '#fceabb'], textColor: '#1a202c' }, // Gold
+    { gradient: ['#d299c2', '#fef9d7'], textColor: '#1a202c' }, // Purple-Cream
+    { gradient: ['#7F7FD5', '#91EAE4'], textColor: '#ffffff' }, // Indigo-Teal
+    { gradient: ['#89f7fe', '#66a6ff'], textColor: '#ffffff' }, // Cyan-Blue
+    { gradient: ['#fddb92', '#d1fdff'], textColor: '#1a202c' }, // Yellow-Cyan
+    { gradient: ['#9890e3', '#b1f4cf'], textColor: '#1a202c' }, // Purple-Green
+  ];
+
+  // Simple hash function to get consistent color for same name
+  let hash = 0;
+  for (let i = 0; i < collegeName.length; i++) {
+    hash = ((hash << 5) - hash) + collegeName.charCodeAt(i);
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  const index = Math.abs(hash) % gradients.length;
+
+  return gradients[index];
 }

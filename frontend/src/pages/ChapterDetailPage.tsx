@@ -19,7 +19,9 @@ import {
   ExternalLink,
   Lock,
   Unlock,
-  Handshake
+  Handshake,
+  LayoutGrid,
+  Layers
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 import { maskName, maskEmail, maskPhone, getMaskingTier, getMaskingIndicator } from '../utils/dataMasking';
@@ -57,6 +59,7 @@ const ChapterDetailPage = () => {
   });
   const [isSubmittingIntro, setIsSubmittingIntro] = useState(false);
   const [introSubmitted, setIntroSubmitted] = useState(false);
+  const [leadershipView, setLeadershipView] = useState<'card' | 'grid'>('card');
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
   const token = localStorage.getItem('token');
@@ -386,73 +389,153 @@ const ChapterDetailPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Link
-            to={backLink}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <img
-            src={getCollegeLogoWithFallback(chapter.university)}
-            alt={chapter.university}
-            className="w-16 h-16 object-contain"
-          />
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              {chapter.fraternity} - {chapter.chapterName}
-            </h1>
-            <p className="text-gray-600 mt-1">{chapter.university} • {chapter.state}</p>
-          </div>
-        </div>
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-2xl shadow-lg border-2 border-blue-100 p-6 overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-indigo-400/10 to-pink-400/10 rounded-full blur-3xl -ml-24 -mb-24"></div>
 
-        {/* Year Selector */}
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-600">School Year:</span>
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            {years.map(year => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </select>
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="flex items-center space-x-6">
+            <Link
+              to={backLink}
+              className="group p-3 bg-white hover:bg-blue-50 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200 hover:border-blue-300"
+            >
+              <ArrowLeft className="w-5 h-5 text-gray-700 group-hover:text-blue-600 transition-colors" />
+            </Link>
+
+            {/* College Logo with enhanced styling */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+              <div className="relative bg-white p-3 rounded-2xl shadow-lg border-2 border-gray-200 group-hover:border-blue-300 transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3">
+                <img
+                  src={getCollegeLogoWithFallback(chapter.university)}
+                  alt={chapter.university}
+                  className="w-20 h-20 object-contain"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+                {chapter.fraternity}
+              </h1>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+                  {chapter.chapterName}
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Building className="w-4 h-4 text-blue-600" />
+                  <p className="font-medium">{chapter.university}</p>
+                  <span className="text-gray-400">•</span>
+                  <MapPin className="w-4 h-4 text-green-600" />
+                  <p className="font-medium">{chapter.state}</p>
+                </div>
+                <Link
+                  to={`/app/map?state=${encodeURIComponent(chapter.state)}`}
+                  className="group inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105"
+                >
+                  <MapPin className="w-4 h-4 group-hover:animate-bounce" />
+                  View in Map
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Year Selector */}
+          <div className="flex items-center space-x-3 bg-white rounded-xl shadow-md p-4 border border-gray-200">
+            <Calendar className="w-5 h-5 text-blue-600" />
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500 font-medium">School Year</span>
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="text-sm font-bold text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer"
+              >
+                {years.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
+        <div className="group relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6">
+          {/* Decorative circles */}
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+
+          <div className="relative z-10 flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-gray-900">{currentYearData.size}</p>
-              <p className="text-sm text-gray-600">Members</p>
+              <p className="text-4xl font-bold text-white mb-1">{currentYearData.size}</p>
+              <p className="text-sm text-white/90 font-medium">Active Members</p>
             </div>
-            <Users className="w-8 h-8 text-primary-500" />
+            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+              <Users className="w-8 h-8 text-white" />
+            </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
+
+        <div className="group relative bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6">
+          {/* Decorative circles */}
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+
+          <div className="relative z-10 flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold text-gray-900">{chapter.greekRank.toFixed(1)}⭐</p>
-              <p className="text-sm text-gray-600">Chapter Rating</p>
+              <div className="flex items-center gap-2">
+                <p className="text-4xl font-bold text-white">{chapter.greekRank.toFixed(1)}</p>
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className={`text-2xl ${i < Math.floor(chapter.greekRank) ? 'opacity-100' : 'opacity-30'}`}>⭐</span>
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm text-white/90 font-medium mt-1">Chapter Rating</p>
+              {unlockPricing.tierBadge && (
+                <span className="inline-block mt-1 text-xs bg-white/30 backdrop-blur-sm text-white px-2 py-0.5 rounded-full font-semibold">
+                  {unlockPricing.tierBadge}
+                </span>
+              )}
             </div>
-            <Award className="w-8 h-8 text-yellow-500" />
+            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+              <Award className="w-8 h-8 text-white" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Main Content Grid - Side by Side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Leadership Section */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-gray-900">Chapter Leadership</h2>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Award className="w-4 h-4" />
-              {balance} credits
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setLeadershipView('card')}
+                  className={`p-1.5 rounded ${leadershipView === 'card' ? 'bg-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                  title="Card View"
+                >
+                  <Layers className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setLeadershipView('grid')}
+                  className={`p-1.5 rounded ${leadershipView === 'grid' ? 'bg-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                  title="Grid View"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Award className="w-4 h-4" />
+                {balance} credits
+              </div>
             </div>
           </div>
 
@@ -508,7 +591,7 @@ const ChapterDetailPage = () => {
           )}
 
           {/* Dynamic Officers List */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className={`grid gap-4 ${leadershipView === 'grid' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
             {(() => {
               const filteredOfficers = officers.filter((officer) => officer.position && officer.position.toLowerCase() !== 'member');
 
@@ -548,50 +631,93 @@ const ChapterDetailPage = () => {
                     const officerName = officer.name || (officer.first_name && officer.last_name ? `${officer.first_name} ${officer.last_name}` : 'To be Determined');
 
                     return (
-                      <div key={officer.id} className="border rounded-lg p-4">
-                        <h3 className="font-semibold text-gray-900">{officer.position || 'To be Determined'}</h3>
-                        <p className="text-gray-900 mt-1">
-                          {officerName !== 'To be Determined' ? maskName(officerName, maskingTier) : 'To be Determined'}
-                          {maskingTier !== 'unlocked' && officerName !== 'To be Determined' && (
-                            <span className="ml-1 text-xs">{indicator}</span>
-                          )}
-                        </p>
-                        {officer.major && officer.graduation_year && (
-                          <p className="text-sm text-gray-600">{officer.major} • Class of {officer.graduation_year}</p>
+                      <div key={officer.id} className="group relative bg-white border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden">
+                        {/* Decorative gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                        {/* LinkedIn Badge - Top Right */}
+                        {officer.linkedin_url && maskingTier === 'unlocked' && (
+                          <a
+                            href={officer.linkedin_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute top-3 right-3 z-20 p-2 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg transition-all transform hover:scale-110"
+                            title="View LinkedIn Profile"
+                          >
+                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"/>
+                            </svg>
+                          </a>
                         )}
-                        <div className="mt-2 space-y-1">
-                          {officer.email ? (
-                            maskingTier === 'unlocked' ? (
-                              <a href={`mailto:${officer.email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                                <Mail className="w-4 h-4 mr-1" />
-                                {officer.email}
-                              </a>
-                            ) : (
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Mail className="w-4 h-4 mr-1" />
-                                <span>{maskEmail(officer.email, maskingTier)}</span>
-                                <span className="ml-1 text-xs">{indicator}</span>
-                              </div>
-                            )
-                          ) : (
-                            <p className="text-sm text-gray-500">Email: To be Determined</p>
+
+                        <div className="relative z-10">
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className="p-2 bg-blue-100 group-hover:bg-blue-200 rounded-lg transform group-hover:rotate-6 transition-all duration-300">
+                              <Users className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{officer.position || 'To be Determined'}</h3>
+                              <p className="text-gray-900 mt-1 font-medium">
+                                {officerName !== 'To be Determined' ? maskName(officerName, maskingTier) : 'To be Determined'}
+                                {maskingTier !== 'unlocked' && officerName !== 'To be Determined' && (
+                                  <span className="ml-1 text-xs">{indicator}</span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          {officer.major && officer.graduation_year && (
+                            <p className="text-sm text-gray-600 mb-3 pl-11">{officer.major} • Class of {officer.graduation_year}</p>
                           )}
-                          {officer.phone ? (
-                            maskingTier === 'unlocked' ? (
-                              <a href={`tel:${officer.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700">
-                                <Phone className="w-4 h-4 mr-1" />
-                                {officer.phone}
-                              </a>
+                          <div className="mt-3 space-y-2 pl-11">
+                            {officer.email ? (
+                              maskingTier === 'unlocked' ? (
+                                <a href={`mailto:${officer.email}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700 font-medium">
+                                  <Mail className="w-4 h-4 mr-2" />
+                                  {officer.email}
+                                </a>
+                              ) : (
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <Mail className="w-4 h-4 mr-2" />
+                                  <span>{maskEmail(officer.email, maskingTier)}</span>
+                                  <span className="ml-1 text-xs">{indicator}</span>
+                                </div>
+                              )
                             ) : (
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Phone className="w-4 h-4 mr-1" />
-                                <span>{maskPhone(officer.phone, maskingTier)}</span>
-                                <span className="ml-1 text-xs">{indicator}</span>
-                              </div>
-                            )
-                          ) : (
-                            <p className="text-sm text-gray-500">Phone: To be Determined</p>
-                          )}
+                              <p className="text-sm text-gray-500 flex items-center"><Mail className="w-4 h-4 mr-2" />Email: To be Determined</p>
+                            )}
+                            {officer.phone ? (
+                              maskingTier === 'unlocked' ? (
+                                <a href={`tel:${officer.phone}`} className="flex items-center text-sm text-primary-600 hover:text-primary-700 font-medium">
+                                  <Phone className="w-4 h-4 mr-2" />
+                                  {officer.phone}
+                                </a>
+                              ) : (
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <Phone className="w-4 h-4 mr-2" />
+                                  <span>{maskPhone(officer.phone, maskingTier)}</span>
+                                  <span className="ml-1 text-xs">{indicator}</span>
+                                </div>
+                              )
+                            ) : (
+                              <p className="text-sm text-gray-500 flex items-center"><Phone className="w-4 h-4 mr-2" />Phone: To be Determined</p>
+                            )}
+                            {officer.linkedin_url && maskingTier === 'unlocked' && (
+                              <a
+                                href={officer.linkedin_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group/linkedin flex items-center text-sm text-blue-600 hover:text-blue-700 font-medium"
+                              >
+                                <div className="w-4 h-4 mr-2 bg-blue-600 group-hover/linkedin:bg-blue-700 rounded flex items-center justify-center transition-colors">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"/>
+                                  </svg>
+                                </div>
+                                LinkedIn Profile
+                                <ExternalLink className="w-3 h-3 ml-1" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );
@@ -727,6 +853,90 @@ const ChapterDetailPage = () => {
             </div>
           </div>
 
+          {/* Unlock Full Roster Banner */}
+          {!isUnlocked('roster_access') && regularMembers.length > 0 && (
+            <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 via-pink-50 to-orange-50 border-2 border-purple-300 rounded-xl shadow-md">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-purple-100 rounded-xl">
+                  <Lock className="w-6 h-6 text-purple-600" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="font-bold text-gray-900 text-lg">🔓 Unlock Complete Chapter Roster</h3>
+                    <span className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-bold">
+                      Best Value 💎
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Get full access to the complete member roster with names, majors, graduation years, and LinkedIn profiles.
+                    Perfect for recruitment, networking, and partnership opportunities.
+                  </p>
+
+                  <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 mb-4 border border-purple-200">
+                    <p className="text-xs font-semibold text-gray-700 mb-3">What's included:</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600 mt-0.5">✓</span>
+                        <span className="text-xs text-gray-600">Full names for all {regularMembers.length}+ members</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600 mt-0.5">✓</span>
+                        <span className="text-xs text-gray-600">Majors and academic details</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600 mt-0.5">✓</span>
+                        <span className="text-xs text-gray-600">Graduation years (Class of)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600 mt-0.5">✓</span>
+                        <span className="text-xs text-gray-600">LinkedIn profile links</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600 mt-0.5">✓</span>
+                        <span className="text-xs text-gray-600">Member contact information</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600 mt-0.5">✓</span>
+                        <span className="text-xs text-gray-600">Lifetime access to this roster</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => handleUnlock('roster_access', 15)}
+                      disabled={isUnlocking}
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                    >
+                      {isUnlocking ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Unlocking...
+                        </>
+                      ) : (
+                        <>
+                          <Unlock className="w-5 h-5" />
+                          Unlock Full Roster for 15 Credits
+                        </>
+                      )}
+                    </button>
+                    <div className="text-sm">
+                      <p className="text-gray-700 font-semibold">≈ $15.00 value</p>
+                      <p className="text-xs text-gray-500">One-time unlock • Lifetime access</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isUnlocked('roster_access') && (
+            <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg flex items-center gap-2">
+              <Unlock className="w-5 h-5 text-purple-600" />
+              <span className="text-sm font-medium text-purple-900">Full roster unlocked! ✅ You have complete access to all member details</span>
+            </div>
+          )}
+
           {regularMembers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {regularMembers.map((member) => {
@@ -738,36 +948,45 @@ const ChapterDetailPage = () => {
                 const memberName = member.name || (member.first_name && member.last_name ? `${member.first_name} ${member.last_name}` : 'Member');
 
                 return (
-                  <div key={member.id} className="border rounded-lg p-4 hover:border-primary-300 transition-colors">
-                    <div className="flex items-start gap-3">
+                  <div key={member.id} className="group relative bg-white border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 overflow-hidden">
+                    {/* Decorative gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                    <div className="relative z-10 flex items-start gap-3">
                       {chapterData?.universities && (
-                        <img
-                          src={chapterData.universities.logo_url || getCollegeLogoWithFallback(chapterData.universities.name)}
-                          alt={chapterData.universities.name}
-                          className="w-10 h-10 object-contain flex-shrink-0 bg-white rounded border border-gray-100 p-1"
-                        />
+                        <div className="flex-shrink-0">
+                          <img
+                            src={chapterData.universities.logo_url || getCollegeLogoWithFallback(chapterData.universities.name)}
+                            alt={chapterData.universities.name}
+                            className="w-12 h-12 object-contain bg-white rounded-lg border-2 border-gray-200 group-hover:border-indigo-300 p-1.5 shadow-sm transform group-hover:rotate-3 transition-all duration-300"
+                          />
+                        </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-gray-900 font-medium truncate">
+                        <p className="text-gray-900 font-bold truncate group-hover:text-indigo-600 transition-colors">
                           {maskName(memberName, maskingTier)}
                           {maskingTier !== 'unlocked' && (
                             <span className="ml-1 text-xs">{indicator}</span>
                           )}
                         </p>
                         {member.major && (
-                          <p className="text-sm text-gray-600 truncate">{member.major}</p>
+                          <p className="text-sm text-gray-600 truncate mt-0.5">{member.major}</p>
                         )}
                         {member.graduation_year && (
-                          <p className="text-xs text-gray-500">Class of {member.graduation_year}</p>
+                          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            Class of {member.graduation_year}
+                          </p>
                         )}
                         {member.linkedin_url && maskingTier === 'unlocked' && (
                           <a
                             href={member.linkedin_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-1"
+                            className="text-xs text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-2 font-medium"
                           >
-                            LinkedIn
+                            <Globe className="w-3 h-3" />
+                            LinkedIn Profile
                             <ExternalLink className="w-3 h-3" />
                           </a>
                         )}
@@ -1047,6 +1266,7 @@ const ChapterDetailPage = () => {
                       {isSubmittingIntro ? 'Submitting...' : 'Submit Request'}
                     </button>
                   </form>
+                  </>
                 )}
                 <p className="text-xs text-gray-600 mt-4">
                   💡 Our team typically responds within 24 hours to facilitate the introduction.

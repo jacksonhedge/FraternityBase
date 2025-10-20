@@ -18,6 +18,7 @@ import AdminNotificationService from './services/AdminNotificationService';
 import DailyReportService from './services/DailyReportService';
 import { EnhancedDailyReportService } from './services/EnhancedDailyReportService';
 import { fetchInstagramData, getInstagramHandle } from './utils/instagram';
+import { slack } from './utils/slackNotifier';
 
 dotenv.config();
 
@@ -1465,6 +1466,25 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
       relatedCompanyId: profile.company_id
     }).catch(err => console.error('Failed to create admin notification:', err));
 
+    // Send Slack notification
+    const { data: userProfile } = await supabaseAdmin
+      .from('user_profiles')
+      .select('first_name, last_name')
+      .eq('user_id', user.id)
+      .single();
+
+    const userName = userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'Unknown User';
+
+    await slack.notifyChapterUnlock({
+      userName,
+      company: company?.company_name || 'Unknown Company',
+      chapterName: chapterData?.chapter_name || 'Unknown Chapter',
+      universityName: (chapterData?.universities as any)?.name || 'Unknown University',
+      grade: parseFloat(chapterData?.grade || '0'),
+      creditsSpent: useSubscriptionUnlock ? 0 : credits,
+      remainingBalance: balanceData?.balance_credits || 0
+    });
+
     res.json({
       success: true,
       balance: balanceData?.balance_credits || 0,
@@ -1823,6 +1843,14 @@ app.post('/api/signup', async (req, res) => {
       }
     });
 
+    // Send Slack notification
+    await slack.notifySignup({
+      name,
+      email,
+      company: companyName,
+      tier: newUser.status || 'pending'
+    });
+
     // Return success response
     res.json({
       success: true,
@@ -1943,7 +1971,7 @@ app.get('/api/chapters', async (req, res) => {
       .select(`
         *,
         greek_organizations(id, name, greek_letters, organization_type),
-        universities(id, name, location, state, student_count, logo_url)
+        universities(id, name, location, state, student_count, logo_url, conference, division)
       `)
       .eq('status', 'active')
       .eq('is_viewable', true);
@@ -2122,6 +2150,11 @@ app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
 
     console.log('Filtered Data:', JSON.stringify(filteredData, null, 2));
 
+
+    // Sanitize date fields - convert empty strings to null
+    if (filteredData.charter_date === '') {
+      filteredData.charter_date = null;
+    }
     // Update the chapter
     const { data, error } = await supabaseAdmin
       .from('chapters')
@@ -4135,6 +4168,13 @@ app.post('/api/waitlist', async (req, res) => {
       console.error('Error sending admin notification:', adminEmailError);
     }
 
+    // Send Slack notification
+    await slack.notifyWaitlistJoin({
+      email,
+      position: count || 1,
+      source: source || 'unknown'
+    });
+
     console.log(`📧 Waitlist signup: ${email} (Position: #${count || 1})`);
 
     res.json({
@@ -4269,6 +4309,170 @@ app.delete('/api/admin/coming-tomorrow/:id', requireAdmin, async (req, res) => {
     res.json({ success: true });
   } catch (error: any) {
     console.error('Error deleting coming tomorrow item:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get recently added items - show items from last 3 days
+app.get('/api/dashboard/recent-additions', async (req, res) => {
+  try {
+    // Calculate date 3 days ago
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    const threeDaysAgoISO = threeDaysAgo.toISOString();
+
+    // Fetch recent universities (last 3 days)
+    const { data: universities, error: uniError } = await supabase
+      .from('universities')
+      .select('id, name, created_at, logo_url')
+      .gte('created_at', threeDaysAgoISO)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (uniError) throw uniError;
+
+    // Fetch recent chapters (last 3 days)
+    const { data: chapters, error: chaptersError } = await supabase
+      .from('chapters')
+      .select(`
+        id,
+        chapter_name,
+        created_at,
+        universities(name, logo_url),
+        greek_organizations(name)
+      `)
+      .gte('created_at', threeDaysAgoISO)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (chaptersError) throw chaptersError;
+
+    // Fetch recent officers (for roster updates) - last 3 days
+    const { data: officers, error: officersError } = await supabase
+      .from('officers')
+      .select(`
+        id,
+        name,
+        created_at,
+        chapters(
+          id,
+          chapter_name,
+          universities(name, logo_url),
+          greek_organizations(name)
+        )
+      `)
+      .gte('created_at', threeDaysAgoISO)
+      .order('created_at', { ascending: false })
+      .limit(100);
+
+    if (officersError) throw officersError;
+
+    // Combine and format the results
+    const recentAdditions = [
+      ...(universities || []).map(uni => ({
+        type: 'university',
+        id: uni.id,
+        name: uni.name,
+        college_name: uni.name,
+        logo_url: uni.logo_url,
+        created_at: uni.created_at,
+        description: 'New school added to database'
+      })),
+      ...(chapters || []).map(ch => ({
+        type: 'chapter',
+        id: ch.id,
+        name: `${(ch.universities as any)?.name} ${(ch.greek_organizations as any)?.name}`,
+        college_name: (ch.universities as any)?.name,
+        chapter_name: (ch.greek_organizations as any)?.name,
+        logo_url: (ch.universities as any)?.logo_url,
+        created_at: ch.created_at,
+        description: (ch.universities as any)?.name
+      })),
+      // Group officers by chapter to show roster updates
+      ...Object.values(
+        (officers || []).reduce((acc: any, officer: any) => {
+          const chapterId = officer.chapters?.id;
+
+          // Only include if chapter exists
+          if (!chapterId || !officer.chapters) return acc;
+
+          if (!acc[chapterId]) {
+            acc[chapterId] = {
+              type: 'roster',
+              id: chapterId,
+              name: `${officer.chapters.universities?.name} ${officer.chapters.greek_organizations?.name} Roster`,
+              college_name: officer.chapters.universities?.name,
+              chapter_name: officer.chapters.greek_organizations?.name,
+              logo_url: officer.chapters.universities?.logo_url,
+              created_at: officer.created_at,
+              description: `${officer.chapters.universities?.name} • Updated roster`,
+              member_count: 1
+            };
+          } else {
+            acc[chapterId].member_count++;
+            // Update description with member count
+            acc[chapterId].description = `${officer.chapters.universities?.name} • ${acc[chapterId].member_count} members`;
+          }
+          return acc;
+        }, {})
+      )
+    ];
+
+    // Sort by created_at descending and limit to 10 most recent
+    const sorted = recentAdditions
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 10);
+
+    console.log(`✅ Retrieved ${sorted.length} recent additions from past 3 days`);
+    res.json({ success: true, data: sorted });
+  } catch (error: any) {
+    console.error('Error fetching recent additions:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Toggle university visibility in dashboard "Newly Added"
+app.patch('/api/admin/universities/:id/dashboard-visibility', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { show_in_dashboard } = req.body;
+
+    const { data, error } = await supabase
+      .from('universities')
+      .update({ show_in_dashboard })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Updated university ${id} dashboard visibility to:`, show_in_dashboard);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error updating university dashboard visibility:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Toggle chapter visibility in dashboard "Newly Added"
+app.patch('/api/admin/chapters/:id/dashboard-visibility', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { show_in_dashboard } = req.body;
+
+    const { data, error } = await supabase
+      .from('chapters')
+      .update({ show_in_dashboard })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Updated chapter ${id} dashboard visibility to:`, show_in_dashboard);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error updating chapter dashboard visibility:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

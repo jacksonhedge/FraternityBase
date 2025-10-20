@@ -920,7 +920,7 @@ export const COLLEGE_LOCATIONS = {
   "Northwestern Oklahoma State University (OK)": { lat: 34.9477, lng: -96.552, state: "OK", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
   "Oklahoma Baptist University (OK)": { lat: 35.301, lng: -96.9339, state: "OK", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
   "Oklahoma Christian University (OK)": { lat: 35.8476, lng: -96.293, state: "OK", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
-  "Oklahoma State University–Stillwater (OK)": { lat: 35.9518, lng: -96.3417, state: "OK", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
+  "Oklahoma State University–Stillwater (OK)": { lat: 35.9518, lng: -96.3417, state: "OK", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "BIG 12", division: "D1" },
   "Oral Roberts University (OK)": { lat: 35.2952, lng: -97.4835, state: "OK", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
   "Rogers State University (OK)": { lat: 36.5267, lng: -97.1192, state: "OK", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
   "Southeastern Oklahoma State University (OK)": { lat: 35.6724, lng: -96.1612, state: "OK", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
@@ -928,7 +928,7 @@ export const COLLEGE_LOCATIONS = {
   "Southwestern Oklahoma State University (OK)": { lat: 35.0893, lng: -97.9204, state: "OK", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
   "The University of Tulsa (OK)": { lat: 34.7837, lng: -97.9111, state: "OK", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
   "University of Central Oklahoma (OK)": { lat: 36.1036, lng: -96.1793, state: "OK", fraternities: 15, sororities: 10, totalMembers: 1000, conference: "", division: "D2" },
-  "University of Oklahoma (OK)": { lat: 35.2472, lng: -96.6582, state: "OK", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "", division: "D1" },
+  "University of Oklahoma (OK)": { lat: 35.2472, lng: -96.6582, state: "OK", fraternities: 30, sororities: 20, totalMembers: 2500, conference: "SEC", division: "D1" },
 
   // OR
   "George Fox University (OR)": { lat: 44.4218, lng: -121.3437, state: "OR", fraternities: 8, sororities: 5, totalMembers: 500, conference: "", division: "D3" },

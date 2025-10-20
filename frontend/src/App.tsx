@@ -30,6 +30,7 @@ import CollegesPage from './pages/CollegesPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
 import MapPage from './pages/MapPage';
 import MapPageFullScreen from './pages/MapPageFullScreen';
+import SuperMapPage from './pages/SuperMapPage';
 import ChaptersPage from './pages/ChaptersPage';
 import ChapterDetailPage from './pages/ChapterDetailPage';
 import EventsPage from './pages/EventsPage';
@@ -176,6 +177,7 @@ function AnimatedRoutes() {
             <Route path="colleges" element={<CollegesPage />} />
             <Route path="colleges/:id" element={<CollegeDetailPage />} />
             <Route path="map" element={<MapPageFullScreen />} />
+            <Route path="supermap" element={<SuperMapPage />} />
             <Route path="chapters" element={<ChaptersPage />} />
             <Route path="chapters/:id" element={<ChapterDetailPage />} />
             <Route path="outreach" element={<OutreachPage />} />

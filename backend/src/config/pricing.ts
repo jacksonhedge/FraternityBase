@@ -26,10 +26,14 @@ export const PRICING = {
   ENTERPRISE_SUBSCRIPTION_GRANT: 500, // Enterprise tier monthly credits
 
   // Credit purchase options (credits and dollar prices)
+  // Priced around Premium unlock value ($27 per unlock)
+  // 100 credits (10 Premium unlocks) = $270 (matches Team→Enterprise tier difference)
   CREDIT_PACKAGES: [
-    { credits: 100, price: 29.99, label: 'Starter Pack' },
-    { credits: 500, price: 139.99, label: 'Value Pack (7% bonus)' },
-    { credits: 1000, price: 249.99, label: 'Pro Pack (17% bonus)' }
+    { credits: 10, price: 30, label: 'Trial' },
+    { credits: 100, price: 270, label: 'Starter' },
+    { credits: 200, price: 500, label: 'Popular' },
+    { credits: 500, price: 1150, label: 'Professional' },
+    { credits: 1000, price: 2100, label: 'Enterprise' }
   ],
 
   // Dollar values for services (for analytics tracking)

@@ -118,6 +118,44 @@ export class SlackNotifier {
   }
 
   /**
+   * Notify when someone joins the waitlist
+   */
+  async notifyWaitlistJoin(data: {
+    email: string;
+    position: number;
+    source?: string;
+  }): Promise<void> {
+    const message: SlackMessage = {
+      text: `📋 New Waitlist Join: ${data.email}`,
+      blocks: [
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: '📋 Waitlist Join!'
+          }
+        },
+        {
+          type: 'section',
+          fields: [
+            { type: 'mrkdwn', text: `*Email:*\n${data.email}` },
+            { type: 'mrkdwn', text: `*Position:*\n#${data.position}` },
+            { type: 'mrkdwn', text: `*Source:*\n${data.source || 'unknown'}` }
+          ]
+        },
+        {
+          type: 'context',
+          elements: [
+            { type: 'mrkdwn', text: `⏰ ${this.formatTimestamp()}` }
+          ]
+        }
+      ]
+    };
+
+    await this.send(message);
+  }
+
+  /**
    * Notify when a user purchases credits
    */
   async notifyCreditPurchase(data: {

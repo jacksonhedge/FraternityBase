@@ -55,6 +55,7 @@ const DashboardPage = () => {
   const [activityFeed, setActivityFeed] = useState<any[]>([]);
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('approved');
   const [recentChapters, setRecentChapters] = useState<any[]>([]);
+  const [recentAdditions, setRecentAdditions] = useState<any[]>([]);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
   const token = localStorage.getItem('token');
@@ -95,12 +96,14 @@ const DashboardPage = () => {
         }).then(res => res.json()).catch(() => ({ data: [] })),
         fetch(`${API_URL}/activity-feed/public?limit=15`).then(res => res.json()).catch(() => ({ data: [] })),
         fetch(`${API_URL}/chapters/recent`).then(res => res.json()).catch(() => ({ data: [] })),
-        fetch(`${API_URL}/admin/coming-tomorrow`).then(res => res.json()).catch(() => ({ data: [] }))
+        fetch(`${API_URL}/admin/coming-tomorrow`).then(res => res.json()).catch(() => ({ data: [] })),
+        fetch(`${API_URL}/dashboard/recent-additions`).then(res => res.json()).catch(() => ({ data: [] }))
       ])
-        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData, recentChaptersData, comingTomorrowData]) => {
+        .then(([creditsData, chaptersData, allChaptersData, universitiesData, activityData, recentChaptersData, comingTomorrowData, recentAdditionsData]) => {
           console.log('[Dashboard] Recent chapters API response:', recentChaptersData);
           console.log('[Dashboard] Recent chapters data array:', recentChaptersData.data);
           console.log('[Dashboard] Coming tomorrow data:', comingTomorrowData);
+          console.log('[Dashboard] Recent additions data:', recentAdditionsData);
 
           setAccountBalance(creditsData.balance || 0);
           setLifetimeSpent(creditsData.lifetimeSpent || 0);
@@ -109,6 +112,7 @@ const DashboardPage = () => {
           setUnlockedChapters(chaptersData.data || []);
           setActivityFeed(activityData.data || []);
           setComingSoonItems(comingTomorrowData.data || []);
+          setRecentAdditions(recentAdditionsData.data || []);
 
           const formattedChapters = (recentChaptersData.data || []).map((item: any) => ({ ...item, metadata: item }));
           console.log('[Dashboard] Formatted chapters for tickertape:', formattedChapters);
@@ -219,52 +223,139 @@ const DashboardPage = () => {
 
 
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          {user?.company?.name ? `Welcome back, ${user.company.name}!` : 'Welcome Back!'}
-        </h1>
-        <p className="text-gray-600 mt-1">
-          Here's your dashboard overview
-        </p>
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-2xl shadow-lg border-2 border-blue-100 p-8 overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-indigo-400/10 to-pink-400/10 rounded-full blur-3xl -ml-24 -mb-24"></div>
+
+        <div className="relative z-10">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+            {user?.company?.name ? `Welcome back, ${user.company.name}!` : 'Welcome Back!'}
+          </h1>
+          <p className="text-gray-600 mt-2 text-lg">
+            Here's your partnership network overview
+          </p>
+        </div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Stats Grid - Enhanced KPI Cards */}
       <div ref={statsContainerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <div
-              key={index}
-              data-animate-card
-              className="bg-white rounded-lg shadow-sm p-6 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:bg-opacity-95"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}>
-                  <Icon className={`w-6 h-6 text-${stat.color}-600`} />
-                </div>
-                {stat.trend === 'up' && (
-                  <span className="flex items-center text-green-600 text-sm font-medium">
-                    <ArrowUp className="w-4 h-4 mr-1" />
-                    {stat.change}
-                  </span>
-                )}
-                {stat.trend === 'down' && (
-                  <span className="flex items-center text-red-600 text-sm font-medium">
-                    <ArrowDown className="w-4 h-4 mr-1" />
-                    {stat.change}
-                  </span>
-                )}
-                {stat.trend === 'neutral' && (
-                  <span className="text-gray-600 text-sm">
-                    {stat.change}
-                  </span>
-                )}
+        {/* Unlocked Chapters */}
+        <div
+          data-animate-card
+          className="group relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+        >
+          {/* Decorative circles */}
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <Unlock className="w-8 h-8 text-white" />
               </div>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
             </div>
-          );
-        })}
+            <div className="text-4xl font-bold text-white mb-2">{unlockedChapters.length}</div>
+            <div className="text-sm text-white/90 font-medium">Unlocked Chapters</div>
+            <p className="text-xs text-white/70 mt-1">Your active partnerships</p>
+
+            <Link
+              to="/app/chapters"
+              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-blue-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+            >
+              <Lock className="w-4 h-4" />
+              Unlock More
+            </Link>
+          </div>
+        </div>
+
+        {/* Unlocked Ambassadors */}
+        <div
+          data-animate-card
+          className="group relative bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+        >
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div className="text-4xl font-bold text-white mb-2">
+              {unlockedChapters.reduce((sum, ch) => sum + (ch.unlockedTypes?.includes('leadership_access') ? 5 : 0), 0)}
+            </div>
+            <div className="text-sm text-white/90 font-medium">Unlocked Ambassadors</div>
+            <p className="text-xs text-white/70 mt-1">Officers you can contact</p>
+
+            <Link
+              to="/app/my-unlocked"
+              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-purple-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+            >
+              <Mail className="w-4 h-4" />
+              View Contacts
+            </Link>
+          </div>
+        </div>
+
+        {/* Credits Balance */}
+        <div
+          data-animate-card
+          className="group relative bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+        >
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <Coins className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div className="text-4xl font-bold text-white mb-2">{accountBalance}</div>
+            <div className="text-sm text-white/90 font-medium">Credits Balance</div>
+            <p className="text-xs text-white/70 mt-1">Available to spend</p>
+
+            <Link
+              to="/app/credits"
+              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-green-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+            >
+              <DollarSign className="w-4 h-4" />
+              Buy Credits
+            </Link>
+          </div>
+        </div>
+
+        {/* Total Network Size */}
+        <div
+          data-animate-card
+          className="group relative bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+        >
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <TrendingUp className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div className="text-4xl font-bold text-white mb-2">
+              {unlockedChapters.reduce((sum, ch) => sum + (ch.memberCount || 0), 0)}
+            </div>
+            <div className="text-sm text-white/90 font-medium">Total Network Size</div>
+            <p className="text-xs text-white/70 mt-1">Combined members reached</p>
+
+            <Link
+              to="/app/map"
+              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-orange-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+            >
+              <Target className="w-4 h-4" />
+              Expand Network
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Newly Added & Coming Tomorrow - Side by Side */}
@@ -278,79 +369,56 @@ const DashboardPage = () => {
             </h2>
           </div>
           <div className={`p-6 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
-            <div className="space-y-4">
-              {/* New School Example */}
-              <div className="border-l-4 border-green-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
-                <div className="flex items-start gap-3">
-                  <img
-                    src={getCollegeLogoWithFallback('Lehigh University')}
-                    alt="Lehigh University"
-                    className="w-12 h-12 object-contain flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <h4 className="font-medium text-gray-900">Lehigh University</h4>
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        Oct 15
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600">New school added to database</p>
-                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
-                      🏫 New School
-                    </span>
-                  </div>
-                </div>
-              </div>
+            {recentAdditions.length > 0 ? (
+              <div className="space-y-4">
+                {recentAdditions.slice(0, 6).map((item) => {
+                  const borderColor = item.type === 'university' ? 'green-500' :
+                                     item.type === 'chapter' ? 'blue-500' :
+                                     'purple-500';
+                  const badgeBg = item.type === 'university' ? 'green-100' :
+                                 item.type === 'chapter' ? 'blue-100' :
+                                 'purple-100';
+                  const badgeText = item.type === 'university' ? 'green-700' :
+                                   item.type === 'chapter' ? 'blue-700' :
+                                   'purple-700';
+                  const badgeLabel = item.type === 'university' ? '🏫 New School' :
+                                    item.type === 'chapter' ? '🆕 New Chapter' :
+                                    `📋 Updated Roster${item.member_count ? ` (${item.member_count})` : ''}`;
 
-              {/* New Chapter Example */}
-              <div className="border-l-4 border-blue-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
-                <div className="flex items-start gap-3">
-                  <img
-                    src={getCollegeLogoWithFallback('Penn State University')}
-                    alt="Penn State University"
-                    className="w-12 h-12 object-contain flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <h4 className="font-medium text-gray-900">Penn State SAE</h4>
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        Oct 16
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600">Penn State University</p>
-                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                      🆕 New Chapter
-                    </span>
-                  </div>
-                </div>
-              </div>
+                  const createdDate = new Date(item.created_at);
+                  const formattedDate = createdDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-              {/* New Roster Example */}
-              <div className="border-l-4 border-purple-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
-                <div className="flex items-start gap-3">
-                  <img
-                    src={getCollegeLogoWithFallback('Purdue University')}
-                    alt="Purdue University"
-                    className="w-12 h-12 object-contain flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <h4 className="font-medium text-gray-900">Purdue Sigma Chi Roster</h4>
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        Oct 17
-                      </span>
+                  return (
+                    <div key={`${item.type}-${item.id}`} className={`border-l-4 border-${borderColor} pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1`}>
+                      <div className="flex items-start gap-3">
+                        <img
+                          src={getCollegeLogoWithFallback(item.college_name)}
+                          alt={item.college_name}
+                          className="w-12 h-12 object-contain flex-shrink-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between">
+                            <h4 className="font-medium text-gray-900">{item.name}</h4>
+                            <span className="text-xs text-gray-500 flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              {formattedDate}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600">{item.description}</p>
+                          <span className={`inline-block mt-2 text-xs px-2 py-1 bg-${badgeBg} text-${badgeText} rounded-full`}>
+                            {badgeLabel}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-600">Purdue University • 94 members</p>
-                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">
-                      📋 Updated Roster
-                    </span>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
-            </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No recent additions in the past 3 days
+              </div>
+            )}
           </div>
         </div>
 
@@ -378,9 +446,17 @@ const DashboardPage = () => {
                   const badgeText = item.update_type === 'new_chapter' ? 'orange-700' :
                                    item.update_type === 'roster_update' ? 'yellow-700' :
                                    'pink-700';
-                  const badgeLabel = item.update_type === 'new_chapter' ? '🚀 New Chapter Tomorrow' :
-                                    item.update_type === 'roster_update' ? '📋 Roster Update Tomorrow' :
-                                    '🚀 New Sorority Tomorrow';
+                  // Format the scheduled date
+                  const scheduledDate = item.scheduled_date ? new Date(item.scheduled_date) : null;
+                  const dateStr = scheduledDate ? scheduledDate.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric'
+                  }) : 'Soon';
+
+                  const badgeLabel = item.update_type === 'new_chapter' ? `🚀 New Chapter ${dateStr}` :
+                                    item.update_type === 'roster_update' ? `📋 Roster Update ${dateStr}` :
+                                    `🚀 New Sorority ${dateStr}`;
 
                   return (
                     <div key={item.id} className={`border-l-4 border-${borderColor} pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1`}>
@@ -423,36 +499,6 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Coming Soon */}
-      {comingSoonItems.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-blue-600" />
-            Coming Soon
-          </h2>
-          <div className={`space-y-4 ${approvalStatus === 'pending' ? 'pointer-events-none opacity-60' : ''}`}>
-            {comingSoonItems.map((item) => (
-              <div key={item.id} className="border-l-4 border-blue-500 pl-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 rounded-r-lg hover:-translate-y-0.5 p-3 -ml-1">
-                <div className="flex items-start gap-3">
-                  <img
-                    src={getCollegeLogoWithFallback(item.university_name)}
-                    alt={item.university_name}
-                    className="w-12 h-12 object-contain flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">{item.university_name}</h4>
-                    <p className="text-sm text-gray-600">{item.description}</p>
-                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                      🔜 Coming Soon
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
