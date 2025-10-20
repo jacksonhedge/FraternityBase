@@ -38,3 +38,4 @@ tmp/
 temp/
 .vercel
 .env*
+.env.vercel.production
