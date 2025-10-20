@@ -552,7 +552,7 @@ app.use('/api/admin/notifications', adminNotificationsRouter);
 // Admin authentication middleware (temporarily disabled for debugging)
 const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const adminToken = req.headers['x-admin-token'];
-  const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '***REMOVED***';
+  const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
 
   console.log('🔐 Admin auth check:', {
     receivedToken: adminToken ? `${String(adminToken).substring(0, 10)}...` : 'none',
@@ -575,7 +575,7 @@ const checkWizardAdmin = async (req: express.Request, res: express.Response, nex
   try {
     // Check for admin token first (for admin panel compatibility)
     const adminToken = req.headers['x-admin-token'];
-    const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '***REMOVED***';
+    const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
 
     if (adminToken && adminToken === ADMIN_TOKEN) {
       // Admin token is valid - check wizard status for the admin email
@@ -4485,7 +4485,7 @@ app.get('/api/wizard/status', async (req, res) => {
   try {
     // Check for admin token first (for admin panel compatibility)
     const adminToken = req.headers['x-admin-token'];
-    const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '***REMOVED***';
+    const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
 
     console.log('🔍 Wizard status check:', {
       hasToken: !!adminToken,

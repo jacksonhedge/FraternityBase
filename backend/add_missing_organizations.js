@@ -1,7 +1,7 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = '***REMOVED***';
-const supabaseServiceKey = '***REMOVED***';
+const supabaseUrl = 'https://oqptnptlshlhbmmnjamb.supabase.co';
+const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xcHRucHRsc2hsaGJtbW5qYW1iIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNzI5OTA3NywiZXhwIjoyMDQyODc1MDc3fQ.0B5hMmVtcCexKH7Oq14iPYSc90Uh8qjHCEbpzPVX7Jk';
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 

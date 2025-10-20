@@ -3,9 +3,9 @@
 ## Database Information
 - **Project**: FraternityBase
 - **Supabase Project ID**: `vvsawtexgpopqxgaqyxg`
-- **Database URL**: `***REMOVED***`
+- **Database URL**: `https://oqptnptlshlhbmmnjamb.supabase.co`
 - **Admin API**: `https://backend-cnwqxx53h-jackson-fitzgeralds-projects.vercel.app/api`
-- **Admin Token**: `***REMOVED***`
+- **Admin Token**: `sk_admin_fra7ernity_b4se_sec2ret_92fj39`
 
 ## Key Tables
 

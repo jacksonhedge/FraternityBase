@@ -241,7 +241,7 @@ STRIPE_SECRET_KEY=sk_live_51RADm3GCEQehRVO2...
 STRIPE_WEBHOOK_SECRET=whsec_c16c6c281ae675548c58e937c34834393...
 
 # Auth
-ADMIN_TOKEN=***REMOVED***
+ADMIN_TOKEN=sk_admin_fra7ernity_b4se_sec2ret_92fj39
 CRON_SECRET=cron_secret_fra7ernity_b4se_2025
 ```
 

@@ -305,7 +305,7 @@ const MapPage = () => {
     checkSubscription();
   }, [session]);
 
-  // Monitor hasEnterpriseAccess state changes
+  // Monitor hasEnterpriseAccess state changes and auto-close lock overlay
   useEffect(() => {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('🔄 [MapPage] hasEnterpriseAccess STATE CHANGED');
@@ -315,6 +315,12 @@ const MapPage = () => {
     console.log('   Current subscriptionTier:', subscriptionTier);
     console.log('   Current campusChapters count:', campusChapters.length);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+    // Auto-close lock overlay if user gains enterprise access
+    if (hasEnterpriseAccess && showLockOverlay) {
+      console.log('✅ [MapPage] Auto-closing lock overlay - user has enterprise access');
+      setShowLockOverlay(false);
+    }
   }, [hasEnterpriseAccess]);
 
   // Monitor subscriptionTier state changes

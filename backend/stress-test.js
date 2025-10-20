@@ -18,7 +18,7 @@ const http = require('http');
 const CONFIG = {
   // Change to production URL when ready
   API_URL: process.env.API_URL || 'http://localhost:3001/api',
-  ADMIN_TOKEN: process.env.ADMIN_TOKEN || '***REMOVED***',
+  ADMIN_TOKEN: process.env.ADMIN_TOKEN || 'sk_admin_fra7ernity_b4se_sec2ret_92fj39',
 
   // Test parameters
   CONCURRENT_USERS: parseInt(process.env.CONCURRENT_USERS) || 10,

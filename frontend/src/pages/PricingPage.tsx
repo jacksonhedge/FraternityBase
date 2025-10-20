@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Check,
@@ -10,12 +10,44 @@ import {
   Star,
   Users,
   TrendingUp,
-  Sparkles
+  Sparkles,
+  CheckCircle
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { useAuth } from '../contexts/AuthContext';
 
 const PricingPage = () => {
+  const { session } = useAuth();
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
+  const [currentTier, setCurrentTier] = useState<string | null>(null);
+
+  // Fetch user's current subscription tier
+  useEffect(() => {
+    const fetchSubscriptionTier = async () => {
+      if (!session?.access_token) {
+        setCurrentTier(null);
+        return;
+      }
+
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${API_URL}/balance`, {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentTier(data.subscriptionTier || 'trial');
+        }
+      } catch (error) {
+        console.error('Error fetching subscription tier:', error);
+      }
+    };
+
+    fetchSubscriptionTier();
+  }, [session]);
 
   const pricingTiers = [
     {
@@ -175,23 +207,40 @@ const PricingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-stretch">
             {pricingTiers.map((tier) => {
               const Icon = tier.icon;
+              // Map subscription tiers: 'monthly' -> 'team', 'enterprise' -> 'enterprise-tier-1'
+              const isCurrentPlan = currentTier && (
+                (currentTier === 'monthly' && tier.id === 'team') ||
+                (currentTier === 'enterprise' && tier.id === 'enterprise-tier-1') ||
+                (currentTier === tier.id)
+              );
+
               return (
                 <div
                   key={tier.id}
                   className={`relative bg-white rounded-3xl shadow-xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl overflow-hidden ${
                     tier.highlighted
-                      ? 'border-purple-200 shadow-purple-100 scale-105 lg:-mt-4 lg:mb-4'
+                      ? 'border-blue-400 shadow-blue-200 scale-105 lg:-mt-4 lg:mb-4 ring-4 ring-blue-100'
+                      : isCurrentPlan
+                      ? 'border-green-300 shadow-green-100 ring-2 ring-green-200'
                       : 'border-gray-100 hover:border-gray-200'
                   }`}
                 >
-                  {tier.highlighted && (
+                  {/* Show "Current Plan" badge if this is the user's plan, otherwise show "Recommended" if highlighted */}
+                  {isCurrentPlan ? (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                      <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white text-sm font-bold px-6 py-2 rounded-full shadow-lg flex items-center gap-2">
+                      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-bold px-6 py-2 rounded-full shadow-lg flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Current Plan
+                      </div>
+                    </div>
+                  ) : tier.highlighted ? (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white text-sm font-bold px-6 py-2 rounded-full shadow-xl flex items-center gap-2 animate-pulse">
                         <Crown className="w-4 h-4" />
                         Recommended
                       </div>
                     </div>
-                  )}
+                  ) : null}
 
                   {/* Header with gradient background */}
                   <div className={`p-6 pb-4 bg-gradient-to-r ${tier.bgColor || 'from-gray-50 to-gray-100'}`}>

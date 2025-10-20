@@ -17,6 +17,6 @@ echo "📁 Uploading roster for chapter: $CHAPTER_ID"
 echo ""
 
 curl -X POST "http://localhost:3001/api/admin/chapters/$CHAPTER_ID/upload-roster" \
-  -H "x-admin-token: ***REMOVED***" \
+  -H "x-admin-token: sk_admin_fra7ernity_b4se_sec2ret_92fj39" \
   -F "csv=@$CSV_PATH" \
   | jq '.'

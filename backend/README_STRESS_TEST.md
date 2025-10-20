@@ -102,7 +102,7 @@ export CONCURRENT_USERS=10      # Default: 10
 export REQUESTS_PER_USER=50     # Default: 50
 export RAMP_UP_TIME=5000        # Default: 5000ms
 export API_URL=http://localhost:3001/api
-export ADMIN_TOKEN=***REMOVED***
+export ADMIN_TOKEN=sk_admin_fra7ernity_b4se_sec2ret_92fj39
 ```
 
 ## Support

@@ -6,7 +6,7 @@
 import { COLLEGE_LOCATIONS } from './src/data/statesGeoData.ts';
 
 const API_URL = 'https://backend-two-topaz-47.vercel.app/api';
-const ADMIN_TOKEN = '***REMOVED***';
+const ADMIN_TOKEN = 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
 
 async function syncConferences() {
   console.log('🚀 Starting conference sync...\n');
