@@ -59,6 +59,18 @@
     <meta name="apple-mobile-web-app-title" content="FraternityBase">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <!-- Prevent duplicate custom element registration (TinyMCE fix) -->
+    <script>
+      if (window.customElements) {
+        const originalDefine = window.customElements.define;
+        window.customElements.define = function(name, constructor, options) {
+          if (!window.customElements.get(name)) {
+            originalDefine.call(window.customElements, name, constructor, options);
+          }
+        };
+      }
+    </script>
   </head>
   <body>
     <noscript>
