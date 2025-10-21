@@ -189,7 +189,7 @@ const Layout = () => {
     {
       items: [
         { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null, requiresTeamPlan: true },
-        { name: 'Map', href: '/app/map', icon: MapPin, badge: import.meta.env.PROD ? 'SOON' : null, comingSoon: import.meta.env.PROD, alwaysAccessible: true, iconColor: 'text-yellow-500' },
+        { name: 'Map', href: '/app/map', icon: MapPin, badge: null, comingSoon: false, alwaysAccessible: true, iconColor: 'text-yellow-500' },
         { name: 'SuperMap', href: '/app/supermap', icon: MapPin, badge: import.meta.env.PROD ? 'SOON' : 'BETA', comingSoon: true, alwaysAccessible: true },
       ]
     },
