@@ -382,21 +382,29 @@ const CollegesPage = () => {
 
                     {/* Stats */}
                     <div className="w-full space-y-2 pt-2">
-                      <div className="flex justify-between items-center text-sm">
-                        <span className="text-white/90">Fraternities</span>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">{college.fraternities}</span>
-                          {college.fiveStarFrats > 0 && (
-                            <span className="text-xs px-1.5 py-0.5 bg-yellow-400/20 text-yellow-300 rounded font-semibold">
-                              {college.fiveStarFrats}x 5.0⭐
-                            </span>
-                          )}
+                      {college.fraternities === 0 && college.sororities === 0 ? (
+                        <div className="text-center py-2">
+                          <span className="text-sm text-yellow-300 font-semibold">Coming Soon</span>
                         </div>
-                      </div>
-                      <div className="flex justify-between items-center text-sm">
-                        <span className="text-white/90">Sororities</span>
-                        <span className="font-bold text-white">{college.sororities}</span>
-                      </div>
+                      ) : (
+                        <>
+                          <div className="flex justify-between items-center text-sm">
+                            <span className="text-white/90">Fraternities</span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-white">{college.fraternities}</span>
+                              {college.fiveStarFrats > 0 && (
+                                <span className="text-xs px-1.5 py-0.5 bg-yellow-400/20 text-yellow-300 rounded font-semibold">
+                                  {college.fiveStarFrats}x 5.0⭐
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center text-sm">
+                            <span className="text-white/90">Sororities</span>
+                            <span className="font-bold text-white">{college.sororities}</span>
+                          </div>
+                        </>
+                      )}
                       <div className="w-full h-px bg-white/20 my-2"></div>
 
                       {/* Chapter Boxes */}
@@ -511,10 +519,18 @@ const CollegesPage = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-blue-600">{college.fraternities}</span>
+                    {college.fraternities === 0 && college.sororities === 0 ? (
+                      <span className="text-sm font-semibold text-yellow-600">Coming Soon</span>
+                    ) : (
+                      <span className="text-sm font-semibold text-blue-600">{college.fraternities}</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-purple-600">{college.sororities}</span>
+                    {college.fraternities === 0 && college.sororities === 0 ? (
+                      <span className="text-sm font-semibold text-yellow-600">Coming Soon</span>
+                    ) : (
+                      <span className="text-sm font-semibold text-purple-600">{college.sororities}</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm font-semibold text-yellow-600">{college.fiveStarFrats}</span>
