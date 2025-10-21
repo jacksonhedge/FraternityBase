@@ -93,60 +93,65 @@ const UnlockConfirmationModal = ({
                   </p>
                   <p className="text-sm text-purple-800">
                     {isUnlimitedUnlocks
-                      ? '🎉 You have unlimited unlocks for this tier!'
-                      : `You have ${subscriptionUnlocksRemaining} subscription unlock${subscriptionUnlocksRemaining !== 1 ? 's' : ''} remaining for ${tierLabel} chapters this month.`}
+                      ? 'You have unlimited unlocks for Premium chapters this month.'
+                      : `You have ${subscriptionUnlocksRemaining} subscription unlock${subscriptionUnlocksRemaining !== 1 ? 's' : ''} remaining for Premium chapters this month.`}
                   </p>
+                  {!isUnlimitedUnlocks && (
+                    <div className="mt-2 pt-2 border-t border-purple-200">
+                      <p className="text-sm font-medium text-purple-900">
+                        💰 You're saving {credits} credits (${(credits * 0.99).toFixed(2)}) by using your subscription!
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           )}
 
-          <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Chapter Tier</span>
-              <span className="font-semibold text-gray-900">
-                {tierLabel}
-                {tierLabel === 'Premium' && ' (5.0⭐)'}
-                {tierLabel === 'Quality' && ' (4.5⭐)'}
-                {tierLabel === 'Good' && ' (4.0⭐)'}
-                {tierLabel === 'Standard' && ' (3.5⭐)'}
-                {tierLabel === 'Basic' && ' (3.0⭐)'}
-              </span>
-            </div>
+          {/* Only show cost details for credit-based unlocks */}
+          {!willUseSubscriptionUnlock && (
+            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Chapter Tier</span>
+                <span className="font-semibold text-gray-900">
+                  {tierLabel}
+                  {tierLabel === 'Premium' && ' (5.0⭐)'}
+                  {tierLabel === 'Quality' && ' (4.5⭐)'}
+                  {tierLabel === 'Good' && ' (4.0⭐)'}
+                  {tierLabel === 'Standard' && ' (3.5⭐)'}
+                  {tierLabel === 'Basic' && ' (3.0⭐)'}
+                </span>
+              </div>
 
-            {willUseSubscriptionUnlock ? (
-              <>
-                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                  <span className="text-sm text-gray-600">Subscription Unlocks</span>
-                  <span className="font-semibold text-purple-600">
-                    {isUnlimitedUnlocks ? '∞ Unlimited' : `${subscriptionUnlocksRemaining} remaining`}
-                  </span>
+              <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                <span className="text-sm text-gray-600">Regular Cost (Without Subscription)</span>
+                <span className="font-semibold text-gray-900 line-through">{credits} Credits</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Your Cost Today</span>
+                <span className="font-bold text-2xl text-purple-600">$0.00 <span className="text-sm font-normal">FREE</span></span>
+              </div>
+            </div>
+          )}
+
+          {/* Show subscription unlock count for subscription unlocks */}
+          {willUseSubscriptionUnlock && (
+            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Subscription Unlocks</span>
+                <span className="font-semibold text-purple-600">
+                  {isUnlimitedUnlocks ? '∞ Unlimited' : `${subscriptionUnlocksRemaining} remaining`}
+                </span>
+              </div>
+              {!isUnlimitedUnlocks && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">After Unlock</span>
+                  <span className="font-semibold text-green-600">{subscriptionUnlocksRemaining - 1} remaining</span>
                 </div>
-                {!isUnlimitedUnlocks && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">After Unlock</span>
-                    <span className="font-semibold text-green-600">{subscriptionUnlocksRemaining - 1} remaining</span>
-                  </div>
-                )}
-              </>
-            ) : (
-              <>
-                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                  <span className="text-sm text-gray-600">Current Balance</span>
-                  <div className="flex items-center gap-1">
-                    <Award className="w-4 h-4 text-gray-600" />
-                    <span className="font-semibold text-gray-900">{balance} Credits</span>
-                  </div>
-                </div>
-                {hasEnoughCredits && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">After Unlock</span>
-                    <span className="font-semibold text-green-600">{balance - credits} Credits</span>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {!canUnlock && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -203,7 +208,7 @@ const UnlockConfirmationModal = ({
               </div>
             ) : canUnlock ? (
               willUseSubscriptionUnlock
-                ? '✨ Unlock Chapter'
+                ? '✨ Unlock FREE with Subscription'
                 : `Unlock for ${credits} Credits`
             ) : (
               'Insufficient Credits'
