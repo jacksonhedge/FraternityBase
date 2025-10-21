@@ -45,6 +45,7 @@ import ActivityLogsTab from '../components/admin/ActivityLogsTab';
 import AmbassadorsAdmin from '../components/AmbassadorsAdmin';
 import RoadmapAdmin from '../components/RoadmapAdmin';
 import AdminNotificationCenter from '../components/AdminNotificationCenter';
+import UnlocksTab from '../components/admin/UnlocksTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -5045,13 +5046,9 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
           {/* Payments & Revenue Tab */}
           {activeTab === 'payments' && <PaymentsRevenueTab />}
 
-          {/* Chapter Unlocks Tab - Coming Soon */}
+          {/* Chapter Unlocks Tab */}
           {activeTab === 'unlocks' && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
-              <Unlock className="w-16 h-16 text-yellow-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Chapter Unlocks Analytics</h3>
-              <p className="text-gray-600">Coming soon - Track popular chapters, unlock trends, and content analytics</p>
-            </div>
+            <UnlocksTab />
           )}
 
           {/* Credits & Pricing Tab - Coming Soon */}

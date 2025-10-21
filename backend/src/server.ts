@@ -2571,6 +2571,49 @@ app.patch('/api/admin/chapters/:chapterId', requireAdmin, async (req, res) => {
 
 // ===== ADMIN ANALYTICS ENDPOINTS =====
 
+// Get all chapter unlocks for admin tracking
+app.get('/api/admin/unlocks', requireAdmin, async (req, res) => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('chapter_unlocks')
+      .select(`
+        *,
+        chapters (
+          chapter_name,
+          greek_organization_id,
+          university_id,
+          greek_organizations (
+            name,
+            organization_type
+          ),
+          universities (
+            name,
+            state
+          )
+        ),
+        companies (
+          name
+        ),
+        balance_transactions (
+          amount_credits,
+          created_at,
+          created_by
+        )
+      `)
+      .order('unlocked_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching unlocks:', error);
+      return res.status(500).json({ error: 'Failed to fetch unlocks' });
+    }
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Admin unlocks endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Get overall analytics (revenue, credits sold, users)
 app.get('/api/admin/analytics/overview', requireAdmin, async (req, res) => {
   try {
