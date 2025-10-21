@@ -2614,6 +2614,143 @@ app.get('/api/admin/unlocks', requireAdmin, async (req, res) => {
   }
 });
 
+// Get all introduction requests (warm intros + ambassador referrals) for admin
+app.get('/api/admin/introduction-requests', requireAdmin, async (req, res) => {
+  try {
+    // Fetch warm intro requests
+    const { data: warmIntros, error: warmIntroError } = await supabaseAdmin
+      .from('warm_intro_requests')
+      .select(`
+        *,
+        chapters (
+          chapter_name,
+          greek_organizations (
+            name,
+            organization_type
+          ),
+          universities (
+            name,
+            state
+          )
+        ),
+        companies (
+          name
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (warmIntroError) {
+      console.error('Error fetching warm intro requests:', warmIntroError);
+      return res.status(500).json({ error: 'Failed to fetch warm intro requests' });
+    }
+
+    // Fetch ambassador referral requests
+    const { data: ambassadorRequests, error: ambassadorError } = await supabaseAdmin
+      .from('ambassador_referral_requests')
+      .select(`
+        *,
+        chapters (
+          chapter_name,
+          greek_organizations (
+            name,
+            organization_type
+          ),
+          universities (
+            name,
+            state
+          )
+        ),
+        companies (
+          name
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (ambassadorError) {
+      console.error('Error fetching ambassador requests:', ambassadorError);
+      return res.status(500).json({ error: 'Failed to fetch ambassador requests' });
+    }
+
+    // Combine and tag requests
+    const allRequests = [
+      ...(warmIntros || []).map(r => ({ ...r, request_type: 'warm_intro' })),
+      ...(ambassadorRequests || []).map(r => ({ ...r, request_type: 'ambassador' }))
+    ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    res.json({ success: true, data: allRequests });
+  } catch (error: any) {
+    console.error('Admin introduction requests endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get count of pending introduction requests for notifications
+app.get('/api/admin/introduction-requests/pending-count', requireAdmin, async (req, res) => {
+  try {
+    const { count: warmIntroCount, error: warmIntroError } = await supabaseAdmin
+      .from('warm_intro_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending');
+
+    const { count: ambassadorCount, error: ambassadorError } = await supabaseAdmin
+      .from('ambassador_referral_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending');
+
+    if (warmIntroError || ambassadorError) {
+      console.error('Error counting pending requests:', warmIntroError || ambassadorError);
+      return res.status(500).json({ error: 'Failed to count pending requests' });
+    }
+
+    const totalPending = (warmIntroCount || 0) + (ambassadorCount || 0);
+
+    res.json({ success: true, count: totalPending });
+  } catch (error: any) {
+    console.error('Admin pending count endpoint error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update introduction request status
+app.patch('/api/admin/introduction-requests/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, admin_notes, request_type } = req.body;
+
+    const table = request_type === 'warm_intro' ? 'warm_intro_requests' : 'ambassador_referral_requests';
+
+    const updateData: any = {
+      status,
+      updated_at: new Date().toISOString()
+    };
+
+    if (admin_notes !== undefined) {
+      updateData.admin_notes = admin_notes;
+    }
+
+    if (status === 'completed') {
+      updateData.completed_at = new Date().toISOString();
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from(table)
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating introduction request:', error);
+      return res.status(500).json({ error: 'Failed to update request' });
+    }
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Update introduction request error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Get overall analytics (revenue, credits sold, users)
 app.get('/api/admin/analytics/overview', requireAdmin, async (req, res) => {
   try {

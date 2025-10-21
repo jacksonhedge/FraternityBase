@@ -46,6 +46,7 @@ import AmbassadorsAdmin from '../components/AmbassadorsAdmin';
 import RoadmapAdmin from '../components/RoadmapAdmin';
 import AdminNotificationCenter from '../components/AdminNotificationCenter';
 import UnlocksTab from '../components/admin/UnlocksTab';
+import IntroductionRequestsTab from '../components/admin/IntroductionRequestsTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -234,6 +235,7 @@ const AdminPageV4 = () => {
   const [activityVisibleCount, setActivityVisibleCount] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const [pendingIntroRequests, setPendingIntroRequests] = useState(0);
 
   // Introduction requests state
   const [introRequests, setIntroRequests] = useState<any[]>([]);
@@ -382,6 +384,28 @@ const AdminPageV4 = () => {
       }
     };
     checkWizardStatus();
+  }, []);
+
+  // Fetch pending introduction requests count for notification badge
+  useEffect(() => {
+    const fetchPendingCount = async () => {
+      try {
+        const response = await fetch(`${API_URL}/admin/introduction-requests/pending-count`, {
+          headers: getAdminHeaders()
+        });
+        const data = await response.json();
+        if (data.success) {
+          setPendingIntroRequests(data.count);
+        }
+      } catch (error) {
+        console.error('Error fetching pending intro requests count:', error);
+      }
+    };
+
+    fetchPendingCount();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchPendingCount, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchData = async () => {
@@ -2146,6 +2170,29 @@ const AdminPageV4 = () => {
           >
             <Unlock className="w-5 h-5" />
             <span className="font-medium">Chapter Unlocks</span>
+          </button>
+
+          <button
+            onClick={() => {
+              navigate('/admin/intro-requests');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'intro-requests'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <Handshake className="w-5 h-5" />
+              <span className="font-medium">Introduction Requests</span>
+            </div>
+            {pendingIntroRequests > 0 && (
+              <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                {pendingIntroRequests}
+              </span>
+            )}
           </button>
 
           <button
@@ -5049,6 +5096,11 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
           {/* Chapter Unlocks Tab */}
           {activeTab === 'unlocks' && (
             <UnlocksTab />
+          )}
+
+          {/* Introduction Requests Tab */}
+          {activeTab === 'intro-requests' && (
+            <IntroductionRequestsTab />
           )}
 
           {/* Credits & Pricing Tab - Coming Soon */}
