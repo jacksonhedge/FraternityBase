@@ -516,11 +516,6 @@ const ChapterDetailPage = () => {
                 </div>
               </div>
               <p className="text-sm text-white/90 font-medium mt-1">Chapter Rating</p>
-              {unlockPricing.tierBadge && (
-                <span className="inline-block mt-1 text-xs bg-white/30 backdrop-blur-sm text-white px-2 py-0.5 rounded-full font-semibold">
-                  {unlockPricing.tierBadge}
-                </span>
-              )}
             </div>
             <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
               <Award className="w-8 h-8 text-white" />
