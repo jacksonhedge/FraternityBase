@@ -91,16 +91,11 @@ const UnlockConfirmationModal = ({
                   <p className="text-base font-bold text-purple-900 mb-2">
                     ✨ Using Subscription Unlock - No Credits Charged!
                   </p>
-                  <p className="text-sm text-purple-800 mb-2">
+                  <p className="text-sm text-purple-800">
                     {isUnlimitedUnlocks
-                      ? '🎉 You have unlimited unlocks for this tier - completely free!'
+                      ? '🎉 You have unlimited unlocks for this tier!'
                       : `You have ${subscriptionUnlocksRemaining} subscription unlock${subscriptionUnlocksRemaining !== 1 ? 's' : ''} remaining for ${tierLabel} chapters this month.`}
                   </p>
-                  <div className="bg-white/60 rounded px-3 py-2 mt-2">
-                    <p className="text-xs font-medium text-purple-900">
-                      💰 You're saving {credits} credits (${(credits * 0.99).toFixed(2)}) by using your subscription!
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
@@ -118,24 +113,6 @@ const UnlockConfirmationModal = ({
                 {tierLabel === 'Basic' && ' (3.0⭐)'}
               </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">
-                {willUseSubscriptionUnlock ? 'Regular Cost (Without Subscription)' : 'Cost'}
-              </span>
-              <span className={`font-bold text-lg ${willUseSubscriptionUnlock ? 'text-gray-400 line-through' : 'text-blue-600'}`}>
-                {credits} Credits
-              </span>
-            </div>
-
-            {willUseSubscriptionUnlock && (
-              <div className="flex items-center justify-between pt-2 border-t border-purple-200 bg-purple-50 -mx-4 px-4 py-2 rounded-b-lg">
-                <span className="text-sm font-medium text-purple-900">Your Cost Today</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold text-purple-600">$0.00</span>
-                  <span className="text-xs text-purple-700 bg-purple-100 px-2 py-1 rounded-full">FREE</span>
-                </div>
-              </div>
-            )}
 
             {willUseSubscriptionUnlock ? (
               <>
@@ -226,8 +203,8 @@ const UnlockConfirmationModal = ({
               </div>
             ) : canUnlock ? (
               willUseSubscriptionUnlock
-                ? '✨ Unlock FREE with Subscription'
-                : `Unlock for ${credits} Credits ($${(credits * 0.99).toFixed(2)})`
+                ? '✨ Unlock Chapter'
+                : `Unlock for ${credits} Credits`
             ) : (
               'Insufficient Credits'
             )}

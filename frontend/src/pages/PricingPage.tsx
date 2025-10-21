@@ -83,13 +83,13 @@ const PricingPage = () => {
         'Unlimited platform access',
         'Browse all 5,000+ chapters',
         'Advanced search & filters',
-        'Export data to CSV',
+        '50 monthly credits',
+        '1 Warm Introduction/month',
+        '3 team seats',
         'Email support',
         'Purchase credits as needed'
       ],
-      limitations: [
-        'Credits sold separately'
-      ],
+      limitations: [],
       highlighted: true,
       buttonText: 'Subscribe Now',
       buttonStyle: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 border-transparent shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
@@ -103,9 +103,11 @@ const PricingPage = () => {
       color: 'from-purple-600 to-purple-700',
       bgColor: 'from-purple-50 to-purple-100',
       features: [
-        '1,000 credits/month ($1,000 value)',
+        '100 credits/month',
+        '3 Premium (5.0⭐) unlocks/month',
+        '25 Quality (4.0⭐) unlocks/month',
+        '50 Standard (3.0⭐) unlocks/month',
         '3 Warm Introductions/month',
-        'Unlimited chapter unlocks',
         'FraternityBase API access',
         'Priority support',
         'Early access to new features',
@@ -126,10 +128,11 @@ const PricingPage = () => {
       color: 'from-yellow-400 via-yellow-500 to-amber-500',
       bgColor: 'from-amber-50 via-yellow-50 to-amber-100',
       features: [
-        'Full Roster + Contact Info: 25 credits',
-        'Unlock POC: 10 credits',
-        'Warm Introduction: 60 credits',
-        'Ambassador Referral: 100 credits',
+        '5.0⭐ chapters: 10 credits',
+        '4.5⭐ chapters: 7 credits',
+        '4.0⭐ chapters: 5 credits',
+        'Warm Introduction: 200 credits',
+        'Ambassador Referral: 330 credits',
         'Buy credits anytime',
         'No monthly commitment',
         'Credits never expire'
@@ -141,15 +144,25 @@ const PricingPage = () => {
     {
       id: 'enterprise-tier-2',
       name: 'Enterprise Tier 2',
-      price: 'Custom Pricing',
-      description: 'For large organizations',
+      price: 2222,
+      description: 'Maximum fraternity access',
       icon: Building2,
-      color: 'from-gray-700 to-gray-800',
-      bgColor: 'from-gray-50 to-gray-100',
-      features: [],
+      color: 'from-indigo-700 to-violet-800',
+      bgColor: 'from-indigo-50 to-violet-100',
+      features: [
+        '50 Premium (5.0⭐) unlocks/month',
+        '10 Diamond unlocks/month',
+        '500 monthly credits',
+        '10 Warm Introductions/month',
+        '50 team seats',
+        'FraternityBase API access',
+        'Priority support',
+        'Advanced analytics',
+        'Fraternities only (bars & sororities sold separately)'
+      ],
       limitations: [],
-      buttonText: 'Contact Sales',
-      buttonStyle: 'border-2 border-gray-800 text-gray-800 hover:bg-gray-100 hover:border-gray-900 transition-all duration-200'
+      buttonText: 'Upgrade to Tier 2',
+      buttonStyle: 'bg-gradient-to-r from-indigo-600 to-violet-700 text-white hover:from-indigo-700 hover:to-violet-800 border-transparent shadow-lg hover:shadow-xl transition-all duration-200'
     }
   ];
 

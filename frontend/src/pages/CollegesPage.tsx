@@ -119,6 +119,22 @@ const CollegesPage = () => {
             }))
           );
 
+          // Debug Georgia Tech specifically
+          const gaTechUni = universitiesData.data.find((u: any) => u.name === 'Georgia Institute of Technology');
+          if (gaTechUni) {
+            const gaTechChapters = chaptersData.data.filter((ch: any) => ch.university_id === gaTechUni.id);
+            console.log('🐝 [DEBUG] Georgia Tech:');
+            console.log('  - University ID:', gaTechUni.id);
+            console.log('  - Total chapters:', gaTechChapters.length);
+            console.log('  - Fraternities count:', fraternitiesMap[gaTechUni.id]);
+            console.log('  - Sororities count:', sororitiesMap[gaTechUni.id]);
+            console.log('  - Sample chapters with org types:', gaTechChapters.slice(0, 5).map((ch: any) => ({
+              name: ch.chapter_name,
+              org_type: ch.greek_organizations?.organization_type,
+              org_name: ch.greek_organizations?.name
+            })));
+          }
+
           setRealChapterCounts(chapterCountsMap);
 
           const formattedColleges = universitiesData.data.map((uni: any) => {

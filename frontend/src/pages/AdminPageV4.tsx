@@ -8,6 +8,8 @@ import {
   Save,
   X,
   Edit,
+  Edit2,
+  Check,
   Trash2,
   LogOut,
   Shield,
@@ -78,6 +80,7 @@ interface University {
   unlock_count?: number;
   conference?: string;
   show_in_dashboard?: boolean;
+  created_at?: string;
 }
 
 interface Chapter {
@@ -101,6 +104,7 @@ interface Chapter {
   is_viewable?: boolean;
   coming_soon_date?: string;
   show_in_dashboard?: boolean;
+  created_at?: string;
   greek_organizations?: { name: string; organization_type: 'fraternity' | 'sorority' };
   universities?: { name: string; state: string };
 }
@@ -223,6 +227,7 @@ const AdminPageV4 = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
   const [comingTomorrowItems, setComingTomorrowItems] = useState<any[]>([]);
+  const [editingComingTomorrowItem, setEditingComingTomorrowItem] = useState<any | null>(null);
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([]);
   const [activityFilter, setActivityFilter] = useState<string>('all');
   const [activityVisibleCount, setActivityVisibleCount] = useState<number>(10);
@@ -240,9 +245,9 @@ const AdminPageV4 = () => {
   const [wizardSession, setWizardSession] = useState<any>(null);
   const [selectedCompanyId, setSelectedCompanyId] = useState('');
   const [showCSVImport, setShowCSVImport] = useState(false);
-  const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference'>('name');
+  const [collegeOrderBy, setCollegeOrderBy] = useState<'name' | 'state' | 'chapters' | 'big10' | 'conference' | 'recent'>('name');
   const [collegeFilter, setCollegeFilter] = useState<string>('all');
-  const [chapterOrderBy, setChapterOrderBy] = useState<'name' | 'university' | 'grade'>('grade');
+  const [chapterOrderBy, setChapterOrderBy] = useState<'name' | 'university' | 'grade' | 'recent'>('grade');
   const [aiPrompt, setAiPrompt] = useState('');
   const [selectedCompany, setSelectedCompany] = useState<CompanyDetail | null>(null);
   const [showCompanyDetail, setShowCompanyDetail] = useState(false);
@@ -399,6 +404,15 @@ const AdminPageV4 = () => {
         const data = await res.json();
         console.log('🏫 Loaded universities:', data.data?.length || 0);
         console.log('🏫 USC check:', data.data?.find((u: any) => u.name.includes('Southern California')));
+
+        // Check for West Virginia University
+        const wvuData = data.data?.filter((u: any) => u.name.includes('West Virginia'));
+        console.log('🏈 WVU Data Check:', {
+          totalUniversities: data.data?.length || 0,
+          wvuFound: wvuData?.length || 0,
+          wvuEntries: wvuData
+        });
+
         setUniversities(data.data || []);
       } else if (activeTab === 'chapters') {
         console.log('[Chapters View] 📊 Fetching chapters data...');
@@ -1725,6 +1739,22 @@ const AdminPageV4 = () => {
         });
       }
 
+      // Debug West Virginia University
+      if (uni.name.includes('West Virginia')) {
+        console.log('🏈 WVU Filter Debug:', {
+          name: uni.name,
+          id: uni.id,
+          state: uni.state,
+          conference: uni.conference,
+          searchTerm,
+          matchesSearch,
+          collegeFilter,
+          matchesFilter,
+          willShow: matchesSearch && matchesFilter,
+          rawUniObject: uni
+        });
+      }
+
       return matchesSearch && matchesFilter;
     })
     .sort((a, b) => {
@@ -1744,6 +1774,10 @@ const AdminPageV4 = () => {
         const aConf = a.conference || 'ZZZ';
         const bConf = b.conference || 'ZZZ';
         return aConf.localeCompare(bConf);
+      } else if (collegeOrderBy === 'recent') {
+        const aDate = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const bDate = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return bDate - aDate; // Most recent first
       }
       return 0;
     });
@@ -1751,12 +1785,19 @@ const AdminPageV4 = () => {
   // Debug: Log filtered results
   React.useEffect(() => {
     if (activeTab === 'colleges' && universities.length > 0) {
+      const wvuInFiltered = filteredUniversities.filter(u => u.name.includes('West Virginia'));
       console.log('📊 Filtered Results:', {
         totalUniversities: universities.length,
         filteredCount: filteredUniversities.length,
         collegeFilter,
-        searchTerm
+        searchTerm,
+        wvuInFiltered: wvuInFiltered.length,
+        wvuData: wvuInFiltered
       });
+
+      // Also check raw universities array for WVU
+      const wvuInRaw = universities.filter(u => u.name.includes('West Virginia'));
+      console.log('🏈 WVU in raw universities array:', wvuInRaw);
     }
   }, [filteredUniversities.length, universities.length, collegeFilter, searchTerm, activeTab]);
 
@@ -1794,6 +1835,10 @@ const AdminPageV4 = () => {
         const aUni = a.universities?.name || '';
         const bUni = b.universities?.name || '';
         return aUni.localeCompare(bUni);
+      } else if (chapterOrderBy === 'recent') {
+        const aDate = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const bDate = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return bDate - aDate; // Most recent first
       }
       return 0;
     });
@@ -3112,6 +3157,7 @@ const AdminPageV4 = () => {
                     <option value="state">State</option>
                     <option value="chapters">Most Chapters</option>
                     <option value="conference">Conference</option>
+                    <option value="recent">Recently Added</option>
                   </select>
                 </div>
               </>
@@ -3613,10 +3659,22 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                       <label className="block text-sm font-medium text-gray-700 mb-1">Logo Upload</label>
                       <input
                         type="file"
-                        accept="image/png,image/jpeg,image/jpg,image/svg+xml"
+                        accept="image/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
+                            // Validate file type
+                            const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/webp', 'image/gif'];
+                            if (!validTypes.includes(file.type)) {
+                              alert(`Invalid file type: ${file.type}. Please upload PNG, JPG, SVG, WebP, or GIF images.`);
+                              return;
+                            }
+                            // Validate file size (5MB limit)
+                            const maxSize = 5 * 1024 * 1024; // 5MB
+                            if (file.size > maxSize) {
+                              alert(`File too large: ${(file.size / 1024 / 1024).toFixed(2)}MB. Maximum size is 5MB.`);
+                              return;
+                            }
                             // Create preview URL
                             const previewUrl = URL.createObjectURL(file);
                             setUniversityForm({
@@ -3628,7 +3686,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                         }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Accepts PNG, JPG, or SVG. Recommended size: 200x200px</p>
+                      <p className="text-xs text-gray-500 mt-1">Accepts PNG, JPG, SVG, WebP, or GIF. Max size: 5MB. Recommended: 200x200px</p>
                       {(universityForm.logo_url || universityForm.logoFile) && (
                         <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                           <p className="text-xs font-medium text-gray-700 mb-2">Logo Preview:</p>
@@ -4199,12 +4257,13 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                 <label className="text-sm font-medium text-gray-700">Order by:</label>
                 <select
                   value={chapterOrderBy}
-                  onChange={(e) => setChapterOrderBy(e.target.value as 'name' | 'university' | 'grade')}
+                  onChange={(e) => setChapterOrderBy(e.target.value as 'name' | 'university' | 'grade' | 'recent')}
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="grade">Grade (Highest First)</option>
                   <option value="name">Fraternity Name</option>
                   <option value="university">University Name</option>
+                  <option value="recent">Recently Added</option>
                 </select>
               </div>
 
@@ -4677,48 +4736,167 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {comingTomorrowItems.map((item) => (
-                      <tr key={item.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.college_name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.chapter_name || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.anticipated_score}⭐</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          <span className={`inline-block px-2 py-1 rounded-full text-xs ${
-                            item.update_type === 'new_chapter' ? 'bg-orange-100 text-orange-700' :
-                            item.update_type === 'roster_update' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-pink-100 text-pink-700'
-                          }`}>
-                            {item.update_type === 'new_chapter' ? 'New Chapter' :
-                             item.update_type === 'roster_update' ? 'Roster Update' :
-                             'New Sorority'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.expected_member_count || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {new Date(item.scheduled_date).toLocaleDateString()}
+                    {comingTomorrowItems.map((item) => {
+                      const isEditing = editingComingTomorrowItem?.id === item.id;
+                      return (
+                      <tr key={item.id} className={isEditing ? 'bg-blue-50' : 'hover:bg-gray-50'}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {isEditing ? (
+                            <input
+                              type="text"
+                              value={editingComingTomorrowItem.college_name}
+                              onChange={(e) => setEditingComingTomorrowItem({ ...editingComingTomorrowItem, college_name: e.target.value })}
+                              className="border rounded px-2 py-1 w-full"
+                            />
+                          ) : item.college_name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          <button
-                            onClick={async () => {
-                              if (confirm('Delete this item?')) {
-                                try {
-                                  await fetch(`${API_URL}/admin/coming-tomorrow/${item.id}`, {
-                                    method: 'DELETE',
-                                    headers: getAdminHeaders()
-                                  });
-                                  fetchData();
-                                } catch (error) {
-                                  console.error('Error deleting item:', error);
-                                }
-                              }
-                            }}
-                            className="text-red-600 hover:text-red-800"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          {isEditing ? (
+                            <input
+                              type="text"
+                              value={editingComingTomorrowItem.chapter_name || ''}
+                              onChange={(e) => setEditingComingTomorrowItem({ ...editingComingTomorrowItem, chapter_name: e.target.value })}
+                              className="border rounded px-2 py-1 w-full"
+                            />
+                          ) : (item.chapter_name || '-')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {isEditing ? (
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={editingComingTomorrowItem.anticipated_score}
+                              onChange={(e) => setEditingComingTomorrowItem({ ...editingComingTomorrowItem, anticipated_score: parseFloat(e.target.value) })}
+                              className="border rounded px-2 py-1 w-20"
+                            />
+                          ) : `${item.anticipated_score}⭐`}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {isEditing ? (
+                            <select
+                              value={editingComingTomorrowItem.update_type}
+                              onChange={(e) => setEditingComingTomorrowItem({ ...editingComingTomorrowItem, update_type: e.target.value })}
+                              className="border rounded px-2 py-1"
+                            >
+                              <option value="new_chapter">New Chapter</option>
+                              <option value="roster_update">Roster Update</option>
+                              <option value="new_sorority">New Sorority</option>
+                            </select>
+                          ) : (
+                            <span className={`inline-block px-2 py-1 rounded-full text-xs ${
+                              item.update_type === 'new_chapter' ? 'bg-orange-100 text-orange-700' :
+                              item.update_type === 'roster_update' ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-pink-100 text-pink-700'
+                            }`}>
+                              {item.update_type === 'new_chapter' ? 'New Chapter' :
+                               item.update_type === 'roster_update' ? 'Roster Update' :
+                               'New Sorority'}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {isEditing ? (
+                            <input
+                              type="number"
+                              value={editingComingTomorrowItem.expected_member_count || ''}
+                              onChange={(e) => setEditingComingTomorrowItem({ ...editingComingTomorrowItem, expected_member_count: e.target.value })}
+                              className="border rounded px-2 py-1 w-20"
+                            />
+                          ) : (item.expected_member_count || '-')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {isEditing ? (
+                            <input
+                              type="date"
+                              value={editingComingTomorrowItem.scheduled_date?.split('T')[0]}
+                              onChange={(e) => setEditingComingTomorrowItem({ ...editingComingTomorrowItem, scheduled_date: e.target.value })}
+                              className="border rounded px-2 py-1"
+                            />
+                          ) : new Date(item.scheduled_date).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          <div className="flex items-center gap-2">
+                            {isEditing ? (
+                              <>
+                                <button
+                                  onClick={async () => {
+                                    try {
+                                      // Only send fields that exist in the database table
+                                      const updatePayload = {
+                                        college_name: editingComingTomorrowItem.college_name,
+                                        chapter_name: editingComingTomorrowItem.chapter_name,
+                                        anticipated_score: editingComingTomorrowItem.anticipated_score,
+                                        update_type: editingComingTomorrowItem.update_type,
+                                        expected_member_count: editingComingTomorrowItem.expected_member_count,
+                                        scheduled_date: editingComingTomorrowItem.scheduled_date,
+                                      };
+
+                                      const res = await fetch(`${API_URL}/admin/coming-tomorrow/${item.id}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                          ...getAdminHeaders(),
+                                          'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(updatePayload)
+                                      });
+                                      if (res.ok) {
+                                        setEditingComingTomorrowItem(null);
+                                        fetchData();
+                                        setSuccessMessage('Item updated successfully!');
+                                        setShowSuccess(true);
+                                      }
+                                    } catch (error) {
+                                      console.error('Error updating item:', error);
+                                    }
+                                  }}
+                                  className="text-green-600 hover:text-green-800"
+                                  title="Save"
+                                >
+                                  <Check className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => setEditingComingTomorrowItem(null)}
+                                  className="text-gray-600 hover:text-gray-800"
+                                  title="Cancel"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => setEditingComingTomorrowItem({ ...item })}
+                                  className="text-blue-600 hover:text-blue-800"
+                                  title="Edit"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={async () => {
+                                    if (confirm('Delete this item?')) {
+                                      try {
+                                        await fetch(`${API_URL}/admin/coming-tomorrow/${item.id}`, {
+                                          method: 'DELETE',
+                                          headers: getAdminHeaders()
+                                        });
+                                        fetchData();
+                                      } catch (error) {
+                                        console.error('Error deleting item:', error);
+                                      }
+                                    }
+                                  }}
+                                  className="text-red-600 hover:text-red-800"
+                                  title="Delete"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
                 {comingTomorrowItems.length === 0 && (

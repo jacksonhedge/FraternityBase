@@ -559,9 +559,34 @@ const SuperMapPage = () => {
     if (!stateAbbr) return;
 
     const collegeData = getCollegeData();
-    const collegesInState = Object.entries(collegeData)
+    let collegesInState = Object.entries(collegeData)
       .filter(([_, college]) => college.state === stateAbbr)
       .map(([name, data]) => ({ name, ...data }));
+
+    // Apply active filter to colleges list
+    if (activeFilter === 'power5') {
+      const power5Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+      collegesInState = collegesInState.filter(college =>
+        power5Conferences.includes(college.conference)
+      );
+    } else if (activeFilter === 'big10') {
+      collegesInState = collegesInState.filter(college =>
+        college.conference === 'BIG 10'
+      );
+    } else if (activeFilter === 'd1') {
+      collegesInState = collegesInState.filter(college =>
+        college.division === 'D1'
+      );
+    } else if (activeFilter === 'd2') {
+      collegesInState = collegesInState.filter(college =>
+        college.division === 'D2'
+      );
+    } else if (activeFilter === 'd3') {
+      collegesInState = collegesInState.filter(college =>
+        college.division === 'D3'
+      );
+    }
+    // Note: 'mychapters' filter is handled separately and doesn't filter colleges
 
     if (collegesInState.length > 0) {
       const totalChapters = collegesInState.reduce(

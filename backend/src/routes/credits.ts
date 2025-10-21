@@ -243,24 +243,35 @@ async function grantSubscriptionBenefits(
   // Define benefits by tier
   const benefits = {
     monthly: {
-      monthly_credit_refresh: 0, // No automatic credits - must purchase separately
-      monthly_unlocks_5_star: 1, // 1 Premium unlock (5.0⭐) per month
-      monthly_unlocks_4_star: 4, // 4 Quality unlocks (4.0-4.9⭐) per month
-      monthly_unlocks_3_star: 7, // 7 Standard unlocks (3.0-3.9⭐) per month
-      monthly_warm_intros: 1, // 1 warm intro (new clients only, one-time benefit)
+      monthly_credit_refresh: 50, // 50 credits per month
+      monthly_unlocks_5_star: 0, // No premium unlocks included (use credits)
+      monthly_unlocks_4_star: 0, // No quality unlocks included (use credits)
+      monthly_unlocks_3_star: 0, // No standard unlocks included (use credits)
+      monthly_warm_intros: 1, // 1 warm intro per month
+      monthly_diamond_unlocks: 0, // No Diamond unlocks
       max_team_seats: 3,
     },
     enterprise: {
-      monthly_credit_refresh: 1000, // 1000 credits per month
+      monthly_credit_refresh: 100, // 100 credits per month
       monthly_unlocks_5_star: 3, // 3 Premium unlocks (5.0⭐) per month
       monthly_unlocks_4_star: 25, // 25 Quality unlocks (4.0-4.9⭐) per month
-      monthly_unlocks_3_star: 60, // 60 Standard unlocks (3.0-3.9⭐) per month
+      monthly_unlocks_3_star: 50, // 50 Standard unlocks (3.0-3.9⭐) per month
       monthly_warm_intros: 3, // 3 warm intros per month
+      monthly_diamond_unlocks: 0, // No Diamond unlocks
       max_team_seats: 10,
+    },
+    enterprise_tier2: {
+      monthly_credit_refresh: 500, // 500 credits per month
+      monthly_unlocks_5_star: 50, // 50 Premium unlocks (5.0⭐) - fraternities only
+      monthly_unlocks_4_star: 0, // No additional quality unlocks (use credits)
+      monthly_unlocks_3_star: 0, // No additional standard unlocks (use credits)
+      monthly_warm_intros: 10, // 10 warm intros per month
+      monthly_diamond_unlocks: 10, // 10 Diamond unlocks per month (full roster access)
+      max_team_seats: 50, // 50 team seats
     }
   };
 
-  const tierBenefits = benefits[tier as 'monthly' | 'enterprise'] || benefits.monthly;
+  const tierBenefits = benefits[tier as 'monthly' | 'enterprise' | 'enterprise_tier2'] || benefits.monthly;
 
   // Update account_balance with subscription info and benefits
   const updateData: any = {
@@ -274,10 +285,12 @@ async function grantSubscriptionBenefits(
     monthly_unlocks_4_star: tierBenefits.monthly_unlocks_4_star,
     monthly_unlocks_3_star: tierBenefits.monthly_unlocks_3_star,
     monthly_warm_intros: tierBenefits.monthly_warm_intros,
+    monthly_diamond_unlocks: tierBenefits.monthly_diamond_unlocks,
     unlocks_5_star_remaining: tierBenefits.monthly_unlocks_5_star,
     unlocks_4_star_remaining: tierBenefits.monthly_unlocks_4_star,
     unlocks_3_star_remaining: tierBenefits.monthly_unlocks_3_star,
     warm_intros_remaining: tierBenefits.monthly_warm_intros,
+    diamond_unlocks_remaining: tierBenefits.monthly_diamond_unlocks,
     max_team_seats: tierBenefits.max_team_seats,
   };
 
@@ -927,10 +940,12 @@ router.post('/webhook', async (req, res) => {
             monthly_unlocks_4_star: 0,
             monthly_unlocks_3_star: 0,
             monthly_warm_intros: 0,
+            monthly_diamond_unlocks: 0,
             unlocks_5_star_remaining: 0,
             unlocks_4_star_remaining: 0,
             unlocks_3_star_remaining: 0,
             warm_intros_remaining: 0,
+            diamond_unlocks_remaining: 0,
             max_team_seats: 1,
           })
           .eq('company_id', account.company_id);
@@ -996,10 +1011,12 @@ router.get('/subscription/status', async (req, res) => {
         monthly_unlocks_4_star,
         monthly_unlocks_3_star,
         monthly_warm_intros,
+        monthly_diamond_unlocks,
         unlocks_5_star_remaining,
         unlocks_4_star_remaining,
         unlocks_3_star_remaining,
         warm_intros_remaining,
+        diamond_unlocks_remaining,
         max_team_seats
       `)
       .eq('company_id', companyId)
@@ -1033,6 +1050,7 @@ router.get('/subscription/status', async (req, res) => {
         monthlyUnlocks4Star: account.monthly_unlocks_4_star,
         monthlyUnlocks3Star: account.monthly_unlocks_3_star,
         monthlyWarmIntros: account.monthly_warm_intros,
+        monthlyDiamondUnlocks: account.monthly_diamond_unlocks,
         maxTeamSeats: account.max_team_seats,
       },
       remaining: {
@@ -1040,6 +1058,7 @@ router.get('/subscription/status', async (req, res) => {
         unlocks4Star: account.unlocks_4_star_remaining,
         unlocks3Star: account.unlocks_3_star_remaining,
         warmIntros: account.warm_intros_remaining,
+        diamondUnlocks: account.diamond_unlocks_remaining,
       }
     });
   } catch (error: any) {

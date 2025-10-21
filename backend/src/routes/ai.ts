@@ -207,37 +207,39 @@ Connect with student influencers within Greek life:
 - Platform access only
 
 ### Team (Monthly) - $29.99/month
-- 0 automatic credits (must purchase separately)
-- Monthly unlock allowances:
-  - 1 Premium unlock (5.0⭐ chapters)
-  - 4 Quality unlocks (4.0-4.9⭐ chapters)
-  - 7 Standard unlocks (3.0-3.9⭐ chapters)
-- 1 Warm Introduction (new clients only, one-time benefit, expires after 3 months)
+- 50 automatic credits per month
+- No pre-allocated chapter unlocks (purchase using credits as needed)
+- 1 Warm Introduction per month
 - Max 3 team seats
 - Annual option available with 10% discount
 
 ### Enterprise Tier 1 - $299.99/month
-- 1,000 credits per month (automatic)
-- Monthly unlock allowances:
+- 100 credits per month (automatic)
+- Monthly unlock allowances (fraternities only):
   - 3 Premium unlocks (5.0⭐ chapters)
   - 25 Quality unlocks (4.0-4.9⭐ chapters)
-  - 60 Standard unlocks (3.0-3.9⭐ chapters)
+  - 50 Standard unlocks (3.0-3.9⭐ chapters)
 - 3 Warm Introductions per month
 - Max 10 team seats
 - FraternityBase API access
 - Priority support
 - Annual option available with 10% discount
 
-### Enterprise Tier 2 - Custom Pricing
-- Unlimited credits
-- Custom integrations
-- Dedicated account manager
-- Contact sales at sales@fraternitybase.com
+### Enterprise Tier 2 - $2,222/month
+- 500 credits per month (automatic)
+- Monthly unlock allowances (fraternities only):
+  - 50 Premium unlocks (5.0⭐ chapters)
+  - 10 Diamond unlocks (full roster data access)
+- 10 Warm Introductions per month
+- Max 50 team seats
+- FraternityBase API access
+- Priority support
+- Note: Fraternities only - bars and sororities sold separately (future add-ons)
 
 ## CHAPTER UNLOCK PRICING (Pay-as-you-go)
 
 Dynamic pricing based on chapter quality rating:
-- 5.0⭐: 5 credits / $4.99
+- 5.0⭐: 10 credits / $9.99 (Enterprise Tier 1: 50% off = 5 credits / $4.99)
 - 4.5-4.9⭐: 7 credits / $6.99
 - 4.0-4.4⭐: 5 credits / $4.99
 - 3.5-3.9⭐: 3 credits / $2.99
@@ -261,6 +263,16 @@ Dynamic pricing based on chapter quality rating:
 ### Venue Connection - 160 credits / $49.99
 - Connect with local venues
 - Event partnership opportunities
+
+### Diamond Unlock - Enterprise Tier 2 Exclusive
+- **Full roster data access** - Complete member contact information
+- Only available to Enterprise Tier 2 subscribers
+- 10 Diamond unlocks included per month
+- Provides complete member roster with full contact info
+- All officer details with direct contacts
+- Historical member data & LinkedIn profiles
+- Chapter analytics & GPA records
+- Not available for purchase with credits (subscription-only benefit)
 
 ## CREDIT PACKAGES (One-time purchases)
 

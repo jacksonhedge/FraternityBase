@@ -134,6 +134,7 @@ function AnimatedRoutes() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/pending-approval" element={<PendingApprovalPage />} />
           <Route path="/admin-login" element={<AdminLoginPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
 
           {/* Admin Routes - Nested with specific paths */}
           <Route path="/admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>}>

@@ -15,6 +15,9 @@ const AdminLoginPage = () => {
     setError('');
     setIsLoading(true);
 
+    // Debug: log expected password (remove in production)
+    console.log('Expected password:', ADMIN_PASSWORD);
+
     // Simulate authentication delay
     setTimeout(() => {
       if (password === ADMIN_PASSWORD) {

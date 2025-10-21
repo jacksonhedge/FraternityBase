@@ -77,10 +77,10 @@ const SubscriptionPage = () => {
       color: 'from-blue-500 to-blue-600',
       bgColor: 'from-blue-50 to-blue-100',
       goldFeatures: [
-        '1 Premium Unlock (5⭐)',
-        '4 Quality Unlocks (4⭐)',
-        '7 Standard Unlocks (3⭐)',
-        '1 Warm Introduction (new clients only)'
+        '50 monthly credits',
+        '1 Warm Introduction',
+        'Purchase unlocks as needed',
+        'Advanced search & filters'
       ],
       features: [
         'Unlimited platform access',
@@ -88,7 +88,7 @@ const SubscriptionPage = () => {
         'Advanced search & filters',
         'Interactive Map',
         'Email support',
-        '100 monthly credits included',
+        '50 monthly credits included',
         'Purchase additional credits'
       ],
       limitations: [],
@@ -108,12 +108,12 @@ const SubscriptionPage = () => {
       goldFeatures: [
         '3 Premium Unlocks (5⭐)',
         '25 Quality Unlocks (4⭐)',
-        '60 Standard Unlocks (3⭐)',
+        '50 Standard Unlocks (3⭐)',
         '3 Warm Introductions/mo'
       ],
       features: [
         'Everything in Team, plus:',
-        '1000 monthly credits included',
+        '100 monthly credits included',
         'FraternityBase API access',
         'Priority support',
         'Early Access to College Influencer marketplace',
@@ -129,31 +129,32 @@ const SubscriptionPage = () => {
       id: 'super_enterprise',
       name: 'Enterprise Tier 2',
       level: 3,
-      price: 'Custom',
-      description: 'Tailored solutions for your needs',
+      price: 2222,
+      description: 'Maximum fraternity access',
       icon: Rocket,
       color: 'from-gradient-to-r from-indigo-600 to-violet-700',
       bgColor: 'from-indigo-50 to-violet-100',
       goldFeatures: [
-        'White-label platform access',
-        'Dedicated account manager',
-        'Custom integrations'
+        '50 Premium Unlocks (5⭐)',
+        '10 Diamond Unlocks (Full Roster)',
+        '10 Warm Introductions',
+        '500 monthly credits'
       ],
       features: [
         'Everything in Enterprise Tier 1, plus:',
-        'Unlimited credits',
-        'Custom API rate limits',
-        'Advanced analytics & reporting',
-        'Multi-user team accounts',
-        'Custom contract terms',
-        'SLA guarantees',
-        'On-demand training sessions',
-        'Priority feature requests'
+        '50 Premium (5.0⭐) fraternity unlocks/mo',
+        '10 Diamond unlocks/mo (full roster data)',
+        '500 monthly credits included',
+        '10 Warm Introductions per month',
+        '50 team seats',
+        'FraternityBase API access',
+        'Priority support',
+        'Note: Fraternities only (bars & sororities sold separately)'
       ],
       limitations: [],
-      buttonText: currentTier === 'super_enterprise' ? 'Current Plan' : 'Contact Sales',
+      buttonText: currentTier === 'super_enterprise' ? 'Current Plan' : 'Upgrade to Enterprise Tier 2',
       isCurrent: currentTier === 'super_enterprise',
-      isContactSales: true
+      isContactSales: false
     }
   ];
 

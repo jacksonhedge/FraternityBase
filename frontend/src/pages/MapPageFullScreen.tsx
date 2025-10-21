@@ -132,7 +132,7 @@ const MapPageFullScreen = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [showNavMenu, setShowNavMenu] = useState(false);
   const [hoveredCollege, setHoveredCollege] = useState<{ name: string; data: any } | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false); // Toggle between radar (dark) and logo (light) mode - default to light
+  const [isDarkMode, setIsDarkMode] = useState(true); // Toggle between radar (dark) and logo (light) mode - default to dark
   const [divisionFilter, setDivisionFilter] = useState<'all' | 'big10' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('big10'); // Default to Big 10 for public users
   const [showLockOverlay, setShowLockOverlay] = useState(false);
   const [collegeLogos, setCollegeLogos] = useState<Record<string, string>>({});

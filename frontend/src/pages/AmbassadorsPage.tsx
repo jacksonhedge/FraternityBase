@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -20,7 +20,9 @@ import {
   Award,
   TrendingUp,
   Star,
-  Unlock
+  Unlock,
+  Crown,
+  Sparkles
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
@@ -55,6 +57,45 @@ const AmbassadorsPage = () => {
   const [filterState, setFilterState] = useState('all');
   const [filterSkill, setFilterSkill] = useState('all');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
+  const [subscriptionTier, setSubscriptionTier] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch user's subscription tier
+  useEffect(() => {
+    const fetchSubscriptionTier = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setSubscriptionTier('trial');
+          setIsLoading(false);
+          return;
+        }
+
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${API_URL}/credits/balance`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSubscriptionTier(data.subscriptionTier?.toLowerCase() || 'trial');
+        } else {
+          setSubscriptionTier('trial');
+        }
+      } catch (error) {
+        console.error('Failed to fetch subscription tier:', error);
+        setSubscriptionTier('trial');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSubscriptionTier();
+  }, []);
+
+  const isEnterpriseTier2 = subscriptionTier === 'enterprise_tier2';
 
   // Only Tyler A. (unlocked) and George S. (locked)
   const ambassadors: Ambassador[] = [
@@ -125,13 +166,90 @@ const AmbassadorsPage = () => {
   const allSkills = [...new Set(ambassadors.flatMap(a => a.skills))].sort();
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Campus Ambassadors</h1>
-          <p className="text-gray-600 mt-2">Connect with student influencers and brand ambassadors</p>
+    <div className="relative space-y-6">
+      {/* Enterprise Tier 2 Lock Overlay */}
+      {!isLoading && !isEnterpriseTier2 && (
+        <div className="absolute inset-0 z-50 bg-white/95 backdrop-blur-sm flex items-center justify-center">
+          <div className="max-w-2xl mx-auto text-center px-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mb-6 shadow-lg">
+              <Crown className="w-10 h-10 text-white" />
+            </div>
+
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+              Ambassadors Marketplace
+            </h2>
+            <p className="text-lg text-gray-600 mb-6">
+              Exclusive to Enterprise Tier 2 Subscribers
+            </p>
+
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-6 border border-blue-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-2">
+                <Sparkles className="w-6 h-6 text-blue-600" />
+                What You'll Get
+              </h3>
+              <div className="grid md:grid-cols-2 gap-4 text-left">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Users className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">Verified Ambassadors</p>
+                    <p className="text-sm text-gray-600">Access to pre-vetted student influencers</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <TrendingUp className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">Campaign Tracking</p>
+                    <p className="text-sm text-gray-600">Monitor performance and ROI metrics</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Mail className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">Direct Communication</p>
+                    <p className="text-sm text-gray-600">Message ambassadors directly</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Star className="w-4 h-4 text-yellow-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">Quality Ratings</p>
+                    <p className="text-sm text-gray-600">See verified reviews and past performance</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Link
+                to="/app/team"
+                className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-xl hover:from-cyan-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
+              >
+                Upgrade to Enterprise Tier 2 - $2,222/month
+              </Link>
+              <p className="text-sm text-gray-500">
+                Current tier: <span className="font-semibold capitalize">{subscriptionTier || 'Trial'}</span>
+              </p>
+            </div>
+          </div>
         </div>
+      )}
+
+      {/* Main Content (blurred when locked) */}
+      <div className={!isEnterpriseTier2 ? 'filter blur-sm pointer-events-none select-none' : ''}>
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Campus Ambassadors</h1>
+            <p className="text-gray-600 mt-2">Connect with student influencers and brand ambassadors</p>
+          </div>
         <div className="flex items-center gap-3">
           {/* View Toggle */}
           <div className="flex items-center bg-gray-100 rounded-lg p-1">
@@ -524,6 +642,7 @@ const AmbassadorsPage = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

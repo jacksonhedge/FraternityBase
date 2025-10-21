@@ -121,8 +121,9 @@ app.use(cors({
 // Stripe webhook needs raw body for signature verification
 app.use('/api/credits/webhook', express.raw({ type: 'application/json' }));
 
-// JSON parsing for all other routes
-app.use(express.json());
+// JSON parsing for all other routes - increase limit for image uploads (base64 encoded)
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Auth verification endpoint - verifies token and returns user data
 app.get('/api/auth/verify', async (req, res) => {
@@ -259,6 +260,8 @@ app.get('/api/credits/balance', async (req, res) => {
         monthly_unlocks_5_star,
         monthly_unlocks_4_star,
         monthly_unlocks_3_star,
+        diamond_unlocks_remaining,
+        monthly_diamond_unlocks,
         warm_intros_remaining,
         monthly_warm_intros,
         max_team_seats,
@@ -387,7 +390,14 @@ app.get('/api/credits/balance', async (req, res) => {
           remaining: data?.unlocks_3_star_remaining || 0,
           monthly: data?.monthly_unlocks_3_star || 0,
           isUnlimited: data?.unlocks_3_star_remaining === -1
-        }
+        },
+        // Only include diamond if they have any (Enterprise Tier 2 only)
+        ...(data?.monthly_diamond_unlocks && data.monthly_diamond_unlocks > 0 ? {
+          diamond: {
+            remaining: data?.diamond_unlocks_remaining || 0,
+            monthly: data?.monthly_diamond_unlocks || 0
+          }
+        } : {})
       },
       warmIntros: {
         remaining: warmIntrosAvailable,
@@ -3691,6 +3701,13 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
       })));
     }
 
+    // Check for West Virginia University
+    const wvuData = data?.filter(u => u.name.includes('West Virginia'));
+    console.log('🏈 WVU Check in backend:', {
+      found: wvuData?.length || 0,
+      entries: wvuData?.map(u => ({ id: u.id, name: u.name, state: u.state, conference: u.conference }))
+    });
+
     // Transform the data to include chapter_count, bars_nearby, and unlock_count
     const transformedData = data?.map(uni => ({
       ...uni,
@@ -3698,6 +3715,10 @@ app.get('/api/admin/universities', requireAdmin, async (req, res) => {
       bars_nearby: uni.bars_nearby || 0,
       unlock_count: 0 // TODO: Add unlock_history table
     })) || [];
+
+    // Final check if WVU made it through transformation
+    const wvuTransformed = transformedData.filter(u => u.name.includes('West Virginia'));
+    console.log('🏈 WVU after transformation:', wvuTransformed.length, wvuTransformed);
 
     console.log(`✅ Sending ${transformedData.length} universities to frontend`);
     console.log('=== END DATABASE FETCH ===\n');

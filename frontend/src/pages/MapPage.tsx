@@ -356,6 +356,61 @@ const MapPage = () => {
     }
   }, [organizationType]);
 
+  // Update selected state colleges when filter changes
+  useEffect(() => {
+    if (selectedState && viewMode === 'usa') {
+      // Reapply the filter to the selected state
+      const collegeData = getCollegeData();
+      let collegesInState = Object.entries(collegeData)
+        .filter(([_, college]) => college.state === selectedState.abbr)
+        .map(([name, data]) => ({ name, ...data }));
+
+      // Apply active filter
+      if (activeFilter === 'power5') {
+        const power5Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+        collegesInState = collegesInState.filter(college =>
+          power5Conferences.includes(college.conference)
+        );
+      } else if (activeFilter === 'big10') {
+        collegesInState = collegesInState.filter(college =>
+          college.conference === 'BIG 10'
+        );
+      } else if (activeFilter === 'd1') {
+        collegesInState = collegesInState.filter(college =>
+          college.division === 'D1'
+        );
+      } else if (activeFilter === 'd2') {
+        collegesInState = collegesInState.filter(college =>
+          college.division === 'D2'
+        );
+      } else if (activeFilter === 'd3') {
+        collegesInState = collegesInState.filter(college =>
+          college.division === 'D3'
+        );
+      }
+
+      // Update the selected state with filtered colleges
+      if (collegesInState.length > 0) {
+        const totalChapters = collegesInState.reduce(
+          (sum, c) => sum + c.fraternities + c.sororities, 0
+        );
+        const totalMembers = collegesInState.reduce(
+          (sum, c) => sum + c.totalMembers, 0
+        );
+
+        setSelectedState({
+          ...selectedState,
+          colleges: collegesInState,
+          totalChapters,
+          totalMembers
+        });
+      } else {
+        // If no colleges match the filter, clear the selection
+        setSelectedState(null);
+      }
+    }
+  }, [activeFilter]);
+
   // Fetch real college data from API to replace hardcoded COLLEGE_LOCATIONS
   useEffect(() => {
     const fetchRealCollegeData = async () => {
@@ -485,6 +540,11 @@ const MapPage = () => {
             abbr => STATE_COORDINATES[abbr as keyof typeof STATE_COORDINATES].name === feature.properties.name
           );
 
+          // Debug: log states that don't have abbreviations
+          if (!stateAbbr) {
+            console.log('⚠️ No abbreviation found for state:', feature.properties.name);
+          }
+
           const collegeData = getCollegeData();
           const collegesInState = Object.values(collegeData).filter(
             college => college.state === stateAbbr
@@ -540,12 +600,44 @@ const MapPage = () => {
   // Handle state click
   const handleStateClick = (feature: any) => {
     const stateAbbr = feature.properties.abbr;
-    if (!stateAbbr) return;
+    console.log('🗺️ State clicked:', feature.properties.name, 'Abbr:', stateAbbr);
+
+    if (!stateAbbr) {
+      console.warn('❌ No abbreviation for state:', feature.properties.name);
+      return;
+    }
 
     const collegeData = getCollegeData();
-    const collegesInState = Object.entries(collegeData)
+    let collegesInState = Object.entries(collegeData)
       .filter(([_, college]) => college.state === stateAbbr)
       .map(([name, data]) => ({ name, ...data }));
+
+    console.log(`📍 Found ${collegesInState.length} colleges in ${stateAbbr}`);
+
+    // Apply active filter to colleges list
+    if (activeFilter === 'power5') {
+      const power5Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
+      collegesInState = collegesInState.filter(college =>
+        power5Conferences.includes(college.conference)
+      );
+    } else if (activeFilter === 'big10') {
+      collegesInState = collegesInState.filter(college =>
+        college.conference === 'BIG 10'
+      );
+    } else if (activeFilter === 'd1') {
+      collegesInState = collegesInState.filter(college =>
+        college.division === 'D1'
+      );
+    } else if (activeFilter === 'd2') {
+      collegesInState = collegesInState.filter(college =>
+        college.division === 'D2'
+      );
+    } else if (activeFilter === 'd3') {
+      collegesInState = collegesInState.filter(college =>
+        college.division === 'D3'
+      );
+    }
+    // Note: 'mychapters' filter is handled separately and doesn't filter colleges
 
     if (collegesInState.length > 0) {
       const totalChapters = collegesInState.reduce(

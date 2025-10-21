@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, FileText } from 'lucide-react';
+import { ArrowLeft, FileText, AlertTriangle } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 const TermsPage = () => {
@@ -15,10 +15,10 @@ const TermsPage = () => {
               <FileText className="w-8 h-8 text-blue-600" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              Terms of Service
+              Terms and Conditions
             </h1>
             <p className="text-gray-600">
-              Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              <strong>Effective Date:</strong> October 21, 2025 | <strong>Last Updated:</strong> October 21, 2025
             </p>
           </div>
 
@@ -33,118 +33,198 @@ const TermsPage = () => {
 
           {/* Content */}
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 space-y-8">
+            {/* Critical Data Prohibition Notice */}
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    Critical Prohibition - Data Resale Strictly Forbidden
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    All data obtained from FraternityBase is provided solely for your internal use to facilitate direct partnerships with Greek Organizations. <strong>Resale, redistribution, or commercialization of Platform data is strictly prohibited</strong> and constitutes a material breach that will result in immediate account termination, legal action to recover all actual damages, enforcement costs, and reasonable attorneys' fees.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                By accessing or using the FraternityBase platform ("Platform," "Service," or "FraternityBase"), you ("User," "you," "Company," or "Brand") agree to be bound by these Terms and Conditions ("Terms"). If you do not agree to these Terms, you may not access or use the Platform.
+              </p>
               <p className="text-gray-700 leading-relaxed">
-                By accessing and using FraternityBase ("Service"), you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these Terms of Service, please do not use our Service.
+                FraternityBase reserves the right to modify these Terms at any time. We will notify you of material changes via email or through the Platform. Your continued use of the Service after such modifications constitutes acceptance of the updated Terms.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Description of Service</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Service Description</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                FraternityBase provides a platform for companies to connect with Greek organizations and access verified contact information for recruitment, marketing, and partnership opportunities.
-              </p>
-              <p className="text-gray-700 leading-relaxed">
-                We reserve the right to modify, suspend, or discontinue any aspect of the Service at any time, with or without notice.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">3. User Accounts</h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                To use certain features of our Service, you must create an account. You agree to:
+                FraternityBase is a B2B platform that connects companies and brands with college fraternities and sororities ("Greek Organizations" or "Chapters") for events, partnerships, sponsorships, and ambassador programs. The Platform provides:
               </p>
               <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                <li>Provide accurate, current, and complete information during registration</li>
-                <li>Maintain and promptly update your account information</li>
-                <li>Maintain the security of your password and account</li>
-                <li>Accept responsibility for all activities that occur under your account</li>
-                <li>Notify us immediately of any unauthorized use of your account</li>
+                <li>Searchable database of Greek Organizations and Chapters</li>
+                <li>Contact information and organizational data</li>
+                <li>Event discovery and partnership management tools</li>
+                <li>Analytics and reporting features</li>
+                <li>Communication and CRM capabilities</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Acceptable Use</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Account Registration and Eligibility</h2>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">3.1 Eligibility</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                You agree not to use the Service to:
+                You must be at least 18 years old and represent a legitimate business entity to use FraternityBase. By registering, you represent and warrant that:
               </p>
-              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                <li>Violate any applicable laws or regulations</li>
-                <li>Infringe upon the rights of others</li>
-                <li>Send unsolicited or unauthorized advertising or spam</li>
-                <li>Collect or harvest personal information without consent</li>
-                <li>Interfere with or disrupt the Service or servers</li>
-                <li>Attempt to gain unauthorized access to any portion of the Service</li>
-                <li>Use automated systems or software to extract data ("scraping")</li>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 mb-4">
+                <li>All registration information is accurate and current</li>
+                <li>You have the authority to bind your company to these Terms</li>
+                <li>Your use of the Service complies with all applicable laws</li>
               </ul>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">3.2 Account Security</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">You are responsible for:</p>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 mb-4">
+                <li>Maintaining the confidentiality of your account credentials</li>
+                <li>All activities that occur under your account</li>
+                <li>Notifying FraternityBase immediately of any unauthorized use</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">3.3 Account Types</h3>
+              <p className="text-gray-700 leading-relaxed">
+                FraternityBase offers various subscription tiers with different features and access levels. Your access to certain features depends on your subscription level.
+              </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">5. Credits and Payments</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Acceptable Use Policy</h2>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">4.1 Permitted Uses</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">You may use the Platform to:</p>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 mb-4">
+                <li>Discover and connect with Greek Organizations</li>
+                <li>Manage partnerships and events</li>
+                <li>Analyze engagement data and metrics</li>
+                <li>Communicate with Chapter officers and representatives</li>
+                <li>Track and optimize partnership performance</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">4.2 Prohibited Uses</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">You may NOT:</p>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 mb-4">
+                <li><strong className="text-red-600">Resell, redistribute, or commercialize any data obtained from the Platform</strong></li>
+                <li>Share your account credentials with third parties</li>
+                <li>Use the Platform for any illegal or unauthorized purpose</li>
+                <li>Harvest, scrape, or extract data using automated means without written permission</li>
+                <li>Send unsolicited spam or marketing communications</li>
+                <li>Misrepresent your identity or affiliation</li>
+                <li>Interfere with or disrupt the Platform's functionality</li>
+                <li>Attempt to gain unauthorized access to any portion of the Platform</li>
+                <li>Use the data for any purpose other than direct partnership facilitation</li>
+                <li>Compile databases or directories using Platform data</li>
+                <li>Create derivative products or services using Platform data</li>
+                <li>Sell, license, or transfer access to Platform data to any third party</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">4.3 Data Collection Restrictions</h3>
+              <p className="text-gray-700 leading-relaxed">
+                All data provided through FraternityBase is provided solely for your internal use to facilitate direct partnerships with Greek Organizations. <strong>Any resale, redistribution, or commercialization of this data is strictly prohibited and constitutes a material breach of these Terms.</strong>
+              </p>
+            </section>
+
+            <section className="bg-red-50 border-l-4 border-red-500 p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+                13. Special Provisions for Data Use
+              </h2>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">13.1 No Data Resale - CRITICAL PROHIBITION</h3>
+              <p className="text-gray-900 font-semibold mb-4">
+                You explicitly acknowledge and agree that you may NOT:
+              </p>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 mb-4">
+                <li>Sell, license, rent, or commercialize any data obtained from the Platform to any third party</li>
+                <li>Create or offer any product, service, or database that incorporates Platform data</li>
+                <li>Use Platform data to build competitive products or services</li>
+                <li>Share Platform data with parent companies, subsidiaries, or affiliates unless authorized</li>
+                <li>Combine Platform data with other datasets for resale or commercialization</li>
+                <li>Use Platform data for lead generation services provided to third parties</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">13.2 Permitted Data Uses</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">You may use Platform data exclusively for:</p>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 mb-4">
+                <li>Direct partnership outreach to Greek Organizations</li>
+                <li>Internal analysis to optimize your own partnership strategies</li>
+                <li>Reporting to internal stakeholders within your organization</li>
+                <li>Communication with Chapters about partnership opportunities</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">13.5 Enforcement</h3>
+              <p className="text-gray-900 font-bold mb-4">
+                Violation of the data resale prohibition will result in:
+              </p>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 mb-4">
+                <li>Immediate account termination</li>
+                <li>Legal action to recover all actual damages and seek injunctive relief</li>
+                <li>Liability for all enforcement costs incurred, including reasonable attorneys' fees</li>
+                <li>Potential statutory damages as provided by law</li>
+              </ul>
+              <p className="text-gray-900 font-bold text-lg">
+                We reserve the right to pursue all available legal remedies, including but not limited to actual damages, consequential damages, and reasonable attorneys' fees.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Payment Terms</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                FraternityBase operates on a credit-based system:
-              </p>
-              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                <li>Credits can be purchased through our platform</li>
-                <li>Credits are non-refundable once purchased</li>
-                <li>Credits expire 12 months after purchase if unused</li>
-                <li>Pricing for credits and unlocks may change with notice</li>
-                <li>All payments are processed securely through third-party payment processors</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Data Use and Privacy</h2>
-              <p className="text-gray-700 leading-relaxed">
-                Contact information accessed through our Service must be used in compliance with applicable privacy laws, including but not limited to CAN-SPAM, GDPR, and CCPA. You agree to use the information responsibly and only for legitimate business purposes. Please refer to our Privacy Policy for details on how we collect, use, and protect your data.
+                Access to FraternityBase requires a paid subscription. Fees are based on your selected plan and billed according to your billing cycle (monthly or annual). Subscription fees are non-refundable except as required by law.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Intellectual Property</h2>
-              <p className="text-gray-700 leading-relaxed">
-                The Service and its original content, features, and functionality are owned by FraternityBase and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws. You may not copy, modify, distribute, or create derivative works based on our content without prior written consent.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Termination</h2>
-              <p className="text-gray-700 leading-relaxed">
-                We reserve the right to suspend or terminate your account and access to the Service at our sole discretion, without notice, for conduct that we believe violates these Terms of Service or is harmful to other users, us, or third parties, or for any other reason.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Disclaimer of Warranties</h2>
-              <p className="text-gray-700 leading-relaxed">
-                THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR ERROR-FREE.
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Warranties and Disclaimers</h2>
+              <p className="text-gray-700 leading-relaxed font-semibold mb-4">
+                THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">10. Limitation of Liability</h2>
-              <p className="text-gray-700 leading-relaxed">
-                IN NO EVENT SHALL FRATERNITYBASE, ITS DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE.
+              <p className="text-gray-700 leading-relaxed font-semibold mb-4">
+                TO THE MAXIMUM EXTENT PERMITTED BY LAW, FRATERNITYBASE'S TOTAL AGGREGATE LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID IN THE 12 MONTHS PRECEDING THE CLAIM.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">11. Changes to Terms</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">11. Indemnification</h2>
               <p className="text-gray-700 leading-relaxed">
-                We reserve the right to modify these Terms of Service at any time. We will notify users of any material changes by posting the new Terms on this page and updating the "Last updated" date. Your continued use of the Service after such modifications constitutes your acceptance of the updated terms.
+                You agree to indemnify, defend, and hold harmless FraternityBase from any claims, liabilities, damages, or expenses arising from your violation of these Terms, including your resale or unauthorized commercialization of Platform data.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">12. Contact Information</h2>
-              <p className="text-gray-700 leading-relaxed">
-                If you have any questions about these Terms of Service, please contact us at:
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Information</h2>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                For questions about these Terms, please contact:
               </p>
-              <p className="text-gray-700 mt-4">
-                <strong>Email:</strong> <a href="mailto:support@fraternitybase.com" className="text-blue-600 hover:underline">support@fraternitybase.com</a>
-              </p>
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <p className="text-gray-900 font-semibold mb-2">FraternityBase Legal Department</p>
+                <p className="text-gray-700">Email: <a href="mailto:legal@fraternitybase.com" className="text-blue-600 hover:underline">legal@fraternitybase.com</a></p>
+              </div>
             </section>
+
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mt-8">
+              <p className="text-gray-900 font-semibold mb-2">
+                By using FraternityBase, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions, including the prohibition on data resale.
+              </p>
+              <p className="text-sm text-gray-600 mt-4">
+                <strong>Last Updated:</strong> October 21, 2025 | <strong>Version:</strong> 1.0
+              </p>
+            </div>
           </div>
         </div>
       </div>

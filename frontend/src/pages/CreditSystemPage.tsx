@@ -136,35 +136,17 @@ const CreditSystemPage = () => {
       ]
     },
     {
-      id: 'warm-intro-platinum',
-      name: 'Platinum Warm Introduction',
-      icon: Sparkles,
-      color: 'from-purple-600 to-purple-700',
-      bgColor: 'from-purple-50 to-purple-100',
-      credits: 100,
-      description: 'Personal introduction to verified Platinum chapters',
-      features: [
-        'Pre-vetted partnership relationship',
-        'Personal email introduction from our team',
-        '70% response rate (vs 10% cold outreach)',
-        'Verified, complete contact data',
-        'Follow-up coordination included'
-      ],
-      badge: 'BEST VALUE',
-      isPremium: true
-    },
-    {
       id: 'warm-intro',
-      name: 'Standard Warm Introduction',
+      name: 'Warm Introduction',
       icon: Handshake,
       color: 'from-indigo-500 to-indigo-600',
       bgColor: 'from-indigo-50 to-indigo-100',
-      credits: 75,
-      description: 'Personal introduction to any chapter leadership',
+      credits: 200,
+      description: 'Personal introduction to chapter leadership',
       features: [
-        'Personal email introduction',
-        '70% response rate',
-        'Follow-up coordination',
+        'Personal email introduction from our team',
+        '70% response rate (vs 10% cold outreach)',
+        'Follow-up coordination included',
         'Much higher success than cold outreach'
       ]
     },
@@ -182,6 +164,25 @@ const CreditSystemPage = () => {
         'Social media reach metrics',
         'Campaign performance tracking'
       ]
+    },
+    {
+      id: 'diamond-unlock',
+      name: '💎 Diamond Unlock (Full Roster)',
+      icon: Crown,
+      color: 'from-cyan-500 to-blue-600',
+      bgColor: 'from-cyan-50 to-blue-50',
+      credits: 0,
+      description: 'Enterprise Tier 2 exclusive - complete member data',
+      features: [
+        'Complete member roster with full contact info',
+        'All officer details with direct contacts',
+        'Historical member data & LinkedIn profiles',
+        'Chapter analytics & GPA records',
+        'Only available with Enterprise Tier 2 subscription',
+        '10 Diamond unlocks included per month'
+      ],
+      badge: 'ENTERPRISE ONLY',
+      isPremium: true
     }
   ];
 
@@ -346,15 +347,21 @@ const CreditSystemPage = () => {
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
-              <h3 className="font-bold text-gray-900 mb-2">Enterprise Benefits</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Enterprise Tier 1 Benefits</h3>
               <p className="text-sm text-gray-600">
-                Enterprise subscribers get 3 Premium (5.0⭐), 25 Quality (4.0-4.9⭐), and 60 Standard (3.0-3.9⭐) chapter unlocks monthly, plus 1000 monthly credits, 3 warm intros, 10 team seats, and API access.
+                Enterprise Tier 1 subscribers get 3 Premium (5.0⭐), 25 Quality (4.0-4.9⭐), and 50 Standard (3.0-3.9⭐) fraternity chapter unlocks monthly, plus 100 credits, 3 warm intros, 10 team seats, and API access.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
+              <h3 className="font-bold text-gray-900 mb-2">Enterprise Tier 2 Benefits ($2,222/mo)</h3>
+              <p className="text-sm text-gray-600">
+                Enterprise Tier 2 subscribers get 50 Premium (5.0⭐) fraternity unlocks monthly, 10 Diamond unlocks (full roster data access), 500 monthly credits, 10 warm intros, 50 team seats, and API access. Note: Fraternities only - bars and sororities sold separately.
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">
               <h3 className="font-bold text-gray-900 mb-2">Team Plan Benefits</h3>
               <p className="text-sm text-gray-600">
-                Team subscribers get 1 Premium (5.0⭐), 4 Quality (4.0-4.9⭐), and 7 Standard (3.0-3.9⭐) chapter unlocks monthly, plus 1 warm introduction (new clients only), 3 team seats, and advanced search.
+                Team subscribers get 50 monthly credits, 1 warm introduction, 3 team seats, and advanced search. Purchase chapter unlocks as needed using credits.
               </p>
             </div>
             <div className="bg-white rounded-lg p-4 border border-gray-100">

@@ -16,6 +16,7 @@ interface AccountBalance {
     fiveStar: { remaining: number; monthly: number; isUnlimited: boolean };
     fourStar: { remaining: number; monthly: number; isUnlimited: boolean };
     threeStar: { remaining: number; monthly: number; isUnlimited: boolean };
+    diamond?: { remaining: number; monthly: number };
   };
   warmIntros?: {
     remaining: number;
@@ -944,7 +945,7 @@ export default function CreditsPage() {
             Your subscription includes monthly unlock allowances. When these are exhausted, unlocks will use credits from your balance.
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {/* 5-Star Chapter Unlocks */}
             <div className="bg-white rounded-lg p-4 border border-gray-200">
               <div className="flex items-center gap-2 mb-3">
@@ -1076,6 +1077,41 @@ export default function CreditsPage() {
                     {accountData.warmIntros.expiresAt
                       ? `Expires ${new Date(accountData.warmIntros.expiresAt).toLocaleDateString()}`
                       : 'intros remaining'}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Diamond Unlocks - Enterprise Tier 2 Only */}
+            {accountData?.unlocks?.diamond && (
+              <div className="bg-white rounded-lg p-4 border border-cyan-300 shadow-cyan-100">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="p-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg">
+                    <Crown className="w-4 h-4 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">💎 Diamond</h3>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl font-bold text-gray-900">
+                      {accountData.unlocks.diamond.remaining}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      / {accountData.unlocks.diamond.monthly}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-cyan-500 to-blue-600 h-2 rounded-full transition-all"
+                      style={{
+                        width: accountData.unlocks.diamond.monthly > 0
+                          ? `${Math.min((accountData.unlocks.diamond.remaining / accountData.unlocks.diamond.monthly) * 100, 100)}%`
+                          : '0%'
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    Full roster access
                   </p>
                 </div>
               </div>

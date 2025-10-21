@@ -22,8 +22,8 @@ export const PRICING = {
   VENUE_CONNECTION: 160,
 
   // Subscription credits
-  MONTHLY_SUBSCRIPTION_GRANT: 100, // Monthly credits for subscribers
-  ENTERPRISE_SUBSCRIPTION_GRANT: 500, // Enterprise tier monthly credits
+  MONTHLY_SUBSCRIPTION_GRANT: 50, // Monthly credits for Team tier ($29.99/month)
+  ENTERPRISE_SUBSCRIPTION_GRANT: 100, // Enterprise Tier 1 monthly credits ($299.99/month)
 
   // Credit purchase options (credits and dollar prices)
   // Priced around Premium unlock value ($27 per unlock)
