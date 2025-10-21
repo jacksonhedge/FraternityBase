@@ -509,7 +509,7 @@ const SubscriptionPage = () => {
                       body: JSON.stringify({
                         message: contactMessage,
                         userEmail: user?.email || '',
-                        userName: user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : '',
+                        userName: user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : '',
                         companyName: '' // We can add this later if needed
                       })
                     });
