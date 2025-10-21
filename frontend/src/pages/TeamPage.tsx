@@ -45,6 +45,7 @@ const TeamPage = () => {
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
   const [resendingMemberId, setResendingMemberId] = useState<string | null>(null);
+  const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
   const [companyInfo, setCompanyInfo] = useState<{
     company_name: string;
     created_at: string;
@@ -332,6 +333,59 @@ const TeamPage = () => {
     }
   };
 
+  const handleRemoveMember = async (memberId: string) => {
+    if (!confirm('Are you sure you want to remove this team member?')) {
+      return;
+    }
+
+    setRemovingMemberId(memberId);
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${API_URL}/team/remove`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          memberId
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to remove team member');
+      }
+
+      // Refresh team members list
+      const membersResponse = await fetch(`${API_URL}/team/members`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (membersResponse.ok) {
+        const membersData = await membersResponse.json();
+        setTeamMembers(membersData as TeamMember[]);
+      }
+
+      console.log(`✅ Team member removed successfully`);
+    } catch (error: any) {
+      console.error('Error removing team member:', error);
+    } finally {
+      setRemovingMemberId(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -599,7 +653,20 @@ const TeamPage = () => {
                                 </button>
                               )}
                               {member.member_number !== 1 && user?.role === 'admin' && (
-                                <button className="text-red-600 hover:text-red-700">Remove</button>
+                                <button
+                                  onClick={() => handleRemoveMember(member.id)}
+                                  disabled={removingMemberId === member.id}
+                                  className="text-red-600 hover:text-red-700 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {removingMemberId === member.id ? (
+                                    <>
+                                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600"></div>
+                                      Removing...
+                                    </>
+                                  ) : (
+                                    'Remove'
+                                  )}
+                                </button>
                               )}
                             </div>
                           </td>

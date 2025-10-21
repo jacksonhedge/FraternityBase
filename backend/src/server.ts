@@ -776,6 +776,99 @@ app.post('/api/team/resend-invite', async (req, res) => {
   }
 });
 
+// POST /api/team/remove - Remove a team member
+app.post('/api/team/remove', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's profile to find company_id
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('company_id, role')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      return res.status(404).json({ error: 'User profile or company not found' });
+    }
+
+    // Check if user is admin (only admins can remove members)
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const { data: teamMember } = await supabaseAdmin
+      .from('team_members')
+      .select('role')
+      .eq('company_id', profile.company_id)
+      .eq('user_id', user.id)
+      .single();
+
+    if (!teamMember || (teamMember.role !== 'admin' && teamMember.role !== 'owner')) {
+      return res.status(403).json({ error: 'Only admins can remove team members' });
+    }
+
+    const { memberId } = req.body;
+
+    if (!memberId) {
+      return res.status(400).json({ error: 'Member ID is required' });
+    }
+
+    // Get the team member to remove
+    const { data: targetMember, error: memberError } = await supabaseAdmin
+      .from('team_members')
+      .select('user_id, member_number, role')
+      .eq('id', memberId)
+      .eq('company_id', profile.company_id)
+      .single();
+
+    if (memberError || !targetMember) {
+      return res.status(404).json({ error: 'Team member not found' });
+    }
+
+    // Prevent removing member #1 (owner)
+    if (targetMember.member_number === 1) {
+      return res.status(400).json({ error: 'Cannot remove the team owner (member #1)' });
+    }
+
+    // Delete the team member record
+    const { error: deleteError } = await supabaseAdmin
+      .from('team_members')
+      .delete()
+      .eq('id', memberId)
+      .eq('company_id', profile.company_id);
+
+    if (deleteError) {
+      console.error('Error removing team member:', deleteError);
+      return res.status(500).json({ error: 'Failed to remove team member' });
+    }
+
+    console.log(`✅ Team member removed: member_number=${targetMember.member_number} from company ${profile.company_id}`);
+
+    res.json({
+      success: true,
+      message: 'Team member removed successfully'
+    });
+  } catch (error: any) {
+    console.error('Remove team member endpoint error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
 // User profile endpoint
 app.get('/api/user/profile', async (req, res) => {
   try {
