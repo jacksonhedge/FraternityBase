@@ -1589,7 +1589,30 @@ const MapPageFullScreen = () => {
                 ) : (
                   <>
                     {/* Show unlocked chapters and locked chapters separately */}
-                    {collegeChapters.map((chapter, index) => {
+                    {/* Sort chapters: Power 5 conferences first, then others */}
+                    {(() => {
+                      const POWER_5_CONFERENCES = ['SEC', 'BIG 10', 'ACC', 'BIG 12'];
+
+                      // Sort chapters with Power 5 first
+                      const sortedChapters = [...collegeChapters].sort((a, b) => {
+                        // Get college data to check conference
+                        const collegeA = selectedCollege;
+                        const collegeB = selectedCollege;
+
+                        const isPower5A = collegeA && POWER_5_CONFERENCES.includes(collegeA.conference || '');
+                        const isPower5B = collegeB && POWER_5_CONFERENCES.includes(collegeB.conference || '');
+
+                        // Power 5 schools first
+                        if (isPower5A && !isPower5B) return -1;
+                        if (!isPower5A && isPower5B) return 1;
+
+                        // Within same tier, sort alphabetically by organization name
+                        const nameA = a.greek_organizations?.name || '';
+                        const nameB = b.greek_organizations?.name || '';
+                        return nameA.localeCompare(nameB);
+                      });
+
+                      return sortedChapters.map((chapter, index) => {
                       const isUnlocked = chapter.unlocked === true;
 
                       if (isUnlocked) {
@@ -1659,7 +1682,8 @@ const MapPageFullScreen = () => {
                           </div>
                         );
                       }
-                    })}
+                      });
+                    })()}
 
                     {/* Unlock button if there are locked chapters and user doesn't have Enterprise access */}
                     {!hasEnterpriseAccess && collegeChapters.some(c => !c.unlocked) && (
@@ -1854,7 +1878,7 @@ const MapPageFullScreen = () => {
         {statesData && (
           <>
             <GeoJSON
-              key={`geojson-${viewMode}-${selectedState?.abbr || 'none'}`}
+              key="geojson-usa-states"
               data={statesData}
               style={styleState}
               onEachFeature={onEachState}
