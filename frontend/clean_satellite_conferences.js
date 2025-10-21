@@ -3,8 +3,10 @@
  * Remove conference assignments from satellite campuses
  */
 
+require('dotenv').config();
+
 const API_URL = 'https://backend-two-topaz-47.vercel.app/api';
-const ADMIN_TOKEN = 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 
 // Keywords that indicate a satellite campus (NOT a Power 4 school)
 const SATELLITE_KEYWORDS = [

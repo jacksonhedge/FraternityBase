@@ -7,7 +7,8 @@ const http = require('http');
 
 const API_URL = 'localhost';
 const API_PORT = 3001;
-const ADMIN_TOKEN = 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
+require('dotenv').config();
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 const CONCURRENT_USERS = 5;
 const REQUESTS_PER_USER = 10;
 

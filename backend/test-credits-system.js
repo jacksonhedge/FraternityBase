@@ -4,7 +4,8 @@
  */
 
 const API_URL = 'http://localhost:3001/api';
-const ADMIN_TOKEN = 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
+require('dotenv').config();
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 const CRON_SECRET = 'cron_secret_fra7ernity_b4se_2025';
 
 // Test company ID - get this from your admin panel

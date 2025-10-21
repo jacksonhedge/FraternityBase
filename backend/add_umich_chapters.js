@@ -1,5 +1,6 @@
 const API_URL = 'https://backend-cnwqxx53h-jackson-fitzgeralds-projects.vercel.app/api';
-const ADMIN_TOKEN = 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
+require('dotenv').config();
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 
 // IFC Fraternities
 const fraternities = [

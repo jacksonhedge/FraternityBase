@@ -1,5 +1,6 @@
 const API_URL = 'https://backend-cnwqxx53h-jackson-fitzgeralds-projects.vercel.app/api';
-const ADMIN_TOKEN = 'sk_admin_fra7ernity_b4se_sec2ret_92fj39';
+require('dotenv').config();
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 
 const presidents = [
   { chapterId: '3ff72083-95f3-4010-a16f-271b15b8243a', name: 'Ella Morgades', email: 'ellamor@umich.edu', org: 'Chi Omega' },
