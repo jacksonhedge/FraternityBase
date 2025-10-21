@@ -303,6 +303,11 @@ const ChapterDetailPage = () => {
 
   // Map API data to display format
   console.log('🎯 DEBUG - Mapping chapter data. chapterData.grade =', chapterData.grade, 'Type:', typeof chapterData.grade);
+
+  // Convert grade to number explicitly to handle string/number type issues
+  const gradeValue = chapterData.grade ? parseFloat(chapterData.grade) : 4.0;
+  console.log('🎯 DEBUG - Parsed grade value:', gradeValue, 'Type:', typeof gradeValue);
+
   const chapter = {
     id: chapterData.id,
     fraternity: chapterData.greek_organizations?.name || 'Unknown Organization',
@@ -315,7 +320,7 @@ const ChapterDetailPage = () => {
     house: chapterData.house_address || '',
     website: chapterData.website || '',
     instagram: chapterData.instagram_handle || '',
-    greekRank: chapterData.grade || 4.0, // Use database grade (0-5.0), fallback to 4.0 for Good tier pricing
+    greekRank: gradeValue, // Use database grade (0-5.0), converted to number, fallback to 4.0
     isPlatinum: chapterData.is_platinum || false, // Platinum status for chapters with partner intros
     nationalRank: 15, // TODO: Add to database
     lastUpdated: chapterData.updated_at || new Date().toISOString(),
