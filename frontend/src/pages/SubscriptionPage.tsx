@@ -17,6 +17,9 @@ const SubscriptionPage = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
   const [currentTier, setCurrentTier] = useState<string>('trial');
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [contactMessage, setContactMessage] = useState('We need full access to everything');
+  const [submittingContact, setSubmittingContact] = useState(false);
 
   // Fetch subscription tier from API
   useEffect(() => {
@@ -159,7 +162,7 @@ const SubscriptionPage = () => {
 
     // Handle "Contact Sales" for Enterprise Tier 2
     if (tierId === 'super_enterprise') {
-      window.location.href = 'mailto:sales@fraternitybase.com?subject=Enterprise Tier 2 Plan Inquiry&body=Hi, I\'m interested in learning more about the Enterprise Tier 2 plan.';
+      setShowContactModal(true);
       return;
     }
 
@@ -401,9 +404,9 @@ const SubscriptionPage = () => {
                 <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-yellow-200">
                   <div className="flex items-center gap-2 mb-1">
                     <Check className="w-4 h-4 text-yellow-600" />
-                    <span className="font-bold text-gray-900 text-sm">Chapter Unlock: $9.99</span>
+                    <span className="font-bold text-gray-900 text-sm">Chapter Unlock: $0.99 - $6.99</span>
                   </div>
-                  <p className="text-xs text-gray-600">Full roster access</p>
+                  <p className="text-xs text-gray-600">Full roster access (pricing varies by chapter quality)</p>
                 </div>
 
                 <div className="bg-white/80 backdrop-blur rounded-lg p-3 border border-yellow-200">
@@ -461,6 +464,87 @@ const SubscriptionPage = () => {
           animation: shimmer 3s infinite;
         }
       `}</style>
+
+      {/* Contact Sales Modal */}
+      {showContactModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-700 shadow-lg">
+                <Rocket className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">Contact Sales</h2>
+            </div>
+
+            <p className="text-gray-600 mb-4">
+              Tell us what you need and our team will reach out within 24 hours.
+            </p>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Your Message
+              </label>
+              <textarea
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                rows={4}
+                placeholder="We need full access to everything"
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={async () => {
+                  setSubmittingContact(true);
+                  try {
+                    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+                    // Get user info from Redux store
+                    const response = await fetch(`${apiUrl}/credits/enterprise/contact-request`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        message: contactMessage,
+                        userEmail: user?.email || '',
+                        userName: user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : '',
+                        companyName: '' // We can add this later if needed
+                      })
+                    });
+
+                    if (response.ok) {
+                      alert('Thank you! Our team will reach out within 24 hours.');
+                      setShowContactModal(false);
+                      setContactMessage('We need full access to everything'); // Reset
+                    } else {
+                      const error = await response.json();
+                      throw new Error(error.error || 'Failed to submit request');
+                    }
+                  } catch (error) {
+                    console.error('Failed to submit contact request:', error);
+                    alert('Failed to submit request. Please try emailing sales@fraternitybase.com directly.');
+                  } finally {
+                    setSubmittingContact(false);
+                  }
+                }}
+                disabled={submittingContact}
+                className="flex-1 bg-gradient-to-r from-indigo-600 to-violet-700 text-white px-6 py-3 rounded-lg font-bold hover:from-indigo-700 hover:to-violet-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submittingContact ? 'Sending...' : 'Send Message'}
+              </button>
+              <button
+                onClick={() => setShowContactModal(false)}
+                disabled={submittingContact}
+                className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

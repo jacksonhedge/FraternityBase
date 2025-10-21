@@ -41,6 +41,8 @@ const TeamPage = () => {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'admin' | 'member'>('member');
   const [isInviting, setIsInviting] = useState(false);
+  const [inviteError, setInviteError] = useState<string | null>(null);
+  const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
   const [companyInfo, setCompanyInfo] = useState<{
     company_name: string;
     created_at: string;
@@ -230,20 +232,60 @@ const TeamPage = () => {
     if (!inviteEmail.trim() || !user?.companyId) return;
 
     setIsInviting(true);
+    setInviteError(null);
+    setInviteSuccess(null);
+
     try {
-      // Get the next member number
-      const nextMemberNumber = teamMembers.length + 1;
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
 
-      // TODO: Send invite email and create pending team member
-      // For now, just show success message
-      alert(`Invite sent to ${inviteEmail}! They will be team member #${nextMemberNumber}`);
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
 
-      setShowInviteModal(false);
-      setInviteEmail('');
-      setInviteRole('member');
-    } catch (error) {
+      const response = await fetch(`${API_URL}/team/invite`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: inviteEmail.trim(),
+          role: inviteRole
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send invitation');
+      }
+
+      setInviteSuccess(`Invitation sent to ${inviteEmail}! They will be team member #${data.teamMember.member_number} as ${inviteRole}.`);
+
+      // Refresh team members list
+      const membersResponse = await fetch(`${API_URL}/team/members`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (membersResponse.ok) {
+        const membersData = await membersResponse.json();
+        setTeamMembers(membersData as TeamMember[]);
+      }
+
+      // Close modal after 2 seconds to show success message
+      setTimeout(() => {
+        setShowInviteModal(false);
+        setInviteEmail('');
+        setInviteRole('member');
+        setInviteSuccess(null);
+      }, 2000);
+    } catch (error: any) {
       console.error('Error inviting member:', error);
-      alert('Failed to send invite. Please try again.');
+      setInviteError(error.message || 'Failed to send invitation. Please try again.');
     } finally {
       setIsInviting(false);
     }
@@ -432,7 +474,11 @@ const TeamPage = () => {
                 <h3 className="text-lg font-semibold text-gray-900">Team Members ({teamMembers.length}/3)</h3>
                 {teamMembers.length < 3 && (
                   <button
-                    onClick={() => setShowInviteModal(true)}
+                    onClick={() => {
+                      setShowInviteModal(true);
+                      setInviteError(null);
+                      setInviteSuccess(null);
+                    }}
                     className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm flex items-center gap-2"
                   >
                     <UserPlus className="w-4 h-4" />
@@ -506,7 +552,11 @@ const TeamPage = () => {
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No team members yet</h3>
                   <p className="text-gray-600 mb-4">Invite team members to collaborate on your account.</p>
                   <button
-                    onClick={() => setShowInviteModal(true)}
+                    onClick={() => {
+                      setShowInviteModal(true);
+                      setInviteError(null);
+                      setInviteSuccess(null);
+                    }}
                     className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm flex items-center gap-2 mx-auto"
                   >
                     <UserPlus className="w-4 h-4" />
@@ -531,7 +581,13 @@ const TeamPage = () => {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">Invite Team Member</h3>
                 <button
-                  onClick={() => setShowInviteModal(false)}
+                  onClick={() => {
+                    setShowInviteModal(false);
+                    setInviteError(null);
+                    setInviteSuccess(null);
+                    setInviteEmail('');
+                    setInviteRole('member');
+                  }}
                   className="text-gray-400 hover:text-gray-600"
                 >
                   <X className="w-6 h-6" />
@@ -580,11 +636,37 @@ const TeamPage = () => {
                     They will receive an email invitation to join your team.
                   </p>
                 </div>
+
+                {/* Error Message */}
+                {inviteError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-start gap-2">
+                      <X className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm text-red-800">{inviteError}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Success Message */}
+                {inviteSuccess && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-start gap-2">
+                      <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm text-green-800">{inviteSuccess}</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => setShowInviteModal(false)}
+                  onClick={() => {
+                    setShowInviteModal(false);
+                    setInviteError(null);
+                    setInviteSuccess(null);
+                    setInviteEmail('');
+                    setInviteRole('member');
+                  }}
                   className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Cancel

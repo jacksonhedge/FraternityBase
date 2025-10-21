@@ -10,6 +10,7 @@ import { animate, set } from 'animejs';
 import { DURATIONS, EASINGS, shouldAnimate } from './animations/constants';
 import { useActivityTracking } from './hooks/useActivityTracking';
 import ErrorBoundary from './components/ErrorBoundary';
+import AIAssistant from './components/AIAssistant';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -213,6 +214,7 @@ function App() {
         <AuthProvider>
           <Router>
             <AnimatedRoutes />
+            <AIAssistant />
           </Router>
         </AuthProvider>
       </Provider>

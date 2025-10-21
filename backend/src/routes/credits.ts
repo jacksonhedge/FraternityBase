@@ -1654,4 +1654,393 @@ router.get('/ambassador/requests', async (req, res) => {
   }
 });
 
+// Get payment method details
+router.get('/payment-method', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await getSupabase().auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's company_id from user_profiles
+    const { data: profile, error: profileError } = await getSupabase()
+      .from('user_profiles')
+      .select('company_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      return res.status(404).json({ error: 'User profile not found' });
+    }
+
+    // Get payment method info from account_balance
+    const { data: account, error: accountError } = await getSupabaseAdmin()
+      .from('account_balance')
+      .select('stripe_customer_id, stripe_payment_method_id')
+      .eq('company_id', profile.company_id)
+      .single();
+
+    if (accountError || !account) {
+      return res.status(404).json({ error: 'Account not found' });
+    }
+
+    // If no payment method saved
+    if (!account.stripe_payment_method_id) {
+      return res.json({ hasPaymentMethod: false });
+    }
+
+    // Get payment method details from Stripe
+    const stripe = getStripe();
+    const paymentMethod = await stripe.paymentMethods.retrieve(account.stripe_payment_method_id);
+
+    res.json({
+      hasPaymentMethod: true,
+      paymentMethod: {
+        id: paymentMethod.id,
+        type: paymentMethod.type,
+        card: paymentMethod.card ? {
+          brand: paymentMethod.card.brand,
+          last4: paymentMethod.card.last4,
+          expMonth: paymentMethod.card.exp_month,
+          expYear: paymentMethod.card.exp_year,
+        } : null,
+      }
+    });
+  } catch (error: any) {
+    console.error('Payment method fetch error:', error);
+    res.status(500).json({ error: 'Failed to fetch payment method' });
+  }
+});
+
+// Create Stripe Setup Intent to add/update payment method
+router.post('/payment-method/setup', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await getSupabase().auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's company_id from user_profiles
+    const { data: profile, error: profileError } = await getSupabase()
+      .from('user_profiles')
+      .select('company_id, email')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      return res.status(404).json({ error: 'User profile not found' });
+    }
+
+    const stripe = getStripe();
+    const supabase = getSupabaseAdmin();
+
+    // Get or create Stripe customer
+    const { data: account } = await supabase
+      .from('account_balance')
+      .select('stripe_customer_id')
+      .eq('company_id', profile.company_id)
+      .single();
+
+    let customerId = account?.stripe_customer_id;
+
+    if (!customerId) {
+      // Create a new Stripe customer
+      const { data: company } = await supabase
+        .from('companies')
+        .select('company_name')
+        .eq('id', profile.company_id)
+        .single();
+
+      const customer = await stripe.customers.create({
+        email: profile.email || user.email,
+        metadata: {
+          company_id: profile.company_id,
+          company_name: company?.company_name || 'Unknown'
+        }
+      });
+
+      customerId = customer.id;
+
+      // Save customer ID
+      await supabase
+        .from('account_balance')
+        .update({ stripe_customer_id: customerId })
+        .eq('company_id', profile.company_id);
+    }
+
+    // Create Setup Intent
+    const setupIntent = await stripe.setupIntents.create({
+      customer: customerId,
+      payment_method_types: ['card'],
+    });
+
+    res.json({
+      clientSecret: setupIntent.client_secret,
+      customerId: customerId
+    });
+  } catch (error: any) {
+    console.error('Setup Intent creation error:', error);
+    res.status(500).json({ error: 'Failed to create setup intent', details: error.message });
+  }
+});
+
+// Save payment method after Setup Intent confirmation
+router.post('/payment-method/save', async (req, res) => {
+  try {
+    const { paymentMethodId, companyId } = req.body;
+
+    if (!paymentMethodId || !companyId) {
+      return res.status(400).json({ error: 'Payment method ID and company ID required' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    // Save payment method ID to account_balance
+    await supabase
+      .from('account_balance')
+      .update({ stripe_payment_method_id: paymentMethodId })
+      .eq('company_id', companyId);
+
+    res.json({ success: true, message: 'Payment method saved successfully' });
+  } catch (error: any) {
+    console.error('Payment method save error:', error);
+    res.status(500).json({ error: 'Failed to save payment method', details: error.message });
+  }
+});
+
+// Remove payment method
+router.delete('/payment-method', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await getSupabase().auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's company_id
+    const { data: profile, error: profileError } = await getSupabase()
+      .from('user_profiles')
+      .select('company_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      return res.status(404).json({ error: 'User profile not found' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    // Remove payment method
+    await supabase
+      .from('account_balance')
+      .update({ stripe_payment_method_id: null })
+      .eq('company_id', profile.company_id);
+
+    res.json({ success: true, message: 'Payment method removed successfully' });
+  } catch (error: any) {
+    console.error('Payment method removal error:', error);
+    res.status(500).json({ error: 'Failed to remove payment method' });
+  }
+});
+
+// Submit Enterprise Tier 2 contact request
+router.post('/enterprise/contact-request', async (req, res) => {
+  try {
+    const { message, userEmail, userName, companyName } = req.body;
+
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    // Create contact request
+    const { data, error } = await supabase
+      .from('enterprise_contact_requests')
+      .insert({
+        message,
+        user_email: userEmail,
+        user_name: userName,
+        company_name: companyName,
+        status: 'pending'
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating contact request:', error);
+      return res.status(500).json({ error: 'Failed to submit contact request' });
+    }
+
+    // Send Slack notification
+    await slack.notify({
+      text: `🚀 New Enterprise Tier 2 Inquiry`,
+      blocks: [
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: '🚀 Enterprise Tier 2 Contact Request',
+            emoji: true
+          }
+        },
+        {
+          type: 'section',
+          fields: [
+            {
+              type: 'mrkdwn',
+              text: `*From:*\n${userName || 'Unknown'}`
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Company:*\n${companyName || 'Not provided'}`
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Email:*\n${userEmail || 'Not provided'}`
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Request ID:*\n${data.id}`
+            }
+          ]
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Message:*\n${message}`
+          }
+        },
+        {
+          type: 'context',
+          elements: [
+            {
+              type: 'mrkdwn',
+              text: `Submitted at ${new Date().toLocaleString()}`
+            }
+          ]
+        }
+      ]
+    });
+
+    // Create admin notification
+    const adminService = getAdminNotificationService();
+    adminService.createNotification({
+      type: 'contact_request',
+      title: '🚀 Enterprise Tier 2 Inquiry',
+      message: `${userName || 'Someone'} from ${companyName || 'a company'} requested information about Enterprise Tier 2`,
+      data: {
+        userEmail,
+        userName,
+        companyName,
+        message,
+        requestId: data.id
+      }
+    }).catch(err => console.error('Failed to create admin notification:', err));
+
+    res.json({
+      success: true,
+      message: 'Contact request submitted successfully. Our team will reach out within 24 hours.',
+      requestId: data.id
+    });
+  } catch (error: any) {
+    console.error('Enterprise contact request error:', error);
+    res.status(500).json({ error: 'Failed to submit contact request', details: error.message });
+  }
+});
+
+// Get all Enterprise Tier 2 contact requests (admin only)
+router.get('/enterprise/contact-requests', async (req, res) => {
+  try {
+    // Admin authentication check
+    const adminToken = req.headers['x-admin-token'];
+    if (!adminToken || adminToken !== process.env.ADMIN_TOKEN) {
+      return res.status(403).json({ error: 'Unauthorized - admin access required' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    const { data: requests, error } = await supabase
+      .from('enterprise_contact_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching contact requests:', error);
+      return res.status(500).json({ error: 'Failed to fetch contact requests' });
+    }
+
+    res.json({ success: true, requests });
+  } catch (error: any) {
+    console.error('Fetch contact requests error:', error);
+    res.status(500).json({ error: 'Failed to fetch contact requests', details: error.message });
+  }
+});
+
+// Update Enterprise Tier 2 contact request status (admin only)
+router.patch('/enterprise/contact-requests/:id/status', async (req, res) => {
+  try {
+    // Admin authentication check
+    const adminToken = req.headers['x-admin-token'];
+    if (!adminToken || adminToken !== process.env.ADMIN_TOKEN) {
+      return res.status(403).json({ error: 'Unauthorized - admin access required' });
+    }
+
+    const { id } = req.params;
+    const { status, adminNotes } = req.body;
+
+    if (!['pending', 'contacted', 'converted', 'declined'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+
+    const supabase = getSupabaseAdmin();
+
+    const updateData: any = { status };
+    if (adminNotes) {
+      updateData.admin_notes = adminNotes;
+    }
+    if (status === 'contacted') {
+      updateData.contacted_at = new Date().toISOString();
+    }
+
+    const { data, error } = await supabase
+      .from('enterprise_contact_requests')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating contact request:', error);
+      return res.status(500).json({ error: 'Failed to update contact request' });
+    }
+
+    res.json({ success: true, request: data });
+  } catch (error: any) {
+    console.error('Update contact request error:', error);
+    res.status(500).json({ error: 'Failed to update contact request', details: error.message });
+  }
+});
+
 export default router;

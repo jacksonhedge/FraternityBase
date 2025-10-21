@@ -11,6 +11,7 @@ import creditsRouter from './routes/credits';
 import activityTrackingRouter from './routes/activityTracking';
 import roadmapRouter from './routes/roadmap';
 import adminNotificationsRouter from './routes/adminNotifications';
+import aiRouter from './routes/ai';
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool that doesn't exist yet
 // import sharesRouter from './routes/shares';
 import CreditNotificationService from './services/CreditNotificationService';
@@ -502,6 +503,160 @@ app.get('/api/team/members', async (req, res) => {
   }
 });
 
+// POST /api/team/invite - Invite a team member
+app.post('/api/team/invite', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's profile to find company_id and verify they're admin
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('company_id, role')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      return res.status(404).json({ error: 'User profile or company not found' });
+    }
+
+    // Check if user is admin (only admins can invite)
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const { data: teamMember } = await supabaseAdmin
+      .from('team_members')
+      .select('role')
+      .eq('company_id', profile.company_id)
+      .eq('user_id', user.id)
+      .single();
+
+    if (!teamMember || (teamMember.role !== 'admin' && teamMember.role !== 'owner')) {
+      return res.status(403).json({ error: 'Only admins can invite team members' });
+    }
+
+    const { email, role } = req.body;
+
+    if (!email || !role) {
+      return res.status(400).json({ error: 'Email and role are required' });
+    }
+
+    if (!['admin', 'member'].includes(role)) {
+      return res.status(400).json({ error: 'Invalid role. Must be "admin" or "member"' });
+    }
+
+    // Check team size limit (max 3 members)
+    const { data: existingMembers, error: countError } = await supabaseAdmin
+      .from('team_members')
+      .select('id')
+      .eq('company_id', profile.company_id);
+
+    if (countError) {
+      console.error('Error counting team members:', countError);
+      return res.status(500).json({ error: 'Failed to check team size' });
+    }
+
+    if (existingMembers && existingMembers.length >= 3) {
+      return res.status(400).json({ error: 'Team is full. Maximum 3 members allowed.' });
+    }
+
+    // Check if user already exists with this email
+    const { data: existingAuth } = await supabaseAdmin.auth.admin.listUsers();
+    const existingUser = existingAuth.users.find(u => u.email === email);
+
+    let invitedUserId: string;
+
+    if (existingUser) {
+      // User already has an account
+      invitedUserId = existingUser.id;
+
+      // Check if they're already a team member of this company
+      const { data: existingTeamMember } = await supabaseAdmin
+        .from('team_members')
+        .select('id')
+        .eq('company_id', profile.company_id)
+        .eq('user_id', invitedUserId)
+        .single();
+
+      if (existingTeamMember) {
+        return res.status(400).json({ error: 'This user is already a member of your team' });
+      }
+    } else {
+      // Create new user via Supabase Auth invite
+      const { data: newUser, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+        redirectTo: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login`
+      });
+
+      if (inviteError || !newUser.user) {
+        console.error('Failed to invite user:', inviteError);
+        return res.status(500).json({ error: 'Failed to send invitation email' });
+      }
+
+      invitedUserId = newUser.user.id;
+    }
+
+    // Get the next member number
+    const nextMemberNumber = (existingMembers?.length || 0) + 1;
+
+    // Create team_member record with pending status
+    const { data: newTeamMember, error: teamMemberError } = await supabaseAdmin
+      .from('team_members')
+      .insert({
+        company_id: profile.company_id,
+        user_id: invitedUserId,
+        member_number: nextMemberNumber,
+        role: role,
+        status: 'pending',
+        invited_by: user.id
+      })
+      .select()
+      .single();
+
+    if (teamMemberError) {
+      console.error('Error creating team member:', teamMemberError);
+      return res.status(500).json({ error: 'Failed to create team member record' });
+    }
+
+    // Get company name for the email
+    const { data: company } = await supabaseAdmin
+      .from('companies')
+      .select('name')
+      .eq('id', profile.company_id)
+      .single();
+
+    console.log(`✅ Team member invited: ${email} as team member #${nextMemberNumber} for company ${company?.name || profile.company_id}`);
+
+    res.json({
+      success: true,
+      message: 'Team member invited successfully',
+      teamMember: {
+        id: newTeamMember.id,
+        email: email,
+        role: role,
+        member_number: nextMemberNumber,
+        status: 'pending'
+      }
+    });
+  } catch (error: any) {
+    console.error('Team invite endpoint error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
 // User profile endpoint
 app.get('/api/user/profile', async (req, res) => {
   try {
@@ -545,6 +700,7 @@ app.get('/api/user/profile', async (req, res) => {
 app.use('/api/credits', creditsRouter);
 app.use('/api/activity', activityTrackingRouter);
 app.use('/api/roadmap', roadmapRouter);
+app.use('/api/ai', aiRouter);
 app.use('/api/admin/notifications', adminNotificationsRouter);
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool
 // app.use('/api/shares', sharesRouter);

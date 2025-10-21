@@ -180,10 +180,13 @@ export default function CreditsPage() {
   });
   const [showAutoReloadEdit, setShowAutoReloadEdit] = useState(false);
   const [subscriptionPlansCollapsed, setSubscriptionPlansCollapsed] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<any>(null);
+  const [loadingPaymentMethod, setLoadingPaymentMethod] = useState(false);
 
   useEffect(() => {
     fetchBalance();
     fetchTransactionHistory();
+    fetchPaymentMethod();
   }, []);
 
   const fetchBalance = async () => {
@@ -263,6 +266,59 @@ export default function CreditsPage() {
       }
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
+    }
+  };
+
+  const fetchPaymentMethod = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${apiUrl}/credits/payment-method`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.hasPaymentMethod) {
+          setPaymentMethod(data.paymentMethod);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch payment method:', error);
+    }
+  };
+
+  const handleRemovePaymentMethod = async () => {
+    if (!window.confirm('Are you sure you want to remove your saved payment method? This will disable auto-reload.')) {
+      return;
+    }
+
+    setLoadingPaymentMethod(true);
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${apiUrl}/credits/payment-method`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        setPaymentMethod(null);
+        alert('Payment method removed successfully');
+      } else {
+        throw new Error('Failed to remove payment method');
+      }
+    } catch (error) {
+      console.error('Failed to remove payment method:', error);
+      alert('Failed to remove payment method. Please try again.');
+    } finally {
+      setLoadingPaymentMethod(false);
     }
   };
 
@@ -533,8 +589,8 @@ export default function CreditsPage() {
       {/* Subscription Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Subscription</h2>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-4">
             <div className={`p-3 rounded-xl bg-gradient-to-r ${getSubscriptionColor(accountData?.subscription_tier || 'free')} shadow-lg`}>
               {(() => {
                 const Icon = getSubscriptionIcon(accountData?.subscription_tier || 'free');
@@ -547,11 +603,48 @@ export default function CreditsPage() {
                  accountData?.subscription_tier?.toLowerCase() === 'enterprise' ? 'Enterprise' :
                  'Free'}
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 mb-2">
                 {accountData?.subscription_tier?.toLowerCase() === 'enterprise' ? 'Unlimited features' :
                  accountData?.subscription_tier?.toLowerCase() === 'monthly' || accountData?.subscription_tier?.toLowerCase() === 'team' ? '$29.99/month' :
                  '3-day trial'}
               </p>
+
+              {/* Billing Information */}
+              {(accountData?.subscription_tier?.toLowerCase() === 'monthly' ||
+                accountData?.subscription_tier?.toLowerCase() === 'team' ||
+                accountData?.subscription_tier?.toLowerCase() === 'enterprise') && (
+                <div className="space-y-1 mt-2">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <CreditCard className="w-4 h-4" />
+                    <span>
+                      {billingPeriod.charAt(0).toUpperCase() + billingPeriod.slice(1)} Billing
+                    </span>
+                  </div>
+
+                  {accountData?.subscriptionStatus && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                        accountData.subscriptionStatus === 'active' ? 'bg-green-100 text-green-800' :
+                        accountData.subscriptionStatus === 'trialing' ? 'bg-blue-100 text-blue-800' :
+                        accountData.subscriptionStatus === 'past_due' ? 'bg-red-100 text-red-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {accountData.subscriptionStatus}
+                      </span>
+                    </div>
+                  )}
+
+                  {accountData?.subscriptionPeriodEnd && (
+                    <p className="text-xs text-gray-500">
+                      Next billing: {new Date(accountData.subscriptionPeriodEnd).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <a
@@ -561,6 +654,60 @@ export default function CreditsPage() {
             Upgrade Plan
           </a>
         </div>
+      </div>
+
+      {/* Payment Method Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Method</h2>
+
+        {paymentMethod ? (
+          <div className="space-y-4">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 shadow-lg">
+                  <CreditCard className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                    {paymentMethod.card?.brand?.toUpperCase() || 'Card'} •••• {paymentMethod.card?.last4}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Expires {paymentMethod.card?.expMonth}/{paymentMethod.card?.expYear}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    This card is used for subscription payments and auto-reload
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleRemovePaymentMethod}
+                disabled={loadingPaymentMethod}
+                className="px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium disabled:opacity-50"
+              >
+                {loadingPaymentMethod ? 'Removing...' : 'Remove'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-xl bg-gradient-to-r from-gray-400 to-gray-500 shadow-lg">
+                <CreditCard className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  No Payment Method Saved
+                </h3>
+                <p className="text-sm text-gray-600 mb-3">
+                  Add a payment method to enable auto-reload and faster checkout. Your card will be securely stored with Stripe.
+                </p>
+                <p className="text-xs text-gray-500">
+                  You can add a payment method during your next purchase by selecting "Save for future payments"
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Subscription Billing Section */}
@@ -630,7 +777,12 @@ export default function CreditsPage() {
             const Icon = tier.icon;
             const price = billingPeriod === 'monthly' ? tier.monthlyPrice : tier.annualPrice;
             const pricePerMonth = billingPeriod === 'annual' ? tier.annualPrice / 12 : tier.monthlyPrice;
-            const isCurrentTier = accountData?.subscription_tier?.toLowerCase() === tier.id;
+
+            // Handle both 'monthly' and 'team' as the same tier
+            const currentTierNormalized = accountData?.subscription_tier?.toLowerCase();
+            const isCurrentTier = currentTierNormalized === tier.id ||
+                                 (currentTierNormalized === 'monthly' && tier.id === 'team') ||
+                                 (currentTierNormalized === 'team' && tier.id === 'team');
 
             return (
               <div
