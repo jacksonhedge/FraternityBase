@@ -74,6 +74,7 @@ const ChapterDetailPage = () => {
         .then(res => res.json())
         .then(data => {
           console.log('Chapter data from API:', data);
+          console.log('🔍 DEBUG - Grade field value:', data.data?.grade, 'Type:', typeof data.data?.grade);
           if (data.success && data.data) {
             setChapterData(data.data);
 
@@ -301,6 +302,7 @@ const ChapterDetailPage = () => {
   };
 
   // Map API data to display format
+  console.log('🎯 DEBUG - Mapping chapter data. chapterData.grade =', chapterData.grade, 'Type:', typeof chapterData.grade);
   const chapter = {
     id: chapterData.id,
     fraternity: chapterData.greek_organizations?.name || 'Unknown Organization',
