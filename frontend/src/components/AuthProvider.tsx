@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { rehydrateAuth, logout } from '../store/slices/authSlice';
+import { analytics } from '../services/analytics';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -32,9 +33,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             user: data.user,
             token: token
           }));
+
+          // Set analytics user context
+          analytics.setUser(
+            data.user.id,
+            data.user.companyId,
+            data.user.email,
+            data.user.companyName || null
+          );
         } else {
           // Token is invalid, log out
           dispatch(logout());
+          // Clear analytics user context
+          analytics.setUser(null, null, null, null);
         }
       } catch (error) {
         console.error('Token verification failed:', error);

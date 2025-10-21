@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/store';
 import { CreditCard, DollarSign, AlertCircle, Download, Crown, Zap, Unlock, Star, Users, Sparkles, Check, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { analytics } from '../services/analytics';
 
 interface AccountBalance {
   balance: number;
@@ -329,6 +330,9 @@ export default function CreditsPage() {
       return;
     }
 
+    // Track credit purchase intent
+    analytics.trackCreditPurchase(pkg.price, pkg.credits, pkg.name);
+
     setLoading(true);
 
     try {
@@ -383,6 +387,13 @@ export default function CreditsPage() {
       // Check if user already has an active subscription (not trial/free)
       const currentTier = accountData?.subscription_tier?.toLowerCase();
       const hasActiveSubscription = currentTier && !['trial', 'free'].includes(currentTier);
+
+      // Track subscription intent
+      const tier = SUBSCRIPTION_TIERS.find(t => t.id === tierId);
+      const price = period === 'monthly' ? tier?.monthlyPrice : tier?.annualPrice;
+      if (tier && price) {
+        analytics.trackSubscription(tierId, price, !hasActiveSubscription);
+      }
 
       if (hasActiveSubscription) {
         // User already has subscription - use change/upgrade endpoint with proration

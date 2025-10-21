@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { STATE_COORDINATES, STATE_BOUNDS, COLLEGE_LOCATIONS } from '../data/statesGeoData';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
+import { analytics } from '../services/analytics';
 
 // Hook to set map ref
 const SetMapRef = ({ mapRef }: { mapRef: React.MutableRefObject<any> }) => {
@@ -573,6 +574,17 @@ const MapPageFullScreen = () => {
     }
     console.log('✅ [MapPage - handleStateClick] Found state abbreviation:', stateAbbr);
 
+    // Track map state click
+    analytics.track({
+      eventType: 'map_state_click',
+      eventCategory: 'engagement',
+      eventName: `Map: State Clicked`,
+      eventData: {
+        state_name: feature.properties.name,
+        state_abbr: stateAbbr
+      }
+    });
+
     // Use hardcoded data to match what's actually shown on the map
     let collegesInState = Object.entries(COLLEGE_LOCATIONS)
       .filter(([name, college]) => college.state === stateAbbr)
@@ -729,6 +741,9 @@ const MapPageFullScreen = () => {
       fraternities: collegeData.fraternities,
       sororities: collegeData.sororities
     });
+
+    // Track map college click
+    analytics.trackMapClick(collegeData.lat, collegeData.lng, collegeName);
 
     // Check if user is NOT authenticated - implement 3-click limit
     if (!user) {

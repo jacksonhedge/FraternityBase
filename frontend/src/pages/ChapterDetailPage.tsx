@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 import { maskName, maskEmail, maskPhone, getMaskingTier, getMaskingIndicator } from '../utils/dataMasking';
+import { analytics } from '../services/analytics';
 
 const ChapterDetailPage = () => {
   const { id } = useParams();
@@ -75,6 +76,13 @@ const ChapterDetailPage = () => {
           console.log('Chapter data from API:', data);
           if (data.success && data.data) {
             setChapterData(data.data);
+
+            // Track chapter view
+            analytics.trackChapterView(
+              data.data.id,
+              data.data.chapter_name || 'Unknown Chapter',
+              data.data.universities?.name || 'Unknown University'
+            );
           }
           setLoading(false);
         })
@@ -168,6 +176,11 @@ const ChapterDetailPage = () => {
         // Fix: backend sends 'balance' not 'remainingBalance'
         const newBalance = data.balance || data.remainingBalance || balance - (data.creditsSpent || 0);
         setBalance(newBalance);
+
+        // Track chapter unlock
+        const chapterName = chapterData?.chapter_name || 'Unknown Chapter';
+        analytics.trackChapterUnlock(id!, chapterName, creditCost);
+
         alert(`✅ Unlocked! ${data.creditsSpent} credits spent. Remaining balance: ${newBalance}`);
         window.location.reload(); // Refresh to show unlocked data
       } else {
@@ -1190,6 +1203,20 @@ const ChapterDetailPage = () => {
                       setIntroSubmitted(true);
                       const deductedAmount = chapter.isPlatinum ? 20 : 100;
                       setBalance(balance - deductedAmount);
+
+                      // Track warm introduction request
+                      analytics.track({
+                        eventType: 'warm_intro_request',
+                        eventCategory: 'conversion',
+                        eventName: `Warm Intro Requested: ${chapter.fraternity}`,
+                        eventData: {
+                          chapter_id: id,
+                          chapter_name: chapter.chapterName,
+                          university_name: chapter.university,
+                          is_platinum: chapter.isPlatinum,
+                          cost: deductedAmount
+                        }
+                      });
                     } catch (error) {
                       console.error('Error submitting intro request:', error);
                       alert('Failed to submit request. Please try again.');

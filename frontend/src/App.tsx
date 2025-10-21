@@ -11,6 +11,7 @@ import { DURATIONS, EASINGS, shouldAnimate } from './animations/constants';
 import { useActivityTracking } from './hooks/useActivityTracking';
 import ErrorBoundary from './components/ErrorBoundary';
 import AIAssistant from './components/AIAssistant';
+import { analytics } from './services/analytics';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -62,6 +63,7 @@ import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import SharePage from './pages/SharePage';
 import CreditSystemPage from './pages/CreditSystemPage';
+import AdminAnalyticsEventsPage from './pages/AdminAnalyticsEventsPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -109,6 +111,9 @@ function AnimatedRoutes() {
       ease: EASINGS.easeOut,
     });
 
+    // Track page view
+    analytics.trackPageView(location.pathname, document.title);
+
     previousLocation.current = location.pathname;
   }, [location.pathname]);
 
@@ -153,6 +158,7 @@ function AnimatedRoutes() {
           <Route path="/admin/wizard-admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/college-clubs" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/csv-upload" element={<AdminRoute><AdminCSVUploadPage /></AdminRoute>} />
+          <Route path="/admin/analytics-events" element={<AdminRoute><AdminAnalyticsEventsPage /></AdminRoute>} />
           <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />
 
           {/* Public Map Route */}

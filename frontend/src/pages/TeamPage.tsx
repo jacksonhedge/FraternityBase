@@ -20,6 +20,7 @@ import {
 import { supabase } from '../lib/supabase';
 import { RootState } from '../store/store';
 import CreditsPage from './CreditsPage';
+import { analytics } from '../services/analytics';
 
 interface TeamMember {
   id: string;
@@ -27,6 +28,8 @@ interface TeamMember {
   role: string;
   status: string;
   joined_at: string;
+  first_name?: string;
+  last_name?: string;
   user_profiles: {
     first_name: string;
     last_name: string;
@@ -40,6 +43,8 @@ const TeamPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteFirstName, setInviteFirstName] = useState('');
+  const [inviteLastName, setInviteLastName] = useState('');
   const [inviteRole, setInviteRole] = useState<'admin' | 'member'>('member');
   const [isInviting, setIsInviting] = useState(false);
   const [inviteError, setInviteError] = useState<string | null>(null);
@@ -254,7 +259,9 @@ const TeamPage = () => {
         },
         body: JSON.stringify({
           email: inviteEmail.trim(),
-          role: inviteRole
+          role: inviteRole,
+          firstName: inviteFirstName.trim() || undefined,
+          lastName: inviteLastName.trim() || undefined
         })
       });
 
@@ -265,6 +272,9 @@ const TeamPage = () => {
       }
 
       setInviteSuccess(`Invitation sent to ${inviteEmail}! They will be team member #${data.teamMember.member_number} as ${inviteRole}.`);
+
+      // Track team invitation
+      analytics.trackTeamInvite(inviteEmail.trim(), inviteRole);
 
       // Refresh team members list
       const membersResponse = await fetch(`${API_URL}/team/members`, {
@@ -283,6 +293,8 @@ const TeamPage = () => {
       setTimeout(() => {
         setShowInviteModal(false);
         setInviteEmail('');
+        setInviteFirstName('');
+        setInviteLastName('');
         setInviteRole('member');
         setInviteSuccess(null);
       }, 2000);
@@ -379,6 +391,16 @@ const TeamPage = () => {
       }
 
       console.log(`✅ Team member removed successfully`);
+
+      // Track team member removal
+      analytics.track({
+        eventType: 'team_remove',
+        eventCategory: 'action',
+        eventName: `Team Member Removed`,
+        eventData: {
+          member_id: memberId
+        }
+      });
     } catch (error: any) {
       console.error('Error removing team member:', error);
     } finally {
@@ -599,7 +621,10 @@ const TeamPage = () => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-medium text-gray-900">
-                                {member.user_profiles.first_name} {member.user_profiles.last_name}
+                                {member.first_name || member.user_profiles?.first_name || ''} {member.last_name || member.user_profiles?.last_name || ''}
+                                {!member.first_name && !member.last_name && !member.user_profiles?.first_name && (
+                                  <span className="text-gray-400 italic">Pending</span>
+                                )}
                               </span>
                               {member.member_number === 1 && (
                                 <span className="px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 rounded">
@@ -715,6 +740,8 @@ const TeamPage = () => {
                     setInviteError(null);
                     setInviteSuccess(null);
                     setInviteEmail('');
+                    setInviteFirstName('');
+                    setInviteLastName('');
                     setInviteRole('member');
                   }}
                   className="text-gray-400 hover:text-gray-600"
@@ -736,6 +763,33 @@ const TeamPage = () => {
                       onChange={(e) => setInviteEmail(e.target.value)}
                       placeholder="teammate@company.com"
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      First Name (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={inviteFirstName}
+                      onChange={(e) => setInviteFirstName(e.target.value)}
+                      placeholder="John"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Last Name (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={inviteLastName}
+                      onChange={(e) => setInviteLastName(e.target.value)}
+                      placeholder="Smith"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -794,6 +848,8 @@ const TeamPage = () => {
                     setInviteError(null);
                     setInviteSuccess(null);
                     setInviteEmail('');
+                    setInviteFirstName('');
+                    setInviteLastName('');
                     setInviteRole('member');
                   }}
                   className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"

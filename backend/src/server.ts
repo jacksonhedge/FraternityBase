@@ -546,7 +546,7 @@ app.post('/api/team/invite', async (req, res) => {
       return res.status(403).json({ error: 'Only admins can invite team members' });
     }
 
-    const { email, role } = req.body;
+    const { email, role, firstName, lastName } = req.body;
 
     if (!email || !role) {
       return res.status(400).json({ error: 'Email and role are required' });
@@ -618,7 +618,9 @@ app.post('/api/team/invite', async (req, res) => {
         member_number: nextMemberNumber,
         role: role,
         status: 'pending',
-        invited_by: user.id
+        invited_by: user.id,
+        first_name: firstName || null,
+        last_name: lastName || null
       })
       .select()
       .single();
