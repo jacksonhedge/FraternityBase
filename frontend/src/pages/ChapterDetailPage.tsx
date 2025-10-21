@@ -221,8 +221,8 @@ const ChapterDetailPage = () => {
 
     if (rank >= 5.0) {
       // 5.0 star chapter - Premium tier
-      credits = 9;
-      dollarValue = 8.99;
+      credits = 10;
+      dollarValue = 9.99;
       tierLabel = 'Premium';
       tierBadge = '⭐ Top Rated';
     } else if (rank >= 4.5) {
