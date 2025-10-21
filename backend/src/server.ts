@@ -657,6 +657,108 @@ app.post('/api/team/invite', async (req, res) => {
   }
 });
 
+// POST /api/team/resend-invite - Resend invitation to a pending team member
+app.post('/api/team/resend-invite', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Missing or invalid authorization token' });
+    }
+
+    const token = authHeader.substring(7);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid token or user not found' });
+    }
+
+    // Get user's profile to find company_id
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('company_id, role')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !profile?.company_id) {
+      return res.status(404).json({ error: 'User profile or company not found' });
+    }
+
+    // Check if user is admin (only admins can resend invites)
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const { data: teamMember } = await supabaseAdmin
+      .from('team_members')
+      .select('role')
+      .eq('company_id', profile.company_id)
+      .eq('user_id', user.id)
+      .single();
+
+    if (!teamMember || (teamMember.role !== 'admin' && teamMember.role !== 'owner')) {
+      return res.status(403).json({ error: 'Only admins can resend invitations' });
+    }
+
+    const { memberId } = req.body;
+
+    if (!memberId) {
+      return res.status(400).json({ error: 'Member ID is required' });
+    }
+
+    // Get the team member to resend invitation to
+    const { data: targetMember, error: memberError } = await supabaseAdmin
+      .from('team_members')
+      .select('user_id, status, role')
+      .eq('id', memberId)
+      .eq('company_id', profile.company_id)
+      .single();
+
+    if (memberError || !targetMember) {
+      return res.status(404).json({ error: 'Team member not found' });
+    }
+
+    if (targetMember.status !== 'pending') {
+      return res.status(400).json({ error: 'Can only resend invitations to pending members' });
+    }
+
+    // Get user email from auth
+    const { data: authUsers } = await supabaseAdmin.auth.admin.listUsers();
+    const targetAuthUser = authUsers.users.find(u => u.id === targetMember.user_id);
+
+    if (!targetAuthUser || !targetAuthUser.email) {
+      return res.status(404).json({ error: 'User email not found' });
+    }
+
+    // Resend invitation email via Supabase Auth
+    const { error: resendError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
+      targetAuthUser.email,
+      {
+        redirectTo: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login`
+      }
+    );
+
+    if (resendError) {
+      console.error('Failed to resend invitation:', resendError);
+      return res.status(500).json({ error: 'Failed to resend invitation email' });
+    }
+
+    console.log(`✅ Invitation resent to: ${targetAuthUser.email}`);
+
+    res.json({
+      success: true,
+      message: 'Invitation resent successfully',
+      email: targetAuthUser.email
+    });
+  } catch (error: any) {
+    console.error('Resend invite endpoint error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
 // User profile endpoint
 app.get('/api/user/profile', async (req, res) => {
   try {

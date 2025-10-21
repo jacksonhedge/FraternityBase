@@ -14,7 +14,8 @@ import {
   DollarSign,
   UserPlus,
   Mail,
-  Info
+  Info,
+  RefreshCcw
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { RootState } from '../store/store';
@@ -43,6 +44,7 @@ const TeamPage = () => {
   const [isInviting, setIsInviting] = useState(false);
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
+  const [resendingMemberId, setResendingMemberId] = useState<string | null>(null);
   const [companyInfo, setCompanyInfo] = useState<{
     company_name: string;
     created_at: string;
@@ -288,6 +290,44 @@ const TeamPage = () => {
       setInviteError(error.message || 'Failed to send invitation. Please try again.');
     } finally {
       setIsInviting(false);
+    }
+  };
+
+  const handleResendInvite = async (memberId: string) => {
+    setResendingMemberId(memberId);
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${API_URL}/team/resend-invite`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          memberId
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to resend invitation');
+      }
+
+      // Show success - you could add a toast notification here
+      alert(`Invitation resent to ${data.email}!`);
+    } catch (error: any) {
+      console.error('Error resending invitation:', error);
+      alert(error.message || 'Failed to resend invitation. Please try again.');
+    } finally {
+      setResendingMemberId(null);
     }
   };
 
@@ -537,9 +577,30 @@ const TeamPage = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
-                            {member.member_number !== 1 && user?.role === 'admin' && (
-                              <button className="text-red-600 hover:text-red-700">Remove</button>
-                            )}
+                            <div className="flex items-center gap-3">
+                              {member.status === 'pending' && (
+                                <button
+                                  onClick={() => handleResendInvite(member.id)}
+                                  disabled={resendingMemberId === member.id}
+                                  className="text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {resendingMemberId === member.id ? (
+                                    <>
+                                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                                      Sending...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <RefreshCcw className="w-4 h-4" />
+                                      Resend
+                                    </>
+                                  )}
+                                </button>
+                              )}
+                              {member.member_number !== 1 && user?.role === 'admin' && (
+                                <button className="text-red-600 hover:text-red-700">Remove</button>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       ))}
