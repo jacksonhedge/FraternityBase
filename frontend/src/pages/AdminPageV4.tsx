@@ -2150,7 +2150,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              navigate('/admin/credits');
+              setActiveTab('credits');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -2169,7 +2169,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              navigate('/admin/intelligence');
+              setActiveTab('intelligence');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -2188,7 +2188,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              navigate('/admin/analytics');
+              setActiveTab('analytics');
               setShowForm(false);
               setEditingId(null);
             }}
