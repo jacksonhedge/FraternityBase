@@ -8,7 +8,7 @@ const AdminLoginPage = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'Hedge2025!';
+  const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
