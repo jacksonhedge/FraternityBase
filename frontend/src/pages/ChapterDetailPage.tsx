@@ -313,7 +313,7 @@ const ChapterDetailPage = () => {
     house: chapterData.house_address || '',
     website: chapterData.website || '',
     instagram: chapterData.instagram_handle || '',
-    greekRank: chapterData.rank || 4.0, // Use database rank, fallback to 4.0 for Good tier pricing
+    greekRank: chapterData.grade || 4.0, // Use database grade (0-5.0), fallback to 4.0 for Good tier pricing
     isPlatinum: chapterData.is_platinum || false, // Platinum status for chapters with partner intros
     nationalRank: 15, // TODO: Add to database
     lastUpdated: chapterData.updated_at || new Date().toISOString(),
