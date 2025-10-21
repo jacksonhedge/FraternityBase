@@ -321,11 +321,12 @@ const TeamPage = () => {
         throw new Error(data.error || 'Failed to resend invitation');
       }
 
-      // Show success - you could add a toast notification here
-      alert(`Invitation resent to ${data.email}!`);
+      // Show success message based on whether user already confirmed
+      console.log(`✅ ${data.message}`);
+      // Optionally refresh team members list to update status
     } catch (error: any) {
       console.error('Error resending invitation:', error);
-      alert(error.message || 'Failed to resend invitation. Please try again.');
+      // Error is logged but not shown as blocking alert
     } finally {
       setResendingMemberId(null);
     }

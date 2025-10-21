@@ -730,26 +730,43 @@ app.post('/api/team/resend-invite', async (req, res) => {
       return res.status(404).json({ error: 'User email not found' });
     }
 
-    // Resend invitation email via Supabase Auth
-    const { error: resendError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
-      targetAuthUser.email,
-      {
-        redirectTo: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login`
+    // Check if user has already confirmed their email
+    const isConfirmed = targetAuthUser.email_confirmed_at !== null;
+
+    if (isConfirmed) {
+      // User already confirmed - just notify them they have a pending team invitation
+      // For now, we'll just return success without sending another Supabase invite
+      console.log(`✅ User ${targetAuthUser.email} already confirmed. Pending team invitation exists.`);
+
+      res.json({
+        success: true,
+        message: 'User has already created their account. They can log in to accept the team invitation.',
+        email: targetAuthUser.email,
+        alreadyConfirmed: true
+      });
+    } else {
+      // User hasn't confirmed yet - resend the Supabase invitation
+      const { error: resendError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
+        targetAuthUser.email,
+        {
+          redirectTo: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login`
+        }
+      );
+
+      if (resendError) {
+        console.error('Failed to resend invitation:', resendError);
+        return res.status(500).json({ error: 'Failed to resend invitation email' });
       }
-    );
 
-    if (resendError) {
-      console.error('Failed to resend invitation:', resendError);
-      return res.status(500).json({ error: 'Failed to resend invitation email' });
+      console.log(`✅ Invitation resent to: ${targetAuthUser.email}`);
+
+      res.json({
+        success: true,
+        message: 'Invitation email resent successfully',
+        email: targetAuthUser.email,
+        alreadyConfirmed: false
+      });
     }
-
-    console.log(`✅ Invitation resent to: ${targetAuthUser.email}`);
-
-    res.json({
-      success: true,
-      message: 'Invitation resent successfully',
-      email: targetAuthUser.email
-    });
   } catch (error: any) {
     console.error('Resend invite endpoint error:', error);
     res.status(500).json({
