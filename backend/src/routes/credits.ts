@@ -573,6 +573,10 @@ router.post('/checkout', async (req, res) => {
     const stripeClient = getStripe();
     console.log('✅ Stripe client initialized');
 
+    // Clean and validate FRONTEND_URL
+    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:5173').trim().replace(/\n/g, '');
+    console.log('🌐 Frontend URL:', frontendUrl);
+
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ['card'],
       line_items: [{
@@ -587,8 +591,8 @@ router.post('/checkout', async (req, res) => {
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/app/team?payment=success&credits=${credits || 0}`,
-      cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/app/team?payment=cancelled`,
+      success_url: `${frontendUrl}/app/team?payment=success&credits=${credits || 0}`,
+      cancel_url: `${frontendUrl}/app/team?payment=cancelled`,
       customer_email: userEmail,
       metadata: {
         companyId: companyId,
