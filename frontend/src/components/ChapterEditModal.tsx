@@ -30,6 +30,8 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
     chapter_name: '',
     greek_letter_name: '',
     grade: '',
+    is_platinum: false,
+    is_diamond: false,
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -81,6 +83,8 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
         chapter_name: chapter.chapter_name || '',
         greek_letter_name: chapter.greek_letter_name || '',
         grade: chapter.grade || '',
+        is_platinum: chapter.is_platinum || false,
+        is_diamond: chapter.is_diamond || false,
       });
     }
   }, [chapter]);
@@ -100,7 +104,7 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
     }
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -300,6 +304,45 @@ const ChapterEditModal = ({ chapter, isOpen, onClose, onSave, chapterUsers = [],
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="e.g., 4.5"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Premium Tiers */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Premium Tiers</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3 p-3 border border-gray-300 rounded-lg">
+                <input
+                  type="checkbox"
+                  id="is_platinum"
+                  checked={formData.is_platinum}
+                  onChange={(e) => handleChange('is_platinum', e.target.checked)}
+                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="is_platinum" className="flex-1 cursor-pointer">
+                  <div className="flex items-center gap-2 font-medium text-gray-900">
+                    <span className="text-lg">⭐</span>
+                    <span>Platinum Chapter</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">$50 unlock (standard access)</p>
+                </label>
+              </div>
+              <div className="flex items-start gap-3 p-3 border border-gray-300 rounded-lg">
+                <input
+                  type="checkbox"
+                  id="is_diamond"
+                  checked={formData.is_diamond}
+                  onChange={(e) => handleChange('is_diamond', e.target.checked)}
+                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="is_diamond" className="flex-1 cursor-pointer">
+                  <div className="flex items-center gap-2 font-medium text-gray-900">
+                    <span className="text-lg">💎</span>
+                    <span>Diamond Chapter</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">$100 unlock + warm intro (48hr guarantee)</p>
+                </label>
               </div>
             </div>
           </div>

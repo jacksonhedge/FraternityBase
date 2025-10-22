@@ -1019,7 +1019,7 @@ const CREDIT_PACKAGES: Record<string, any> = {
   starter: { credits: 100, price: 59, priceId: process.env.VITE_STRIPE_PRICE_STARTER || 'price_1SCo7FGCEQehRVO2DuF4YivE' },
   popular: { credits: 500, price: 275, priceId: process.env.VITE_STRIPE_PRICE_POPULAR || 'price_1SCo7uGCEQehRVO2aeKPhB5D' },
   professional: { credits: 1000, price: 500, priceId: process.env.VITE_STRIPE_PRICE_PROFESSIONAL || 'price_1SCo8HGCEQehRVO2THIU6hiP' },
-  enterprise: { credits: 5000, price: 2000, priceId: process.env.VITE_STRIPE_PRICE_ENTERPRISE || 'price_1SCo8yGCEQehRVO2ItYM17aV' }
+  enterprise: { credits: 3000, price: 3000, priceId: process.env.VITE_STRIPE_PRICE_ENTERPRISE || 'price_1SCo8yGCEQehRVO2ItYM17aV' }
 };
 
 // Credits API endpoints (balance endpoint moved above to override router)
@@ -1461,7 +1461,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     console.log(`🔓 Unlock request for chapter: ${chapterId}`);
     const { data: chapterData, error: chapterError } = await supabaseAdmin
       .from('chapters')
-      .select('grade, five_star_rating, chapter_name, is_platinum, universities(name)')
+      .select('grade, five_star_rating, chapter_name, is_platinum, is_diamond, universities(name)')
       .eq('id', chapterId)
       .single();
 
@@ -1500,10 +1500,23 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     const rank = parseFloat(chapterData.grade) || 0;
     const is5Star = rank >= 5.0;
     const isPlatinum = chapterData.is_platinum || false;
+    const isDiamond = chapterData.is_diamond || false;
     let credits = 1; // Default for lowest-ranked chapters
     let dollarValue = 0.99;
 
-    if (unlockType === 'warm_introduction') {
+    // Diamond chapters override all other pricing (highest priority)
+    if (isDiamond) {
+      if (unlockType === 'warm_introduction') {
+        credits = 100;
+        dollarValue = 99.00;
+        console.log(`💎 Diamond warm introduction pricing: ${credits} credits ($${dollarValue})`);
+      } else {
+        // Full unlock for Diamond chapters
+        credits = 100;
+        dollarValue = 99.00;
+        console.log(`💎 Diamond full unlock pricing: ${credits} credits ($${dollarValue})`);
+      }
+    } else if (unlockType === 'warm_introduction') {
       // Special pricing for warm introductions
       if (isPlatinum) {
         // Platinum chapters - 20 credits
@@ -1516,7 +1529,7 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
         dollarValue = 99.99;
         console.log(`🤝 Standard warm introduction pricing: ${credits} credits ($${dollarValue})`);
       }
-    } else {
+    } else if (!isDiamond) {
       // Full unlock - Behavioral Economics Pricing based on rating
       // Higher rank = more expensive (better chapters cost more)
       if (rank >= 5.0) {
@@ -5234,6 +5247,7 @@ app.get('/api/dashboard/recent-additions', async (req, res) => {
         id,
         chapter_name,
         created_at,
+        grade,
         universities(name, logo_url),
         greek_organizations(name)
       `)
@@ -5282,7 +5296,8 @@ app.get('/api/dashboard/recent-additions', async (req, res) => {
         chapter_name: (ch.greek_organizations as any)?.name,
         logo_url: (ch.universities as any)?.logo_url,
         created_at: ch.created_at,
-        description: (ch.universities as any)?.name
+        description: (ch.universities as any)?.name,
+        grade: ch.grade || null
       })),
       // Group officers by chapter to show roster updates
       ...Object.values(

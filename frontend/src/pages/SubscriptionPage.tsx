@@ -78,7 +78,6 @@ const SubscriptionPage = () => {
       bgColor: 'from-blue-50 to-blue-100',
       goldFeatures: [
         '50 monthly credits',
-        '1 Warm Introduction',
         'Purchase unlocks as needed',
         'Advanced search & filters'
       ],
@@ -109,7 +108,7 @@ const SubscriptionPage = () => {
         '3 Premium Unlocks (5⭐)',
         '25 Quality Unlocks (4⭐)',
         '50 Standard Unlocks (3⭐)',
-        '3 Warm Introductions/mo'
+        '1 Warm Introduction/mo'
       ],
       features: [
         'Everything in Team, plus:',

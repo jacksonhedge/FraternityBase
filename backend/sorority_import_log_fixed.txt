@@ -2167,8 +2167,8 @@
     ✓ Created chapter: Sigma Alpha Omega (ΣΑΩ)
     ✓ Created chapter: Zeta Phi Beta (ΖΦΒ)
 
-🏫 Georgia Institute of Technology - GT - (15 sororities)
-  ✓ Matched university: "Georgia Institute of Technology - GT -" → "Georgia Institute of Technology"
+🏫 Georgia Tech - GT - (15 sororities)
+  ✓ Matched university: "Georgia Tech - GT -" → "Georgia Tech"
     ✓ Created chapter: Kappa Alpha Theta (ΚΑΘ)
     ✓ Created chapter: Alpha Xi Delta (ΑΞΔ)
     ✓ Created chapter: Phi Mu (ΦΜ)

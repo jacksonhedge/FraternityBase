@@ -120,7 +120,7 @@ const CollegesPage = () => {
           );
 
           // Debug Georgia Tech specifically
-          const gaTechUni = universitiesData.data.find((u: any) => u.name === 'Georgia Institute of Technology');
+          const gaTechUni = universitiesData.data.find((u: any) => u.name === 'Georgia Tech');
           if (gaTechUni) {
             const gaTechChapters = chaptersData.data.filter((ch: any) => ch.university_id === gaTechUni.id);
             console.log('🐝 [DEBUG] Georgia Tech:');

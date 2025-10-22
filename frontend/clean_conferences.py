@@ -75,7 +75,7 @@ POWER_4_SCHOOLS = {
         "Clemson University",
         "Duke University",
         "Florida State University",
-        "Georgia Institute of Technology",
+        "Georgia Tech",
         "University of Louisville",
         "University of Miami",
         "North Carolina State University",

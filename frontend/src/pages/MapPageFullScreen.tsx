@@ -301,6 +301,7 @@ const MapPageFullScreen = () => {
               let foundMatch = false;
 
               // Check all college names in COLLEGE_LOCATIONS for a match
+              // Only use exact match to avoid duplicates (e.g., Penn State variants)
               for (const collegeName of Object.keys(COLLEGE_LOCATIONS)) {
                 const normalizedCollegeName = collegeName.toLowerCase()
                   .replace(/^the\s+/i, '')
@@ -308,9 +309,8 @@ const MapPageFullScreen = () => {
                   .replace(/\s+/g, ' ')
                   .trim();
 
-                if (normalizedCollegeName === normalizedUnivName ||
-                    normalizedCollegeName.includes(normalizedUnivName) ||
-                    normalizedUnivName.includes(normalizedCollegeName)) {
+                // Only exact match to prevent duplicates
+                if (normalizedCollegeName === normalizedUnivName) {
                   console.log('   ✅ MATCHED:', univName, '→', collegeName);
                   collegeNames.add(collegeName);
                   foundMatch = true;

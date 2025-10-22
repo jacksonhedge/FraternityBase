@@ -74,7 +74,16 @@ async function findChapterByName(chapterName) {
   let bestScore = 0;
 
   for (const chapter of chapters) {
-    const score = calculateSimilarity(chapterName, chapter.chapter_name);
+    // Create searchable string: "University Name Organization Name"
+    const searchStr = `${chapter.universities?.name || ''} ${chapter.greek_organizations?.name || ''}`.toLowerCase();
+
+    // Also try with chapter name
+    const chapterNameStr = chapter.chapter_name.toLowerCase();
+
+    const score1 = calculateSimilarity(chapterName.toLowerCase(), searchStr);
+    const score2 = calculateSimilarity(chapterName.toLowerCase(), chapterNameStr);
+    const score = Math.max(score1, score2);
+
     if (score > bestScore) {
       bestScore = score;
       bestMatch = chapter;

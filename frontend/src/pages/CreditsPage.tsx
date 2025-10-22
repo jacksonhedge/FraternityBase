@@ -80,9 +80,8 @@ const CREDIT_PACKAGES = [
     credits: 200,
     price: 500,
     pricePerCredit: 2.50,
-    popular: true,
+    popular: false,
     features: [
-      'Best value package',
       '20 Premium unlocks',
       '8% volume discount',
       'Ideal for active recruiting',
@@ -107,14 +106,15 @@ const CREDIT_PACKAGES = [
   {
     id: 'enterprise',
     name: 'Enterprise',
-    credits: 1000,
-    price: 2100,
-    pricePerCredit: 2.10,
-    popular: false,
+    credits: 3000,
+    price: 3000,
+    pricePerCredit: 1.00,
+    popular: true,
+    bestValue: true,
     features: [
+      'Best value - $1 per credit',
       'Maximum flexibility',
-      '100 Premium unlocks',
-      '22% volume discount',
+      '300 Premium unlocks',
       'Large organizations',
       'Priority support included'
     ]
@@ -1184,17 +1184,26 @@ export default function CreditsPage() {
           </p>
 
           <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-            {CREDIT_PACKAGES.map((pkg) => (
+            {CREDIT_PACKAGES.map((pkg: any) => (
               <div
                 key={pkg.id}
                 className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all ${
                   selectedPackage === pkg.id
                     ? 'border-blue-600 bg-blue-50'
+                    : pkg.bestValue
+                    ? 'border-green-500 border-4'
                     : 'border-gray-200 hover:border-gray-300'
                 } ${pkg.popular ? 'ring-2 ring-yellow-400' : ''}`}
                 onClick={() => setSelectedPackage(pkg.id)}
               >
-                {pkg.popular && (
+                {pkg.bestValue && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                      BEST VALUE
+                    </div>
+                  </div>
+                )}
+                {pkg.popular && !pkg.bestValue && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                     <div className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                       MOST POPULAR

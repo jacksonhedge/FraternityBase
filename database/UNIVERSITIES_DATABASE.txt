@@ -1760,7 +1760,7 @@ Exported: 2025-10-08T10:10:31.158Z
    Greek Life: 0.1%
    ID: ab495f36-1da6-4de7-86e4-1928e8306cef
 
-293. Georgia Institute of Technology
+293. Georgia Tech
    Location: Atlanta, GA
    Students: 40,000
    Greek Life: 0.12%

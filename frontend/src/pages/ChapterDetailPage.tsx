@@ -213,11 +213,20 @@ const ChapterDetailPage = () => {
   /**
    * Calculate unlock pricing based on chapter rank (matches backend logic)
    */
-  const calculateUnlockPricing = (rank: number) => {
+  const calculateUnlockPricing = (rank: number, isDiamond?: boolean) => {
     let credits = 5;
     let dollarValue = 4.99;
     let tierLabel = 'Good';
     let tierBadge = '';
+
+    // Diamond chapters override all other pricing
+    if (isDiamond) {
+      credits = 100;
+      dollarValue = 99.00;
+      tierLabel = 'Diamond';
+      tierBadge = '💎 Premium Access + Warm Intro';
+      return { credits, dollarValue, tierLabel, tierBadge };
+    }
 
     if (rank >= 5.0) {
       // 5.0 star chapter - Premium tier
@@ -405,7 +414,7 @@ const ChapterDetailPage = () => {
   const hasCompleteData = chapter.house && chapter.house.trim() !== '' && currentYearData.president;
 
   // Calculate dynamic unlock pricing based on chapter rank
-  const unlockPricing = calculateUnlockPricing(chapter.greekRank);
+  const unlockPricing = calculateUnlockPricing(chapter.greekRank, chapter.isDiamond);
 
   return (
     <div className="space-y-6">
@@ -878,12 +887,12 @@ const ChapterDetailPage = () => {
             <h2 className="text-xl font-bold text-gray-900">Chapter Roster</h2>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Users className="w-4 h-4" />
-              {regularMembers.length} members
+              {currentYearData.size || members.length} members
             </div>
           </div>
 
           {/* Unlock Full Roster Banner */}
-          {!isUnlocked('roster_access') && regularMembers.length > 0 && (
+          {!isUnlocked('roster_access') && currentYearData.size > 0 && (
             <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 via-pink-50 to-orange-50 border-2 border-purple-300 rounded-xl shadow-md">
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-purple-100 rounded-xl">
@@ -906,7 +915,7 @@ const ChapterDetailPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <div className="flex items-start gap-2">
                         <span className="text-purple-600 mt-0.5">✓</span>
-                        <span className="text-xs text-gray-600">Full names for all {regularMembers.length}+ members</span>
+                        <span className="text-xs text-gray-600">Full names for all {currentYearData.size}+ members</span>
                       </div>
                       <div className="flex items-start gap-2">
                         <span className="text-purple-600 mt-0.5">✓</span>
@@ -933,7 +942,7 @@ const ChapterDetailPage = () => {
 
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={() => handleUnlock('roster_access', 15)}
+                      onClick={() => handleUnlock('roster_access', 100)}
                       disabled={isUnlocking}
                       className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                     >
@@ -945,12 +954,11 @@ const ChapterDetailPage = () => {
                       ) : (
                         <>
                           <Unlock className="w-5 h-5" />
-                          Unlock Full Roster for 15 Credits
+                          Unlock for 100 Credits
                         </>
                       )}
                     </button>
                     <div className="text-sm">
-                      <p className="text-gray-700 font-semibold">≈ $15.00 value</p>
                       <p className="text-xs text-gray-500">One-time unlock • Lifetime access</p>
                     </div>
                   </div>
@@ -1142,7 +1150,7 @@ const ChapterDetailPage = () => {
                     </ul>
                   </div>
                   <button
-                    onClick={() => handleUnlock('warm_introduction', chapter.isDiamond ? 15 : chapter.isPlatinum ? 20 : 100)}
+                    onClick={() => handleUnlock('warm_introduction', 100)}
                     disabled={isUnlocking}
                     className={`inline-flex items-center gap-2 ${chapter.isDiamond ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 shadow-lg' : chapter.isPlatinum ? 'bg-blue-600 hover:bg-blue-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white px-6 py-3 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105`}
                   >
@@ -1156,7 +1164,7 @@ const ChapterDetailPage = () => {
                         {chapter.isDiamond && <span className="text-2xl animate-bounce">💎</span>}
                         {!chapter.isDiamond && chapter.isPlatinum && <span className="text-xl">💎</span>}
                         <Handshake className="w-4 h-4" />
-                        {chapter.isDiamond ? 'Get Diamond Package for 15 Credits' : `Request Introduction for ${chapter.isPlatinum ? '20' : '100'} Credits`}
+                        Request Introduction for 100 Credits
                       </>
                     )}
                   </button>
@@ -1461,26 +1469,7 @@ const ChapterDetailPage = () => {
 
       {/* Major Events section removed - was displaying hardcoded dummy data (Derby Days, Winter Formal, Spring Philanthropy Week) */}
 
-      {/* Financial Information */}
-      {currentYearData.budget && (
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Financial Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600">Annual Budget</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{currentYearData.budget.annual}</p>
-            </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600">Semester Dues</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{currentYearData.budget.dues}</p>
-            </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600">Housing Cost</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{currentYearData.budget.housing}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Financial Information section removed - was displaying hardcoded dummy data */}
     </div>
   );
 };

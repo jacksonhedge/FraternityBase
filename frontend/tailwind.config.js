@@ -79,9 +79,8 @@ export default {
           '50%': { boxShadow: '0 0 40px rgba(59, 130, 246, 0.6)' },
         },
         shimmer: {
-          '0%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-          '100%': { backgroundPosition: '0% 50%' },
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },

@@ -96,13 +96,6 @@ const UnlockConfirmationModal = ({
                       ? 'You have unlimited unlocks for Premium chapters this month.'
                       : `You have ${subscriptionUnlocksRemaining} subscription unlock${subscriptionUnlocksRemaining !== 1 ? 's' : ''} remaining for Premium chapters this month.`}
                   </p>
-                  {!isUnlimitedUnlocks && (
-                    <div className="mt-2 pt-2 border-t border-purple-200">
-                      <p className="text-sm font-medium text-purple-900">
-                        💰 You're saving {credits} credits (${(credits * 0.99).toFixed(2)}) by using your subscription!
-                      </p>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -166,11 +159,21 @@ const UnlockConfirmationModal = ({
 
           <div className="text-xs text-gray-500">
             <p className="font-medium mb-1">What you'll unlock:</p>
-            <ul className="space-y-1 pl-4">
-              <li>• Full officer contact information</li>
-              <li>• Emails and phone numbers</li>
-              <li>• Complete member roster</li>
-            </ul>
+            {credits === 10 || tierLabel === 'Premium' ? (
+              // 5.0 star chapter unlock - officers/leaders only
+              <ul className="space-y-1 pl-4">
+                <li>• Contact information for chapter officers and leaders</li>
+                <li className="text-gray-400">• Full roster: Additional 100 credits</li>
+                <li className="text-gray-400">• Warm introduction: Additional 100 credits</li>
+              </ul>
+            ) : (
+              // Regular chapter unlock - full access
+              <ul className="space-y-1 pl-4">
+                <li>• Full officer contact information</li>
+                <li>• Emails and phone numbers</li>
+                <li>• Complete member roster</li>
+              </ul>
+            )}
           </div>
         </div>
 

@@ -112,7 +112,7 @@ Undergraduate,Eta Psi,University of Arkansas-Fayetteville,Fayetteville,AR,United
 Undergraduate,Eta Rho,University of Mississippi,Oxford,MS,United States,Mississippi
 Undergraduate,Eta Sigma,Longwood University,Farmville,VA,United States,Eastern Virginia
 Undergraduate,Eta Tau,Old Dominion University,Norfolk,VA,United States,Eastern Virginia
-Undergraduate,Eta Theta,Georgia Institute of Technology,Atlanta,GA,United States,North Georgia
+Undergraduate,Eta Theta,Georgia Tech,Atlanta,GA,United States,North Georgia
 Undergraduate,Eta Zeta,Austin Peay State University,Clarksville,TN,United States,Middle Tennessee
 Undergraduate,Gamma,Pennsylvania State University,University Park,PA,United States,Central Pennsylvania
 Undergraduate,Gamma Alpha,Oklahoma State University,Stillwater,OK,United States,Oklahoma/Arkansas

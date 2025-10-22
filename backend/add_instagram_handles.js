@@ -56,7 +56,7 @@ const instagramData = {
   'University of North Carolina at Chapel Hill': '@sigmachiunc',
   'Wake Forest University': '@sigmachideltanu',
   'University of Miami': '@sigmachi_umiami',
-  'Georgia Institute of Technology': '@gtsigmachi',
+  'Georgia Tech': '@gtsigmachi',
   'University of Pittsburgh': '@sigmachipitt',
   'Florida State University': '@fsusigmachi',
   'North Carolina State University': '@ncsusigmachi',

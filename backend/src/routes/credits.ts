@@ -247,7 +247,7 @@ async function grantSubscriptionBenefits(
       monthly_unlocks_5_star: 0, // No premium unlocks included (use credits)
       monthly_unlocks_4_star: 0, // No quality unlocks included (use credits)
       monthly_unlocks_3_star: 0, // No standard unlocks included (use credits)
-      monthly_warm_intros: 1, // 1 warm intro per month
+      monthly_warm_intros: 0, // No warm intros for Team tier
       monthly_diamond_unlocks: 0, // No Diamond unlocks
       max_team_seats: 3,
     },
@@ -256,7 +256,7 @@ async function grantSubscriptionBenefits(
       monthly_unlocks_5_star: 3, // 3 Premium unlocks (5.0⭐) per month
       monthly_unlocks_4_star: 25, // 25 Quality unlocks (4.0-4.9⭐) per month
       monthly_unlocks_3_star: 50, // 50 Standard unlocks (3.0-3.9⭐) per month
-      monthly_warm_intros: 3, // 3 warm intros per month
+      monthly_warm_intros: 1, // 1 warm intro per month for Enterprise tier
       monthly_diamond_unlocks: 0, // No Diamond unlocks
       max_team_seats: 10,
     },

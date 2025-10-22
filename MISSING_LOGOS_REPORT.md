@@ -43,7 +43,7 @@ These are the ONLY universities that currently have logos uploaded:
 - Clemson University
 - Duke University
 - Florida State University
-- Georgia Institute of Technology
+- Georgia Tech
 - Louisiana State University
 - University of Miami
 - University of North Carolina at Chapel Hill

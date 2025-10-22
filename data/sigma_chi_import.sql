@@ -451,7 +451,7 @@ BEGIN
     ) VALUES (
         v_fraternity_id,
         'Beta Psi',
-        'Georgia Institute of Technology',
+        'Georgia Tech',
         'Atlanta',
         'GA',
         'United States',

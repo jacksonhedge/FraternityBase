@@ -104,6 +104,8 @@ interface Chapter {
   grade?: number;
   is_favorite?: boolean;
   is_viewable?: boolean;
+  is_platinum?: boolean;
+  is_diamond?: boolean;
   coming_soon_date?: string;
   show_in_dashboard?: boolean;
   created_at?: string;
@@ -318,6 +320,8 @@ const AdminPageV4 = () => {
     grade: '',
     is_favorite: false,
     is_viewable: false,
+    is_platinum: false,
+    is_diamond: false,
     coming_soon_date: ''
   });
 
@@ -801,6 +805,8 @@ const AdminPageV4 = () => {
           grade: chapterForm.grade ? parseFloat(chapterForm.grade) : null,
           is_favorite: chapterForm.is_favorite,
           is_viewable: chapterForm.is_viewable,
+          is_platinum: chapterForm.is_platinum,
+          is_diamond: chapterForm.is_diamond,
           coming_soon_date: chapterForm.coming_soon_date || null
         })
       });
@@ -827,6 +833,8 @@ const AdminPageV4 = () => {
           grade: '',
           is_favorite: false,
           is_viewable: false,
+          is_platinum: false,
+          is_diamond: false,
           coming_soon_date: ''
         });
         fetchData();
@@ -4334,6 +4342,40 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                         <Eye className="w-4 h-4 text-blue-500" />
                         Viewable in Dashboard (clients can see this chapter)
                       </label>
+                    </div>
+                    <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-gray-200 mt-3">
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          id="is_platinum"
+                          checked={chapterForm.is_platinum}
+                          onChange={(e) => setChapterForm({ ...chapterForm, is_platinum: e.target.checked })}
+                          className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                        />
+                        <label htmlFor="is_platinum" className="text-sm font-medium text-gray-700">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">⭐</span>
+                            <span>Platinum Chapter</span>
+                          </div>
+                          <p className="text-xs text-gray-500 ml-6">$50 unlock (standard access)</p>
+                        </label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          id="is_diamond"
+                          checked={chapterForm.is_diamond}
+                          onChange={(e) => setChapterForm({ ...chapterForm, is_diamond: e.target.checked })}
+                          className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                        />
+                        <label htmlFor="is_diamond" className="text-sm font-medium text-gray-700">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">💎</span>
+                            <span>Diamond Chapter</span>
+                          </div>
+                          <p className="text-xs text-gray-500 ml-6">$100 unlock + warm intro (48hr guarantee)</p>
+                        </label>
+                      </div>
                     </div>
                   </div>
                   <div className="flex justify-end space-x-3 mt-6">

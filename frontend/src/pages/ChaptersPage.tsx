@@ -23,7 +23,10 @@ import {
   Download,
   UserPlus,
   Star,
-  Building2
+  Building2,
+  ArrowDown,
+  MessageSquare,
+  Info
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 import UnlockConfirmationModal from '../components/UnlockConfirmationModal';
@@ -44,6 +47,7 @@ interface Chapter {
   header_image_url?: string;
   grade?: number;
   coming_soon_date?: string;
+  is_diamond?: boolean;
   greek_organizations?: {
     id: string;
     name: string;
@@ -98,6 +102,8 @@ const ChaptersPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
+  const [isIntroModalOpen, setIsIntroModalOpen] = useState(false);
+  const [selectedIntroChapter, setSelectedIntroChapter] = useState<Chapter | null>(null);
   const [unlocks, setUnlocks] = useState<{
     fiveStar: { remaining: number; monthly: number; isUnlimited: boolean };
     fourStar: { remaining: number; monthly: number; isUnlimited: boolean };
@@ -615,7 +621,13 @@ const ChaptersPage = () => {
                   filteredChapters.map((chapter) => (
                     <tr key={chapter.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {chapter.is_diamond && (
+                            <div className="flex items-center gap-1 bg-purple-100 px-2 py-1 rounded border border-purple-300">
+                              <span className="text-sm">💎</span>
+                              <span className="text-xs font-bold text-purple-900">Diamond</span>
+                            </div>
+                          )}
                           {unlockedChapterIds.has(chapter.id) ? (
                             <>
                               <Unlock className="w-4 h-4 text-green-500" />
@@ -648,7 +660,7 @@ const ChaptersPage = () => {
                             chapter.grade >= 3.0 ? 'bg-orange-100 text-orange-800' :
                             'bg-gray-100 text-gray-600'
                           }`}>
-                            {chapter.grade.toFixed(1)}
+                            {chapter.grade >= 5.0 ? '💎 ' : ''}{chapter.grade.toFixed(1)}
                           </span>
                         ) : (
                           <span className="text-gray-400 text-sm">-</span>
@@ -732,6 +744,16 @@ const ChaptersPage = () => {
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600" />
+                )}
+
+                {/* Diamond Badge (Top Left) */}
+                {chapter.is_diamond && (
+                  <div className="absolute top-2 left-2 z-10">
+                    <div className="bg-purple-600/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border-2 border-purple-400">
+                      <span className="text-base">💎</span>
+                      <span className="text-xs font-bold text-white">Diamond</span>
+                    </div>
+                  </div>
                 )}
 
                 {/* Unlock Badge Overlay */}
@@ -836,7 +858,7 @@ const ChaptersPage = () => {
                         chapter.grade >= 3.0 ? 'bg-orange-100 text-orange-800' :
                         'bg-gray-100 text-gray-600'
                       }`}>
-                        {chapter.grade.toFixed(1)}
+                        {chapter.grade >= 5.0 ? '💎 ' : ''}{chapter.grade.toFixed(1)}
                       </span>
                     ) : (
                       <span className="text-sm font-semibold text-gray-400">-</span>
@@ -858,32 +880,78 @@ const ChaptersPage = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 pt-4">
-                  {!isUnlocked && (
+                <div className="flex flex-col gap-2 pt-4">
+                  <div className="flex gap-2">
+                    {!isUnlocked && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setSelectedChapter(chapter);
+                          setIsModalOpen(true);
+                        }}
+                        className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-1.5"
+                      >
+                        <Lock className="w-3.5 h-3.5" />
+                        Click to Unlock
+                      </button>
+                    )}
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setSelectedChapter(chapter);
-                        setIsModalOpen(true);
-                      }}
-                      className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-1.5"
+                      onClick={(e) => handleToggleInterested(e, chapter.id)}
+                      className={`flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-1.5 ${
+                        interestedChapterIds.has(chapter.id)
+                          ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                          : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                      }`}
                     >
-                      <Lock className="w-3.5 h-3.5" />
-                      Click to Unlock
+                      <Star className={`w-3.5 h-3.5 ${interestedChapterIds.has(chapter.id) ? 'fill-white' : ''}`} />
+                      {interestedChapterIds.has(chapter.id) ? 'Interested' : 'Mark Interested'}
                     </button>
+                  </div>
+
+                  {/* Sigma Chi specific: Diamond indicator + Request Introduction button */}
+                  {chapter.greek_organizations?.name === 'Sigma Chi' && (
+                    <>
+                      {/* Enhanced Diamond indicator with shimmer animation and info icon */}
+                      <div className="relative overflow-hidden bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 border-2 border-purple-300 rounded-xl p-3 shadow-sm">
+                        {/* Shimmer effect */}
+                        <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+
+                        <div className="relative flex items-center justify-center gap-2">
+                          <span className="text-3xl drop-shadow-lg">💎</span>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-bold text-purple-900">Diamond Chapter</span>
+                            <span className="text-xs text-purple-700">48hr intro guarantee</span>
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              alert('Diamond Chapters include:\n\n✓ Full roster with contact info (100 credits)\n✓ Warm introduction within 48 hours (100 credits)\n✓ Money-back guarantee if intro takes longer\n✓ Premium access to chapter leadership');
+                            }}
+                            className="ml-auto p-1.5 bg-purple-200 hover:bg-purple-300 rounded-full transition-colors"
+                            title="Learn more about Diamond Chapters"
+                          >
+                            <Info className="w-4 h-4 text-purple-700" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Request Introduction button with enhanced styling */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setSelectedIntroChapter(chapter);
+                          setIsIntroModalOpen(true);
+                        }}
+                        className="w-full px-3 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        Request an Introduction
+                      </button>
+                    </>
                   )}
-                  <button
-                    onClick={(e) => handleToggleInterested(e, chapter.id)}
-                    className={`flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-1.5 ${
-                      interestedChapterIds.has(chapter.id)
-                        ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    <Star className={`w-3.5 h-3.5 ${interestedChapterIds.has(chapter.id) ? 'fill-white' : ''}`} />
-                    {interestedChapterIds.has(chapter.id) ? 'Interested' : 'Mark Interested'}
-                  </button>
                 </div>
               </div>
             </Link>
@@ -964,6 +1032,87 @@ const ChaptersPage = () => {
           <UnlockConfirmationModal {...modalProps} />
         );
       })()}
+
+      {/* Introduction Request Modal */}
+      {isIntroModalOpen && selectedIntroChapter && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">💎</span>
+                <h3 className="text-xl font-bold text-gray-900">Diamond Chapter Introduction</h3>
+              </div>
+              <button
+                onClick={() => {
+                  setIsIntroModalOpen(false);
+                  setSelectedIntroChapter(null);
+                }}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Chapter Info */}
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+              <div className="font-semibold text-gray-900 mb-1">
+                {selectedIntroChapter.greek_organizations?.name}
+              </div>
+              <div className="text-sm text-gray-600">
+                {selectedIntroChapter.chapter_name} • {selectedIntroChapter.universities?.name}
+              </div>
+            </div>
+
+            {/* 48-Hour Guarantee Message */}
+            <div className="bg-gradient-to-r from-purple-100 to-pink-100 border-2 border-purple-300 rounded-lg p-4 mb-6">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-purple-900 mb-1">48-Hour Guarantee</h4>
+                  <p className="text-sm text-purple-800">
+                    We guarantee a warm introduction to this Diamond chapter within 48 hours, or it's <span className="font-bold">completely free</span>!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Cost */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-6">
+              <span className="text-gray-700 font-medium">Introduction Cost</span>
+              <span className="text-2xl font-bold text-purple-600">100 credits</span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setIsIntroModalOpen(false);
+                  setSelectedIntroChapter(null);
+                }}
+                className="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  // TODO: Wire up to backend
+                  console.log('Requesting introduction for:', selectedIntroChapter.id);
+                  alert('Introduction request feature coming soon!');
+                  setIsIntroModalOpen(false);
+                  setSelectedIntroChapter(null);
+                }}
+                className="flex-1 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4" />
+                Request Introduction
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
