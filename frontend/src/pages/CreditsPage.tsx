@@ -627,6 +627,134 @@ export default function CreditsPage() {
 
       {/* Note: Header removed when embedded in TeamPage */}
 
+        {/* Credit Balance Display */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Current Balance</h2>
+          <div className="flex items-baseline gap-3">
+            <div className="text-5xl font-bold text-gray-900">
+              {Math.floor(accountData?.balance ?? 0)}
+            </div>
+            <div className="text-lg text-gray-600">credits</div>
+          </div>
+          <p className="text-sm text-gray-500 mt-2">
+            Credits are used when subscription unlocks are exhausted
+          </p>
+        </div>
+
+        {/* Credit Packages Grid */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Buy Credit Packages</h2>
+          <p className="text-sm text-gray-600 mb-6">
+            Choose the package that best fits your needs. All credits never expire and can be used anytime.
+          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+            {CREDIT_PACKAGES.map((pkg: any) => (
+              <div
+                key={pkg.id}
+                className={`relative border-2 rounded-lg p-3 cursor-pointer transition-all ${
+                  selectedPackage === pkg.id
+                    ? 'border-blue-600 bg-blue-50'
+                    : pkg.bestValue
+                    ? 'border-green-500 border-4'
+                    : 'border-gray-200 hover:border-gray-300'
+                } ${pkg.popular ? 'ring-2 ring-yellow-400' : ''}`}
+                onClick={() => setSelectedPackage(pkg.id)}
+              >
+                {pkg.bestValue && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-xl flex items-center gap-1.5 animate-pulse border-2 border-white">
+                      <Sparkles className="w-4 h-4" />
+                      BEST VALUE
+                    </div>
+                  </div>
+                )}
+                {pkg.popular && !pkg.bestValue && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                      MOST POPULAR
+                    </div>
+                  </div>
+                )}
+
+                <div className="text-center">
+                  <div className="text-xs font-semibold text-gray-900 mb-1">{pkg.name}</div>
+                  <div className="text-2xl font-bold text-gray-900 mb-0.5">
+                    {pkg.credits}
+                  </div>
+                  <div className="text-xs text-gray-500 mb-2">credits</div>
+
+                  <div className="text-xl font-bold text-blue-600 mb-0.5">
+                    ${pkg.price}
+                  </div>
+                  <div className="text-xs text-gray-500 mb-2">
+                    ${pkg.pricePerCredit.toFixed(2)}/credit
+                  </div>
+
+                  <ul className="mt-2 space-y-1 text-left">
+                    {pkg.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-1">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-xs text-gray-700 leading-tight">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              onClick={() => handleBuyCredits(selectedPackage)}
+              disabled={loading}
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-5 h-5" />
+                  Buy {CREDIT_PACKAGES.find(p => p.id === selectedPackage)?.credits} Credits for ${CREDIT_PACKAGES.find(p => p.id === selectedPackage)?.price}
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* How Credits Work */}
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm border border-blue-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-blue-600" />
+            How Credits Work
+          </h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-lg p-4">
+              <div className="text-3xl mb-2">💳</div>
+              <h3 className="font-semibold text-gray-900 mb-2">One-Time Purchase</h3>
+              <p className="text-sm text-gray-600">
+                Buy credits once and use them whenever you need. No recurring charges.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4">
+              <div className="text-3xl mb-2">♾️</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Never Expire</h3>
+              <p className="text-sm text-gray-600">
+                Credits remain in your account forever. No rush, no pressure.
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4">
+              <div className="text-3xl mb-2">💎</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Volume Savings</h3>
+              <p className="text-sm text-gray-600">
+                Larger packages offer better value - save up to 32% with Enterprise.
+              </p>
+            </div>
+          </div>
+        </div>
       {/* Subscription Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Subscription</h2>
@@ -1191,134 +1319,6 @@ export default function CreditsPage() {
         </div>
       )}
 
-        {/* Credit Balance Display */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">Current Balance</h2>
-          <div className="flex items-baseline gap-3">
-            <div className="text-5xl font-bold text-gray-900">
-              {Math.floor(accountData?.balance ?? 0)}
-            </div>
-            <div className="text-lg text-gray-600">credits</div>
-          </div>
-          <p className="text-sm text-gray-500 mt-2">
-            Credits are used when subscription unlocks are exhausted
-          </p>
-        </div>
-
-        {/* Credit Packages Grid */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Buy Credit Packages</h2>
-          <p className="text-sm text-gray-600 mb-6">
-            Choose the package that best fits your needs. All credits never expire and can be used anytime.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-            {CREDIT_PACKAGES.map((pkg: any) => (
-              <div
-                key={pkg.id}
-                className={`relative border-2 rounded-lg p-3 cursor-pointer transition-all ${
-                  selectedPackage === pkg.id
-                    ? 'border-blue-600 bg-blue-50'
-                    : pkg.bestValue
-                    ? 'border-green-500 border-4'
-                    : 'border-gray-200 hover:border-gray-300'
-                } ${pkg.popular ? 'ring-2 ring-yellow-400' : ''}`}
-                onClick={() => setSelectedPackage(pkg.id)}
-              >
-                {pkg.bestValue && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-xl flex items-center gap-1.5 animate-pulse border-2 border-white">
-                      <Sparkles className="w-4 h-4" />
-                      BEST VALUE
-                    </div>
-                  </div>
-                )}
-                {pkg.popular && !pkg.bestValue && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      MOST POPULAR
-                    </div>
-                  </div>
-                )}
-
-                <div className="text-center">
-                  <div className="text-xs font-semibold text-gray-900 mb-1">{pkg.name}</div>
-                  <div className="text-2xl font-bold text-gray-900 mb-0.5">
-                    {pkg.credits}
-                  </div>
-                  <div className="text-xs text-gray-500 mb-2">credits</div>
-
-                  <div className="text-xl font-bold text-blue-600 mb-0.5">
-                    ${pkg.price}
-                  </div>
-                  <div className="text-xs text-gray-500 mb-2">
-                    ${pkg.pricePerCredit.toFixed(2)}/credit
-                  </div>
-
-                  <ul className="mt-2 space-y-1 text-left">
-                    {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-1">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-xs text-gray-700 leading-tight">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-center">
-            <button
-              onClick={() => handleBuyCredits(selectedPackage)}
-              disabled={loading}
-              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <CreditCard className="w-5 h-5" />
-                  Buy {CREDIT_PACKAGES.find(p => p.id === selectedPackage)?.credits} Credits for ${CREDIT_PACKAGES.find(p => p.id === selectedPackage)?.price}
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* How Credits Work */}
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm border border-blue-200 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-blue-600" />
-            How Credits Work
-          </h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg p-4">
-              <div className="text-3xl mb-2">💳</div>
-              <h3 className="font-semibold text-gray-900 mb-2">One-Time Purchase</h3>
-              <p className="text-sm text-gray-600">
-                Buy credits once and use them whenever you need. No recurring charges.
-              </p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <div className="text-3xl mb-2">♾️</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Never Expire</h3>
-              <p className="text-sm text-gray-600">
-                Credits remain in your account forever. No rush, no pressure.
-              </p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <div className="text-3xl mb-2">💎</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Volume Savings</h3>
-              <p className="text-sm text-gray-600">
-                Larger packages offer better value - save up to 32% with Enterprise.
-              </p>
-            </div>
-          </div>
-        </div>
 
         {/* Invoice history (Purchases/Top-ups) */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
