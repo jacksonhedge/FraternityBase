@@ -3664,6 +3664,48 @@ app.patch('/api/admin/companies/:id/status', requireAdmin, async (req, res) => {
   }
 });
 
+// Update company unlock limits (admin only)
+app.patch('/api/admin/companies/:id/unlock-limits', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { monthly_unlocks_5_star, monthly_unlocks_4_star } = req.body;
+
+    // Build update object with only provided fields
+    const updateData: any = {};
+    if (monthly_unlocks_5_star !== undefined) {
+      updateData.monthly_unlocks_5_star = parseInt(monthly_unlocks_5_star);
+      updateData.unlocks_5_star_remaining = parseInt(monthly_unlocks_5_star); // Reset remaining to new limit
+    }
+    if (monthly_unlocks_4_star !== undefined) {
+      updateData.monthly_unlocks_4_star = parseInt(monthly_unlocks_4_star);
+      updateData.unlocks_4_star_remaining = parseInt(monthly_unlocks_4_star); // Reset remaining to new limit
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ error: 'No valid fields to update' });
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from('account_balance')
+      .update(updateData)
+      .eq('company_id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Updated unlock limits for company ${id}:`, updateData);
+    res.json({
+      success: true,
+      message: 'Unlock limits updated successfully',
+      data
+    });
+  } catch (error: any) {
+    console.error('Error updating unlock limits:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Cron job to grant monthly credits (should be called daily by a cron service)
 app.post('/api/cron/grant-monthly-credits', async (req, res) => {
   try {
