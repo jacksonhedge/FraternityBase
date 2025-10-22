@@ -248,14 +248,14 @@ Dynamic pricing based on chapter quality rating:
 
 ## PREMIUM SERVICES
 
-### Warm Introduction - 200 credits / $59.99
+### Warm Introduction - 100 credits / $29.99
 - Personal introduction to chapter officers
 - Facilitates direct partnerships
 - Team processes within 24-48 hours
 - Monthly tier subscribers get 1 free (first 3 months only)
 - Enterprise subscribers get 3 free per month
 
-### Ambassador Referral - 330 credits / $99.99
+### Ambassador Referral - 200 credits / $59.99
 - Connect with student ambassadors
 - Influencer marketing campaigns
 - Team matches within 48-72 hours

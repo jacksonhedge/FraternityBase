@@ -5932,9 +5932,9 @@ app.post('/api/chapters/:id/warm-intro-request', async (req, res) => {
       .eq('id', chapterId)
       .single();
 
-    // Fraternity introduction costs 333 credits ($99.99)
-    const credits = 333;
-    const dollarValue = 99.99;
+    // Fraternity introduction costs 100 credits ($29.99)
+    const credits = 100;
+    const dollarValue = 29.99;
 
     // Deduct credits for the introduction request
     const { data: transactionId, error: deductError } = await supabaseAdmin.rpc('deduct_credits', {
