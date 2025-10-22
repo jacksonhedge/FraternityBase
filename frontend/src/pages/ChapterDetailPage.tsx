@@ -419,13 +419,13 @@ const ChapterDetailPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-2xl shadow-lg border-2 border-blue-100 p-6 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-2xl shadow-lg border-2 border-blue-100 p-4 sm:p-6 overflow-hidden">
         {/* Decorative background elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-indigo-400/10 to-pink-400/10 rounded-full blur-3xl -ml-24 -mb-24"></div>
 
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center space-x-6">
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-center space-x-3 sm:space-x-6 w-full md:w-auto">
             <Link
               to={backLink}
               className="group p-3 bg-white hover:bg-blue-50 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200 hover:border-blue-300"
@@ -434,20 +434,20 @@ const ChapterDetailPage = () => {
             </Link>
 
             {/* College Logo with enhanced styling */}
-            <div className="group relative">
+            <div className="group relative flex-shrink-0">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-              <div className="relative bg-white p-3 rounded-2xl shadow-lg border-2 border-gray-200 group-hover:border-blue-300 transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3">
+              <div className="relative bg-white p-2 sm:p-3 rounded-2xl shadow-lg border-2 border-gray-200 group-hover:border-blue-300 transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3">
                 <img
                   src={getCollegeLogoWithFallback(chapter.university)}
                   alt={chapter.university}
-                  className="w-20 h-20 object-contain"
+                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+            <div className="space-y-2 min-w-0 flex-1">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <h1 className="text-lg sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent break-words">
                   {chapter.fraternity}
                 </h1>
                 {chapter.isDiamond && (
@@ -462,24 +462,24 @@ const ChapterDetailPage = () => {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs sm:text-sm font-semibold">
                   {chapter.chapterName}
                 </span>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Building className="w-4 h-4 text-blue-600" />
-                  <p className="font-medium">{chapter.university}</p>
-                  <span className="text-gray-400">•</span>
-                  <MapPin className="w-4 h-4 text-green-600" />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                <div className="flex items-center gap-2 text-gray-600 text-sm flex-wrap">
+                  <Building className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 flex-shrink-0" />
+                  <p className="font-medium break-words">{chapter.university}</p>
+                  <span className="text-gray-400 hidden sm:inline">•</span>
+                  <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-green-600 flex-shrink-0" />
                   <p className="font-medium">{chapter.state}</p>
                 </div>
                 <Link
                   to={`/app/map?state=${encodeURIComponent(chapter.state)}`}
-                  className="group inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105"
+                  className="group inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105"
                 >
-                  <MapPin className="w-4 h-4 group-hover:animate-bounce" />
+                  <MapPin className="w-3 h-3 sm:w-4 sm:h-4 group-hover:animate-bounce" />
                   View in Map
                 </Link>
               </div>
@@ -487,7 +487,7 @@ const ChapterDetailPage = () => {
           </div>
 
           {/* Year Selector */}
-          <div className="flex items-center space-x-3 bg-white rounded-xl shadow-md p-4 border border-gray-200">
+          <div className="flex items-center space-x-2 sm:space-x-3 bg-white rounded-xl shadow-md p-3 sm:p-4 border border-gray-200 w-full md:w-auto">
             <Calendar className="w-5 h-5 text-blue-600" />
             <div className="flex flex-col">
               <span className="text-xs text-gray-500 font-medium">School Year</span>
@@ -506,24 +506,24 @@ const ChapterDetailPage = () => {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="group relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="group relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-4 sm:p-6">
           {/* Decorative circles */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
 
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <p className="text-4xl font-bold text-white mb-1">{currentYearData.size}</p>
-              <p className="text-sm text-white/90 font-medium">Active Members</p>
+              <p className="text-3xl sm:text-4xl font-bold text-white mb-1">{currentYearData.size}</p>
+              <p className="text-xs sm:text-sm text-white/90 font-medium">Active Members</p>
             </div>
-            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
-              <Users className="w-8 h-8 text-white" />
+            <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+              <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
           </div>
         </div>
 
-        <div className="group relative bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6">
+        <div className="group relative bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-4 sm:p-6">
           {/* Decorative circles */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
@@ -531,17 +531,17 @@ const ChapterDetailPage = () => {
           <div className="relative z-10 flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <p className="text-4xl font-bold text-white">{chapter.greekRank.toFixed(1)}</p>
+                <p className="text-3xl sm:text-4xl font-bold text-white">{chapter.greekRank.toFixed(1)}</p>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className={`text-2xl ${i < Math.floor(chapter.greekRank) ? 'opacity-100' : 'opacity-30'}`}>⭐</span>
+                    <span key={i} className={`text-lg sm:text-2xl ${i < Math.floor(chapter.greekRank) ? 'opacity-100' : 'opacity-30'}`}>⭐</span>
                   ))}
                 </div>
               </div>
-              <p className="text-sm text-white/90 font-medium mt-1">Chapter Rating</p>
+              <p className="text-xs sm:text-sm text-white/90 font-medium mt-1">Chapter Rating</p>
             </div>
-            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
-              <Award className="w-8 h-8 text-white" />
+            <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+              <Award className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
           </div>
         </div>

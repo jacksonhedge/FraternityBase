@@ -223,47 +223,47 @@ const DashboardPage = () => {
 
 
       {/* Header */}
-      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-2xl shadow-lg border-2 border-blue-100 p-8 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-2xl shadow-lg border-2 border-blue-100 p-4 sm:p-6 md:p-8 overflow-hidden">
         {/* Decorative background elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-indigo-400/10 to-pink-400/10 rounded-full blur-3xl -ml-24 -mb-24"></div>
 
         <div className="relative z-10">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent break-words">
             {user?.company?.name ? `Welcome back, ${user.company.name}!` : 'Welcome Back!'}
           </h1>
-          <p className="text-gray-600 mt-2 text-lg">
+          <p className="text-gray-600 mt-2 text-sm sm:text-base md:text-lg">
             Here's your partnership network overview
           </p>
         </div>
       </div>
 
       {/* Stats Grid - Enhanced KPI Cards */}
-      <div ref={statsContainerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div ref={statsContainerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Unlocked Chapters */}
         <div
           data-animate-card
-          className="group relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+          className="group relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-4 sm:p-6"
         >
           {/* Decorative circles */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
 
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
-                <Unlock className="w-8 h-8 text-white" />
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <Unlock className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
-            <div className="text-4xl font-bold text-white mb-2">{unlockedChapters.length}</div>
-            <div className="text-sm text-white/90 font-medium">Unlocked Chapters</div>
+            <div className="text-3xl sm:text-4xl font-bold text-white mb-2">{unlockedChapters.length}</div>
+            <div className="text-xs sm:text-sm text-white/90 font-medium">Unlocked Chapters</div>
             <p className="text-xs text-white/70 mt-1">Your active partnerships</p>
 
             <Link
               to="/app/chapters"
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-blue-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+              className="mt-3 sm:mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-100 text-blue-600 rounded-lg font-semibold transition-all shadow-md text-xs sm:text-sm"
             >
-              <Lock className="w-4 h-4" />
+              <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
               Unlock More
             </Link>
           </div>
@@ -272,28 +272,28 @@ const DashboardPage = () => {
         {/* Unlocked Ambassadors */}
         <div
           data-animate-card
-          className="group relative bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+          className="group relative bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-4 sm:p-6"
         >
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
 
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
-                <Users className="w-8 h-8 text-white" />
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
-            <div className="text-4xl font-bold text-white mb-2">
+            <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
               {unlockedChapters.reduce((sum, ch) => sum + (ch.unlockedTypes?.includes('leadership_access') ? 5 : 0), 0)}
             </div>
-            <div className="text-sm text-white/90 font-medium">Unlocked Ambassadors</div>
+            <div className="text-xs sm:text-sm text-white/90 font-medium">Unlocked Ambassadors</div>
             <p className="text-xs text-white/70 mt-1">Officers you can contact</p>
 
             <Link
               to="/app/my-unlocked"
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-purple-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+              className="mt-3 sm:mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-100 text-purple-600 rounded-lg font-semibold transition-all shadow-md text-xs sm:text-sm"
             >
-              <Mail className="w-4 h-4" />
+              <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
               View Contacts
             </Link>
           </div>
@@ -302,26 +302,26 @@ const DashboardPage = () => {
         {/* Credits Balance */}
         <div
           data-animate-card
-          className="group relative bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+          className="group relative bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-4 sm:p-6"
         >
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
 
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
-                <Coins className="w-8 h-8 text-white" />
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <Coins className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
-            <div className="text-4xl font-bold text-white mb-2">{accountBalance}</div>
-            <div className="text-sm text-white/90 font-medium">Credits Balance</div>
+            <div className="text-3xl sm:text-4xl font-bold text-white mb-2">{accountBalance}</div>
+            <div className="text-xs sm:text-sm text-white/90 font-medium">Credits Balance</div>
             <p className="text-xs text-white/70 mt-1">Available to spend</p>
 
             <Link
               to="/app/credits"
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-green-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+              className="mt-3 sm:mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-100 text-green-600 rounded-lg font-semibold transition-all shadow-md text-xs sm:text-sm"
             >
-              <DollarSign className="w-4 h-4" />
+              <DollarSign className="w-3 h-3 sm:w-4 sm:h-4" />
               Buy Credits
             </Link>
           </div>
@@ -330,28 +330,28 @@ const DashboardPage = () => {
         {/* Total Network Size */}
         <div
           data-animate-card
-          className="group relative bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-6"
+          className="group relative bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden p-4 sm:p-6"
         >
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
 
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
-                <TrendingUp className="w-8 h-8 text-white" />
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl transform group-hover:rotate-12 transition-transform duration-300">
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
-            <div className="text-4xl font-bold text-white mb-2">
+            <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
               {unlockedChapters.reduce((sum, ch) => sum + (ch.memberCount || 0), 0)}
             </div>
-            <div className="text-sm text-white/90 font-medium">Total Network Size</div>
+            <div className="text-xs sm:text-sm text-white/90 font-medium">Total Network Size</div>
             <p className="text-xs text-white/70 mt-1">Combined members reached</p>
 
             <Link
               to="/app/map"
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-orange-600 rounded-lg font-semibold transition-all shadow-md text-sm"
+              className="mt-3 sm:mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-100 text-orange-600 rounded-lg font-semibold transition-all shadow-md text-xs sm:text-sm"
             >
-              <Target className="w-4 h-4" />
+              <Target className="w-3 h-3 sm:w-4 sm:h-4" />
               Expand Network
             </Link>
           </div>
