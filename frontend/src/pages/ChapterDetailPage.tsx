@@ -322,6 +322,7 @@ const ChapterDetailPage = () => {
     instagram: chapterData.instagram_handle || '',
     greekRank: gradeValue, // Use database grade (0-5.0), converted to number, fallback to 4.0
     isPlatinum: chapterData.is_platinum || false, // Platinum status for chapters with partner intros
+    isDiamond: gradeValue >= 5.0, // Diamond = 5.0⭐ rating (full roster + warm intro within 3 days)
     nationalRank: 15, // TODO: Add to database
     lastUpdated: chapterData.updated_at || new Date().toISOString(),
     yearData: {
@@ -436,9 +437,22 @@ const ChapterDetailPage = () => {
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
-                {chapter.fraternity}
-              </h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+                  {chapter.fraternity}
+                </h1>
+                {chapter.isDiamond && (
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity animate-pulse"></div>
+                    <div className="relative px-4 py-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl shadow-lg transform hover:scale-110 transition-all">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl animate-bounce">💎</span>
+                        <span className="text-white font-black text-sm tracking-wide">DIAMOND</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
                   {chapter.chapterName}
@@ -1022,21 +1036,50 @@ const ChapterDetailPage = () => {
         {/* Warm Introduction Section */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Handshake className={`w-6 h-6 ${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'}`} />
+            <Handshake className={`w-6 h-6 ${chapter.isDiamond ? 'text-purple-600' : chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'}`} />
             Personal Introduction
-            {chapter.isPlatinum && <span className="text-2xl">💎</span>}
+            {chapter.isDiamond && <span className="text-2xl animate-bounce">💎</span>}
+            {!chapter.isDiamond && chapter.isPlatinum && <span className="text-2xl">💎</span>}
           </h2>
 
           {!isUnlocked('warm_introduction') ? (
-            <div className={`bg-gradient-to-r ${chapter.isPlatinum ? 'from-blue-50 to-indigo-100 border-2 border-blue-300' : 'from-emerald-50 to-teal-50 border-2 border-emerald-200'} rounded-lg p-6`}>
+            <div className={`bg-gradient-to-r ${chapter.isDiamond ? 'from-purple-50 via-pink-50 to-blue-50 border-2 border-purple-400' : chapter.isPlatinum ? 'from-blue-50 to-indigo-100 border-2 border-blue-300' : 'from-emerald-50 to-teal-50 border-2 border-emerald-200'} rounded-lg p-6`}>
               <div className="flex items-start gap-3">
-                <Lock className={`w-5 h-5 ${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} flex-shrink-0 mt-0.5`} />
+                <Lock className={`w-5 h-5 ${chapter.isDiamond ? 'text-purple-600' : chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} flex-shrink-0 mt-0.5`} />
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                    {chapter.isPlatinum && <span className="text-xl">💎</span>}
-                    {chapter.isPlatinum ? 'Platinum Chapter - Priority Introduction' : '🤝 Get a Personal Introduction'}
+                    {chapter.isDiamond && <span className="text-2xl animate-bounce">💎</span>}
+                    {chapter.isDiamond && 'DIAMOND CHAPTER - Full Roster + 3-Day Introduction'}
+                    {!chapter.isDiamond && chapter.isPlatinum && <span className="text-xl">💎</span>}
+                    {!chapter.isDiamond && chapter.isPlatinum && 'Platinum Chapter - Priority Introduction'}
+                    {!chapter.isDiamond && !chapter.isPlatinum && '🤝 Get a Personal Introduction'}
                   </h3>
-                  {chapter.isPlatinum && (
+                  {chapter.isDiamond && (
+                    <div className="mb-3 p-3 bg-gradient-to-r from-purple-100 to-pink-100 border-2 border-purple-300 rounded-md">
+                      <p className="text-sm font-bold text-purple-900 mb-2">
+                        💎 DIAMOND TIER - Our Most Exclusive Chapters
+                      </p>
+                      <div className="space-y-1 text-xs text-purple-800">
+                        <div className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">✓</span>
+                          <span className="font-semibold">Complete roster with {currentYearData.size}+ verified members</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">✓</span>
+                          <span className="font-semibold">Warm introduction within 3 business days GUARANTEED</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">✓</span>
+                          <span className="font-semibold">Direct access to chapter president and executive board</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">✓</span>
+                          <span className="font-semibold">Priority partnership consideration</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {!chapter.isDiamond && chapter.isPlatinum && (
                     <div className="mb-3 p-2 bg-blue-100 border border-blue-200 rounded-md">
                       <p className="text-xs font-semibold text-blue-900">
                         ⭐ This is a Platinum chapter with verified contact data and existing partner relationships
@@ -1044,30 +1087,53 @@ const ChapterDetailPage = () => {
                     </div>
                   )}
                   <p className="text-sm text-gray-700 mb-4">
-                    Skip the cold outreach! We'll personally introduce you to the chapter's leadership team,
-                    leveraging our network and credibility to facilitate a warm connection. Perfect for
-                    partnerships, sponsorships, and collaboration opportunities.
+                    {chapter.isDiamond ? (
+                      <>
+                        Diamond chapters represent our highest tier - complete rosters with verified contacts and guaranteed introductions within 3 business days.
+                        Get immediate access to the full chapter roster AND a personal introduction to leadership.
+                      </>
+                    ) : (
+                      <>
+                        Skip the cold outreach! We'll personally introduce you to the chapter's leadership team,
+                        leveraging our network and credibility to facilitate a warm connection. Perfect for
+                        partnerships, sponsorships, and collaboration opportunities.
+                      </>
+                    )}
                   </p>
                   <div className="bg-white/60 rounded-lg p-3 mb-4">
-                    <p className="text-xs font-medium text-gray-700 mb-2">What's included:</p>
+                    <p className="text-xs font-medium text-gray-700 mb-2">
+                      {chapter.isDiamond ? 'Diamond Package Includes:' : 'What\'s included:'}
+                    </p>
                     <ul className="text-xs text-gray-600 space-y-1">
+                      {chapter.isDiamond && (
+                        <>
+                          <li className="flex items-start gap-2">
+                            <span className="text-purple-600 mt-0.5 font-bold">💎</span>
+                            <span className="font-bold text-purple-900">Full chapter roster ({currentYearData.size}+ members with contact info)</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-purple-600 mt-0.5 font-bold">⚡</span>
+                            <span className="font-bold text-purple-900">Introduction within 3 business days GUARANTEED</span>
+                          </li>
+                        </>
+                      )}
                       <li className="flex items-start gap-2">
-                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
+                        <span className={`${chapter.isDiamond ? 'text-purple-600' : chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Personal email introduction from our team to chapter president</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
+                        <span className={`${chapter.isDiamond ? 'text-purple-600' : chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Your company background and partnership proposal shared</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
+                        <span className={`${chapter.isDiamond ? 'text-purple-600' : chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Follow-up coordination to ensure connection is made</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className={`${chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
+                        <span className={`${chapter.isDiamond ? 'text-purple-600' : chapter.isPlatinum ? 'text-blue-600' : 'text-emerald-600'} mt-0.5`}>✓</span>
                         <span>Higher response rate vs. cold email (~70% vs. ~10%)</span>
                       </li>
-                      {chapter.isPlatinum && (
+                      {!chapter.isDiamond && chapter.isPlatinum && (
                         <li className="flex items-start gap-2">
                           <span className="text-blue-600 mt-0.5">✓</span>
                           <span className="font-semibold">Complete roster data and verified officer contacts</span>
@@ -1076,9 +1142,9 @@ const ChapterDetailPage = () => {
                     </ul>
                   </div>
                   <button
-                    onClick={() => handleUnlock('warm_introduction', chapter.isPlatinum ? 20 : 100)}
+                    onClick={() => handleUnlock('warm_introduction', chapter.isDiamond ? 15 : chapter.isPlatinum ? 20 : 100)}
                     disabled={isUnlocking}
-                    className={`inline-flex items-center gap-2 ${chapter.isPlatinum ? 'bg-blue-600 hover:bg-blue-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={`inline-flex items-center gap-2 ${chapter.isDiamond ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 shadow-lg' : chapter.isPlatinum ? 'bg-blue-600 hover:bg-blue-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white px-6 py-3 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105`}
                   >
                     {isUnlocking ? (
                       <>
@@ -1087,14 +1153,15 @@ const ChapterDetailPage = () => {
                       </>
                     ) : (
                       <>
-                        {chapter.isPlatinum && <span className="text-xl">💎</span>}
+                        {chapter.isDiamond && <span className="text-2xl animate-bounce">💎</span>}
+                        {!chapter.isDiamond && chapter.isPlatinum && <span className="text-xl">💎</span>}
                         <Handshake className="w-4 h-4" />
-                        Request Introduction for {chapter.isPlatinum ? '20' : '100'} Credits
+                        {chapter.isDiamond ? 'Get Diamond Package for 15 Credits' : `Request Introduction for ${chapter.isPlatinum ? '20' : '100'} Credits`}
                       </>
                     )}
                   </button>
                   <p className="text-xs text-gray-500 mt-2">
-                    {chapter.isPlatinum ? '💎 Platinum tier - Premium partner with complete data' : 'Significantly increases partnership success rate'}
+                    {chapter.isDiamond ? '💎 Diamond tier - Full roster + 3-day introduction guarantee' : chapter.isPlatinum ? '💎 Platinum tier - Premium partner with complete data' : 'Significantly increases partnership success rate'}
                   </p>
                 </div>
               </div>
