@@ -723,6 +723,13 @@ export default function CreditsPage() {
               )}
             </button>
           </div>
+
+          {/* Processing Time Notice */}
+          <div className="mt-4 bg-blue-50 border border-blue-200 rounded-md p-3">
+            <p className="text-sm text-blue-900 text-center">
+              ⏱️ <strong>Please note:</strong> Credits may take 30-60 minutes to appear in your account after purchase while we verify the transaction.
+            </p>
+          </div>
         </div>
 
         {/* How Credits Work */}
