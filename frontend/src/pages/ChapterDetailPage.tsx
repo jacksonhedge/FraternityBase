@@ -336,7 +336,7 @@ const ChapterDetailPage = () => {
     lastUpdated: chapterData.updated_at || new Date().toISOString(),
     yearData: {
       '2025-2026': {
-        size: chapterData.member_count || 0,
+        size: officers.length + regularMembers.length, // Use actual roster count instead of member_count
         president: findOfficer('president'),
         vicePresident: findOfficer('vice president') || findOfficer('vp'),
         rushChair: findOfficer('rush'),
