@@ -130,8 +130,8 @@ const PricingPage = () => {
         '5.0⭐ chapters: 10 credits',
         '4.5⭐ chapters: 7 credits',
         '4.0⭐ chapters: 5 credits',
-        'Warm Introduction: 200 credits',
-        'Ambassador Referral: 330 credits',
+        'Warm Introduction: 100 credits',
+        'Ambassador Referral: 200 credits',
         'Buy credits anytime',
         'No monthly commitment',
         'Credits never expire'

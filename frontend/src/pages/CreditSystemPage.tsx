@@ -141,7 +141,7 @@ const CreditSystemPage = () => {
       icon: Handshake,
       color: 'from-indigo-500 to-indigo-600',
       bgColor: 'from-indigo-50 to-indigo-100',
-      credits: 200,
+      credits: 100,
       description: 'Personal introduction to chapter leadership',
       features: [
         'Personal email introduction from our team',
@@ -156,7 +156,7 @@ const CreditSystemPage = () => {
       icon: UserPlus,
       color: 'from-pink-500 to-pink-600',
       bgColor: 'from-pink-50 to-pink-100',
-      credits: 333,
+      credits: 200,
       description: 'Get matched with chapter influencer for campaigns',
       features: [
         'Matched with verified ambassador',
