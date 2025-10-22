@@ -337,7 +337,21 @@ export default function CreditsPage() {
     setLoading(true);
 
     try {
-      // Create checkout session with package ID
+      // Get user profile for companyId
+      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const profile = await profileResponse.json();
+
+      if (!profile.company_id) {
+        alert('Unable to find company profile. Please try logging in again.');
+        setLoading(false);
+        return;
+      }
+
+      // Create checkout session with amount and companyId
       const response = await fetch(`${import.meta.env.VITE_API_URL}/credits/checkout`, {
         method: 'POST',
         headers: {
@@ -345,8 +359,10 @@ export default function CreditsPage() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          packageId: packageId,
-          priceId: pkg.id // Backend will map this to the Stripe price ID
+          amount: pkg.price,
+          companyId: profile.company_id,
+          userEmail: user?.email || profile.email,
+          credits: pkg.credits // Pass credits for metadata
         })
       });
 

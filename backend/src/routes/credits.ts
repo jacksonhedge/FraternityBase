@@ -548,12 +548,19 @@ router.post('/auto-reload/trigger', async (req, res) => {
 
 // Create checkout session for top-up
 router.post('/checkout', async (req, res) => {
-  const { amount, companyId, userEmail, savePaymentMethod = false } = req.body;
+  const { amount, companyId, userEmail, savePaymentMethod = false, credits } = req.body;
 
   // Validate amount
   if (!amount || typeof amount !== 'number' || amount < 10.00) {
     return res.status(400).json({
       error: `Invalid amount. Minimum top-up is $10.00`
+    });
+  }
+
+  // Validate companyId
+  if (!companyId) {
+    return res.status(400).json({
+      error: 'Company ID is required'
     });
   }
 
@@ -564,21 +571,23 @@ router.post('/checkout', async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Account Balance Top-Up',
-            description: `Add $${amount.toFixed(2)} to your account balance`,
+            name: credits ? `${credits} Credits` : 'Account Balance Top-Up',
+            description: credits ? `Purchase ${credits} credits for $${amount.toFixed(2)}` : `Add $${amount.toFixed(2)} to your account balance`,
           },
           unit_amount: Math.round(amount * 100), // Convert to cents
         },
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/app/dashboard?payment=success&amount=${amount}`,
-      cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/app/credits?payment=cancelled`,
+      success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/app/team?payment=success&credits=${credits || 0}`,
+      cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/app/team?payment=cancelled`,
       customer_email: userEmail,
       metadata: {
-        companyId: companyId || 'demo',
+        companyId: companyId,
+        credits: credits ? credits.toString() : '0',
         amount: amount.toString(),
-        transaction_type: 'top_up'
+        type: 'credit_purchase',
+        transaction_type: 'credit_purchase'
       }
     };
 
