@@ -553,10 +553,10 @@ router.post('/checkout', async (req, res) => {
   console.log('💳 Checkout request received:', { amount, companyId, userEmail, credits });
 
   // Validate amount
-  if (!amount || typeof amount !== 'number' || amount < 10.00) {
+  if (!amount || typeof amount !== 'number' || amount < 3.00) {
     console.error('❌ Invalid amount:', amount);
     return res.status(400).json({
-      error: `Invalid amount. Minimum top-up is $10.00`
+      error: `Invalid amount. Minimum top-up is $3.00`
     });
   }
 
