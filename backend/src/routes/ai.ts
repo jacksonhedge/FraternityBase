@@ -264,15 +264,14 @@ Dynamic pricing based on chapter quality rating:
 - Connect with local venues
 - Event partnership opportunities
 
-### Diamond Unlock - Enterprise Tier 2 Exclusive
+### Diamond Unlock - 100 credits / $29.99
 - **Full roster data access** - Complete member contact information
-- Only available to Enterprise Tier 2 subscribers
-- 10 Diamond unlocks included per month
+- Available to all users for 100 credits
+- Enterprise Tier 2 subscribers: 10 Diamond unlocks included per month
 - Provides complete member roster with full contact info
 - All officer details with direct contacts
 - Historical member data & LinkedIn profiles
 - Chapter analytics & GPA records
-- Not available for purchase with credits (subscription-only benefit)
 
 ## CREDIT PACKAGES (One-time purchases)
 

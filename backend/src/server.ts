@@ -1508,12 +1508,12 @@ app.post('/api/chapters/:id/unlock', async (req, res) => {
     if (isDiamond) {
       if (unlockType === 'warm_introduction') {
         credits = 100;
-        dollarValue = 99.00;
+        dollarValue = 29.99;
         console.log(`💎 Diamond warm introduction pricing: ${credits} credits ($${dollarValue})`);
       } else {
         // Full unlock for Diamond chapters
         credits = 100;
-        dollarValue = 99.00;
+        dollarValue = 29.99;
         console.log(`💎 Diamond full unlock pricing: ${credits} credits ($${dollarValue})`);
       }
     } else if (unlockType === 'warm_introduction') {
