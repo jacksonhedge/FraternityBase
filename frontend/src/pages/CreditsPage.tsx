@@ -48,6 +48,19 @@ interface Transaction {
 // 100 credits (10 Premium unlocks) = $270 (matches Team→Enterprise tier difference)
 const CREDIT_PACKAGES = [
   {
+    id: 'single',
+    name: 'Single',
+    credits: 1,
+    price: 3,
+    pricePerCredit: 3.00,
+    popular: false,
+    features: [
+      'Test the platform',
+      'Quick one-time unlock',
+      'Never expires'
+    ]
+  },
+  {
     id: 'trial',
     name: 'Trial',
     credits: 10,
@@ -1199,11 +1212,11 @@ export default function CreditsPage() {
             Choose the package that best fits your needs. All credits never expire and can be used anytime.
           </p>
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
             {CREDIT_PACKAGES.map((pkg: any) => (
               <div
                 key={pkg.id}
-                className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                className={`relative border-2 rounded-lg p-3 cursor-pointer transition-all ${
                   selectedPackage === pkg.id
                     ? 'border-blue-600 bg-blue-50'
                     : pkg.bestValue
@@ -1229,24 +1242,24 @@ export default function CreditsPage() {
                 )}
 
                 <div className="text-center">
-                  <div className="text-sm font-semibold text-gray-900 mb-2">{pkg.name}</div>
-                  <div className="text-3xl font-bold text-gray-900 mb-1">
+                  <div className="text-xs font-semibold text-gray-900 mb-1">{pkg.name}</div>
+                  <div className="text-2xl font-bold text-gray-900 mb-0.5">
                     {pkg.credits}
                   </div>
-                  <div className="text-xs text-gray-500 mb-3">credits</div>
+                  <div className="text-xs text-gray-500 mb-2">credits</div>
 
-                  <div className="text-2xl font-bold text-blue-600 mb-1">
+                  <div className="text-xl font-bold text-blue-600 mb-0.5">
                     ${pkg.price}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-500 mb-2">
                     ${pkg.pricePerCredit.toFixed(2)}/credit
                   </div>
 
-                  <ul className="mt-4 space-y-2 text-left">
+                  <ul className="mt-2 space-y-1 text-left">
                     {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-1.5">
-                        <Check className="w-3.5 h-3.5 text-green-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-xs text-gray-700">{feature}</span>
+                      <li key={idx} className="flex items-start gap-1">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-xs text-gray-700 leading-tight">{feature}</span>
                       </li>
                     ))}
                   </ul>
