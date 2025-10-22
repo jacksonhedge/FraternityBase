@@ -550,8 +550,11 @@ router.post('/auto-reload/trigger', async (req, res) => {
 router.post('/checkout', async (req, res) => {
   const { amount, companyId, userEmail, savePaymentMethod = false, credits } = req.body;
 
+  console.log('💳 Checkout request received:', { amount, companyId, userEmail, credits });
+
   // Validate amount
   if (!amount || typeof amount !== 'number' || amount < 10.00) {
+    console.error('❌ Invalid amount:', amount);
     return res.status(400).json({
       error: `Invalid amount. Minimum top-up is $10.00`
     });
@@ -559,12 +562,17 @@ router.post('/checkout', async (req, res) => {
 
   // Validate companyId
   if (!companyId) {
+    console.error('❌ Missing companyId');
     return res.status(400).json({
       error: 'Company ID is required'
     });
   }
 
   try {
+    console.log('🔑 Initializing Stripe...');
+    const stripeClient = getStripe();
+    console.log('✅ Stripe client initialized');
+
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ['card'],
       line_items: [{
@@ -598,11 +606,19 @@ router.post('/checkout', async (req, res) => {
       };
     }
 
-    const session = await getStripe().checkout.sessions.create(sessionConfig);
+    console.log('📝 Creating Stripe checkout session...');
+    const session = await stripeClient.checkout.sessions.create(sessionConfig);
+    console.log('✅ Stripe session created:', session.id);
 
     res.json({ url: session.url });
   } catch (error: any) {
-    console.error('Stripe session error:', error);
+    console.error('❌ Stripe session error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      stack: error.stack
+    });
     res.status(500).json({ error: 'Failed to create checkout session', details: error.message });
   }
 });
