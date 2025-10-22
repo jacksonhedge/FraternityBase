@@ -84,7 +84,6 @@ const PricingPage = () => {
         'Browse all 5,000+ chapters',
         'Advanced search & filters',
         '50 monthly credits',
-        '1 Warm Introduction/month',
         '3 team seats',
         'Email support',
         'Purchase credits as needed'
@@ -107,7 +106,7 @@ const PricingPage = () => {
         '3 Premium (5.0⭐) unlocks/month',
         '25 Quality (4.0⭐) unlocks/month',
         '50 Standard (3.0⭐) unlocks/month',
-        '3 Warm Introductions/month',
+        '1 Warm Introduction/month',
         'FraternityBase API access',
         'Priority support',
         'Early access to new features',
@@ -163,6 +162,30 @@ const PricingPage = () => {
       limitations: [],
       buttonText: 'Upgrade to Tier 2',
       buttonStyle: 'bg-gradient-to-r from-indigo-600 to-violet-700 text-white hover:from-indigo-700 hover:to-violet-800 border-transparent shadow-lg hover:shadow-xl transition-all duration-200'
+    },
+    {
+      id: 'enterprise-plus',
+      name: 'Enterprise Plus',
+      price: 'Custom',
+      description: 'Custom enterprise solutions',
+      icon: Crown,
+      color: 'from-gray-800 to-gray-900',
+      bgColor: 'from-gray-50 to-gray-100',
+      features: [
+        'Unlimited unlocks',
+        'Unlimited credits',
+        'Unlimited warm introductions',
+        'Unlimited team seats',
+        'White-label solutions',
+        'Dedicated account manager',
+        '24/7 premium support',
+        'Custom integrations',
+        'On-premise deployment options',
+        'SLA guarantees'
+      ],
+      limitations: [],
+      buttonText: 'Contact Sales',
+      buttonStyle: 'bg-gradient-to-r from-gray-800 to-gray-900 text-white hover:from-gray-900 hover:to-black border-transparent shadow-lg hover:shadow-xl transition-all duration-200'
     }
   ];
 
@@ -216,8 +239,8 @@ const PricingPage = () => {
             </div>
           </div>
 
-          {/* Pricing Grid - 5 tiers */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-stretch">
+          {/* Pricing Grid - 6 tiers */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 items-stretch">
             {pricingTiers.map((tier) => {
               const Icon = tier.icon;
               // Map subscription tiers: 'monthly' -> 'team', 'enterprise' -> 'enterprise-tier-1'
@@ -295,7 +318,7 @@ const PricingPage = () => {
                   <div className="p-6 pt-2">
                     {/* CTA Button */}
                     <Link
-                      to={tier.id === 'enterprise' ? '/contact' : '/signup'}
+                      to={tier.id === 'enterprise-plus' ? '/contact' : '/signup'}
                       className={`block w-full text-center py-4 px-6 rounded-xl font-bold transition-all duration-200 mb-6 ${tier.buttonStyle}`}
                     >
                       {tier.buttonText}
