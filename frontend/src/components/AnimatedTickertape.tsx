@@ -74,8 +74,47 @@ const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
     setHoveredItem(null);
   };
 
-  // Duplicate activities for seamless loop
-  const duplicatedActivities = [...activities, ...activities];
+  // Shuffle activities to prevent more than 2 orgs from same college in a row
+  const shuffleActivities = (activities: Activity[]): Activity[] => {
+    if (activities.length <= 2) return activities;
+
+    const result: Activity[] = [];
+    const remaining = [...activities];
+
+    while (remaining.length > 0) {
+      // Get the last two colleges added to result
+      const lastCollege = result.length > 0 ? (result[result.length - 1].college_name || result[result.length - 1].metadata?.universityName) : null;
+      const secondLastCollege = result.length > 1 ? (result[result.length - 2].college_name || result[result.length - 2].metadata?.universityName) : null;
+
+      // Find activities that won't create 3+ in a row from same college
+      const validIndices: number[] = [];
+      for (let i = 0; i < remaining.length; i++) {
+        const currentCollege = remaining[i].college_name || remaining[i].metadata?.universityName;
+
+        // If last two are from same college, don't pick another from that college
+        if (lastCollege === secondLastCollege && currentCollege === lastCollege) {
+          continue;
+        }
+        validIndices.push(i);
+      }
+
+      // If no valid options, just take any (shouldn't happen often)
+      if (validIndices.length === 0) {
+        validIndices.push(...remaining.map((_, i) => i));
+      }
+
+      // Pick a random valid activity
+      const randomValidIndex = validIndices[Math.floor(Math.random() * validIndices.length)];
+      result.push(remaining[randomValidIndex]);
+      remaining.splice(randomValidIndex, 1);
+    }
+
+    return result;
+  };
+
+  // Shuffle and duplicate activities for seamless loop
+  const shuffledActivities = shuffleActivities(activities);
+  const duplicatedActivities = [...shuffledActivities, ...shuffledActivities];
 
   // Don't render if no activities
   if (activities.length === 0) {
