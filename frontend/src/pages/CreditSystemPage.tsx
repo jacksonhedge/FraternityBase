@@ -171,17 +171,16 @@ const CreditSystemPage = () => {
       icon: Crown,
       color: 'from-cyan-500 to-blue-600',
       bgColor: 'from-cyan-50 to-blue-50',
-      credits: 0,
-      description: 'Enterprise Tier 2 exclusive - complete member data',
+      credits: 100,
+      description: 'Premium full roster access with complete member data',
       features: [
         'Complete member roster with full contact info',
         'All officer details with direct contacts',
         'Historical member data & LinkedIn profiles',
         'Chapter analytics & GPA records',
-        'Only available with Enterprise Tier 2 subscription',
-        '10 Diamond unlocks included per month'
+        'Social media profiles & engagement data',
+        'Enterprise Tier 2: 10 included per month'
       ],
-      badge: 'ENTERPRISE ONLY',
       isPremium: true
     }
   ];
