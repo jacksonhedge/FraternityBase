@@ -281,7 +281,7 @@ const SignUpPage = () => {
               Create Your Account
             </h1>
             <p className="text-gray-600">
-              Get started with 10 free chapter unlocks
+              Start connecting with Greek organizations today
             </p>
           </div>
 
