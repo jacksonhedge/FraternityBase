@@ -11,6 +11,11 @@ const AdminLoginPage = () => {
 
   const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
+  // Debug: Check what password is loaded in production
+  console.log('🔍 Expected password:', ADMIN_PASSWORD);
+  console.log('🔍 Password length:', ADMIN_PASSWORD?.length);
+  console.log('🔍 Password includes #:', ADMIN_PASSWORD?.includes('#'));
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
