@@ -257,6 +257,8 @@ const AdminPageV4 = () => {
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiStatus, setAiStatus] = useState<{ connected: boolean; model: string } | null>(null);
+  const [aiConversationId, setAiConversationId] = useState<string | null>(null);
+  const [aiHistory, setAiHistory] = useState<Array<{role: string; content: string; timestamp: number}>>([]);
   const [editingChapter, setEditingChapter] = useState<Chapter | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -1683,27 +1685,72 @@ const AdminPageV4 = () => {
     }
   };
 
-  // AI Assistant Handler
+  // AI Assistant Handler with conversation memory
   const handleAIAssist = async () => {
+    if (!aiPrompt.trim()) return;
+
     setAiLoading(true);
+    const userMessage = { role: 'user', content: aiPrompt, timestamp: Date.now() };
+    setAiHistory(prev => [...prev, userMessage]);
+
     try {
-      // This would call your backend endpoint that uses Claude API
       const res = await fetch(`${API_URL}/admin/ai-assist`, {
         method: 'POST',
         headers: getAdminHeaders(),
         body: JSON.stringify({
           prompt: aiPrompt,
           context: activeTab,
-          existingData: activeTab === 'colleges' ? universities : activeTab === 'fraternities' ? greekOrgs : []
+          conversationId: aiConversationId,
+          universities: universities.map(u => ({ id: u.id, name: u.name, state: u.state })),
+          greekOrgs: greekOrgs.map(g => ({ id: g.id, name: g.name, organization_type: g.organization_type })),
+          chapters: chapters.map(c => ({
+            id: c.id,
+            chapter_name: c.chapter_name,
+            university_name: c.universities?.name,
+            organization_name: c.greek_organizations?.name
+          })),
+          existingData: {
+            universities,
+            greekOrgs,
+            chapters
+          }
         })
       });
+
       const data = await res.json();
-      setAiResponse(data.response || data.suggestion || 'No response');
+
+      if (data.success) {
+        const assistantMessage = {
+          role: 'assistant',
+          content: data.response || data.suggestion || 'No response',
+          timestamp: Date.now()
+        };
+        setAiHistory(prev => [...prev, assistantMessage]);
+
+        // Store full response object to show tools used
+        setAiResponse(data);
+
+        // Store conversation ID for continuity
+        if (data.conversationId && !aiConversationId) {
+          setAiConversationId(data.conversationId);
+        }
+
+        console.log(`🤖 AI conversation [${data.conversationId}]: ${data.historyLength} messages | Tools: ${data.toolsUsed || 0}`);
+
+        // If tools were used, refresh the data
+        if (data.toolsUsed && data.toolsUsed > 0) {
+          console.log('🔄 AI executed actions - refreshing data...');
+          setTimeout(() => fetchData(), 500); // Refresh after a short delay
+        }
+      } else {
+        setAiResponse('Error: ' + (data.error || 'Could not get AI assistance'));
+      }
     } catch (error) {
       console.error('AI assist error:', error);
-      setAiResponse('Error: Could not get AI assistance');
+      setAiResponse('Error: Could not connect to AI assistant');
     } finally {
       setAiLoading(false);
+      setAiPrompt(''); // Clear input after sending
     }
   };
 
@@ -1751,34 +1798,7 @@ const AdminPageV4 = () => {
         matchesFilter = uni.conference === 'ACC';
       }
 
-      // Debug USC
-      if (uni.name.includes('Southern California')) {
-        console.log('🔍 USC Filter Debug:', {
-          name: uni.name,
-          searchTerm,
-          matchesSearch,
-          collegeFilter,
-          conference: uni.conference,
-          matchesFilter,
-          willShow: matchesSearch && matchesFilter
-        });
-      }
-
-      // Debug West Virginia University
-      if (uni.name.includes('West Virginia')) {
-        console.log('🏈 WVU Filter Debug:', {
-          name: uni.name,
-          id: uni.id,
-          state: uni.state,
-          conference: uni.conference,
-          searchTerm,
-          matchesSearch,
-          collegeFilter,
-          matchesFilter,
-          willShow: matchesSearch && matchesFilter,
-          rawUniObject: uni
-        });
-      }
+      // Debug logs removed to prevent console spam
 
       return matchesSearch && matchesFilter;
     })
@@ -2197,7 +2217,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('credits');
+              navigate('/admin/credits');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -2216,7 +2236,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('intelligence');
+              navigate('/admin/intelligence');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -2235,7 +2255,7 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
-              setActiveTab('analytics');
+              navigate('/admin/analytics');
               setShowForm(false);
               setEditingId(null);
             }}
@@ -4092,6 +4112,106 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                 )}
               </div>
 
+              {/* AI Chapter Verification Tool */}
+              {aiStatus?.connected && (
+                <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        🤖 AI Chapter Verification
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Check chapter info, validate data, find duplicates, or ask about chapter details
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={aiPrompt}
+                        onChange={(e) => setAiPrompt(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey && aiPrompt.trim()) {
+                            handleAIAssist();
+                          }
+                        }}
+                        placeholder='e.g., "Check if Sigma Chi at Penn State is a duplicate" or "Validate the Rutgers Sigma Chi chapter info" or "Find all chapters with missing member counts"'
+                        className="flex-1 px-4 py-3 text-sm border-2 border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                      <button
+                        onClick={handleAIAssist}
+                        disabled={aiLoading || !aiPrompt.trim()}
+                        className="px-6 py-3 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                      >
+                        {aiLoading ? (
+                          <>
+                            <span className="animate-spin">⚙️</span>
+                            <span>Checking...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>✨</span>
+                            <span>Verify</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {aiResponse && (
+                      <div className="p-4 bg-white rounded-lg border-2 border-purple-200">
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <p className="text-xs font-semibold text-purple-700">
+                            AI Response:
+                            {(aiResponse as any).toolsUsed > 0 && (
+                              <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs">
+                                {(aiResponse as any).toolsUsed} action{(aiResponse as any).toolsUsed > 1 ? 's' : ''} executed
+                              </span>
+                            )}
+                          </p>
+                          <button
+                            onClick={() => setAiResponse('')}
+                            className="text-gray-400 hover:text-gray-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <div className="text-sm text-gray-700 whitespace-pre-wrap">{typeof aiResponse === 'string' ? aiResponse : (aiResponse as any).response || JSON.stringify(aiResponse)}</div>
+                      </div>
+                    )}
+
+                    {/* Quick Actions */}
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => setAiPrompt('Check for duplicate chapters')}
+                        className="px-3 py-1.5 bg-white border border-purple-300 text-purple-700 text-xs rounded-full hover:bg-purple-50 transition-colors"
+                      >
+                        Find Duplicates
+                      </button>
+                      <button
+                        onClick={() => setAiPrompt('List chapters with missing member counts')}
+                        className="px-3 py-1.5 bg-white border border-purple-300 text-purple-700 text-xs rounded-full hover:bg-purple-50 transition-colors"
+                      >
+                        Missing Data
+                      </button>
+                      <button
+                        onClick={() => setAiPrompt('Show chapters needing grades')}
+                        className="px-3 py-1.5 bg-white border border-purple-300 text-purple-700 text-xs rounded-full hover:bg-purple-50 transition-colors"
+                      >
+                        Need Grades
+                      </button>
+                      <button
+                        onClick={() => setAiPrompt('Validate all chapter data quality')}
+                        className="px-3 py-1.5 bg-white border border-purple-300 text-purple-700 text-xs rounded-full hover:bg-purple-50 transition-colors"
+                      >
+                        Data Quality Check
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {showForm && (
                 <form onSubmit={handleChapterSubmit} className="mb-6 p-6 bg-gray-50 rounded-lg border-2 border-primary-200">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">{editingId ? 'Edit' : 'Add New'} Chapter</h3>
@@ -4319,22 +4439,23 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase w-16">
+                      <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase w-16">
                         <Eye className="w-4 h-4 mx-auto" />
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fraternity</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">University</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Members</th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Show in Dashboard</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fraternity</th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">University</th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Members</th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date Added</th>
+                      <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase">Dashboard</th>
+                      <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredChapters.length === 0 ? (
                       <tr>
-                        <td colSpan={8} className="px-6 py-12 text-center">
+                        <td colSpan={9} className="px-6 py-12 text-center">
                           <div className="text-gray-400">
                             <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
                             <p className="text-sm font-medium">No chapters found</p>
@@ -4345,7 +4466,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                     ) : (
                       filteredChapters.map((ch) => (
                       <tr key={ch.id} className="hover:bg-gray-50">
-                        <td className="px-3 py-4 whitespace-nowrap text-center">
+                        <td className="px-2 py-4 whitespace-nowrap text-center">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -4361,7 +4482,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                             )}
                           </button>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-3 py-4 whitespace-nowrap">
                           {ch.grade ? (
                             <span className={`px-2 py-1 font-bold rounded text-sm ${
                               ch.grade >= 5.0 ? 'bg-green-100 text-green-800' :
@@ -4375,14 +4496,14 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                             <span className="text-gray-400 text-sm">-</span>
                           )}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                           {ch.greek_organizations?.name || '-'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                           {ch.universities?.name || '-'} ({ch.universities?.state || '-'})
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ch.chapter_name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{ch.chapter_name}</td>
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-600">
                           {(() => {
                             const actualCount = users.filter(u => u.chapter_id === ch.id).length;
                             const targetCount = ch.member_count || 0;
@@ -4405,7 +4526,10 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                             );
                           })()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {ch.created_at ? new Date(ch.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-'}
+                        </td>
+                        <td className="px-3 py-4 whitespace-nowrap text-center">
                           <button
                             onClick={async () => {
                               const newValue = !ch.show_in_dashboard;
@@ -4433,20 +4557,20 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                             />
                           </button>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <td className="px-3 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleToggleFavorite(ch.id, ch.is_favorite || false);
                             }}
-                            className={`mr-3 ${ch.is_favorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}
+                            className={`mr-2 ${ch.is_favorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}
                             title={ch.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
                           >
                             <Star className={`w-4 h-4 inline ${ch.is_favorite ? 'fill-yellow-500' : ''}`} />
                           </button>
                           <button
                             onClick={() => handleChapterEdit(ch)}
-                            className="text-primary-600 hover:text-primary-900 mr-3"
+                            className="text-primary-600 hover:text-primary-900 mr-2"
                           >
                             <Edit className="w-4 h-4 inline" />
                           </button>
@@ -5099,6 +5223,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
           )}
 
           {/* Introduction Requests Tab */}
+          {/* @ts-expect-error TypeScript type narrowing issue - activeTab does include 'intro-requests' */}
           {activeTab === 'intro-requests' && (
             <IntroductionRequestsTab />
           )}

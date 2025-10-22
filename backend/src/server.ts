@@ -2372,9 +2372,16 @@ app.get('/api/chapters', async (req, res) => {
 
     const { data, error } = await query
       .order('is_favorite', { ascending: false, nullsFirst: false })
-      .order('member_count', { ascending: false });
+      .order('member_count', { ascending: false, nullsFirst: false })
+      .range(0, 4999); // Get up to 5000 chapters
 
     if (error) throw error;
+
+    // Debug: Check if Sigma Chi Rutgers is in results
+    const sigmaChiRutgers = data?.find(c => c.id === '6f5a17ae-809a-4fae-87cf-cd7f91b716bb');
+    console.log(`📊 Public /api/chapters returning ${data?.length || 0} chapters`);
+    console.log(`🏈 Sigma Chi Rutgers in results: ${sigmaChiRutgers ? 'YES ✅' : 'NO ❌'}`);
+
     res.json({ success: true, data });
   } catch (error: any) {
     console.error('Error fetching chapters:', error);
@@ -3981,18 +3988,25 @@ app.delete('/api/admin/universities/:id', requireAdmin, async (req, res) => {
 // Chapters
 app.get('/api/admin/chapters', requireAdmin, async (req, res) => {
   try {
+    console.log('🔍 Fetching chapters for admin panel...');
     const { data, error } = await supabaseAdmin
       .from('chapters')
       .select(`
         *,
         greek_organizations(id, name, organization_type),
         universities(id, name, state)
-      `)
+      `, { count: 'exact' })
       .order('is_favorite', { ascending: false, nullsFirst: false })
-      .order('member_count', { ascending: false })
-      .limit(5000); // Increase limit to get all chapters
+      .order('member_count', { ascending: false, nullsFirst: false })
+      .range(0, 4999); // Get first 5000 chapters - NULLs sorted LAST so real data shows first
 
     if (error) throw error;
+
+    // Check if Sigma Chi Rutgers is in the results
+    const sigmaChiRutgers = data?.find(c => c.id === '6f5a17ae-809a-4fae-87cf-cd7f91b716bb');
+    console.log(`📊 Returning ${data?.length || 0} chapters`);
+    console.log(`🏈 Sigma Chi Rutgers in results: ${sigmaChiRutgers ? 'YES ✅' : 'NO ❌'}`);
+
     res.json({ success: true, data });
   } catch (error: any) {
     console.error('Error fetching chapters:', error);
@@ -4285,7 +4299,8 @@ app.get('/api/admin/officers', requireAdmin, async (req, res) => {
   try {
     const { chapter_id } = req.query;
 
-    let query = supabaseAdmin
+    // Fetch both officers AND chapter members
+    let officersQuery = supabaseAdmin
       .from('chapter_officers')
       .select(`
         *,
@@ -4297,16 +4312,41 @@ app.get('/api/admin/officers', requireAdmin, async (req, res) => {
       `)
       .order('created_at', { ascending: false });
 
+    let membersQuery = supabaseAdmin
+      .from('chapter_members')
+      .select(`
+        *,
+        chapters!inner(
+          chapter_name,
+          greek_organizations(name),
+          universities(name)
+        )
+      `)
+      .order('created_at', { ascending: false });
+
     if (chapter_id) {
-      query = query.eq('chapter_id', chapter_id);
+      officersQuery = officersQuery.eq('chapter_id', chapter_id);
+      membersQuery = membersQuery.eq('chapter_id', chapter_id);
     }
 
-    const { data, error } = await query;
+    const [officersResult, membersResult] = await Promise.all([
+      officersQuery,
+      membersQuery
+    ]);
 
-    if (error) throw error;
-    res.json({ success: true, data });
+    if (officersResult.error) throw officersResult.error;
+    if (membersResult.error) throw membersResult.error;
+
+    // Combine officers and members, marking source
+    const officers = (officersResult.data || []).map(o => ({ ...o, source: 'officer' }));
+    const members = (membersResult.data || []).map(m => ({ ...m, source: 'member' }));
+    const combined = [...officers, ...members];
+
+    console.log(`📊 Returning ${officers.length} officers + ${members.length} members = ${combined.length} total`);
+
+    res.json({ success: true, data: combined });
   } catch (error: any) {
-    console.error('Error fetching officers:', error);
+    console.error('Error fetching officers/members:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -4485,7 +4525,13 @@ app.get('/api/admin/ai-status', requireAdmin, async (req, res) => {
   try {
     const hasApiKey = !!process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY !== 'ADD_YOUR_ANTHROPIC_API_KEY_HERE';
 
+    console.log('🤖 AI Status Check:', {
+      hasApiKey,
+      keyLength: process.env.ANTHROPIC_API_KEY?.length || 0
+    });
+
     if (!hasApiKey) {
+      console.log('❌ No API key configured');
       return res.json({
         connected: false,
         model: 'No API Key'
@@ -4500,11 +4546,13 @@ app.get('/api/admin/ai-status', requireAdmin, async (req, res) => {
         messages: [{ role: 'user', content: 'Hi' }]
       });
 
+      console.log('✅ AI connected successfully');
       res.json({
         connected: true,
         model: 'Claude 3.5 Sonnet'
       });
     } catch (error: any) {
+      console.log('❌ AI connection failed:', error.message);
       res.json({
         connected: false,
         model: error.message || 'API Error'
@@ -4517,109 +4565,386 @@ app.get('/api/admin/ai-status', requireAdmin, async (req, res) => {
 });
 
 // AI Assistant endpoint for admin data entry help
+// In-memory conversation history (would be better in Redis or database for production)
+const conversationHistory = new Map<string, Array<{role: string; content: string}>>();
+
 app.post('/api/admin/ai-assist', requireAdmin, async (req, res) => {
   try {
-    const { prompt, context, existingData } = req.body;
+    const { prompt, context, existingData, conversationId, universities, greekOrgs, chapters } = req.body;
 
     if (!prompt) {
       return res.status(400).json({ error: 'Missing prompt' });
     }
 
-    // Build context-aware system message based on the current tab
-    let systemPrompt = '';
-    let dataFormat = '';
+    // Get or create conversation history
+    const sessionId = conversationId || `session-${Date.now()}`;
+    if (!conversationHistory.has(sessionId)) {
+      conversationHistory.set(sessionId, []);
+    }
+    const history = conversationHistory.get(sessionId)!;
 
+    // Build enhanced context-aware system message
+    let systemPrompt = `You are an intelligent data entry assistant for FraternityBase, a fraternity/sorority database management system.
+
+**Your Capabilities:**
+1. Parse unstructured text and organize it into structured database records
+2. Match organizations and universities from partial names
+3. Handle bulk data entry with multiple records at once
+4. Validate emails, phone numbers, and other data formats
+5. Suggest corrections for data inconsistencies
+6. Remember context from previous messages in this conversation
+
+**Current Context:** ${context || 'general'}
+
+**Available Data:**
+- Universities: ${universities ? universities.length : (existingData?.universities?.length || 0)} loaded
+- Greek Organizations: ${greekOrgs ? greekOrgs.length : (existingData?.greekOrgs?.length || 0)} loaded
+- Chapters: ${chapters ? chapters.length : (existingData?.chapters?.length || 0)} loaded
+
+**Instructions:**
+- When adding chapters, ALWAYS try to match existing universities and Greek organizations by name (case-insensitive, fuzzy matching OK)
+- Return data in clean JSON format that can be directly inserted
+- If uncertain about a match, provide multiple options
+- Be conversational but concise
+- Remember previous context in this conversation`;
+
+    let dataFormat = '';
+    let availableContext = '';
+
+    // Build context based on current tab
     switch (context) {
       case 'colleges':
-        systemPrompt = `You are a helpful assistant for adding university data to a fraternity/sorority database.
-The user is working with university records that include: name, location, state, student_count, greek_percentage, website, logo_url.
-Existing universities: ${JSON.stringify(existingData.slice(0, 10).map((u: any) => u.name))}`;
-        dataFormat = `Return a JSON array of university objects with structure:
+        availableContext = universities ? `\nKnown universities (sample): ${universities.slice(0, 20).map((u: any) => u.name).join(', ')}` : '';
+        dataFormat = `For university data, return JSON like:
 {
-  "name": "University Name",
-  "location": "City, State",
-  "state": "State Abbreviation",
-  "student_count": 0,
-  "greek_percentage": 0.0,
-  "website": "https://...",
-  "logo_url": ""
+  "action": "add_universities",
+  "data": [{
+    "name": "University Name",
+    "location": "City",
+    "state": "ST",
+    "student_count": 25000,
+    "conference": "Big Ten",
+    "division": "Division I"
+  }]
 }`;
         break;
 
       case 'fraternities':
-        systemPrompt = `You are a helpful assistant for adding Greek organization data to a database.
-The user is working with fraternity/sorority records that include: name, greek_letters, organization_type, founded_year, total_chapters, website, logo_url, national_website.
-Existing organizations: ${JSON.stringify(existingData.slice(0, 10).map((g: any) => g.name))}`;
-        dataFormat = `Return a JSON array of organization objects with structure:
+        availableContext = greekOrgs ? `\nKnown organizations (sample): ${greekOrgs.slice(0, 20).map((g: any) => g.name).join(', ')}` : '';
+        dataFormat = `For Greek organization data, return JSON like:
 {
-  "name": "Organization Name",
-  "greek_letters": "ΑΒΓ",
-  "organization_type": "fraternity" or "sorority",
-  "founded_year": 1900,
-  "total_chapters": 0,
-  "website": "https://...",
-  "national_website": "https://..."
+  "action": "add_organizations",
+  "data": [{
+    "name": "Organization Name",
+    "greek_letters": "ΑΒΓ",
+    "organization_type": "fraternity",
+    "founded_year": 1900
+  }]
 }`;
         break;
 
       case 'chapters':
-        systemPrompt = `You are a helpful assistant for adding chapter data to a fraternity/sorority database.
-Chapters connect a Greek organization to a university and include: chapter_name, member_count, house_address, status, instagram_handle.`;
-        dataFormat = `Return a JSON array of chapter objects with structure:
+        availableContext = `\nUniversities: ${universities?.slice(0, 10).map((u: any) => `${u.name} (${u.state})`).join(', ') || 'Loading...'}
+Greek Orgs: ${greekOrgs?.slice(0, 10).map((g: any) => g.name).join(', ') || 'Loading...'}`;
+        dataFormat = `For chapter data, return JSON like:
 {
-  "greek_organization_id": "uuid",
-  "university_id": "uuid",
-  "chapter_name": "Alpha Chapter",
-  "member_count": 0,
-  "house_address": "123 Greek Row",
-  "status": "active",
-  "instagram_handle": "@handle"
-}`;
+  "action": "add_chapters",
+  "data": [{
+    "organization_name": "Sigma Chi",  // We'll match this to existing org
+    "university_name": "Penn State",    // We'll match this to existing university
+    "chapter_name": "Alpha Chapter",
+    "member_count": 95,
+    "grade": 5.0,
+    "status": "active"
+  }],
+  "matches": {
+    "organization_name -> greek_organization_id": "uuid-here",
+    "university_name -> university_id": "uuid-here"
+  }
+}
+
+IMPORTANT: Use organization_name and university_name - I'll match them to IDs. Include fuzzy matches if unsure.`;
         break;
 
       case 'officers':
-        systemPrompt = `You are a helpful assistant for adding chapter officer contact data.
-Officers include: name, position, email, phone, linkedin_url, major, graduation_year.`;
-        dataFormat = `Return a JSON array of officer objects with structure:
+        dataFormat = `For officer/roster data, return JSON like:
 {
-  "chapter_id": "uuid",
-  "name": "Full Name",
-  "position": "President",
-  "email": "email@university.edu",
-  "phone": "(555) 123-4567",
-  "linkedin_url": "https://linkedin.com/in/...",
-  "major": "Major",
-  "graduation_year": 2025
+  "action": "add_members",
+  "chapter_info": "Sigma Chi at Penn State",  // For context
+  "data": [{
+    "name": "John Smith",
+    "position": "President",
+    "email": "john@psu.edu",
+    "phone": "555-0100",
+    "graduation_year": 2026
+  }]
 }`;
         break;
-
-      default:
-        systemPrompt = 'You are a helpful assistant for managing fraternity and sorority data.';
-        dataFormat = 'Provide helpful suggestions or data in JSON format if applicable.';
     }
 
-    // Call Claude API
-    const message = await anthropic.messages.create({
+    // Define tools for the AI to use
+    const tools = [
+      {
+        name: 'add_university',
+        description: 'Add a new university to the database',
+        input_schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'University name' },
+            location: { type: 'string', description: 'City location' },
+            state: { type: 'string', description: '2-letter state code' },
+            student_count: { type: 'number', description: 'Student population' },
+            conference: { type: 'string', description: 'Athletic conference (e.g., SEC, BIG 10)' },
+            division: { type: 'string', description: 'NCAA division' }
+          },
+          required: ['name', 'state']
+        }
+      },
+      {
+        name: 'add_greek_organization',
+        description: 'Add a new fraternity or sorority',
+        input_schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'Organization name (e.g., Sigma Chi)' },
+            greek_letters: { type: 'string', description: 'Greek letters (e.g., ΣΧ)' },
+            organization_type: { type: 'string', enum: ['fraternity', 'sorority'], description: 'Type of organization' },
+            founded_year: { type: 'number', description: 'Year founded' }
+          },
+          required: ['name', 'organization_type']
+        }
+      },
+      {
+        name: 'add_chapter',
+        description: 'Add a new chapter. Will automatically match organization and university names to existing records.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            organization_name: { type: 'string', description: 'Name of the Greek organization (will be matched to existing)' },
+            university_name: { type: 'string', description: 'Name of the university (will be matched to existing)' },
+            chapter_name: { type: 'string', description: 'Chapter designation (e.g., Alpha, Iota Psi)' },
+            member_count: { type: 'number', description: 'Number of members' },
+            grade: { type: 'number', description: 'Quality grade from 1.0 to 5.0' },
+            status: { type: 'string', enum: ['active', 'inactive', 'suspended'], description: 'Chapter status' }
+          },
+          required: ['organization_name', 'university_name']
+        }
+      },
+      {
+        name: 'add_chapter_members',
+        description: 'Add roster members to a chapter',
+        input_schema: {
+          type: 'object',
+          properties: {
+            chapter_identifier: { type: 'string', description: 'Chapter identifier like "Sigma Chi at Penn State"' },
+            members: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                  position: { type: 'string', description: 'Leadership position if any' },
+                  email: { type: 'string' },
+                  phone: { type: 'string' },
+                  graduation_year: { type: 'number' }
+                },
+                required: ['name']
+              }
+            }
+          },
+          required: ['chapter_identifier', 'members']
+        }
+      },
+      {
+        name: 'update_chapter_grade',
+        description: 'Update the grade/rating for a chapter',
+        input_schema: {
+          type: 'object',
+          properties: {
+            chapter_identifier: { type: 'string', description: 'Chapter identifier like "Sigma Chi at Penn State"' },
+            grade: { type: 'number', description: 'New grade from 1.0 to 5.0' }
+          },
+          required: ['chapter_identifier', 'grade']
+        }
+      },
+      {
+        name: 'find_duplicates',
+        description: 'Search for duplicate chapters in the database',
+        input_schema: {
+          type: 'object',
+          properties: {
+            search_type: { type: 'string', enum: ['all', 'by_organization', 'by_university'] }
+          }
+        }
+      },
+      {
+        name: 'validate_chapter_data',
+        description: 'Validate chapter data quality (missing fields, incorrect formats, etc.)',
+        input_schema: {
+          type: 'object',
+          properties: {
+            validation_type: { type: 'string', enum: ['missing_data', 'missing_grades', 'all'] }
+          }
+        }
+      }
+    ];
+
+    // Add user message to history
+    history.push({ role: 'user', content: prompt });
+
+    // Build messages array with history
+    const messages = history.map(msg => ({
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content
+    }));
+
+    // Call Claude API with conversation history and tools
+    let message = await anthropic.messages.create({
       model: 'claude-3-5-sonnet-20241022',
       max_tokens: 4096,
-      messages: [{
-        role: 'user',
-        content: `${systemPrompt}
-
-${dataFormat}
-
-User request: ${prompt}
-
-If the user is asking to add data, provide a properly formatted JSON array that can be directly inserted into the database.
-If they're asking for suggestions or information, provide a helpful text response.
-Be concise and accurate.`
-      }]
+      system: systemPrompt + availableContext + '\n\n' + dataFormat + '\n\nYou have access to tools to directly modify the database. Use them when the user asks you to add, update, or check data.',
+      messages,
+      tools
     });
 
-    const response = message.content[0].type === 'text' ? message.content[0].text : '';
+    let response = '';
+    const toolResults: string[] = [];
 
-    console.log(`🤖 AI Assist: ${prompt.substring(0, 50)}...`);
-    res.json({ success: true, response, suggestion: response });
+    // Tool use loop - execute tools and get final response
+    while (message.stop_reason === 'tool_use') {
+      const toolUse = message.content.find(block => block.type === 'tool_use');
+      if (!toolUse || toolUse.type !== 'tool_use') break;
+
+      console.log(`🔧 AI using tool: ${toolUse.name} with input:`, toolUse.input);
+
+      let toolResult: any = { success: false, error: 'Tool not implemented' };
+
+      // Execute the requested tool
+      try {
+        switch (toolUse.name) {
+          case 'add_university':
+            const uniData = await supabaseAdmin.from('universities').insert(toolUse.input).select().single();
+            toolResult = { success: !uniData.error, data: uniData.data, error: uniData.error?.message };
+            break;
+
+          case 'add_greek_organization':
+            const orgData = await supabaseAdmin.from('greek_organizations').insert(toolUse.input).select().single();
+            toolResult = { success: !orgData.error, data: orgData.data, error: orgData.error?.message };
+            break;
+
+          case 'add_chapter':
+            // Match organization and university names
+            const { organization_name, university_name, ...chapterFields } = toolUse.input;
+            const org = greekOrgs?.find(g => g.name.toLowerCase().includes(organization_name.toLowerCase()));
+            const uni = universities?.find(u => u.name.toLowerCase().includes(university_name.toLowerCase()));
+
+            if (!org || !uni) {
+              toolResult = { success: false, error: `Could not match: ${!org ? organization_name : university_name}` };
+            } else {
+              const chData = await supabaseAdmin.from('chapters').insert({
+                greek_organization_id: org.id,
+                university_id: uni.id,
+                is_viewable: true,
+                ...chapterFields
+              }).select().single();
+              toolResult = { success: !chData.error, data: chData.data, error: chData.error?.message };
+            }
+            break;
+
+          case 'update_chapter_grade':
+            // Find chapter by identifier
+            const chapterMatch = chapters?.find(c =>
+              `${c.greek_organizations?.name} at ${c.universities?.name}`.toLowerCase().includes(toolUse.input.chapter_identifier.toLowerCase())
+            );
+            if (!chapterMatch) {
+              toolResult = { success: false, error: 'Chapter not found' };
+            } else {
+              const gradeData = await supabaseAdmin.from('chapters').update({ grade: toolUse.input.grade }).eq('id', chapterMatch.id).select().single();
+              toolResult = { success: !gradeData.error, data: gradeData.data, error: gradeData.error?.message };
+            }
+            break;
+
+          case 'find_duplicates':
+            // Find duplicate chapters
+            const duplicates: any[] = [];
+            const seen = new Set();
+            chapters?.forEach(ch => {
+              const key = `${ch.greek_organizations?.name}|${ch.universities?.name}`;
+              if (seen.has(key)) {
+                duplicates.push(ch);
+              } else {
+                seen.add(key);
+              }
+            });
+            toolResult = { success: true, duplicates: duplicates.length, data: duplicates };
+            break;
+
+          case 'validate_chapter_data':
+            const issues: any[] = [];
+            if (toolUse.input.validation_type === 'missing_data' || toolUse.input.validation_type === 'all') {
+              chapters?.filter(c => !c.member_count).forEach(c => issues.push({ chapter: c.chapter_name, issue: 'missing member_count' }));
+            }
+            if (toolUse.input.validation_type === 'missing_grades' || toolUse.input.validation_type === 'all') {
+              chapters?.filter(c => !c.grade).forEach(c => issues.push({ chapter: c.chapter_name, issue: 'missing grade' }));
+            }
+            toolResult = { success: true, issues_found: issues.length, issues };
+            break;
+        }
+
+        toolResults.push(`Tool ${toolUse.name}: ${JSON.stringify(toolResult)}`);
+      } catch (error: any) {
+        toolResult = { success: false, error: error.message };
+        console.error(`❌ Tool execution error:`, error);
+      }
+
+      // Continue conversation with tool result
+      messages.push({
+        role: 'assistant',
+        content: message.content
+      });
+      messages.push({
+        role: 'user',
+        content: [{
+          type: 'tool_result',
+          tool_use_id: toolUse.id,
+          content: JSON.stringify(toolResult)
+        }]
+      });
+
+      // Get next response from Claude
+      message = await anthropic.messages.create({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 4096,
+        system: systemPrompt + availableContext + '\n\n' + dataFormat,
+        messages,
+        tools
+      });
+    }
+
+    // Extract final text response
+    response = message.content.find(block => block.type === 'text')?.type === 'text'
+      ? (message.content.find(block => block.type === 'text') as any).text
+      : 'Task completed successfully!';
+
+    // Add final assistant response to history
+    history.push({ role: 'assistant', content: response });
+
+    // Keep only last 20 messages to prevent token overflow
+    if (history.length > 20) {
+      history.splice(0, history.length - 20);
+    }
+
+    console.log(`🤖 AI Assist [${sessionId}]: ${prompt.substring(0, 50)}... | Tools used: ${toolResults.length}`);
+
+    res.json({
+      success: true,
+      response,
+      suggestion: response,
+      conversationId: sessionId,
+      historyLength: history.length,
+      toolsUsed: toolResults.length,
+      actions: toolResults
+    });
   } catch (error: any) {
     console.error('Error with AI assist:', error);
     res.status(500).json({ error: error.message || 'AI assist failed' });
@@ -5916,6 +6241,20 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
     let skippedCount = 0;
     const errors: string[] = [];
 
+    // Officer positions to detect (case-insensitive)
+    const OFFICER_POSITIONS = [
+      'president', 'vice president', 'vp', 'treasurer', 'secretary',
+      'social chair', 'risk manager', 'recruitment chair', 'rush chair',
+      'philanthropy chair', 'pr chair', 'ims chair', 'scholarship chair',
+      'house manager', 'steward', 'athletics chair', 'alumni relations'
+    ];
+
+    const isOfficerPosition = (position: string | null): boolean => {
+      if (!position) return false;
+      const posLower = position.toLowerCase();
+      return OFFICER_POSITIONS.some(officerPos => posLower.includes(officerPos));
+    };
+
     // Process each record
     for (const record of records) {
       try {
@@ -5926,22 +6265,27 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
           continue;
         }
 
+        const position = record.position?.trim() || null;
+        const isOfficer = isOfficerPosition(position);
+
         // Prepare member data
         const memberData = {
           chapter_id: chapterId,
           name: record.name.trim(),
-          position: record.position?.trim() || null,
+          position: position,
           email: record.email?.trim() || null,
           phone: record.phone?.trim() || null,
           linkedin_url: record.linkedin?.trim() || null,
           graduation_year: record.graduation_year ? parseInt(record.graduation_year) : null,
           major: record.major?.trim() || null,
-          member_type: record.member_type?.trim() || 'member',
+          member_type: record.member_type?.trim() || (isOfficer ? 'officer' : 'member'),
           is_primary_contact: record.is_primary_contact === 'true',
           updated_at: new Date().toISOString()
         };
 
         // Upsert (insert or update if email already exists for this chapter)
+        let memberId: string | null = null;
+
         if (memberData.email) {
           // Check if member exists with this email in this chapter
           const { data: existing } = await supabaseAdmin
@@ -5963,31 +6307,68 @@ app.post('/api/admin/chapters/:chapterId/upload-roster', requireAdmin, upload.si
               skippedCount++;
             } else {
               updatedCount++;
+              memberId = existing.id;
             }
           } else {
             // Insert new
-            const { error: insertError } = await supabaseAdmin
+            const { data: newMember, error: insertError } = await supabaseAdmin
               .from('chapter_members')
-              .insert(memberData);
+              .insert(memberData)
+              .select('id')
+              .single();
 
             if (insertError) {
               errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
               skippedCount++;
             } else {
               insertedCount++;
+              memberId = newMember?.id || null;
             }
           }
         } else {
           // No email - just insert (can't check for duplicates)
-          const { error: insertError } = await supabaseAdmin
+          const { data: newMember, error: insertError } = await supabaseAdmin
             .from('chapter_members')
-            .insert(memberData);
+            .insert(memberData)
+            .select('id')
+            .single();
 
           if (insertError) {
             errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
             skippedCount++;
           } else {
             insertedCount++;
+            memberId = newMember?.id || null;
+          }
+        }
+
+        // If this is an officer, also insert/update in chapter_officers table
+        if (memberId && isOfficer && position) {
+          const officerData = {
+            chapter_id: chapterId,
+            name: memberData.name,
+            position: position,
+            email: memberData.email,
+            phone: memberData.phone,
+            linkedin_url: memberData.linkedin_url,
+            updated_at: new Date().toISOString()
+          };
+
+          // Try to upsert officer (update if exists, insert if new)
+          if (memberData.email) {
+            await supabaseAdmin
+              .from('chapter_officers')
+              .upsert(officerData, {
+                onConflict: 'chapter_id,email',
+                ignoreDuplicates: false
+              });
+          } else {
+            await supabaseAdmin
+              .from('chapter_officers')
+              .insert({
+                ...officerData,
+                created_at: new Date().toISOString()
+              });
           }
         }
       } catch (recordError: any) {
@@ -6073,6 +6454,20 @@ app.post('/api/admin/chapters/:chapterId/paste-roster', requireAdmin, async (req
     let skippedCount = 0;
     const errors: string[] = [];
 
+    // Officer positions to detect (case-insensitive)
+    const OFFICER_POSITIONS = [
+      'president', 'vice president', 'vp', 'treasurer', 'secretary',
+      'social chair', 'risk manager', 'recruitment chair', 'rush chair',
+      'philanthropy chair', 'pr chair', 'ims chair', 'scholarship chair',
+      'house manager', 'steward', 'athletics chair', 'alumni relations'
+    ];
+
+    const isOfficerPosition = (position: string | null): boolean => {
+      if (!position) return false;
+      const posLower = position.toLowerCase();
+      return OFFICER_POSITIONS.some(officerPos => posLower.includes(officerPos));
+    };
+
     // Process each record
     for (const record of records) {
       try {
@@ -6083,22 +6478,27 @@ app.post('/api/admin/chapters/:chapterId/paste-roster', requireAdmin, async (req
           continue;
         }
 
+        const position = record.position?.trim() || null;
+        const isOfficer = isOfficerPosition(position);
+
         // Prepare member data
         const memberData = {
           chapter_id: chapterId,
           name: record.name.trim(),
-          position: record.position?.trim() || null,
+          position: position,
           email: record.email?.trim() || null,
           phone: record.phone?.trim() || null,
           linkedin_url: record.linkedin?.trim() || null,
           graduation_year: record.graduation_year ? parseInt(record.graduation_year) : null,
           major: record.major?.trim() || null,
-          member_type: record.member_type?.trim() || 'member',
+          member_type: record.member_type?.trim() || (isOfficer ? 'officer' : 'member'),
           is_primary_contact: record.is_primary_contact?.toLowerCase() === 'true',
           updated_at: new Date().toISOString()
         };
 
         // Upsert (insert or update if email already exists for this chapter)
+        let memberId: string | null = null;
+
         if (memberData.email) {
           // Check if member exists with this email in this chapter
           const { data: existing } = await supabaseAdmin
@@ -6120,31 +6520,68 @@ app.post('/api/admin/chapters/:chapterId/paste-roster', requireAdmin, async (req
               skippedCount++;
             } else {
               updatedCount++;
+              memberId = existing.id;
             }
           } else {
             // Insert new
-            const { error: insertError } = await supabaseAdmin
+            const { data: newMember, error: insertError } = await supabaseAdmin
               .from('chapter_members')
-              .insert(memberData);
+              .insert(memberData)
+              .select('id')
+              .single();
 
             if (insertError) {
               errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
               skippedCount++;
             } else {
               insertedCount++;
+              memberId = newMember?.id || null;
             }
           }
         } else {
           // No email - just insert (can't check for duplicates)
-          const { error: insertError } = await supabaseAdmin
+          const { data: newMember, error: insertError } = await supabaseAdmin
             .from('chapter_members')
-            .insert(memberData);
+            .insert(memberData)
+            .select('id')
+            .single();
 
           if (insertError) {
             errors.push(`Error inserting ${memberData.name}: ${insertError.message}`);
             skippedCount++;
           } else {
             insertedCount++;
+            memberId = newMember?.id || null;
+          }
+        }
+
+        // If this is an officer, also insert/update in chapter_officers table
+        if (memberId && isOfficer && position) {
+          const officerData = {
+            chapter_id: chapterId,
+            name: memberData.name,
+            position: position,
+            email: memberData.email,
+            phone: memberData.phone,
+            linkedin_url: memberData.linkedin_url,
+            updated_at: new Date().toISOString()
+          };
+
+          // Try to upsert officer (update if exists, insert if new)
+          if (memberData.email) {
+            await supabaseAdmin
+              .from('chapter_officers')
+              .upsert(officerData, {
+                onConflict: 'chapter_id,email',
+                ignoreDuplicates: false
+              });
+          } else {
+            await supabaseAdmin
+              .from('chapter_officers')
+              .insert({
+                ...officerData,
+                created_at: new Date().toISOString()
+              });
           }
         }
       } catch (recordError: any) {
