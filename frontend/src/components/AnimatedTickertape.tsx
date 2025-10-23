@@ -25,7 +25,6 @@ interface AnimatedTickertapeProps {
 const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
   const tickertapeRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
   console.log('[TickerTape] Received activities:', activities);
@@ -52,19 +51,7 @@ const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
     };
   }, [activities]);
 
-  const handleMouseEnter = () => {
-    setIsPaused(true);
-    if (animationRef.current) {
-      animationRef.current.pause();
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setIsPaused(false);
-    if (animationRef.current) {
-      animationRef.current.play();
-    }
-  };
+  // Removed pause on hover - ticker keeps scrolling continuously
 
   const handleItemHover = (index: number) => {
     setHoveredItem(index);
@@ -123,11 +110,7 @@ const AnimatedTickertape = ({ activities }: AnimatedTickertapeProps) => {
 
   return (
     <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg overflow-hidden">
-      <div
-        className="relative h-12 flex items-center"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
+      <div className="relative h-12 flex items-center">
         {/* Gradient fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-blue-600 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-purple-600 to-transparent z-10 pointer-events-none" />
