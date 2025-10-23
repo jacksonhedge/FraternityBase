@@ -3031,7 +3031,11 @@ const AdminPageV4 = () => {
                         });
 
                         if (response.ok) {
-                          alert(`Successfully updated to ${newTier} tier`);
+                          const result = await response.json();
+                          const benefitsMsg = result.benefits && result.benefits.length > 0
+                            ? `\n\nAuto-provisioned:\n• ${result.benefits.join('\n• ')}`
+                            : '';
+                          alert(`Successfully updated to ${newTier} tier!${benefitsMsg}`);
                           await fetchCompanyDetails(selectedCompany.id);
                         } else {
                           const result = await response.json();

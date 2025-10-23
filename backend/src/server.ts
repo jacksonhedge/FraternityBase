@@ -3621,16 +3621,73 @@ app.post('/api/admin/companies/:id/subscription-tier', requireAdmin, async (req,
       .eq('id', id)
       .single();
 
-    // Update subscription tier in account_balance
+    // Define tier benefits
+    const tierBenefits: any = {
+      trial: {
+        credits: 0,
+        monthly_unlocks_5_star: 0,
+        monthly_unlocks_4_star: 0,
+        unlocks_5_star_remaining: 0,
+        unlocks_4_star_remaining: 0
+      },
+      monthly: {
+        credits: 50, // Team tier gets 50 automatic credits/month
+        monthly_unlocks_5_star: 0,
+        monthly_unlocks_4_star: 0,
+        unlocks_5_star_remaining: 0,
+        unlocks_4_star_remaining: 0
+      },
+      enterprise: {
+        credits: 100, // Enterprise gets 100 monthly credits
+        monthly_unlocks_5_star: 3, // 3 Premium Unlocks (5.0⭐)
+        monthly_unlocks_4_star: 25, // 25 Quality Unlocks (4.0-4.9⭐)
+        unlocks_5_star_remaining: 3, // Start with full allowance
+        unlocks_4_star_remaining: 25 // Start with full allowance
+      }
+    };
+
+    const benefits = tierBenefits[tier];
+
+    // Get current balance to add credits to existing balance
+    const { data: currentBalance } = await supabaseAdmin
+      .from('account_balance')
+      .select('balance_credits')
+      .eq('company_id', id)
+      .single();
+
+    // Update subscription tier and add benefits
+    const updateData: any = {
+      subscription_tier: tier,
+      balance_credits: (currentBalance?.balance_credits || 0) + benefits.credits,
+      monthly_unlocks_5_star: benefits.monthly_unlocks_5_star,
+      monthly_unlocks_4_star: benefits.monthly_unlocks_4_star,
+      unlocks_5_star_remaining: benefits.unlocks_5_star_remaining,
+      unlocks_4_star_remaining: benefits.unlocks_4_star_remaining
+    };
+
     const { error } = await supabaseAdmin
       .from('account_balance')
-      .update({ subscription_tier: tier })
+      .update(updateData)
       .eq('company_id', id);
 
     if (error) throw error;
 
+    // Log the benefits granted
+    const benefitsLog = [];
+    if (benefits.credits > 0) benefitsLog.push(`${benefits.credits} credits`);
+    if (benefits.monthly_unlocks_5_star > 0) benefitsLog.push(`${benefits.monthly_unlocks_5_star} 5.0⭐ unlocks/month`);
+    if (benefits.monthly_unlocks_4_star > 0) benefitsLog.push(`${benefits.monthly_unlocks_4_star} 4.0⭐ unlocks/month`);
+
     console.log(`🎫 Updated subscription tier for ${company?.name || id} to: ${tier.toUpperCase()}`);
-    res.json({ success: true, message: `Updated subscription tier to ${tier}` });
+    if (benefitsLog.length > 0) {
+      console.log(`💰 Auto-provisioned: ${benefitsLog.join(', ')}`);
+    }
+
+    res.json({
+      success: true,
+      message: `Updated subscription tier to ${tier}`,
+      benefits: benefitsLog.length > 0 ? benefitsLog : ['No automatic benefits for this tier']
+    });
   } catch (error: any) {
     console.error('❌ Error updating subscription tier:', error);
     res.status(500).json({ error: error.message });
