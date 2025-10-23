@@ -3049,8 +3049,9 @@ const AdminPageV4 = () => {
                     className="mt-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-semibold bg-white hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="trial">Trial</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="enterprise">Enterprise</option>
+                    <option value="monthly">Monthly (Team)</option>
+                    <option value="enterprise">Enterprise Tier 1</option>
+                    <option value="super_enterprise">Enterprise Tier 2</option>
                   </select>
                 </div>
               </div>

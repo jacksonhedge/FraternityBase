@@ -3610,7 +3610,7 @@ app.post('/api/admin/companies/:id/subscription-tier', requireAdmin, async (req,
     const { id } = req.params;
     const { tier } = req.body;
 
-    if (!['trial', 'monthly', 'enterprise'].includes(tier)) {
+    if (!['trial', 'monthly', 'enterprise', 'super_enterprise'].includes(tier)) {
       return res.status(400).json({ error: 'Invalid tier value' });
     }
 
@@ -3638,11 +3638,18 @@ app.post('/api/admin/companies/:id/subscription-tier', requireAdmin, async (req,
         unlocks_4_star_remaining: 0
       },
       enterprise: {
-        credits: 100, // Enterprise gets 100 monthly credits
+        credits: 100, // Enterprise Tier 1 gets 100 monthly credits
         monthly_unlocks_5_star: 3, // 3 Premium Unlocks (5.0⭐)
         monthly_unlocks_4_star: 25, // 25 Quality Unlocks (4.0-4.9⭐)
         unlocks_5_star_remaining: 3, // Start with full allowance
         unlocks_4_star_remaining: 25 // Start with full allowance
+      },
+      super_enterprise: {
+        credits: 500, // Enterprise Tier 2 gets 500 monthly credits
+        monthly_unlocks_5_star: 50, // 50 Premium Unlocks (5.0⭐)
+        monthly_unlocks_4_star: 100, // Unlimited Quality unlocks (set to 100)
+        unlocks_5_star_remaining: 50, // Start with full allowance
+        unlocks_4_star_remaining: 100 // Start with full allowance
       }
     };
 
