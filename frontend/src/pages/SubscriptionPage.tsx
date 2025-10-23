@@ -233,9 +233,36 @@ const SubscriptionPage = () => {
           </p>
 
           {/* Current Subscription Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full shadow-md border border-gray-200">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full shadow-md border border-gray-200 mb-4">
             <span className="text-xs text-gray-600">Current Plan:</span>
             <span className="text-xs font-bold text-gray-900 capitalize">{currentTier}</span>
+          </div>
+
+          {/* Billing Period Toggle */}
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <button
+              onClick={() => setBillingPeriod('monthly')}
+              className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${
+                billingPeriod === 'monthly'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                  : 'bg-white text-gray-600 border border-gray-300 hover:border-gray-400'
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setBillingPeriod('annual')}
+              className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 relative ${
+                billingPeriod === 'annual'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                  : 'bg-white text-gray-600 border border-gray-300 hover:border-gray-400'
+              }`}
+            >
+              Annual
+              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                Save 10%
+              </span>
+            </button>
           </div>
         </div>
 
@@ -285,14 +312,23 @@ const SubscriptionPage = () => {
                   {/* Price */}
                   <div className="mb-1">
                     {typeof tier.price === 'number' ? (
-                      <div className="flex items-baseline">
-                        <span className="text-2xl font-bold text-gray-900">
-                          ${tier.price}
-                        </span>
-                        {tier.price > 0 && (
-                          <span className="text-gray-600 ml-1 text-sm">
-                            /mo
+                      <div>
+                        <div className="flex items-baseline">
+                          <span className="text-2xl font-bold text-gray-900">
+                            ${billingPeriod === 'annual' && tier.price > 0
+                              ? (tier.price * 0.9).toFixed(2)
+                              : tier.price}
                           </span>
+                          {tier.price > 0 && (
+                            <span className="text-gray-600 ml-1 text-sm">
+                              /mo
+                            </span>
+                          )}
+                        </div>
+                        {billingPeriod === 'annual' && tier.price > 0 && (
+                          <div className="text-[10px] text-gray-500 mt-0.5">
+                            ${(tier.price * 12 * 0.9).toFixed(2)} billed annually
+                          </div>
                         )}
                       </div>
                     ) : (
