@@ -252,10 +252,10 @@ const MyUnlockedPage = () => {
                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
 
                     {/* Rating Badge - Top Left */}
-                    {chapter.chapterScore && (
+                    {chapter.chapterScore !== null && chapter.chapterScore !== undefined && (
                       <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg border border-white/50">
                         <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                        <span className="text-sm font-bold text-gray-900">{chapter.chapterScore.toFixed(1)}</span>
+                        <span className="text-sm font-bold text-gray-900">{Number(chapter.chapterScore).toFixed(1)}</span>
                       </div>
                     )}
 
