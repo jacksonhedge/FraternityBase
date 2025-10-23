@@ -1173,9 +1173,11 @@ app.get('/api/chapters/unlocked', async (req, res) => {
       .single();
 
     if (profileError || !profile?.company_id) {
-      console.error('Profile fetch error:', profileError);
+      console.error('[Unlocked Chapters] Profile fetch error for user:', user.id, profileError);
       return res.status(404).json({ error: 'User profile not found' });
     }
+
+    console.log(`[Unlocked Chapters] Fetching unlocks for company_id: ${profile.company_id}, user: ${user.email}`);
 
     // Query all unlocks for this company with chapter details
     const { data, error } = await supabaseAdmin
@@ -1203,9 +1205,11 @@ app.get('/api/chapters/unlocked', async (req, res) => {
       .eq('company_id', profile.company_id);
 
     if (error) {
-      console.error('Error fetching unlocked chapters:', error);
+      console.error('[Unlocked Chapters] Error fetching unlocked chapters:', error);
       return res.status(500).json({ error: 'Failed to fetch unlocked chapters' });
     }
+
+    console.log(`[Unlocked Chapters] Found ${data?.length || 0} unlocks for company ${profile.company_id}`);
 
     // Filter out expired unlocks (if expires_at is set and in the past)
     const validUnlocks = data?.filter(unlock =>
