@@ -3387,7 +3387,7 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
     // Get account balance (use admin client to bypass RLS)
     const { data: accountBalance, error: balanceError } = await supabaseAdmin
       .from('account_balance')
-      .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier')
+      .select('balance_credits, balance_dollars, lifetime_spent_credits, lifetime_spent_dollars, lifetime_earned_credits, lifetime_added_dollars, subscription_tier, monthly_unlocks_5_star, monthly_unlocks_4_star, unlocks_5_star_remaining, unlocks_4_star_remaining')
       .eq('company_id', id)
       .single();
 
@@ -3406,7 +3406,11 @@ app.get('/api/admin/companies/:id', requireAdmin, async (req, res) => {
         total_spent: accountBalance?.lifetime_spent_credits || 0,
         credits_balance: accountBalance?.balance_credits || 0,
         lifetime_spent: accountBalance?.lifetime_spent_credits || 0,
-        lifetime_added: accountBalance?.lifetime_earned_credits || 0
+        lifetime_added: accountBalance?.lifetime_earned_credits || 0,
+        monthly_unlocks_5_star: accountBalance?.monthly_unlocks_5_star || 0,
+        monthly_unlocks_4_star: accountBalance?.monthly_unlocks_4_star || 0,
+        unlocks_5_star_remaining: accountBalance?.unlocks_5_star_remaining || 0,
+        unlocks_4_star_remaining: accountBalance?.unlocks_4_star_remaining || 0
       }
     });
   } catch (error: any) {
