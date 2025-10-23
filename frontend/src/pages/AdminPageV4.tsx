@@ -47,6 +47,7 @@ import RoadmapAdmin from '../components/RoadmapAdmin';
 import AdminNotificationCenter from '../components/AdminNotificationCenter';
 import UnlocksTab from '../components/admin/UnlocksTab';
 import IntroductionRequestsTab from '../components/admin/IntroductionRequestsTab';
+import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -3731,6 +3732,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Top Colleges</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Greek Letters</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
@@ -3741,7 +3743,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredGreekOrgs.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="px-6 py-12 text-center">
+                        <td colSpan={6} className="px-6 py-12 text-center">
                           <div className="text-gray-400">
                             <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
                             <p className="text-sm font-medium">No fraternities or sororities found</p>
@@ -3752,6 +3754,27 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                     ) : (
                       filteredGreekOrgs.map((org) => (
                         <tr key={org.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-1">
+                              {org.topColleges && org.topColleges.length > 0 ? (
+                                org.topColleges.map((college: any, idx: number) => (
+                                  <div key={college.id} className="relative group">
+                                    <img
+                                      src={college.logo_url || getCollegeLogoWithFallback(college.name)}
+                                      alt={college.name}
+                                      className="w-8 h-8 rounded-full object-contain bg-white border border-gray-200"
+                                      title={`${college.name} (${college.chapterCount} chapter${college.chapterCount !== 1 ? 's' : ''})`}
+                                    />
+                                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                      {college.name} ({college.chapterCount})
+                                    </div>
+                                  </div>
+                                ))
+                              ) : (
+                                <span className="text-xs text-gray-400">No chapters</span>
+                              )}
+                            </div>
+                          </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">{org.name}</div>
                           </td>

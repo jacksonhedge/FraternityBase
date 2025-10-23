@@ -3904,7 +3904,51 @@ app.get('/api/admin/greek-organizations', requireAdmin, async (req, res) => {
       .order('name', { ascending: true });
 
     if (error) throw error;
-    res.json({ success: true, data });
+
+    // For each greek org, fetch top 3 colleges by chapter count
+    const orgsWithColleges = await Promise.all(
+      (data || []).map(async (org) => {
+        const { data: chaptersData } = await supabase
+          .from('chapters')
+          .select(`
+            id,
+            university_id,
+            universities (
+              id,
+              name,
+              logo_url
+            )
+          `)
+          .eq('greek_organization_id', org.id)
+          .not('universities', 'is', null);
+
+        // Group by university and count chapters
+        const universityChapterCounts = (chaptersData || []).reduce((acc: any, chapter: any) => {
+          if (!chapter.universities) return acc;
+          const uniId = chapter.universities.id;
+          if (!acc[uniId]) {
+            acc[uniId] = {
+              ...chapter.universities,
+              chapterCount: 0
+            };
+          }
+          acc[uniId].chapterCount++;
+          return acc;
+        }, {});
+
+        // Get top 3 colleges by chapter count
+        const topColleges = Object.values(universityChapterCounts)
+          .sort((a: any, b: any) => b.chapterCount - a.chapterCount)
+          .slice(0, 3);
+
+        return {
+          ...org,
+          topColleges
+        };
+      })
+    );
+
+    res.json({ success: true, data: orgsWithColleges });
   } catch (error: any) {
     console.error('Error fetching greek organizations:', error);
     res.status(500).json({ error: error.message });
