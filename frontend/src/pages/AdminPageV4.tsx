@@ -3069,6 +3069,7 @@ const AdminPageV4 = () => {
                       defaultValue={(selectedCompany as any).monthly_unlocks_5_star || 0}
                       onBlur={async (e) => {
                         const newLimit = parseInt(e.target.value) || 0;
+                        console.log('[Unlock Limits] 🎯 Updating 5.0⭐ limit to:', newLimit);
                         try {
                           const response = await fetch(`${API_URL}/admin/companies/${selectedCompany.id}/unlock-limits`, {
                             method: 'PATCH',
@@ -3078,15 +3079,20 @@ const AdminPageV4 = () => {
                             })
                           });
 
+                          console.log('[Unlock Limits] Response status:', response.status);
+                          const result = await response.json();
+                          console.log('[Unlock Limits] Response data:', result);
+
                           if (response.ok) {
                             alert(`Successfully updated 5.0⭐ unlock limit to ${newLimit}/month`);
+                            console.log('[Unlock Limits] ✅ Fetching updated company details...');
                             await fetchCompanyDetails(selectedCompany.id);
+                            console.log('[Unlock Limits] ✅ Company details refreshed');
                           } else {
-                            const result = await response.json();
                             alert(`Failed to update limit: ${result.error || 'Unknown error'}`);
                           }
                         } catch (error) {
-                          console.error('Error updating unlock limit:', error);
+                          console.error('[Unlock Limits] ❌ Error:', error);
                           alert('Error updating unlock limit');
                         }
                       }}
@@ -3108,6 +3114,7 @@ const AdminPageV4 = () => {
                       defaultValue={(selectedCompany as any).monthly_unlocks_4_star || 0}
                       onBlur={async (e) => {
                         const newLimit = parseInt(e.target.value) || 0;
+                        console.log('[Unlock Limits] 🎯 Updating 4.0⭐ limit to:', newLimit);
                         try {
                           const response = await fetch(`${API_URL}/admin/companies/${selectedCompany.id}/unlock-limits`, {
                             method: 'PATCH',
@@ -3117,15 +3124,20 @@ const AdminPageV4 = () => {
                             })
                           });
 
+                          console.log('[Unlock Limits] Response status:', response.status);
+                          const result = await response.json();
+                          console.log('[Unlock Limits] Response data:', result);
+
                           if (response.ok) {
                             alert(`Successfully updated 4.0⭐ unlock limit to ${newLimit}/month`);
+                            console.log('[Unlock Limits] ✅ Fetching updated company details...');
                             await fetchCompanyDetails(selectedCompany.id);
+                            console.log('[Unlock Limits] ✅ Company details refreshed');
                           } else {
-                            const result = await response.json();
                             alert(`Failed to update limit: ${result.error || 'Unknown error'}`);
                           }
                         } catch (error) {
-                          console.error('Error updating unlock limit:', error);
+                          console.error('[Unlock Limits] ❌ Error:', error);
                           alert('Error updating unlock limit');
                         }
                       }}
