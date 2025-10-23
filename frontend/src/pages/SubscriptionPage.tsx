@@ -72,23 +72,22 @@ const SubscriptionPage = () => {
       name: 'Team',
       level: 1,
       price: 29.99,
-      description: 'Full platform access',
+      description: 'For small teams & startups',
       icon: Zap,
       color: 'from-blue-500 to-blue-600',
       bgColor: 'from-blue-50 to-blue-100',
       goldFeatures: [
-        '50 monthly credits',
-        'Purchase unlocks as needed',
-        'Advanced search & filters'
+        '50 automatic credits/month',
+        '1 Warm Introduction/month',
+        'Up to 3 team seats'
       ],
       features: [
-        'Unlimited platform access',
+        'Pay-as-you-go chapter unlocks',
         'Browse all 5,000+ chapters',
         'Advanced search & filters',
         'Interactive Map',
         'Email support',
-        '50 monthly credits included',
-        'Purchase additional credits'
+        'Annual billing: 10% discount'
       ],
       limitations: [],
       highlighted: true,
@@ -100,25 +99,23 @@ const SubscriptionPage = () => {
       name: 'Enterprise Tier 1',
       level: 2,
       price: 299.99,
-      description: 'For large organizations',
+      description: 'For growing organizations',
       icon: Building2,
       color: 'from-purple-600 to-purple-700',
       bgColor: 'from-purple-50 to-purple-100',
       goldFeatures: [
-        '3 Premium Unlocks (5⭐)',
-        '25 Quality Unlocks (4⭐)',
-        '50 Standard Unlocks (3⭐)',
-        '1 Warm Introduction/mo'
+        '3 Premium Unlocks (5.0⭐)',
+        '25 Quality Unlocks (4.0-4.9⭐)',
+        '50 Standard Unlocks (3.0-3.9⭐)',
+        '3 Warm Introductions/month'
       ],
       features: [
         'Everything in Team, plus:',
         '100 monthly credits included',
-        'FraternityBase API access',
-        'Priority support',
-        'Early Access to College Influencer marketplace',
-        'Full Interactive Map Access',
-        'Early Access to Venue Partnerships',
-        'Early Access to Ambassadors'
+        'Monthly unlock allowances (fraternities only)',
+        'Up to 10 team seats',
+        'API access',
+        'Priority support'
       ],
       limitations: [],
       buttonText: currentTier === 'enterprise' ? 'Current Plan' : 'Upgrade to Enterprise Tier 1',
@@ -131,24 +128,20 @@ const SubscriptionPage = () => {
       price: 2222,
       description: 'Maximum fraternity access',
       icon: Rocket,
-      color: 'from-gradient-to-r from-indigo-600 to-violet-700',
+      color: 'from-indigo-600 to-violet-700',
       bgColor: 'from-indigo-50 to-violet-100',
       goldFeatures: [
-        '50 Premium Unlocks (5⭐)',
-        '10 Diamond Unlocks (Full Roster)',
-        '10 Warm Introductions',
+        '50 Premium Unlocks (5.0⭐)',
+        '10 Diamond Unlocks (full roster)',
+        '10 Warm Introductions/month',
         '500 monthly credits'
       ],
       features: [
         'Everything in Enterprise Tier 1, plus:',
-        '50 Premium (5.0⭐) fraternity unlocks/mo',
-        '10 Diamond unlocks/mo (full roster data)',
-        '500 monthly credits included',
-        '10 Warm Introductions per month',
-        '50 team seats',
-        'FraternityBase API access',
-        'Priority support',
-        'Note: Fraternities only (bars & sororities sold separately)'
+        'Monthly unlock allowances (fraternities only)',
+        'Up to 50 team seats',
+        'API access',
+        'Priority support'
       ],
       limitations: [],
       buttonText: currentTier === 'super_enterprise' ? 'Current Plan' : 'Upgrade to Enterprise Tier 2',
