@@ -275,6 +275,8 @@ const AdminPageV4 = () => {
   const [universitySearchTerm, setUniversitySearchTerm] = useState('');
   const [chapterSearchTerm, setChapterSearchTerm] = useState('');
   const [orgTypeFilter, setOrgTypeFilter] = useState<'all' | 'fraternity' | 'sorority'>('all');
+  const [selectedFraternityFilter, setSelectedFraternityFilter] = useState<string>('all');
+  const [recentFilter, setRecentFilter] = useState<'all' | '24h' | '7d' | '30d'>('all');
 
   // Form states
   const [fraternityForm, setFraternityForm] = useState({
@@ -1871,7 +1873,24 @@ const AdminPageV4 = () => {
       // Filter by organization type - use embedded data
       if (orgTypeFilter !== 'all') {
         const matchesType = ch.greek_organizations?.organization_type === orgTypeFilter;
-        return matchesSearch && matchesType;
+        if (!matchesType) return false;
+      }
+
+      // Filter by specific fraternity/sorority
+      if (selectedFraternityFilter !== 'all') {
+        const matchesFraternity = ch.greek_organization_id === selectedFraternityFilter;
+        if (!matchesFraternity) return false;
+      }
+
+      // Filter by recent date
+      if (recentFilter !== 'all' && ch.created_at) {
+        const createdDate = new Date(ch.created_at);
+        const now = new Date();
+        const hoursDiff = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60);
+
+        if (recentFilter === '24h' && hoursDiff > 24) return false;
+        if (recentFilter === '7d' && hoursDiff > 24 * 7) return false;
+        if (recentFilter === '30d' && hoursDiff > 24 * 30) return false;
       }
 
       return matchesSearch;
@@ -1903,11 +1922,32 @@ const AdminPageV4 = () => {
       return 0;
     });
 
-  const filteredUsers = users.filter(off =>
-    off.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    off.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    off.chapters?.chapter_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter(off => {
+    const matchesSearch =
+      off.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      off.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      off.chapters?.chapter_name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Filter by specific fraternity/sorority
+    if (selectedFraternityFilter !== 'all') {
+      const chapter = chapters.find(ch => ch.id === off.chapter_id);
+      const matchesFraternity = chapter?.greek_organization_id === selectedFraternityFilter;
+      if (!matchesFraternity) return false;
+    }
+
+    // Filter by recent date
+    if (recentFilter !== 'all' && off.created_at) {
+      const createdDate = new Date(off.created_at);
+      const now = new Date();
+      const hoursDiff = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60);
+
+      if (recentFilter === '24h' && hoursDiff > 24) return false;
+      if (recentFilter === '7d' && hoursDiff > 24 * 7) return false;
+      if (recentFilter === '30d' && hoursDiff > 24 * 30) return false;
+    }
+
+    return matchesSearch;
+  });
 
   // Helper function to get initials from university name
   const getInitials = (name: string) => {
@@ -4579,19 +4619,75 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                 )}
               </div>
 
-              {/* Order By Dropdown */}
-              <div className="mb-4 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700">Order by:</label>
-                <select
-                  value={chapterOrderBy}
-                  onChange={(e) => setChapterOrderBy(e.target.value as 'name' | 'university' | 'grade' | 'recent')}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
-                >
-                  <option value="grade">Grade (Highest First)</option>
-                  <option value="name">Fraternity Name</option>
-                  <option value="university">University Name</option>
-                  <option value="recent">Recently Added</option>
-                </select>
+              {/* Filters Row */}
+              <div className="mb-4 flex flex-wrap items-center gap-4">
+                {/* Order By Dropdown */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Order by:</label>
+                  <select
+                    value={chapterOrderBy}
+                    onChange={(e) => setChapterOrderBy(e.target.value as 'name' | 'university' | 'grade' | 'recent')}
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    <option value="grade">Grade (Highest First)</option>
+                    <option value="name">Fraternity Name</option>
+                    <option value="university">University Name</option>
+                    <option value="recent">Recently Added</option>
+                  </select>
+                </div>
+
+                {/* Fraternity Filter Dropdown */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Fraternity:</label>
+                  <select
+                    value={selectedFraternityFilter}
+                    onChange={(e) => setSelectedFraternityFilter(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500 min-w-[200px]"
+                  >
+                    <option value="all">All Fraternities</option>
+                    {greekOrgs
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map(org => (
+                        <option key={org.id} value={org.id}>
+                          {org.name}
+                        </option>
+                      ))
+                    }
+                  </select>
+                </div>
+
+                {/* Recent Filter Dropdown */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Recently Added:</label>
+                  <select
+                    value={recentFilter}
+                    onChange={(e) => setRecentFilter(e.target.value as 'all' | '24h' | '7d' | '30d')}
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    <option value="all">All Time</option>
+                    <option value="24h">Last 24 Hours</option>
+                    <option value="7d">Last 7 Days</option>
+                    <option value="30d">Last 30 Days</option>
+                  </select>
+                </div>
+
+                {/* Clear Filters Button */}
+                {(selectedFraternityFilter !== 'all' || recentFilter !== 'all') && (
+                  <button
+                    onClick={() => {
+                      setSelectedFraternityFilter('all');
+                      setRecentFilter('all');
+                    }}
+                    className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 underline"
+                  >
+                    Clear Filters
+                  </button>
+                )}
+
+                {/* Results Count */}
+                <div className="ml-auto text-sm text-gray-600">
+                  Showing {filteredChapters.length} {filteredChapters.length === 1 ? 'chapter' : 'chapters'}
+                </div>
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -4843,6 +4939,63 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                   </div>
                 </form>
               )}
+
+              {/* Filters Row for Users */}
+              <div className="mb-4 flex flex-wrap items-center gap-4">
+                {/* Fraternity Filter Dropdown */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Fraternity:</label>
+                  <select
+                    value={selectedFraternityFilter}
+                    onChange={(e) => setSelectedFraternityFilter(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500 min-w-[200px]"
+                  >
+                    <option value="all">All Fraternities</option>
+                    {greekOrgs
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map(org => (
+                        <option key={org.id} value={org.id}>
+                          {org.name}
+                        </option>
+                      ))
+                    }
+                  </select>
+                </div>
+
+                {/* Recent Filter Dropdown */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Recently Added:</label>
+                  <select
+                    value={recentFilter}
+                    onChange={(e) => setRecentFilter(e.target.value as 'all' | '24h' | '7d' | '30d')}
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    <option value="all">All Time</option>
+                    <option value="24h">Last 24 Hours</option>
+                    <option value="7d">Last 7 Days</option>
+                    <option value="30d">Last 30 Days</option>
+                  </select>
+                </div>
+
+                {/* Clear Filters Button */}
+                {(selectedFraternityFilter !== 'all' || recentFilter !== 'all') && (
+                  <button
+                    onClick={() => {
+                      setSelectedFraternityFilter('all');
+                      setRecentFilter('all');
+                    }}
+                    className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 underline"
+                  >
+                    Clear Filters
+                  </button>
+                )}
+
+                {/* Results Count */}
+                <div className="ml-auto text-sm text-gray-600">
+                  Showing {filteredUsers.length} {filteredUsers.length === 1 ? 'user' : 'users'}
+                </div>
+              </div>
+
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
