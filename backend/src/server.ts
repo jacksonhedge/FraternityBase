@@ -1177,9 +1177,24 @@ app.get('/api/chapters/unlocked', async (req, res) => {
       return res.status(404).json({ error: 'User profile not found' });
     }
 
-    console.log(`[Unlocked Chapters] Fetching unlocks for company_id: ${profile.company_id}, user: ${user.email}`);
+    // Pagination parameters
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const offset = (page - 1) * limit;
 
-    // Query all unlocks for this company with chapter details
+    console.log(`[Unlocked Chapters] Fetching unlocks for company_id: ${profile.company_id}, user: ${user.email}, page: ${page}, limit: ${limit}`);
+
+    // First, get total count
+    const { count: totalCount, error: countError } = await supabaseAdmin
+      .from('chapter_unlocks')
+      .select('*', { count: 'exact', head: true })
+      .eq('company_id', profile.company_id);
+
+    if (countError) {
+      console.error('[Unlocked Chapters] Error counting unlocked chapters:', countError);
+    }
+
+    // Query unlocks for this company with chapter details and pagination
     const { data, error } = await supabaseAdmin
       .from('chapter_unlocks')
       .select(`
@@ -1202,14 +1217,16 @@ app.get('/api/chapters/unlocked', async (req, res) => {
           )
         )
       `)
-      .eq('company_id', profile.company_id);
+      .eq('company_id', profile.company_id)
+      .order('unlocked_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) {
       console.error('[Unlocked Chapters] Error fetching unlocked chapters:', error);
       return res.status(500).json({ error: 'Failed to fetch unlocked chapters' });
     }
 
-    console.log(`[Unlocked Chapters] Found ${data?.length || 0} unlocks for company ${profile.company_id}`);
+    console.log(`[Unlocked Chapters] Found ${data?.length || 0} unlocks for company ${profile.company_id} (page ${page} of ${Math.ceil((totalCount || 0) / limit)})`);
 
     // Filter out expired unlocks (if expires_at is set and in the past)
     const validUnlocks = data?.filter(unlock =>
@@ -1237,9 +1254,18 @@ app.get('/api/chapters/unlocked', async (req, res) => {
 
     const chapters = Array.from(chaptersMap.values());
 
+    const totalPages = Math.ceil((totalCount || 0) / limit);
+
     res.json({
       success: true,
-      data: chapters
+      data: chapters,
+      pagination: {
+        page,
+        limit,
+        total: totalCount || 0,
+        totalPages,
+        hasMore: page < totalPages
+      }
     });
   } catch (error: any) {
     console.error('Unlocked chapters endpoint error:', error);
