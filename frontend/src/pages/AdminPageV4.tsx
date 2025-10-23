@@ -67,6 +67,12 @@ interface GreekOrg {
   organization_type: 'fraternity' | 'sorority';
   founded_year?: number;
   national_website?: string;
+  topColleges?: Array<{
+    id: string;
+    name: string;
+    logo_url: string;
+    chapterCount: number;
+  }>;
 }
 
 interface University {
