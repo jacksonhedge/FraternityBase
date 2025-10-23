@@ -81,6 +81,7 @@ interface University {
   bars_nearby?: number;
   unlock_count?: number;
   conference?: string;
+  division?: string;
   show_in_dashboard?: boolean;
   created_at?: string;
 }
@@ -126,6 +127,7 @@ interface User {
   major?: string;
   is_primary_contact?: boolean;
   is_pinned?: boolean;
+  created_at?: string;
   chapters?: {
     chapter_name: string;
     greek_organizations: { name: string; organization_type: 'fraternity' | 'sorority' };
@@ -214,7 +216,7 @@ const AdminPageV4 = () => {
   type AdminTab =
     'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
     'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' |
-    'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters';
+    'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters' | string;
 
   // Derive active tab from URL path
   const activeTab: AdminTab = (location.pathname.split('/')[2] || 'dashboard') as AdminTab;
@@ -5538,9 +5540,8 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
           )}
 
           {/* Introduction Requests Tab */}
-          {/* @ts-expect-error TypeScript type narrowing issue - activeTab does include 'intro-requests' */}
           {/* Diamond Chapters Tab */}
-          {activeTab === 'diamond-chapters' && (
+          {(activeTab as string) === 'diamond-chapters' && (
             <div className="bg-white rounded-lg shadow-sm p-6">
               <div className="mb-6 flex items-center justify-between">
                 <div>
@@ -5636,7 +5637,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
             </div>
           )}
 
-          {activeTab === 'intro-requests' && (
+          {(activeTab as string) === 'intro-requests' && (
             <IntroductionRequestsTab />
           )}
 
