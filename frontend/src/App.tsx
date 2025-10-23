@@ -148,6 +148,7 @@ function AnimatedRoutes() {
           <Route path="/admin/fraternities" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/colleges" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/chapters" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/diamond-chapters" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/ambassadors" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/waitlist" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />

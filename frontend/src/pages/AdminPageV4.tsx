@@ -214,7 +214,7 @@ const AdminPageV4 = () => {
   type AdminTab =
     'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
     'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' |
-    'wizard-admin' | 'college-clubs' | 'intro-requests';
+    'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters';
 
   // Derive active tab from URL path
   const activeTab: AdminTab = (location.pathname.split('/')[2] || 'dashboard') as AdminTab;
@@ -227,6 +227,7 @@ const AdminPageV4 = () => {
   const [greekOrgs, setGreekOrgs] = useState<GreekOrg[]>([]);
   const [universities, setUniversities] = useState<University[]>([]);
   const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [diamondChapters, setDiamondChapters] = useState<Chapter[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
@@ -522,6 +523,12 @@ const AdminPageV4 = () => {
         const data = await res.json();
         setIntroRequests(data.requests || []);
         setIntroRequestsLoading(false);
+      } else if (activeTab === 'diamond-chapters') {
+        console.log('[Diamond Chapters View] 💎 Fetching diamond chapters data...');
+        const res = await fetch(`${API_URL}/admin/chapters?is_diamond=true`, { headers: getAdminHeaders() });
+        const data = await res.json();
+        console.log('💎 Loaded diamond chapters:', data.data?.length || 0);
+        setDiamondChapters(data.data || []);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -2024,6 +2031,25 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
+              navigate('/admin/diamond-chapters');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'diamond-chapters'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Sparkles className="w-5 h-5" />
+            <span className="font-medium">Diamond Chapters</span>
+            {diamondChapters.length > 0 && (
+              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{diamondChapters.length}</span>
+            )}
+          </button>
+
+          <button
+            onClick={() => {
               navigate('/admin/ambassadors');
               setShowForm(false);
               setEditingId(null);
@@ -2352,6 +2378,7 @@ const AdminPageV4 = () => {
               {activeTab === 'fraternities' && 'Manage Greek organizations'}
               {activeTab === 'colleges' && 'Manage universities and colleges'}
               {activeTab === 'chapters' && 'Manage individual chapters'}
+              {activeTab === 'diamond-chapters' && 'View and manage all introducable (diamond) chapters available for warm introductions'}
               {activeTab === 'ambassadors' && 'Manage ambassador profiles and partnerships'}
               {activeTab === 'users' && 'Manage chapter users and contacts'}
               {activeTab === 'waitlist' && 'View and manage waitlist signups'}
@@ -5356,6 +5383,103 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
 
           {/* Introduction Requests Tab */}
           {/* @ts-expect-error TypeScript type narrowing issue - activeTab does include 'intro-requests' */}
+          {/* Diamond Chapters Tab */}
+          {activeTab === 'diamond-chapters' && (
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="mb-6 flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <Sparkles className="w-6 h-6 text-blue-600" />
+                    Diamond Chapters - Introducable
+                  </h3>
+                  <p className="text-gray-600 mt-1">
+                    Chapters marked as available for warm introductions
+                  </p>
+                </div>
+                <div className="bg-gradient-to-r from-blue-100 to-purple-100 px-4 py-2 rounded-lg">
+                  <span className="text-2xl font-bold text-gray-900">{diamondChapters.length}</span>
+                  <span className="text-gray-600 ml-2">chapters</span>
+                </div>
+              </div>
+
+              {diamondChapters.length === 0 ? (
+                <div className="text-center py-12">
+                  <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 text-lg">No diamond chapters yet</p>
+                  <p className="text-gray-400 mt-2">Chapters can be marked as diamond in the Chapters tab</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organization</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapter</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Members</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {diamondChapters.map((chapter) => (
+                        <tr key={chapter.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="text-sm font-medium text-gray-900">
+                                {chapter.greek_organizations?.name || 'N/A'}
+                              </div>
+                              <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                                chapter.greek_organizations?.organization_type === 'fraternity'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : 'bg-pink-100 text-pink-800'
+                              }`}>
+                                {chapter.greek_organizations?.organization_type || 'N/A'}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-sm text-gray-900">{chapter.universities?.name || 'N/A'}</div>
+                            <div className="text-sm text-gray-500">{chapter.universities?.state || ''}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {chapter.chapter_name}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {chapter.member_count || 0}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {chapter.grade ? (
+                              <span className={`px-2 py-1 text-xs rounded-full font-semibold ${
+                                chapter.grade >= 4.0 ? 'bg-green-100 text-green-800' :
+                                chapter.grade >= 3.5 ? 'bg-blue-100 text-blue-800' :
+                                chapter.grade >= 3.0 ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {chapter.grade.toFixed(1)}
+                              </span>
+                            ) : (
+                              <span className="text-gray-400 text-sm">N/A</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              chapter.status === 'active'
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {chapter.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
           {activeTab === 'intro-requests' && (
             <IntroductionRequestsTab />
           )}
