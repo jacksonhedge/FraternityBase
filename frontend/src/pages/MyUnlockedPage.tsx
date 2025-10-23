@@ -236,151 +236,153 @@ const MyUnlockedPage = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {unlockedChapters.map((chapter, index) => {
-              const collegeLogo = getCollegeLogoWithFallback(chapter.university);
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {unlockedChapters.map((chapter, index) => {
+                const collegeLogo = getCollegeLogoWithFallback(chapter.university);
 
-              // Generate vibrant gradient colors
-              const gradients = [
-                'from-blue-500 via-blue-600 to-indigo-600',
-                'from-purple-500 via-purple-600 to-pink-600',
-                'from-green-500 via-emerald-600 to-teal-600',
-                'from-orange-500 via-red-500 to-pink-600',
-                'from-cyan-500 via-blue-600 to-purple-600',
-                'from-yellow-500 via-orange-500 to-red-600',
-                'from-pink-500 via-rose-600 to-purple-600',
-                'from-indigo-500 via-purple-600 to-pink-600',
-              ];
-              const gradient = gradients[index % gradients.length];
+                // Generate vibrant gradient colors
+                const gradients = [
+                  'from-blue-500 via-blue-600 to-indigo-600',
+                  'from-purple-500 via-purple-600 to-pink-600',
+                  'from-green-500 via-emerald-600 to-teal-600',
+                  'from-orange-500 via-red-500 to-pink-600',
+                  'from-cyan-500 via-blue-600 to-purple-600',
+                  'from-yellow-500 via-orange-500 to-red-600',
+                  'from-pink-500 via-rose-600 to-purple-600',
+                  'from-indigo-500 via-purple-600 to-pink-600',
+                ];
+                const gradient = gradients[index % gradients.length];
 
-              return (
-                <div
-                  key={chapter.id}
-                  className="group relative"
-                >
-                  {/* Colorful Card */}
-                  <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
-                    {/* Decorative circles */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                return (
+                  <div
+                    key={chapter.id}
+                    className="group relative"
+                  >
+                    {/* Colorful Card */}
+                    <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
+                      {/* Decorative circles */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
 
-                    {/* Rating Badge - Top Left */}
-                    {chapter.chapterScore !== null && chapter.chapterScore !== undefined && (
-                      <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg border border-white/50">
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                        <span className="text-sm font-bold text-gray-900">{Number(chapter.chapterScore).toFixed(1)}</span>
-                      </div>
-                    )}
+                      {/* Rating Badge - Top Left */}
+                      {chapter.chapterScore !== null && chapter.chapterScore !== undefined && (
+                        <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg border border-white/50">
+                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                          <span className="text-sm font-bold text-gray-900">{Number(chapter.chapterScore).toFixed(1)}</span>
+                        </div>
+                      )}
 
-                    {/* Content */}
-                    <div className="relative z-10 flex flex-col items-center text-center space-y-4">
-                      {/* College Logo */}
-                      <div className="w-24 h-24 rounded-2xl bg-white shadow-xl p-3 transform group-hover:rotate-3 transition-transform duration-300">
-                        <img
-                          src={collegeLogo}
-                          alt={chapter.university}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
+                      {/* Content */}
+                      <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                        {/* College Logo */}
+                        <div className="w-24 h-24 rounded-2xl bg-white shadow-xl p-3 transform group-hover:rotate-3 transition-transform duration-300">
+                          <img
+                            src={collegeLogo}
+                            alt={chapter.university}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
 
-                      {/* College Name */}
-                      <div>
-                        <h3 className="font-bold text-white text-lg leading-tight mb-1">
-                          {chapter.university}
-                        </h3>
-                        <p className="text-white/90 text-sm font-medium">
-                          {chapter.name}
-                        </p>
-                      </div>
+                        {/* College Name */}
+                        <div>
+                          <h3 className="font-bold text-white text-lg leading-tight mb-1">
+                            {chapter.university}
+                          </h3>
+                          <p className="text-white/90 text-sm font-medium">
+                            {chapter.name}
+                          </p>
+                        </div>
 
-                      {/* Buttons */}
-                      <div className="flex flex-col gap-2 w-full pt-2">
-                        <Link
-                          to={`/app/my-unlocked/${chapter.id}`}
-                          className="w-full px-4 py-2.5 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-md flex items-center justify-center gap-2"
-                        >
-                          View Details
-                          <ArrowRight className="w-4 h-4" />
-                        </Link>
-                        <Link
-                          to={`/app/my-unlocked/${chapter.id}#intro`}
-                          className="w-full px-4 py-2.5 bg-black hover:bg-gray-900 text-yellow-400 rounded-lg font-semibold transition-colors shadow-md flex items-center justify-center gap-2"
-                        >
-                          <Handshake className="w-4 h-4" />
-                          Request an Intro
-                        </Link>
-                        <Link
-                          to={`/app/map?state=${encodeURIComponent(chapter.state)}`}
-                          className="w-full px-4 py-2.5 bg-white/20 backdrop-blur-sm text-white rounded-lg font-semibold hover:bg-white/30 transition-colors border border-white/30 flex items-center justify-center gap-2"
-                        >
-                          <MapPin className="w-4 h-4" />
-                          View in Map
-                        </Link>
+                        {/* Buttons */}
+                        <div className="flex flex-col gap-2 w-full pt-2">
+                          <Link
+                            to={`/app/my-unlocked/${chapter.id}`}
+                            className="w-full px-4 py-2.5 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-md flex items-center justify-center gap-2"
+                          >
+                            View Details
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                          <Link
+                            to={`/app/my-unlocked/${chapter.id}#intro`}
+                            className="w-full px-4 py-2.5 bg-black hover:bg-gray-900 text-yellow-400 rounded-lg font-semibold transition-colors shadow-md flex items-center justify-center gap-2"
+                          >
+                            <Handshake className="w-4 h-4" />
+                            Request an Intro
+                          </Link>
+                          <Link
+                            to={`/app/map?state=${encodeURIComponent(chapter.state)}`}
+                            className="w-full px-4 py-2.5 bg-white/20 backdrop-blur-sm text-white rounded-lg font-semibold hover:bg-white/30 transition-colors border border-white/30 flex items-center justify-center gap-2"
+                          >
+                            <MapPin className="w-4 h-4" />
+                            View in Map
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Pagination Controls */}
-          {!loading && unlockedChapters.length > 0 && totalPages > 1 && (
-            <div className="mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
-              <div className="text-sm text-gray-600">
-                Showing page {currentPage} of {totalPages} ({totalCount} total chapters)
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Previous
-                </button>
-
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    let pageNum;
-                    if (totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    } else {
-                      pageNum = currentPage - 2 + i;
-                    }
-
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => setCurrentPage(pageNum)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          currentPage === pageNum
-                            ? 'bg-primary-600 text-white'
-                            : 'text-gray-700 hover:bg-gray-100'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+                );
+              })}
             </div>
-          )}
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
+                <div className="text-sm text-gray-600">
+                  Showing page {currentPage} of {totalPages} ({totalCount} total chapters)
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setCurrentPage(pageNum)}
+                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            currentPage === pageNum
+                              ? 'bg-primary-600 text-white'
+                              : 'text-gray-700 hover:bg-gray-100'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
