@@ -2840,9 +2840,10 @@ const AdminPageV4 = () => {
                             : 'bg-gray-100 text-gray-700'
                         }`}
                       >
-                        <option value="trial">trial</option>
-                        <option value="monthly">monthly</option>
-                        <option value="enterprise">enterprise</option>
+                        <option value="trial">Trial</option>
+                        <option value="monthly">Team</option>
+                        <option value="enterprise">Enterprise T1</option>
+                        <option value="super_enterprise">Enterprise T2</option>
                       </select>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
