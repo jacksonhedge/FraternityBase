@@ -1802,7 +1802,9 @@ const AdminPageV4 = () => {
 
       // Conference filter
       let matchesFilter = true;
-      if (collegeFilter === 'power5') {
+      if (collegeFilter === 'division1') {
+        matchesFilter = uni.division === 'Division 1' || uni.division === 'Division I' || uni.division === 'D1';
+      } else if (collegeFilter === 'power5') {
         const power4Conferences = ['SEC', 'BIG 10', 'BIG 12', 'ACC'];
         matchesFilter = power4Conferences.includes(uni.conference || '');
       } else if (collegeFilter === 'sec') {
@@ -3372,6 +3374,7 @@ const AdminPageV4 = () => {
                     className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white text-sm"
                   >
                     <option value="all">All Colleges</option>
+                    <option value="division1">Division 1</option>
                     <option value="power5">Power 5</option>
                     <option value="sec">SEC</option>
                     <option value="big10">Big 10</option>
