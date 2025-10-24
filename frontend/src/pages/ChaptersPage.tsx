@@ -48,6 +48,8 @@ interface Chapter {
   grade?: number;
   coming_soon_date?: string;
   is_diamond?: boolean;
+  updated_at?: string;
+  expected_update_date?: string;
   greek_organizations?: {
     id: string;
     name: string;
@@ -728,7 +730,7 @@ const ChaptersPage = () => {
             <Link
               key={chapter.id}
               to={`/app/chapters/${chapter.id}`}
-              className={`bg-white rounded-lg shadow-sm hover:shadow-md transition-all overflow-hidden border relative group ${
+              className={`bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden border relative group ${
                 isUnlocked
                   ? 'border-green-400 hover:border-green-500'
                   : 'border-gray-200 hover:border-primary-300'
@@ -809,11 +811,11 @@ const ChaptersPage = () => {
                   <MapPin className="w-4 h-4 mr-2 text-gray-400" />
                   {chapter.universities?.name || '-'}
                 </div>
-                {/* Member Icons with Fan Effect */}
+                {/* Member Icons with Fan Effect + Count */}
                 <div className="flex items-center justify-between text-sm text-gray-600">
                   <span className="flex items-center">
                     <Users className="w-4 h-4 mr-2 text-gray-400" />
-                    Members
+                    Members {chapter.member_count ? `(${chapter.member_count})` : ''}
                   </span>
                   <div className="relative h-6 w-16 group">
                     {[...Array(5)].map((_, i) => (
@@ -845,6 +847,15 @@ const ChaptersPage = () => {
                     {chapter.house_address}
                   </div>
                 )}
+                {/* Last Updated and Expected Update */}
+                <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
+                  <span className="text-white bg-gray-800 px-2 py-1 rounded">
+                    Last updated: {chapter.updated_at ? new Date(chapter.updated_at).toLocaleDateString() : 'N/A'}
+                  </span>
+                  <span className="text-gray-600">
+                    Expected: {chapter.expected_update_date ? new Date(chapter.expected_update_date).toLocaleDateString() : 'TBD'}
+                  </span>
+                </div>
               </div>
 
                 {/* Grade Badge */}
@@ -921,7 +932,7 @@ const ChaptersPage = () => {
                           <span className="text-3xl drop-shadow-lg">💎</span>
                           <div className="flex flex-col">
                             <span className="text-sm font-bold text-purple-900">Diamond Chapter</span>
-                            <span className="text-xs text-purple-700">48hr intro guarantee</span>
+                            <span className="text-xs text-purple-700">48 hour Intro Expectation (Average Response Time)</span>
                           </div>
                           <button
                             onClick={(e) => {
