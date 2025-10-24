@@ -214,15 +214,15 @@ const CollegesPage = () => {
   }).sort((a, b) => b.fraternities - a.fraternities); // Sort by fraternity count (most to least)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6 px-4 md:px-0">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Universities & Colleges</h1>
-            <p className="text-gray-600 mt-1">Browse NCAA Division I, II, and III institutions with Greek life</p>
+      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+          <div className="flex-1">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Universities & Colleges</h1>
+            <p className="text-sm md:text-base text-gray-600 mt-1">Browse NCAA Division I, II, and III institutions with Greek life</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-end">
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-lg transition-colors ${
@@ -250,20 +250,20 @@ const CollegesPage = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          <div className="relative md:col-span-3 lg:col-span-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 md:w-5 md:h-5" />
             <input
               type="text"
-              placeholder="Search universities, cities, or conferences..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Search universities..."
+              className="w-full pl-9 md:pl-10 pr-4 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <select
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             value={selectedDivision}
             onChange={(e) => setSelectedDivision(e.target.value)}
           >
@@ -274,7 +274,7 @@ const CollegesPage = () => {
             <option value="Division III">NCAA Division III</option>
           </select>
           <select
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             value={selectedState}
             onChange={(e) => setSelectedState(e.target.value)}
           >
@@ -284,11 +284,11 @@ const CollegesPage = () => {
             ))}
           </select>
         </div>
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-gray-600">
+        <div className="mt-3 md:mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <p className="text-xs md:text-sm text-gray-600">
             Showing {filteredColleges.length} of {colleges.length} universities
           </p>
-          <button className="text-blue-600 text-sm font-medium hover:text-blue-700 flex items-center gap-1">
+          <button className="text-blue-600 text-xs md:text-sm font-medium hover:text-blue-700 flex items-center gap-1 justify-center sm:justify-start">
             <Filter className="w-4 h-4" />
             Advanced Filters
           </button>
@@ -306,28 +306,28 @@ const CollegesPage = () => {
       {/* Summary Stats */}
       {!loading && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4">
-              <p className="text-3xl font-bold">{filteredColleges.length}</p>
-              <p className="text-sm opacity-90">Universities</p>
+              <p className="text-2xl md:text-3xl font-bold">{filteredColleges.length}</p>
+              <p className="text-xs md:text-sm opacity-90">Universities</p>
             </div>
             <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-4">
-              <p className="text-3xl font-bold">
+              <p className="text-2xl md:text-3xl font-bold">
                 {filteredColleges.reduce((acc, c) => acc + c.greekLife, 0).toLocaleString()}
               </p>
-              <p className="text-sm opacity-90">Greek Orgs</p>
+              <p className="text-xs md:text-sm opacity-90">Greek Orgs</p>
             </div>
             <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
-              <p className="text-3xl font-bold">
+              <p className="text-2xl md:text-3xl font-bold">
                 {filteredColleges.length * 3}
               </p>
-              <p className="text-sm opacity-90">Known Rosters</p>
+              <p className="text-xs md:text-sm opacity-90">Known Rosters</p>
             </div>
           </div>
 
           {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           {filteredColleges.map((college, index) => {
             // Generate vibrant gradient colors
             const gradients = [
@@ -348,15 +348,15 @@ const CollegesPage = () => {
                 className="group relative"
               >
                 {/* Colorful Card */}
-                <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
+                <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
                   {/* Decorative circles */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-white/10 rounded-full -mr-12 -mt-12 md:-mr-16 md:-mt-16"></div>
+                  <div className="absolute bottom-0 left-0 w-20 h-20 md:w-24 md:h-24 bg-white/10 rounded-full -ml-10 -mb-10 md:-ml-12 md:-mb-12"></div>
 
                   {/* Content */}
-                  <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                  <div className="relative z-10 flex flex-col items-center text-center space-y-3 md:space-y-4">
                     {/* College Logo */}
-                    <div className="w-24 h-24 rounded-2xl bg-white shadow-xl p-3 transform group-hover:rotate-3 transition-transform duration-300">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-white shadow-xl p-2.5 md:p-3 transform group-hover:rotate-3 transition-transform duration-300">
                       <img
                         src={college.image}
                         alt={college.name}
@@ -366,49 +366,49 @@ const CollegesPage = () => {
 
                     {/* College Name */}
                     <div>
-                      <h3 className="font-bold text-white text-lg leading-tight mb-1">
+                      <h3 className="font-bold text-white text-base md:text-lg leading-tight mb-1">
                         {college.name}
                       </h3>
-                      <div className="flex items-center justify-center gap-1 text-white/90 text-sm">
-                        <MapPin className="w-4 h-4" />
+                      <div className="flex items-center justify-center gap-1 text-white/90 text-xs md:text-sm">
+                        <MapPin className="w-3 h-3 md:w-4 md:h-4" />
                         {college.location}
                       </div>
                       <div className="flex gap-2 mt-2 justify-center">
-                        <span className="text-xs px-2 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full">
+                        <span className="text-[10px] md:text-xs px-2 py-0.5 md:py-1 bg-white/20 backdrop-blur-sm text-white rounded-full">
                           {college.conference}
                         </span>
                       </div>
                     </div>
 
                     {/* Stats */}
-                    <div className="w-full space-y-2 pt-2">
+                    <div className="w-full space-y-1.5 md:space-y-2 pt-2">
                       {college.fraternities === 0 && college.sororities === 0 ? (
                         <div className="text-center py-2">
-                          <span className="text-sm text-yellow-300 font-semibold">Coming Soon</span>
+                          <span className="text-xs md:text-sm text-yellow-300 font-semibold">Coming Soon</span>
                         </div>
                       ) : (
                         <>
-                          <div className="flex justify-between items-center text-sm">
+                          <div className="flex justify-between items-center text-xs md:text-sm">
                             <span className="text-white/90">Fraternities</span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 md:gap-2">
                               <span className="font-bold text-white">{college.fraternities}</span>
                               {college.fiveStarFrats > 0 && (
-                                <span className="text-xs px-1.5 py-0.5 bg-yellow-400/20 text-yellow-300 rounded font-semibold">
+                                <span className="text-[10px] md:text-xs px-1 md:px-1.5 py-0.5 bg-yellow-400/20 text-yellow-300 rounded font-semibold">
                                   {college.fiveStarFrats}x 5.0⭐
                                 </span>
                               )}
                             </div>
                           </div>
-                          <div className="flex justify-between items-center text-sm">
+                          <div className="flex justify-between items-center text-xs md:text-sm">
                             <span className="text-white/90">Sororities</span>
                             <span className="font-bold text-white">{college.sororities}</span>
                           </div>
                         </>
                       )}
-                      <div className="w-full h-px bg-white/20 my-2"></div>
+                      <div className="w-full h-px bg-white/20 my-1.5 md:my-2"></div>
 
                       {/* Chapter Boxes */}
-                      <div className="flex justify-between items-center text-xs">
+                      <div className="flex justify-between items-center text-[10px] md:text-xs">
                         <span className="text-white/80">Chapters</span>
                         <div className="relative h-8 w-20 group">
                           {[...Array(Math.min(5, college.greekLife))].map((_, i) => (
@@ -435,11 +435,11 @@ const CollegesPage = () => {
                         </div>
                       </div>
 
-                      <div className="flex justify-between items-center text-xs">
+                      <div className="flex justify-between items-center text-[10px] md:text-xs">
                         <span className="text-white/80">4.0⭐ Chapters</span>
                         <span className="font-semibold text-blue-200">{college.fourStarFrats}</span>
                       </div>
-                      <div className="flex justify-between items-center text-xs">
+                      <div className="flex justify-between items-center text-[10px] md:text-xs">
                         <span className="text-white/80">3.0⭐ Chapters</span>
                         <span className="font-semibold text-white/70">{college.threeStarFrats}</span>
                       </div>
@@ -448,7 +448,7 @@ const CollegesPage = () => {
                     {/* Button */}
                     <Link
                       to={`/app/colleges/${college.id}`}
-                      className="w-full mt-2 px-4 py-2.5 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-md flex items-center justify-center gap-2"
+                      className="w-full mt-2 px-3 md:px-4 py-2 md:py-2.5 bg-white text-gray-900 rounded-lg text-sm md:text-base font-semibold hover:bg-gray-100 transition-colors shadow-md flex items-center justify-center gap-1.5 md:gap-2"
                     >
                       View Details
                       <ChevronRight className="w-4 h-4" />
@@ -463,8 +463,8 @@ const CollegesPage = () => {
 
       {/* List View */}
       {viewMode === 'list' && (
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <table className="w-full">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden overflow-x-auto">
+          <table className="w-full min-w-[800px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
