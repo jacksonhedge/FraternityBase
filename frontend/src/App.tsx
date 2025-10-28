@@ -33,6 +33,7 @@ import CollegeDetailPage from './pages/CollegeDetailPage';
 import MapPage from './pages/MapPage';
 import MapPageFullScreen from './pages/MapPageFullScreen';
 import SuperMapPage from './pages/SuperMapPage';
+import RetroSuperMapPage from './pages/RetroSuperMapPage';
 import ChaptersPage from './pages/ChaptersPage';
 import ChapterDetailPage from './pages/ChapterDetailPage';
 import EventsPage from './pages/EventsPage';
@@ -167,7 +168,7 @@ function AnimatedRoutes() {
           <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />
 
           {/* Public Map Route */}
-          <Route path="/dashboard-map" element={<MapPageFullScreen />} />
+          <Route path="/dashboard-map" element={<RetroSuperMapPage />} />
 
           {/* Public Share Route */}
           <Route path="/share/:token" element={<SharePage />} />
@@ -190,6 +191,7 @@ function AnimatedRoutes() {
             <Route path="colleges/:id" element={<CollegeDetailPage />} />
             <Route path="map" element={<MapPageFullScreen />} />
             <Route path="supermap" element={<SuperMapPage />} />
+            <Route path="retro-map" element={<RetroSuperMapPage />} />
             <Route path="chapters" element={<ChaptersPage />} />
             <Route path="chapters/:id" element={<ChapterDetailPage />} />
             <Route path="outreach" element={<OutreachPage />} />
