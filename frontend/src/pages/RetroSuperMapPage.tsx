@@ -539,7 +539,7 @@ const RetroSuperMapPage = () => {
           name: stateName,
           abbr: stateAbbr,
           colleges: stateColleges.map(c => ({
-            name: c.name,
+            name: (c as any).name || 'Unknown',
             lat: c.lat,
             lng: c.lng,
             state: c.state,
@@ -553,7 +553,7 @@ const RetroSuperMapPage = () => {
 
         // Zoom to state
         mapRef.current.flyToBounds(
-          bounds,
+          bounds as any,
           {
             duration: 1.5,
             easeLinearity: 0.25,
@@ -608,9 +608,6 @@ const RetroSuperMapPage = () => {
 
       {/* Right Side Info Boxes - Below Controls */}
       <div className="absolute top-48 right-4 z-[998] w-80 space-y-4">
-        {/* Debug: Log current state */}
-        {console.log('📊 Render - viewMode:', viewMode, 'selectedStateData:', selectedStateData ? 'YES' : 'NO')}
-
         {/* State View: Show State Info */}
         {viewMode === 'state' && selectedStateData ? (
           <>
