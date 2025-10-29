@@ -67,6 +67,8 @@ import CookieConsent from './components/legal/CookieConsent';
 import SharePage from './pages/SharePage';
 import CreditSystemPage from './pages/CreditSystemPage';
 import AdminAnalyticsEventsPage from './pages/AdminAnalyticsEventsPage';
+import PartnershipOpportunitiesPage from './pages/PartnershipOpportunitiesPage';
+import SponsorshipDetailPage from './pages/SponsorshipDetailPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -200,6 +202,8 @@ function AnimatedRoutes() {
             <Route path="events/:id" element={<EventDetailPage />} />
             <Route path="partnerships" element={<PartnershipsPage />} />
             <Route path="partnerships/:id" element={<PartnershipDetailPage />} />
+            <Route path="sponsorships" element={<PartnershipOpportunitiesPage />} />
+            <Route path="sponsorships/:id" element={<SponsorshipDetailPage />} />
             <Route path="ambassadors" element={<AmbassadorsPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />

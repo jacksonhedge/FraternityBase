@@ -21,6 +21,8 @@
     "daily-report": "tsx scripts/send-daily-reports.ts",
     "daily-report-enhanced": "tsx scripts/send-enhanced-daily-reports.ts",
     "daily-report-pdf": "tsx scripts/generate-daily-report-pdf.ts",
+    "sponsorship-daily-digest": "tsx src/scripts/sendDailySponsorshipDigest.ts",
+    "sponsorship-weekly-digest": "tsx src/scripts/sendWeeklySponsorshipDigest.ts",
     "validate-csv": "tsx scripts/validate-csv.ts",
     "mass-import": "tsx scripts/mass-import-chapter-data.ts",
     "test": "echo \"Error: no test specified\" && exit 1"

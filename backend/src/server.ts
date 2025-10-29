@@ -12,6 +12,8 @@ import activityTrackingRouter from './routes/activityTracking';
 import roadmapRouter from './routes/roadmap';
 import adminNotificationsRouter from './routes/adminNotifications';
 import aiRouter from './routes/ai';
+import sponsorshipsRouter from './routes/sponsorships';
+import sponsorshipNotificationsRouter from './routes/sponsorshipNotifications';
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool that doesn't exist yet
 // import sharesRouter from './routes/shares';
 import CreditNotificationService from './services/CreditNotificationService';
@@ -926,6 +928,8 @@ app.use('/api/activity', activityTrackingRouter);
 app.use('/api/roadmap', roadmapRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/admin/notifications', adminNotificationsRouter);
+app.use('/api/sponsorships', sponsorshipsRouter);
+app.use('/api/sponsorship-notifications', sponsorshipNotificationsRouter);
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool
 // app.use('/api/shares', sharesRouter);
 
