@@ -8,6 +8,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import multer from 'multer';
 import { parse } from 'csv-parse/sync';
 import creditsRouter from './routes/credits';
+import subscriptionsRouter from './routes/subscriptions';
+import partnershipsRouter from './routes/partnerships';
 import activityTrackingRouter from './routes/activityTracking';
 import roadmapRouter from './routes/roadmap';
 import adminNotificationsRouter from './routes/adminNotifications';
@@ -124,6 +126,7 @@ app.use(cors({
 
 // Stripe webhook needs raw body for signature verification
 app.use('/api/credits/webhook', express.raw({ type: 'application/json' }));
+app.use('/api/subscriptions/webhook', express.raw({ type: 'application/json' }));
 
 // JSON parsing for all other routes - increase limit for image uploads (base64 encoded)
 app.use(express.json({ limit: '10mb' }));
@@ -924,8 +927,10 @@ app.get('/api/user/profile', async (req, res) => {
   }
 });
 
-// Mount credits router
-app.use('/api/credits', creditsRouter);
+// Mount routers
+app.use('/api/credits', creditsRouter); // Legacy route (will be deprecated)
+app.use('/api/subscriptions', subscriptionsRouter); // New subscription system
+app.use('/api/partnerships', partnershipsRouter); // Partnership requests
 app.use('/api/activity', activityTrackingRouter);
 app.use('/api/roadmap', roadmapRouter);
 app.use('/api/ai', aiRouter);

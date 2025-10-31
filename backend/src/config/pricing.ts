@@ -1,95 +1,97 @@
 /**
  * Pricing Configuration
- * Credits-based system with dollar values for purchases
+ * Subscription-based model with partnership requests
  */
 
 export const PRICING = {
-  // Chapter access (in credits) - Dynamic pricing based on rating
-  // Note: Actual pricing is calculated dynamically in server.ts based on five_star_rating
-  // These values are deprecated in favor of grade-based pricing:
-  // 5.0: 5 credits / $4.99
-  // 4.5-4.9: 7 credits / $6.99
-  // 4.0-4.4: 5 credits / $4.99
-  // 3.5-3.9: 3 credits / $2.99
-  // 3.0-3.4: 2 credits / $1.99
-  // <3.0: 1 credit / $0.99
-  CHAPTER_UNLOCK: 3, // Average chapter unlock (deprecated)
-  FIVE_STAR_UNLOCK: 5, // 5.0 star chapter unlock
-
-  // Premium services (in credits)
-  WARM_INTRO: 200,
-  AMBASSADOR_REFERRAL: 330,
-  VENUE_CONNECTION: 160,
-
-  // Subscription credits
-  MONTHLY_SUBSCRIPTION_GRANT: 50, // Monthly credits for Team tier ($29.99/month)
-  ENTERPRISE_SUBSCRIPTION_GRANT: 100, // Enterprise Tier 1 monthly credits ($299.99/month)
-
-  // Credit purchase options (credits and dollar prices)
-  // Priced around Premium unlock value ($27 per unlock)
-  // 100 credits (10 Premium unlocks) = $270 (matches Team→Enterprise tier difference)
-  CREDIT_PACKAGES: [
-    { credits: 10, price: 30, label: 'Trial' },
-    { credits: 100, price: 270, label: 'Starter' },
-    { credits: 200, price: 500, label: 'Popular' },
-    { credits: 500, price: 1150, label: 'Professional' },
-    { credits: 1000, price: 2100, label: 'Enterprise' }
-  ],
-
-  // Dollar values for services (for analytics tracking)
-  DOLLAR_VALUES: {
-    FIVE_STAR_UNLOCK: 4.99,
-    CHAPTER_UNLOCK: 2.99,
-    WARM_INTRO: 59.99,
-    AMBASSADOR_REFERRAL: 99.99,
-    VENUE_CONNECTION: 49.99,
+  // Subscription Tiers (monthly pricing)
+  SUBSCRIPTIONS: {
+    STARTER: {
+      name: 'Starter',
+      monthlyPrice: 29.99,
+      annualPrice: 29.99 * 12, // No discount for now
+      partnershipRequests: 5,
+      features: [
+        '5 partnership requests per month',
+        'Basic marketplace listing',
+        'Email support',
+        '20% platform fee on partnerships'
+      ]
+    },
+    GROWTH: {
+      name: 'Growth',
+      monthlyPrice: 99.99,
+      annualPrice: 99.99 * 12, // No discount for now
+      partnershipRequests: 20,
+      features: [
+        '20 partnership requests per month',
+        'Enhanced visibility',
+        'Priority listing placement',
+        'Advanced analytics',
+        'Priority support',
+        '20% platform fee on partnerships'
+      ]
+    },
+    ENTERPRISE: {
+      name: 'Enterprise',
+      monthlyPrice: 999.00,
+      annualPrice: 999.00 * 12,
+      partnershipRequests: 'unlimited',
+      features: [
+        'Unlimited partnership requests',
+        'Contracts & partnership management',
+        'Advanced analytics & reporting',
+        'Dedicated account manager',
+        'Custom integrations',
+        'White-label options',
+        '20% platform fee on partnerships'
+      ]
+    }
   },
 
-  // Top-up presets (in credits)
-  TOP_UP_PRESETS: [100, 200, 500, 1000],
+  // Platform fee (added on top of compensation)
+  PLATFORM_FEE_PERCENTAGE: 0.20, // 20%
 
-  // Free trial
-  FREE_TRIAL_CREDITS: 0, // Trial users start with 0 credits
+  // Stripe Price IDs (set these in environment variables)
+  STRIPE_PRICE_IDS: {
+    STARTER_MONTHLY: process.env.STRIPE_PRICE_STARTER_MONTHLY || 'price_starter_monthly',
+    STARTER_ANNUAL: process.env.STRIPE_PRICE_STARTER_ANNUAL || 'price_starter_annual',
+    GROWTH_MONTHLY: process.env.STRIPE_PRICE_GROWTH_MONTHLY || 'price_growth_monthly',
+    GROWTH_ANNUAL: process.env.STRIPE_PRICE_GROWTH_ANNUAL || 'price_growth_annual',
+    ENTERPRISE_MONTHLY: process.env.STRIPE_PRICE_ENTERPRISE_MONTHLY || 'price_enterprise_monthly',
+    ENTERPRISE_ANNUAL: process.env.STRIPE_PRICE_ENTERPRISE_ANNUAL || 'price_enterprise_annual',
+  },
 
-  // Minimum amounts (in credits)
-  MIN_CREDIT_PURCHASE: 100,
+  // Minimum partnership compensation
+  MIN_PARTNERSHIP_COMPENSATION: 100.00, // $100 minimum
+
+  // Helper function to calculate total amount (compensation + platform fee)
+  calculateTotal(compensation: number): { compensation: number; platformFee: number; total: number } {
+    const platformFee = Math.round(compensation * this.PLATFORM_FEE_PERCENTAGE * 100) / 100;
+    const total = Math.round((compensation + platformFee) * 100) / 100;
+    return {
+      compensation,
+      platformFee,
+      total
+    };
+  },
+
+  // Get quota for a subscription tier
+  getQuotaForTier(tier: string): number {
+    switch (tier) {
+      case 'starter':
+        return this.SUBSCRIPTIONS.STARTER.partnershipRequests;
+      case 'growth':
+        return this.SUBSCRIPTIONS.GROWTH.partnershipRequests;
+      case 'enterprise':
+        return 999; // Unlimited represented as 999
+      default:
+        return 0;
+    }
+  }
 } as const;
 
-export type ServiceType = 'chapter_unlock' | 'five_star_unlock' | 'warm_intro' | 'ambassador_referral' | 'venue_connection';
-
-export function getServiceCredits(serviceType: ServiceType): number {
-  switch (serviceType) {
-    case 'chapter_unlock':
-      return PRICING.CHAPTER_UNLOCK;
-    case 'five_star_unlock':
-      return PRICING.FIVE_STAR_UNLOCK;
-    case 'warm_intro':
-      return PRICING.WARM_INTRO;
-    case 'ambassador_referral':
-      return PRICING.AMBASSADOR_REFERRAL;
-    case 'venue_connection':
-      return PRICING.VENUE_CONNECTION;
-    default:
-      throw new Error(`Unknown service type: ${serviceType}`);
-  }
-}
-
-export function getServiceDollarValue(serviceType: ServiceType): number {
-  switch (serviceType) {
-    case 'chapter_unlock':
-      return PRICING.DOLLAR_VALUES.CHAPTER_UNLOCK;
-    case 'five_star_unlock':
-      return PRICING.DOLLAR_VALUES.FIVE_STAR_UNLOCK;
-    case 'warm_intro':
-      return PRICING.DOLLAR_VALUES.WARM_INTRO;
-    case 'ambassador_referral':
-      return PRICING.DOLLAR_VALUES.AMBASSADOR_REFERRAL;
-    case 'venue_connection':
-      return PRICING.DOLLAR_VALUES.VENUE_CONNECTION;
-    default:
-      throw new Error(`Unknown service type: ${serviceType}`);
-  }
-}
+export type SubscriptionTier = 'starter' | 'growth' | 'enterprise';
 
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-US', {
@@ -98,6 +100,15 @@ export function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
-export function formatCredits(credits: number): string {
-  return `${credits} credit${credits !== 1 ? 's' : ''}`;
+export function getSubscriptionInfo(tier: SubscriptionTier) {
+  switch (tier) {
+    case 'starter':
+      return PRICING.SUBSCRIPTIONS.STARTER;
+    case 'growth':
+      return PRICING.SUBSCRIPTIONS.GROWTH;
+    case 'enterprise':
+      return PRICING.SUBSCRIPTIONS.ENTERPRISE;
+    default:
+      return PRICING.SUBSCRIPTIONS.STARTER;
+  }
 }

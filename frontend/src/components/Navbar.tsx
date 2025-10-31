@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Menu, X, Search, Users, LogIn, UserPlus } from 'lucide-react';
+import { Menu, X, Search, Users, LogIn, UserPlus, Heart } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -44,7 +44,7 @@ const Navbar = () => {
 
               <Link
                 to="/signup"
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg"
               >
                 <UserPlus className="w-4 h-4" />
                 Sign Up
@@ -90,7 +90,7 @@ const Navbar = () => {
 
             <Link
               to="/signup"
-              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mt-2"
+              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-md mt-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <UserPlus className="w-4 h-4" />

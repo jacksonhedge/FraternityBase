@@ -65,7 +65,14 @@ const LoginPage = () => {
 
       if (authError) {
         console.error('Login error:', authError);
-        setError(authError.message || 'Invalid email or password');
+        // Provide more helpful error messages
+        if (authError.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please check your credentials and try again. Make sure you selected the correct account type above.');
+        } else if (authError.message.includes('Email not confirmed')) {
+          setError('Please verify your email address before logging in. Check your inbox for a confirmation link.');
+        } else {
+          setError(authError.message || 'Login failed. Please try again.');
+        }
         setIsLoading(false);
         return;
       }
@@ -99,8 +106,8 @@ const LoginPage = () => {
         }
 
         if (fraternityUser.approval_status === 'pending') {
-          setError('Your account is pending approval. Please check back later.');
-          setIsLoading(false);
+          // Navigate to waiting for approval page instead of showing error
+          navigate('/fraternity/pending-approval');
           return;
         }
 
@@ -136,7 +143,7 @@ const LoginPage = () => {
 
       if (profileError) {
         console.error('Profile fetch error:', profileError);
-        setError('Account not found. Please make sure you selected the correct account type.');
+        setError('Account not found. Please make sure you selected the correct account type above. If you signed up as a Fraternity/Sorority, please select that option to log in.');
         setIsLoading(false);
         return;
       }

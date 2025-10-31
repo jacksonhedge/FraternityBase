@@ -74,6 +74,7 @@ import FraternitySignUpPage from './pages/FraternitySignUpPage';
 import AmbassadorSignUpPage from './pages/AmbassadorSignUpPage';
 import FraternityMarketplacePage from './pages/FraternityMarketplacePage';
 import FraternityDashboardPage from './pages/FraternityDashboardPage';
+import FraternityPendingApprovalPage from './pages/FraternityPendingApprovalPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -139,6 +140,7 @@ function AnimatedRoutes() {
           <Route path="/signup/fraternity" element={<FraternitySignUpPage />} />
           <Route path="/signup/ambassador" element={<AmbassadorSignUpPage />} />
           <Route path="/fraternity/dashboard" element={<FraternityDashboardPage />} />
+          <Route path="/fraternity/pending-approval" element={<FraternityPendingApprovalPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/browse" element={<BrowsePage />} />
