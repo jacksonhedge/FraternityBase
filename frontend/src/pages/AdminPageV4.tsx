@@ -37,7 +37,8 @@ import {
   ChevronDown,
   Loader,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Heart
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
@@ -47,6 +48,8 @@ import RoadmapAdmin from '../components/RoadmapAdmin';
 import AdminNotificationCenter from '../components/AdminNotificationCenter';
 import UnlocksTab from '../components/admin/UnlocksTab';
 import IntroductionRequestsTab from '../components/admin/IntroductionRequestsTab';
+import FraternityUsersTab from '../components/admin/FraternityUsersTab';
+import CompanyProfileTab from '../components/admin/CompanyProfileTab';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -221,7 +224,7 @@ const AdminPageV4 = () => {
 
   // Define tab type
   type AdminTab =
-    'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'waitlist' |
+    'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'fraternity-users' | 'waitlist' |
     'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' |
     'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters' | string;
 
@@ -2136,6 +2139,22 @@ const AdminPageV4 = () => {
 
           <button
             onClick={() => {
+              navigate('/admin/fraternity-users');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'fraternity-users'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+          >
+            <Heart className="w-5 h-5" />
+            <span className="font-medium">Fraternity Users</span>
+          </button>
+
+          <button
+            onClick={() => {
               navigate('/admin/waitlist');
               setShowForm(false);
               setEditingId(null);
@@ -2432,6 +2451,7 @@ const AdminPageV4 = () => {
               {activeTab === 'diamond-chapters' && 'View and manage all introducable (diamond) chapters available for warm introductions'}
               {activeTab === 'ambassadors' && 'Manage ambassador profiles and partnerships'}
               {activeTab === 'users' && 'Manage chapter users and contacts'}
+              {activeTab === 'fraternity-users' && 'Manage fraternity and sorority sign-ups for sponsorships'}
               {activeTab === 'waitlist' && 'View and manage waitlist signups'}
               {activeTab === 'coming-tomorrow' && 'Manage upcoming chapters and roster updates for Dashboard'}
               {activeTab === 'wizard-admin' && 'Platform super admin - impersonate any company account'}
@@ -3166,6 +3186,14 @@ const AdminPageV4 = () => {
                 </p>
               </div>
 
+              {/* Company Profile Section */}
+              <CompanyProfileTab
+                company={selectedCompany}
+                onUpdate={() => fetchCompanyDetails(selectedCompany.id)}
+                apiUrl={API_URL}
+                getAdminHeaders={getAdminHeaders}
+              />
+
               {/* Users Section */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -3377,7 +3405,7 @@ const AdminPageV4 = () => {
       )}
 
       {/* Content Area with Action Bar */}
-      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'ambassadors' || activeTab === 'users' || activeTab === 'waitlist' || activeTab === 'coming-tomorrow' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity' || activeTab === 'roadmap') && (
+      {(activeTab === 'fraternities' || activeTab === 'colleges' || activeTab === 'chapters' || activeTab === 'ambassadors' || activeTab === 'users' || activeTab === 'fraternity-users' || activeTab === 'waitlist' || activeTab === 'coming-tomorrow' || activeTab === 'payments' || activeTab === 'unlocks' || activeTab === 'credits' || activeTab === 'intelligence' || activeTab === 'analytics' || activeTab === 'activity' || activeTab === 'roadmap') && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           {/* Action Bar */}
           <div className="flex justify-between items-center mb-6 gap-3">
@@ -6036,6 +6064,9 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
 
           {/* Ambassadors Tab */}
           {activeTab === 'ambassadors' && <AmbassadorsAdmin />}
+
+          {/* Fraternity Users Tab */}
+          {activeTab === 'fraternity-users' && <FraternityUsersTab />}
 
           {/* Product Roadmap Tab */}
           {activeTab === 'roadmap' && <RoadmapAdmin />}

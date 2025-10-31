@@ -17,7 +17,6 @@ import { analytics } from './services/analytics';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import SignUpPage from './pages/SignUpPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import BrowsePage from './pages/BrowsePage';
@@ -69,6 +68,12 @@ import CreditSystemPage from './pages/CreditSystemPage';
 import AdminAnalyticsEventsPage from './pages/AdminAnalyticsEventsPage';
 import PartnershipOpportunitiesPage from './pages/PartnershipOpportunitiesPage';
 import SponsorshipDetailPage from './pages/SponsorshipDetailPage';
+import SignUpPage from './pages/SignUpPage';
+import BrandSignUpPage from './pages/BrandSignUpPage';
+import FraternitySignUpPage from './pages/FraternitySignUpPage';
+import AmbassadorSignUpPage from './pages/AmbassadorSignUpPage';
+import FraternityMarketplacePage from './pages/FraternityMarketplacePage';
+import FraternityDashboardPage from './pages/FraternityDashboardPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -130,6 +135,10 @@ function AnimatedRoutes() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/signup/brand" element={<BrandSignUpPage />} />
+          <Route path="/signup/fraternity" element={<FraternitySignUpPage />} />
+          <Route path="/signup/ambassador" element={<AmbassadorSignUpPage />} />
+          <Route path="/fraternity/dashboard" element={<FraternityDashboardPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/browse" element={<BrowsePage />} />
@@ -154,6 +163,7 @@ function AnimatedRoutes() {
           <Route path="/admin/diamond-chapters" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/ambassadors" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/fraternity-users" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/waitlist" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/payments" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/unlocks" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
@@ -179,6 +189,7 @@ function AnimatedRoutes() {
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Navigate to="/app/map" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="marketplace" element={<FraternityMarketplacePage />} />
             <Route path="my-unlocked" element={<MyUnlockedPage />} />
             <Route path="my-unlocked" element={<MyChaptersPage />} />
             <Route path="my-unlocked/:id" element={<ChapterDetailPage />} />

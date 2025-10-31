@@ -14,6 +14,8 @@ import adminNotificationsRouter from './routes/adminNotifications';
 import aiRouter from './routes/ai';
 import sponsorshipsRouter from './routes/sponsorships';
 import sponsorshipNotificationsRouter from './routes/sponsorshipNotifications';
+import fraternityRouter from './routes/fraternity';
+console.log('✅ Fraternity router loaded:', typeof fraternityRouter);
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool that doesn't exist yet
 // import sharesRouter from './routes/shares';
 import CreditNotificationService from './services/CreditNotificationService';
@@ -930,6 +932,8 @@ app.use('/api/ai', aiRouter);
 app.use('/api/admin/notifications', adminNotificationsRouter);
 app.use('/api/sponsorships', sponsorshipsRouter);
 app.use('/api/sponsorship-notifications', sponsorshipNotificationsRouter);
+app.use('/api/fraternity', fraternityRouter);
+console.log('✅ Fraternity router mounted at /api/fraternity');
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool
 // app.use('/api/shares', sharesRouter);
 
@@ -3762,6 +3766,60 @@ app.patch('/api/admin/companies/:id/status', requireAdmin, async (req, res) => {
     });
   } catch (error: any) {
     console.error('Error updating company status:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update company profile (admin only)
+app.patch('/api/admin/companies/:id/profile', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      website,
+      logo_url,
+      instagram_url,
+      linkedin_url,
+      twitter_url,
+      facebook_url,
+      tiktok_url,
+      description,
+      industry,
+      company_size,
+      headquarters_location
+    } = req.body;
+
+    const updateData: any = { updated_at: new Date().toISOString() };
+
+    // Only update fields that are provided
+    if (website !== undefined) updateData.website = website;
+    if (logo_url !== undefined) updateData.logo_url = logo_url;
+    if (instagram_url !== undefined) updateData.instagram_url = instagram_url;
+    if (linkedin_url !== undefined) updateData.linkedin_url = linkedin_url;
+    if (twitter_url !== undefined) updateData.twitter_url = twitter_url;
+    if (facebook_url !== undefined) updateData.facebook_url = facebook_url;
+    if (tiktok_url !== undefined) updateData.tiktok_url = tiktok_url;
+    if (description !== undefined) updateData.description = description;
+    if (industry !== undefined) updateData.industry = industry;
+    if (company_size !== undefined) updateData.company_size = company_size;
+    if (headquarters_location !== undefined) updateData.headquarters_location = headquarters_location;
+
+    const { data, error } = await supabase
+      .from('companies')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log(`✅ Updated company ${id} profile by admin`);
+    res.json({
+      success: true,
+      message: 'Company profile updated successfully',
+      data
+    });
+  } catch (error: any) {
+    console.error('Error updating company profile:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -6968,3 +7026,4 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Export for Vercel serverless
 export default app;
+

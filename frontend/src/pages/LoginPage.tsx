@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { supabase } from '../lib/supabase';
 import { loginSuccess, loginFailure } from '../store/slices/authSlice';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Building2, Heart, Users } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -24,6 +24,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [idleMessage, setIdleMessage] = useState<string | null>(null);
+  const [accountType, setAccountType] = useState<'brand' | 'fraternity' | 'ambassador'>('brand');
 
   const {
     register,
@@ -48,6 +49,13 @@ const LoginPage = () => {
     setError(null);
     setIsLoading(true);
 
+    // Check if ambassador
+    if (accountType === 'ambassador') {
+      setError('Ambassador login is not available yet. Please check back soon!');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       // Authenticate with Supabase
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -68,7 +76,58 @@ const LoginPage = () => {
         return;
       }
 
-      // Get user profile from database
+      // Check if user is a fraternity user first
+      const { data: fraternityUser, error: fraternityError } = await supabase
+        .from('fraternity_users')
+        .select('*')
+        .eq('user_id', authData.user.id)
+        .single();
+
+      // If fraternity user found
+      if (fraternityUser && !fraternityError) {
+        // Check if they selected the right account type
+        if (accountType !== 'fraternity') {
+          setError('This email is registered as a fraternity account. Please select "Fraternity/Sorority" to login.');
+          setIsLoading(false);
+          return;
+        }
+        // Check approval status
+        if (fraternityUser.approval_status === 'rejected') {
+          setError(`Your application was rejected. Reason: ${fraternityUser.rejection_reason || 'Please contact support for more information.'}`);
+          setIsLoading(false);
+          return;
+        }
+
+        if (fraternityUser.approval_status === 'pending') {
+          setError('Your account is pending approval. Please check back later.');
+          setIsLoading(false);
+          return;
+        }
+
+        // Store token in localStorage for API calls
+        localStorage.setItem('token', authData.session.access_token);
+        localStorage.setItem('userType', 'fraternity');
+
+        // Dispatch to Redux with fraternity user data
+        dispatch(loginSuccess({
+          user: {
+            id: authData.user.id,
+            email: authData.user.email || '',
+            firstName: fraternityUser.first_name || '',
+            lastName: fraternityUser.last_name || '',
+            role: 'user',
+          },
+          token: authData.session.access_token
+        }));
+
+        // Navigate to fraternity dashboard
+        setTimeout(() => {
+          navigate('/fraternity/dashboard');
+        }, 0);
+        return;
+      }
+
+      // Otherwise, check for brand user profile
       const { data: profile, error: profileError } = await supabase
         .from('user_profiles')
         .select('*, companies(name, approval_status)')
@@ -77,7 +136,14 @@ const LoginPage = () => {
 
       if (profileError) {
         console.error('Profile fetch error:', profileError);
-        setError('Failed to load user profile');
+        setError('Account not found. Please make sure you selected the correct account type.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if they selected the right account type
+      if (accountType !== 'brand') {
+        setError('This email is registered as a brand account. Please select "Brand/Business" to login.');
         setIsLoading(false);
         return;
       }
@@ -91,6 +157,7 @@ const LoginPage = () => {
 
       // Store token in localStorage for API calls
       localStorage.setItem('token', authData.session.access_token);
+      localStorage.setItem('userType', 'brand');
 
       // Dispatch to Redux with real user data
       dispatch(loginSuccess({
@@ -148,6 +215,51 @@ const LoginPage = () => {
                   {error}
                 </div>
               )}
+
+              {/* Account Type Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  I am signing in as a:
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setAccountType('brand')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      accountType === 'brand'
+                        ? 'border-blue-600 bg-blue-50 text-blue-900'
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                    }`}
+                  >
+                    <Building2 className="w-6 h-6" />
+                    <span className="text-xs font-medium">Brand</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAccountType('fraternity')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      accountType === 'fraternity'
+                        ? 'border-purple-600 bg-purple-50 text-purple-900'
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                    }`}
+                  >
+                    <Heart className="w-6 h-6" />
+                    <span className="text-xs font-medium">Fraternity</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAccountType('ambassador')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      accountType === 'ambassador'
+                        ? 'border-green-600 bg-green-50 text-green-900'
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                    }`}
+                  >
+                    <Users className="w-6 h-6" />
+                    <span className="text-xs font-medium">Ambassador</span>
+                  </button>
+                </div>
+              </div>
 
               <div>
                 <label htmlFor="email" className="label">
