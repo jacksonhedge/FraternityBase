@@ -171,51 +171,15 @@ const PartnershipOpportunitiesPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex items-center gap-3 mb-4">
-            <Briefcase className="w-10 h-10" />
-            <h1 className="text-4xl font-bold">Partnership Marketplace</h1>
-          </div>
-          <p className="text-indigo-100 text-lg max-w-3xl">
-            Discover sponsorship and partnership opportunities with fraternity chapters nationwide.
-            Organized by day of the week for easy browsing.
-          </p>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-5 h-5" />
-                <span className="text-sm font-medium">Total Opportunities</span>
-              </div>
-              <div className="text-3xl font-bold">{opportunities.length}</div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Building2 className="w-5 h-5" />
-                <span className="text-sm font-medium">Active Chapters</span>
-              </div>
-              <div className="text-3xl font-bold">
-                {new Set(opportunities.map(o => o.chapter_id)).size}
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5" />
-                <span className="text-sm font-medium">Today's Featured</span>
-              </div>
-              <div className="text-3xl font-bold">{currentDayOpportunities.length}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Simple Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Partnership Marketplace</h1>
+          <p className="text-gray-600 mt-2">
+            Discover sponsorship and partnership opportunities with fraternity chapters nationwide.
+          </p>
+        </div>
 
         {/* Search & Filters */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
