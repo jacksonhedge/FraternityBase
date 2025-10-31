@@ -83,6 +83,8 @@ const PartnershipOpportunitiesPage = () => {
   const [opportunities, setOpportunities] = useState<SponsorshipOpportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedOpportunity, setSelectedOpportunity] = useState<SponsorshipOpportunity | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Get current day index (0 = Monday, 6 = Sunday)
   function getCurrentDayIndex(): number {
@@ -253,12 +255,26 @@ const PartnershipOpportunitiesPage = () => {
                 key={opportunity.id}
                 opportunity={opportunity}
                 index={index}
-                onClick={() => navigate(`/sponsorships/${opportunity.id}`)}
+                onClick={() => {
+                  setSelectedOpportunity(opportunity);
+                  setShowModal(true);
+                }}
               />
             ))}
           </div>
         )}
       </div>
+
+      {/* Partnership Opportunity Modal */}
+      {showModal && selectedOpportunity && (
+        <PartnershipModal
+          opportunity={selectedOpportunity}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedOpportunity(null);
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -373,19 +389,18 @@ const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
               </span>
             </div>
 
+            {/* Social Following */}
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-white/80">Social Following</span>
+              <span className="font-semibold text-white">
+                {chapter?.instagram_followers ? chapter.instagram_followers.toLocaleString() : 'N/A'}
+              </span>
+            </div>
+
             {opportunity.budget_range && (
               <div className="flex justify-between items-center text-xs">
                 <span className="text-white/80">Budget</span>
                 <span className="font-semibold text-white">{opportunity.budget_range}</span>
-              </div>
-            )}
-
-            {opportunity.expected_reach && (
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-white/80">Reach</span>
-                <span className="font-semibold text-white">
-                  {opportunity.expected_reach.toLocaleString()} students
-                </span>
               </div>
             )}
           </div>
@@ -395,6 +410,175 @@ const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
             <div className="bg-white/20 backdrop-blur-sm text-white text-sm font-bold py-2 px-4 rounded-lg hover:bg-white/30 transition-colors flex items-center justify-center gap-2">
               View Opportunity
               <Award className="w-4 h-4" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Partnership Modal Component
+interface PartnershipModalProps {
+  opportunity: SponsorshipOpportunity;
+  onClose: () => void;
+}
+
+const PartnershipModal = ({ opportunity, onClose }: PartnershipModalProps) => {
+  const chapter = opportunity.chapters;
+  const collegeLogo = getCollegeLogoWithFallback(chapter?.universities?.name || '');
+
+  const handleRequestPartnership = () => {
+    // TODO: Implement partnership request logic
+    console.log('Request partnership for:', opportunity.id);
+    alert('Partnership request submitted! We will contact you soon.');
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        onClick={onClose}
+      ></div>
+
+      {/* Modal */}
+      <div className="flex min-h-full items-center justify-center p-4">
+        <div className="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-10 p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Header with College Logo */}
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-8 rounded-t-2xl">
+            <div className="flex items-start gap-6">
+              <div className="w-24 h-24 bg-white rounded-2xl p-3 shadow-xl flex-shrink-0">
+                <img
+                  src={collegeLogo}
+                  alt={chapter?.universities?.name || 'College'}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full mb-3">
+                  <Award className="w-4 h-4" />
+                  <span className="text-xs font-bold uppercase">
+                    {chapter?.greek_organizations?.organization_type || 'Chapter'}
+                  </span>
+                </div>
+                <h2 className="text-3xl font-bold mb-2">
+                  {chapter?.greek_organizations?.name || 'Unknown Organization'}
+                </h2>
+                {chapter?.greek_organizations?.greek_letters && (
+                  <div className="text-xl font-serif mb-2 text-white/90">
+                    {chapter?.greek_organizations?.greek_letters}
+                  </div>
+                )}
+                <div className="flex items-center gap-2 text-white/90">
+                  <Building2 className="w-4 h-4" />
+                  <span className="font-medium">{chapter?.universities?.name}</span>
+                </div>
+                {chapter?.universities?.location && (
+                  <div className="flex items-center gap-2 text-white/80 text-sm mt-1">
+                    <MapPin className="w-3 h-3" />
+                    <span>{chapter?.universities?.location}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-8">
+            {/* Opportunity Details */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Partnership Opportunity</h3>
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <div className="text-sm text-gray-500 mb-1">Opportunity Type</div>
+                    <div className="font-semibold text-gray-900 capitalize">
+                      {opportunity.opportunity_type.replace(/_/g, ' ')}
+                    </div>
+                  </div>
+                  {opportunity.budget_range && (
+                    <div>
+                      <div className="text-sm text-gray-500 mb-1">Budget Range</div>
+                      <div className="font-semibold text-gray-900">{opportunity.budget_range}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Chapter Stats */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Chapter Details</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                  <div className="flex items-center gap-2 text-blue-600 mb-2">
+                    <Users className="w-5 h-5" />
+                    <span className="text-sm font-medium">Members</span>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {chapter?.member_count || 'N/A'}
+                  </div>
+                </div>
+
+                <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
+                  <div className="flex items-center gap-2 text-purple-600 mb-2">
+                    <TrendingUp className="w-5 h-5" />
+                    <span className="text-sm font-medium">Social Following</span>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {chapter?.instagram_followers ? chapter.instagram_followers.toLocaleString() : 'N/A'}
+                  </div>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+                  <div className="flex items-center gap-2 text-green-600 mb-2">
+                    <Award className="w-5 h-5" />
+                    <span className="text-sm font-medium">Rating</span>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {chapter?.grade ? `${chapter.grade}⭐` : '5.0⭐'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* About */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">About This Opportunity</h3>
+              <p className="text-gray-700 leading-relaxed">
+                Partner with {chapter?.greek_organizations?.name || 'this chapter'} at {chapter?.universities?.name || 'this university'}
+                {' '}to reach {chapter?.member_count || 'hundreds of'} engaged students. This {opportunity.opportunity_type.replace(/_/g, ' ')}
+                {' '}opportunity offers authentic brand engagement with a highly active chapter community.
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              <button
+                onClick={onClose}
+                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleRequestPartnership}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors shadow-lg flex items-center justify-center gap-2"
+              >
+                <Briefcase className="w-5 h-5" />
+                Request Partnership
+              </button>
             </div>
           </div>
         </div>

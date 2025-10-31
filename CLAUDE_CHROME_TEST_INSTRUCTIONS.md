@@ -105,8 +105,13 @@ Explore the main dashboard that chapters see after logging in.
 4. **Navigation & UX**
    - Test all menu items
    - Check if sidebar/header is clear
-   - **IMPORTANT DESIGN REQUIREMENT**: The NavBar content should be pinned at the bottom of the left sidebar menu (like a frozen row in Google Sheets, but vertical). It should NOT be a horizontal bar at the top.
+   - **IMPORTANT DESIGN REQUIREMENT**:
+     - Left sidebar menu should have its OWN scrollability (independent scroll from main content)
+     - NavBar content should be pinned/frozen at the BOTTOM of the left sidebar (like a frozen row in Google Sheets, but vertical)
+     - When you scroll the left menu, the NavBar stays stuck at the bottom
+     - NavBar should NOT be a horizontal bar at the top
    - Look for: User account info, settings, logout buttons at the bottom of the left menu, overlaid/frozen there
+   - Test: Scroll the left menu to see if NavBar stays pinned at bottom
    - Try mobile view (resize browser)
 
 5. **Take Screenshots**
@@ -120,11 +125,14 @@ Explore the main dashboard that chapters see after logging in.
 - ✅ Easy navigation
 - ✅ Important info is prominent
 - ✅ Actions are clear (buttons, CTAs)
-- ✅ NavBar content is pinned at bottom of left sidebar (frozen/overlaid)
+- ✅ Left sidebar has independent scrollability (can scroll menu items separately from main content)
+- ✅ NavBar content is pinned at bottom of left sidebar (frozen/overlaid, stays put when scrolling menu)
 - ❌ Cluttered or confusing layout
 - ❌ Missing or unclear features
 - ❌ Slow loading times
 - ❌ NavBar is still a horizontal bar at the top (should be moved to left sidebar bottom)
+- ❌ Left sidebar doesn't scroll independently
+- ❌ NavBar scrolls away when scrolling the left menu (should stay pinned)
 
 ---
 
