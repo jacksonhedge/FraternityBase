@@ -189,7 +189,7 @@ const Layout = () => {
     {
       items: [
         { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null, requiresTeamPlan: true },
-        { name: 'Partnership Opportunities', href: '/app/sponsorships', icon: Briefcase, badge: { text: 'NEW', type: 'success' }, requiresTeamPlan: true },
+        { name: 'Partnership Marketplace', href: '/app/sponsorships', icon: Briefcase, badge: { text: 'NEW', type: 'success' }, requiresTeamPlan: true },
       ]
     },
     {

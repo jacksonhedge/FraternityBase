@@ -176,7 +176,7 @@ const PartnershipOpportunitiesPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center gap-3 mb-4">
             <Briefcase className="w-10 h-10" />
-            <h1 className="text-4xl font-bold">Partnership Opportunities</h1>
+            <h1 className="text-4xl font-bold">Partnership Marketplace</h1>
           </div>
           <p className="text-indigo-100 text-lg max-w-3xl">
             Discover sponsorship and partnership opportunities with fraternity chapters nationwide.
@@ -353,11 +353,12 @@ const PartnershipOpportunitiesPage = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {currentDayOpportunities.map((opportunity) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {currentDayOpportunities.map((opportunity, index) => (
               <ChapterCard
                 key={opportunity.id}
                 opportunity={opportunity}
+                index={index}
                 onClick={() => navigate(`/sponsorships/${opportunity.id}`)}
               />
             ))}
@@ -368,103 +369,129 @@ const PartnershipOpportunitiesPage = () => {
   );
 };
 
-// Chapter Card Component - Shows limited info (School, Name, Members)
+// Chapter Card Component - Shows fraternity info in colorful college-card style
 interface ChapterCardProps {
   opportunity: SponsorshipOpportunity;
   onClick: () => void;
+  index: number;
 }
 
-const ChapterCard = ({ opportunity, onClick }: ChapterCardProps) => {
+const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
   const chapter = opportunity.chapters;
+
+  // Generate vibrant gradient colors (same as college cards)
+  const gradients = [
+    'from-blue-500 via-blue-600 to-indigo-600',
+    'from-purple-500 via-purple-600 to-pink-600',
+    'from-green-500 via-emerald-600 to-teal-600',
+    'from-orange-500 via-red-500 to-pink-600',
+    'from-cyan-500 via-blue-600 to-purple-600',
+    'from-yellow-500 via-orange-500 to-red-600',
+    'from-pink-500 via-rose-600 to-purple-600',
+    'from-indigo-500 via-purple-600 to-pink-600',
+  ];
+  const gradient = gradients[index % gradients.length];
 
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer border border-gray-200 hover:border-indigo-300 p-6"
+      className="group relative cursor-pointer"
     >
-      {/* Organization Name & Type */}
-      <div className="mb-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Award className={`w-5 h-5 ${
-            chapter?.greek_organizations?.organization_type === 'fraternity'
-              ? 'text-blue-500'
-              : 'text-pink-500'
-          }`} />
-          <span className="text-xs font-medium text-gray-500 uppercase">
-            {chapter?.greek_organizations?.organization_type || 'Chapter'}
-          </span>
-        </div>
+      {/* Colorful Card */}
+      <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
+        {/* Decorative circles */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
 
-        <h3 className="text-xl font-bold text-gray-900 mb-1">
-          {chapter?.greek_organizations?.name || 'Unknown Organization'}
-        </h3>
-
-        {chapter?.greek_organizations?.greek_letters && (
-          <div className="text-2xl font-serif text-indigo-600 mb-2">
-            {chapter?.greek_organizations?.greek_letters}
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+          {/* Organization Type Badge */}
+          <div className="flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full">
+            <Award className="w-4 h-4 text-white" />
+            <span className="text-xs font-bold text-white uppercase">
+              {chapter?.greek_organizations?.organization_type || 'Chapter'}
+            </span>
           </div>
-        )}
-      </div>
 
-      {/* Chapter Name */}
-      <div className="mb-3">
-        <div className="text-sm font-medium text-gray-700">
-          {chapter?.chapter_name || 'Chapter'}
-        </div>
-      </div>
+          {/* Organization Name */}
+          <div>
+            <h3 className="font-bold text-white text-lg leading-tight mb-2">
+              {chapter?.greek_organizations?.name || 'Unknown Organization'}
+            </h3>
 
-      {/* University */}
-      <div className="flex items-center gap-2 mb-3 pb-3 border-b">
-        <Building2 className="w-4 h-4 text-gray-400" />
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-medium text-gray-900 truncate">
-            {chapter?.universities?.name || 'Unknown University'}
-          </div>
-          {chapter?.universities?.location && (
-            <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">
-              <MapPin className="w-3 h-3" />
-              {chapter?.universities?.location}
+            {chapter?.greek_organizations?.greek_letters && (
+              <div className="text-2xl font-serif text-white/90 mb-2">
+                {chapter?.greek_organizations?.greek_letters}
+              </div>
+            )}
+
+            <div className="text-sm font-medium text-white/80">
+              {chapter?.chapter_name || 'Chapter'}
             </div>
-          )}
+          </div>
+
+          {/* University */}
+          <div className="w-full">
+            <div className="flex items-center justify-center gap-2 text-white/90 text-sm mb-1">
+              <Building2 className="w-4 h-4" />
+              <span className="font-medium">{chapter?.universities?.name || 'Unknown University'}</span>
+            </div>
+            {chapter?.universities?.location && (
+              <div className="flex items-center justify-center gap-1 text-white/80 text-xs">
+                <MapPin className="w-3 h-3" />
+                {chapter?.universities?.location}
+              </div>
+            )}
+          </div>
+
+          {/* Stats */}
+          <div className="w-full space-y-2 pt-2">
+            <div className="w-full h-px bg-white/20"></div>
+
+            {/* Member Count */}
+            <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center gap-2 text-white/90">
+                <Users className="w-4 h-4" />
+                <span>Members</span>
+              </div>
+              <span className="font-bold text-white text-lg">
+                {chapter?.member_count || 'N/A'}
+              </span>
+            </div>
+
+            {/* Opportunity Type */}
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-white/80">Partnership Type</span>
+              <span className="font-semibold text-white">
+                {opportunity.opportunity_type.replace(/_/g, ' ')}
+              </span>
+            </div>
+
+            {opportunity.budget_range && (
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-white/80">Budget</span>
+                <span className="font-semibold text-white">{opportunity.budget_range}</span>
+              </div>
+            )}
+
+            {opportunity.expected_reach && (
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-white/80">Reach</span>
+                <span className="font-semibold text-white">
+                  {opportunity.expected_reach.toLocaleString()} students
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* View Details Button */}
+          <div className="w-full pt-2">
+            <div className="bg-white/20 backdrop-blur-sm text-white text-sm font-bold py-2 px-4 rounded-lg hover:bg-white/30 transition-colors flex items-center justify-center gap-2">
+              View Opportunity
+              <Award className="w-4 h-4" />
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Member Count */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Users className="w-5 h-5 text-gray-400" />
-          <span className="text-sm text-gray-600">Members</span>
-        </div>
-        <span className="text-lg font-bold text-indigo-600">
-          {chapter?.member_count || 'N/A'}
-        </span>
-      </div>
-
-      {/* Opportunity Type Badge */}
-      <div className="flex items-center gap-2">
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-          {opportunity.opportunity_type.replace(/_/g, ' ')}
-        </span>
-
-        {opportunity.budget_range && (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            {opportunity.budget_range}
-          </span>
-        )}
-      </div>
-
-      {/* Expected Reach (if available) */}
-      {opportunity.expected_reach && (
-        <div className="mt-3 pt-3 border-t flex items-center gap-2 text-sm text-gray-600">
-          <TrendingUp className="w-4 h-4" />
-          <span>Reach: {opportunity.expected_reach.toLocaleString()} students</span>
-        </div>
-      )}
-
-      {/* Posted Date */}
-      <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
-        <Clock className="w-3 h-3" />
-        Posted {new Date(opportunity.posted_at).toLocaleDateString()}
       </div>
     </div>
   );
