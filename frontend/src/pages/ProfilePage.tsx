@@ -44,6 +44,7 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    business_vertical: '',
     industry: '',
     company_size: '',
     website: '',
@@ -80,6 +81,7 @@ const ProfilePage = () => {
         setFormData({
           name: data.name || '',
           description: data.description || '',
+          business_vertical: data.business_vertical || '',
           industry: data.industry || '',
           company_size: data.company_size || '',
           website: data.website || '',
@@ -121,6 +123,7 @@ const ProfilePage = () => {
         .update({
           name: formData.name,
           description: formData.description,
+          business_vertical: formData.business_vertical,
           industry: formData.industry,
           company_size: formData.company_size,
           website: formData.website,
@@ -264,7 +267,32 @@ const ProfilePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Industry
+                  Business Vertical
+                </label>
+                <select
+                  name="business_vertical"
+                  value={formData.business_vertical}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select business vertical...</option>
+                  <option value="Fantasy Sports">Fantasy Sports</option>
+                  <option value="Sportsbook/Casino">Sportsbook/Casino</option>
+                  <option value="Food & Beverage">Food & Beverage</option>
+                  <option value="Apparel">Apparel</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Health & Wellness">Health & Wellness</option>
+                  <option value="Education">Education</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Industry (Legacy)
                 </label>
                 <select
                   name="industry"

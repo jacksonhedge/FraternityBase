@@ -3783,6 +3783,7 @@ app.patch('/api/admin/companies/:id/profile', requireAdmin, async (req, res) => 
       facebook_url,
       tiktok_url,
       description,
+      business_vertical,
       industry,
       company_size,
       headquarters_location
@@ -3799,6 +3800,7 @@ app.patch('/api/admin/companies/:id/profile', requireAdmin, async (req, res) => 
     if (facebook_url !== undefined) updateData.facebook_url = facebook_url;
     if (tiktok_url !== undefined) updateData.tiktok_url = tiktok_url;
     if (description !== undefined) updateData.description = description;
+    if (business_vertical !== undefined) updateData.business_vertical = business_vertical;
     if (industry !== undefined) updateData.industry = industry;
     if (company_size !== undefined) updateData.company_size = company_size;
     if (headquarters_location !== undefined) updateData.headquarters_location = headquarters_location;

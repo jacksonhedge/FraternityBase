@@ -20,6 +20,7 @@ const CompanyProfileTab = ({ company, onUpdate, apiUrl, getAdminHeaders }: Compa
     facebook_url: company.facebook_url || '',
     tiktok_url: company.tiktok_url || '',
     description: company.description || '',
+    business_vertical: company.business_vertical || '',
     industry: company.industry || '',
     company_size: company.company_size || '',
     headquarters_location: company.headquarters_location || ''
@@ -69,6 +70,7 @@ const CompanyProfileTab = ({ company, onUpdate, apiUrl, getAdminHeaders }: Compa
       facebook_url: company.facebook_url || '',
       tiktok_url: company.tiktok_url || '',
       description: company.description || '',
+      business_vertical: company.business_vertical || '',
       industry: company.industry || '',
       company_size: company.company_size || '',
       headquarters_location: company.headquarters_location || ''
@@ -337,18 +339,37 @@ const CompanyProfileTab = ({ company, onUpdate, apiUrl, getAdminHeaders }: Compa
           )}
         </div>
 
-        {/* Industry & Size */}
-        <div className="bg-white p-4 rounded-lg border border-blue-200">
-          <p className="text-xs text-gray-500 uppercase mb-2">Industry & Size</p>
+        {/* Business Vertical & Company Info */}
+        <div className="bg-white p-4 rounded-lg border border-blue-200 md:col-span-2">
+          <p className="text-xs text-gray-500 uppercase mb-2">Business Vertical & Company Info</p>
           {isEditing ? (
-            <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <select
+                name="business_vertical"
+                value={formData.business_vertical}
+                onChange={handleChange}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select business vertical...</option>
+                <option value="Fantasy Sports">Fantasy Sports</option>
+                <option value="Sportsbook/Casino">Sportsbook/Casino</option>
+                <option value="Food & Beverage">Food & Beverage</option>
+                <option value="Apparel">Apparel</option>
+                <option value="Technology">Technology</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Health & Wellness">Health & Wellness</option>
+                <option value="Education">Education</option>
+                <option value="Other">Other</option>
+              </select>
               <select
                 name="industry"
                 value={formData.industry}
                 onChange={handleChange}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Select industry...</option>
+                <option value="">Select industry (legacy)...</option>
                 <option value="Technology">Technology</option>
                 <option value="Finance">Finance</option>
                 <option value="Marketing">Marketing</option>
@@ -385,7 +406,10 @@ const CompanyProfileTab = ({ company, onUpdate, apiUrl, getAdminHeaders }: Compa
               />
             </div>
           ) : (
-            <div className="space-y-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {formData.business_vertical && (
+                <p className="text-sm text-gray-700"><span className="font-medium">Business Vertical:</span> {formData.business_vertical}</p>
+              )}
               {formData.industry && (
                 <p className="text-sm text-gray-700"><span className="font-medium">Industry:</span> {formData.industry}</p>
               )}
@@ -395,7 +419,7 @@ const CompanyProfileTab = ({ company, onUpdate, apiUrl, getAdminHeaders }: Compa
               {formData.headquarters_location && (
                 <p className="text-sm text-gray-700"><span className="font-medium">HQ:</span> {formData.headquarters_location}</p>
               )}
-              {!formData.industry && !formData.company_size && !formData.headquarters_location && (
+              {!formData.business_vertical && !formData.industry && !formData.company_size && !formData.headquarters_location && (
                 <p className="text-sm text-gray-400 italic">Not provided</p>
               )}
             </div>

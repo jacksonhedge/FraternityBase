@@ -46,7 +46,7 @@ const FraternityMarketplacePage = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedIndustry, setSelectedIndustry] = useState<string>('all');
+  const [selectedVertical, setSelectedVertical] = useState<string>('all');
 
   useEffect(() => {
     fetchData();
@@ -81,11 +81,11 @@ const FraternityMarketplacePage = () => {
   const filteredCompanies = companies.filter(company => {
     const matchesSearch = company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          company.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesIndustry = selectedIndustry === 'all' || company.industry === selectedIndustry;
-    return matchesSearch && matchesIndustry;
+    const matchesVertical = selectedVertical === 'all' || (company as any).business_vertical === selectedVertical;
+    return matchesSearch && matchesVertical;
   });
 
-  const industries = Array.from(new Set(companies.map(c => c.industry).filter(Boolean)));
+  const verticals = Array.from(new Set(companies.map((c: any) => c.business_vertical).filter(Boolean)));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
@@ -129,29 +129,110 @@ const FraternityMarketplacePage = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Search and Filters */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search brands..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
+          {/* Search Bar */}
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search brands..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Business Vertical Toggles */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Filter className="w-5 h-5 text-gray-600" />
+              <h3 className="font-semibold text-gray-900">Filter by Category</h3>
             </div>
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <select
-                value={selectedIndustry}
-                onChange={(e) => setSelectedIndustry(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none"
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setSelectedVertical('all')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedVertical === 'all'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               >
-                <option value="all">All Industries</option>
-                {industries.map(industry => (
-                  <option key={industry} value={industry}>{industry}</option>
+                All Brands
+              </button>
+              <button
+                onClick={() => setSelectedVertical('Fantasy Sports')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedVertical === 'Fantasy Sports'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                🏈 Fantasy Sports
+              </button>
+              <button
+                onClick={() => setSelectedVertical('Sportsbook/Casino')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedVertical === 'Sportsbook/Casino'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                🎰 Sportsbook/Casino
+              </button>
+              <button
+                onClick={() => setSelectedVertical('Food & Beverage')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedVertical === 'Food & Beverage'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                🍔 Food & Beverage
+              </button>
+              <button
+                onClick={() => setSelectedVertical('Apparel')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedVertical === 'Apparel'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                👕 Apparel
+              </button>
+              <button
+                onClick={() => setSelectedVertical('Technology')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedVertical === 'Technology'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                💻 Technology
+              </button>
+              <button
+                onClick={() => setSelectedVertical('Entertainment')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedVertical === 'Entertainment'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                🎬 Entertainment
+              </button>
+              {verticals
+                .filter(v => !['Fantasy Sports', 'Sportsbook/Casino', 'Food & Beverage', 'Apparel', 'Technology', 'Entertainment'].includes(v))
+                .map(vertical => (
+                  <button
+                    key={vertical}
+                    onClick={() => setSelectedVertical(vertical)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      selectedVertical === vertical
+                        ? 'bg-purple-600 text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {vertical}
+                  </button>
                 ))}
-              </select>
             </div>
           </div>
         </div>
@@ -207,9 +288,9 @@ const FraternityMarketplacePage = () => {
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
                     </div>
 
-                    {company.industry && (
+                    {(company as any).business_vertical && (
                       <span className="inline-block bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                        {company.industry}
+                        {(company as any).business_vertical}
                       </span>
                     )}
 
