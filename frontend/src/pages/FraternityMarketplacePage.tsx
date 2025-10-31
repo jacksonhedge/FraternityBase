@@ -92,12 +92,22 @@ const FraternityMarketplacePage = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-4">
-            <Trophy className="w-10 h-10" />
-            <h1 className="text-4xl font-bold">Sponsorship Marketplace</h1>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <Trophy className="w-10 h-10" />
+              <h1 className="text-4xl font-bold">Sponsorship Marketplace</h1>
+            </div>
+            <div className="hidden md:block">
+              <div className="bg-green-500 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg animate-pulse">
+                100% FREE TO JOIN
+              </div>
+            </div>
           </div>
-          <p className="text-xl text-purple-100">
+          <p className="text-xl text-purple-100 mb-2">
             Find brands to sponsor your fraternity's events and philanthropies
+          </p>
+          <p className="text-lg text-purple-200 font-semibold">
+            🎉 Free to sign up • Free to get listed • Free to connect with brands
           </p>
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
@@ -369,30 +379,60 @@ const FraternityMarketplacePage = () => {
           )}
         </div>
 
+        {/* Free CTA Banner */}
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-xl p-8 text-white mb-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-4">🎉 Completely Free for Fraternities & Sororities</h2>
+            <p className="text-xl text-green-100 mb-6">
+              No hidden fees. No credit card required. Get your chapter listed in minutes.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                <p className="text-2xl font-bold mb-1">$0</p>
+                <p className="text-green-100">Sign Up Fee</p>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                <p className="text-2xl font-bold mb-1">$0</p>
+                <p className="text-green-100">Listing Fee</p>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                <p className="text-2xl font-bold mb-1">$0</p>
+                <p className="text-green-100">Connection Fee</p>
+              </div>
+            </div>
+            <button
+              onClick={() => window.location.href = '/fraternity-signup'}
+              className="bg-white text-green-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-green-50 transition-colors shadow-lg"
+            >
+              Get Your Chapter Listed - It's Free! →
+            </button>
+          </div>
+        </div>
+
         {/* How It Works Section */}
         <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-xl p-8 text-white">
-          <h2 className="text-2xl font-bold mb-6 text-center">How It Works</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">How It Works (100% Free)</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Search className="w-8 h-8" />
               </div>
-              <h3 className="font-bold mb-2">1. Browse Brands</h3>
-              <p className="text-purple-100">Explore top brands looking to sponsor college events</p>
+              <h3 className="font-bold mb-2">1. Sign Up Free</h3>
+              <p className="text-purple-100">Create your chapter profile in 2 minutes - no payment needed</p>
             </div>
             <div className="text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-8 h-8" />
               </div>
-              <h3 className="font-bold mb-2">2. Submit Event</h3>
-              <p className="text-purple-100">Tell brands about your philanthropy or event</p>
+              <h3 className="font-bold mb-2">2. Get Listed</h3>
+              <p className="text-purple-100">Your chapter appears to brands instantly - 100% free</p>
             </div>
             <div className="text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <DollarSign className="w-8 h-8" />
               </div>
-              <h3 className="font-bold mb-2">3. Get Sponsored</h3>
-              <p className="text-purple-100">Receive funding and support from brands</p>
+              <h3 className="font-bold mb-2">3. Connect with Brands</h3>
+              <p className="text-purple-100">Brands reach out directly to sponsor your events</p>
             </div>
           </div>
         </div>

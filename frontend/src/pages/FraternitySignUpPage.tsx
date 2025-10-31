@@ -223,11 +223,17 @@ const FraternitySignUpPage = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mb-4">
               <Heart className="w-8 h-8 text-white" />
             </div>
+            <div className="bg-green-500 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg inline-block mb-4 animate-pulse">
+              100% FREE - NO CREDIT CARD REQUIRED
+            </div>
             <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Find Sponsors
+              Get Your Chapter Listed Free
             </h1>
-            <p className="text-xl text-gray-600">
-              Connect your chapter with brands
+            <p className="text-xl text-gray-600 mb-2">
+              Connect your chapter with brands looking to sponsor
+            </p>
+            <p className="text-md text-gray-500">
+              ✓ Free to sign up  ✓ Free to list your chapter  ✓ Free forever
             </p>
           </div>
 
