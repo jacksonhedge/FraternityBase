@@ -2039,7 +2039,7 @@ const AdminPageV4 = () => {
             }`}
           >
             <UserPlus className="w-5 h-5" />
-            <span className="font-medium">Users & Accounts</span>
+            <span className="font-medium">Accounts</span>
             {companies.length > 0 && (
               <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{companies.length}</span>
             )}
@@ -2444,7 +2444,7 @@ const AdminPageV4 = () => {
             <h2 className="text-3xl font-bold text-gray-900 capitalize">{activeTab}</h2>
             <p className="text-gray-600 mt-1">
               {activeTab === 'dashboard' && 'Overview of system statistics'}
-              {activeTab === 'companies' && 'Manage all user accounts, credits, approval status, and unlock history'}
+              {activeTab === 'companies' && 'Manage brand accounts, credits, approval status, and unlock history'}
               {activeTab === 'fraternities' && 'Manage Greek organizations'}
               {activeTab === 'colleges' && 'Manage universities and colleges'}
               {activeTab === 'chapters' && 'Manage individual chapters'}
@@ -2771,6 +2771,7 @@ const AdminPageV4 = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -2785,6 +2786,11 @@ const AdminPageV4 = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {companies.map((company) => (
                   <tr key={company.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => fetchCompanyDetails(company.id)}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
+                        Brand
+                      </span>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         <Eye className="w-4 h-4 text-gray-400" />
