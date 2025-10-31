@@ -22,6 +22,7 @@ import {
   Clock,
   Briefcase
 } from 'lucide-react';
+import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -121,35 +122,17 @@ const PartnershipOpportunitiesPage = () => {
     fetchOpportunities();
   }, [filterType, filterState]);
 
-  // Organize opportunities by day of week (distribute evenly)
-  const organizeByDay = () => {
-    const organized: Record<number, SponsorshipOpportunity[]> = {
-      0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []
-    };
+  // Filter opportunities by search term
+  const filteredOpportunities = opportunities.filter(opp => {
+    const searchLower = searchTerm.toLowerCase();
+    const chapterName = opp.chapters?.chapter_name?.toLowerCase() || '';
+    const universityName = opp.chapters?.universities?.name?.toLowerCase() || '';
+    const orgName = opp.chapters?.greek_organizations?.name?.toLowerCase() || '';
 
-    // Filter by search term
-    const filtered = opportunities.filter(opp => {
-      const searchLower = searchTerm.toLowerCase();
-      const chapterName = opp.chapters?.chapter_name?.toLowerCase() || '';
-      const universityName = opp.chapters?.universities?.name?.toLowerCase() || '';
-      const orgName = opp.chapters?.greek_organizations?.name?.toLowerCase() || '';
-
-      return chapterName.includes(searchLower) ||
-             universityName.includes(searchLower) ||
-             orgName.includes(searchLower);
-    });
-
-    // Distribute opportunities across days
-    filtered.forEach((opp, index) => {
-      const dayIndex = index % 7;
-      organized[dayIndex].push(opp);
-    });
-
-    return organized;
-  };
-
-  const organizedOpportunities = organizeByDay();
-  const currentDayOpportunities = organizedOpportunities[selectedDay] || [];
+    return chapterName.includes(searchLower) ||
+           universityName.includes(searchLower) ||
+           orgName.includes(searchLower);
+  });
 
   // Navigate between days
   const goToPreviousDay = () => {
@@ -174,7 +157,7 @@ const PartnershipOpportunitiesPage = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Simple Header */}
-        <div className="mb-6">
+        <div className="mb-4">
           <h1 className="text-3xl font-bold text-gray-900">Partnership Marketplace</h1>
           <p className="text-gray-600 mt-2">
             Discover sponsorship and partnership opportunities with fraternity chapters nationwide.
@@ -182,7 +165,7 @@ const PartnershipOpportunitiesPage = () => {
         </div>
 
         {/* Search & Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1">
@@ -248,77 +231,24 @@ const PartnershipOpportunitiesPage = () => {
           )}
         </div>
 
-        {/* Day Navigation */}
-        <div className="bg-white rounded-lg shadow-sm mb-6 overflow-hidden">
-          <div className="flex items-center justify-between p-4 border-b">
-            <button
-              onClick={goToPreviousDay}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-
-            <div className="flex-1 flex items-center justify-center gap-2">
-              <Calendar className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-xl font-semibold">
-                {DAYS_OF_WEEK[selectedDay]}
-              </h2>
-              {selectedDay === getCurrentDayIndex() && (
-                <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
-                  Today
-                </span>
-              )}
-            </div>
-
-            <button
-              onClick={goToNextDay}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          </div>
-
-          {/* Day Tabs */}
-          <div className="flex overflow-x-auto">
-            {DAYS_OF_WEEK.map((day, index) => (
-              <button
-                key={day}
-                onClick={() => setSelectedDay(index)}
-                className={`flex-1 min-w-[120px] px-4 py-3 text-sm font-medium transition-colors ${
-                  selectedDay === index
-                    ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600'
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                <div className="text-center">
-                  <div>{day}</div>
-                  <div className="text-xs mt-1 opacity-75">
-                    {organizedOpportunities[index]?.length || 0} opportunities
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Opportunities Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
           </div>
-        ) : currentDayOpportunities.length === 0 ? (
+        ) : filteredOpportunities.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
             <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-700 mb-2">
-              No opportunities for {DAYS_OF_WEEK[selectedDay]}
+              No opportunities found
             </h3>
             <p className="text-gray-500">
-              Check other days or adjust your filters to see more opportunities.
+              Try adjusting your filters or search terms to see more opportunities.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {currentDayOpportunities.map((opportunity, index) => (
+            {filteredOpportunities.map((opportunity, index) => (
               <ChapterCard
                 key={opportunity.id}
                 opportunity={opportunity}
@@ -342,6 +272,9 @@ interface ChapterCardProps {
 
 const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
   const chapter = opportunity.chapters;
+
+  // Get college logo
+  const collegeLogo = getCollegeLogoWithFallback(chapter?.universities?.name || '');
 
   // Generate vibrant gradient colors (same as college cards)
   const gradients = [
@@ -369,6 +302,15 @@ const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+          {/* College Logo */}
+          <div className="w-20 h-20 rounded-2xl bg-white shadow-xl p-2.5 transform group-hover:rotate-3 transition-transform duration-300">
+            <img
+              src={collegeLogo}
+              alt={chapter?.universities?.name || 'College'}
+              className="w-full h-full object-contain"
+            />
+          </div>
+
           {/* Organization Type Badge */}
           <div className="flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full">
             <Award className="w-4 h-4 text-white" />
