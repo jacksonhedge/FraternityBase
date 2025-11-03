@@ -62,10 +62,9 @@ const FraternitySignUpPage = () => {
   const paymentMethods = [
     'Venmo',
     'Zelle',
-    'Check',
-    'Bank Transfer',
-    'PayPal',
-    'Other'
+    'Bankroll',
+    'Bank Payment/Wire',
+    'Online donation'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -199,8 +198,8 @@ const FraternitySignUpPage = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Success! Redirect to pending approval page
-        navigate('/pending-approval');
+        // Success! Redirect to fraternity pending approval page
+        navigate('/fraternity/pending-approval');
       } else {
         setErrors({ submit: data.error || 'Something went wrong. Please try again.' });
       }
@@ -222,9 +221,6 @@ const FraternitySignUpPage = () => {
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mb-4">
               <Heart className="w-8 h-8 text-white" />
-            </div>
-            <div className="bg-green-500 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg inline-block mb-4 animate-pulse">
-              100% FREE - NO CREDIT CARD REQUIRED
             </div>
             <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Get Your Chapter Listed Free
@@ -371,7 +367,7 @@ const FraternitySignUpPage = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       What type of sponsorship are you looking for?
                     </label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <button
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, sponsorshipType: 'event' }))}
@@ -392,7 +388,7 @@ const FraternitySignUpPage = () => {
                           <div>
                             <div className="font-semibold text-gray-900">Event Sponsorship</div>
                             <div className="text-sm text-gray-600 mt-1">
-                              One-time sponsorship for a specific charity event or philanthropy
+                              One-time event sponsorships
                             </div>
                           </div>
                         </div>
@@ -417,7 +413,32 @@ const FraternitySignUpPage = () => {
                           <div>
                             <div className="font-semibold text-gray-900">Chapter Sponsorship</div>
                             <div className="text-sm text-gray-600 mt-1">
-                              Ongoing partnership and support for your entire chapter
+                              Ongoing chapter partnerships
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, sponsorshipType: 'both' }))}
+                        className={`p-4 rounded-lg border-2 transition-all text-left ${
+                          formData.sponsorshipType === 'both'
+                            ? 'border-purple-600 bg-purple-50'
+                            : 'border-gray-300 bg-white hover:border-gray-400'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                            formData.sponsorshipType === 'both' ? 'border-purple-600' : 'border-gray-300'
+                          }`}>
+                            {formData.sponsorshipType === 'both' && (
+                              <div className="w-3 h-3 rounded-full bg-purple-600"></div>
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">Both</div>
+                            <div className="text-sm text-gray-600 mt-1">
+                              Open to both types
                             </div>
                           </div>
                         </div>
@@ -510,109 +531,6 @@ const FraternitySignUpPage = () => {
                         <option key={method} value={method}>{method}</option>
                       ))}
                     </select>
-                  </div>
-
-                  {/* Payment Details Section */}
-                  <div className="border-t border-gray-200 pt-6 mt-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Details</h3>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                      <p className="text-sm text-blue-900">
-                        💰 Brands can send payments directly to you. Add your payment information below so sponsors can pay you easily.
-                      </p>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Payment Recipient Name
-                      </label>
-                      <input
-                        type="text"
-                        name="paymentRecipientName"
-                        value={formData.paymentRecipientName}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="John Smith or Sigma Chi Fraternity"
-                      />
-                      <p className="mt-1 text-xs text-gray-500">Name that will appear on payments</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Venmo Username (optional)
-                        </label>
-                        <div className="flex">
-                          <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500">
-                            @
-                          </span>
-                          <input
-                            type="text"
-                            name="paymentVenmo"
-                            value={formData.paymentVenmo}
-                            onChange={handleInputChange}
-                            className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            placeholder="username"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Zelle Email/Phone (optional)
-                        </label>
-                        <input
-                          type="text"
-                          name="paymentZelle"
-                          value={formData.paymentZelle}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          placeholder="email@example.com or (555) 123-4567"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          PayPal Email (optional)
-                        </label>
-                        <input
-                          type="email"
-                          name="paymentPaypal"
-                          value={formData.paymentPaypal}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          placeholder="paypal@example.com"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Bank Account Number (optional)
-                        </label>
-                        <input
-                          type="text"
-                          name="paymentBankAccount"
-                          value={formData.paymentBankAccount}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          placeholder="Account number"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Routing Number (optional)
-                        </label>
-                        <input
-                          type="text"
-                          name="paymentRoutingNumber"
-                          value={formData.paymentRoutingNumber}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          placeholder="9 digit routing number"
-                          maxLength={9}
-                        />
-                      </div>
-                    </div>
                   </div>
 
                   <div className="flex gap-3">

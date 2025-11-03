@@ -61,16 +61,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProfile = async (userId: string) => {
     try {
+      // Try to fetch from user_profiles (for company users)
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
         .eq('user_id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // If not found in user_profiles, they might be a fraternity user
+        // Just set profile to null and don't log an error
+        setProfile(null);
+        return;
+      }
+
       setProfile(data);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      // Silently ignore - user might be a fraternity user
+      setProfile(null);
     }
   };
 

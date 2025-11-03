@@ -28,7 +28,7 @@ import {
   Package
 } from 'lucide-react';
 
-type Tab = 'marketplace' | 'my-brands' | 'assets' | 'analytics' | 'events' | 'settings';
+type Tab = 'my-listings' | 'marketplace' | 'my-brands' | 'assets' | 'analytics' | 'events' | 'settings';
 
 interface Company {
   id: string;
@@ -55,7 +55,7 @@ interface FraternityUser {
 const FraternityDashboardPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<Tab>('marketplace');
+  const [activeTab, setActiveTab] = useState<Tab>('my-listings');
   const [companies, setCompanies] = useState<Company[]>([]);
   const [fraternityProfile, setFraternityProfile] = useState<FraternityUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,25 +80,42 @@ const FraternityDashboardPage = () => {
     setIsLoading(true);
 
     try {
-      // Fetch fraternity user profile
-      const { data: profile, error: profileError } = await supabase
-        .from('fraternity_users')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        setError('Authentication required. Please log in again.');
+        setIsLoading(false);
+        navigate('/login');
+        return;
+      }
 
-      if (profileError) {
-        console.error('Error fetching fraternity profile:', profileError);
-        console.error('User ID used:', user.id);
-        setError('Failed to load your profile. Please try again.');
+      // Fetch fraternity user profile via API (bypasses RLS)
+      const response = await fetch('http://localhost:3001/api/fraternity/me', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch profile');
+      }
+
+      const data = await response.json();
+
+      if (!data.success || !data.user) {
+        console.error('No profile found for user ID:', user.id);
+        setError('Profile not found. Please contact support.');
         setIsLoading(false);
         return;
       }
 
-      if (!profile) {
-        console.error('No profile found for user ID:', user.id);
-        setError('Profile not found. Please contact support.');
-        setIsLoading(false);
+      const profile = data.user;
+
+      // Check if user is approved
+      if (profile.approval_status !== 'approved') {
+        console.log('User is not approved yet, redirecting to pending page');
+        navigate('/fraternity/pending-approval');
         return;
       }
 
@@ -141,7 +158,8 @@ const FraternityDashboardPage = () => {
   const industries = Array.from(new Set(companies.map(c => c.industry).filter(Boolean)));
 
   const menuItems = [
-    { id: 'marketplace' as Tab, label: 'Brands Marketplace', icon: Store },
+    { id: 'my-listings' as Tab, label: 'My Listings', icon: FileText },
+    { id: 'marketplace' as Tab, label: 'Browse Brands', icon: Store },
     { id: 'my-brands' as Tab, label: 'My Sponsorships', icon: Handshake },
     { id: 'assets' as Tab, label: 'Assets & Media', icon: Image },
     { id: 'events' as Tab, label: 'My Events', icon: Calendar },
@@ -292,7 +310,8 @@ const FraternityDashboardPage = () => {
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {activeTab === 'marketplace' && 'Brands Marketplace'}
+                  {activeTab === 'my-listings' && 'My Listings'}
+                  {activeTab === 'marketplace' && 'Browse Brands'}
                   {activeTab === 'my-brands' && 'My Sponsorships'}
                   {activeTab === 'assets' && 'Assets & Media'}
                   {activeTab === 'events' && 'My Events'}
@@ -300,6 +319,7 @@ const FraternityDashboardPage = () => {
                   {activeTab === 'settings' && 'Settings'}
                 </h1>
                 <p className="text-sm text-gray-500">
+                  {activeTab === 'my-listings' && 'Create sponsorship opportunities for brands to discover'}
                   {activeTab === 'marketplace' && 'Discover brands looking to sponsor chapters'}
                   {activeTab === 'my-brands' && 'Manage your brand partnerships'}
                   {activeTab === 'assets' && 'Logos, photos, and promotional materials'}
@@ -323,6 +343,206 @@ const FraternityDashboardPage = () => {
 
         {/* Content Area */}
         <div className="p-6">
+          {/* My Listings Tab */}
+          {activeTab === 'my-listings' && (
+            <div className="space-y-6">
+              {/* Existing Listings Section */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-gray-900">Your Listings</h3>
+                  <span className="text-sm text-gray-500">0 active listings</span>
+                </div>
+
+                {/* Empty state for now - we'll fetch actual listings later */}
+                <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-12 text-center">
+                  <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">No listings yet</h4>
+                  <p className="text-gray-600 mb-6">Create your first sponsorship listing to start attracting brands</p>
+                  <button
+                    onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+                    className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition font-medium"
+                  >
+                    Create Your First Listing
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-200 my-8"></div>
+
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Create a New Listing</h3>
+                <p className="text-gray-600">Choose what type of sponsorship opportunity you want to offer to brands</p>
+              </div>
+
+              {/* Sponsor Type Cards - Airbnb Style */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Semester Long Sponsorship */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1564982819069-0f2c8f7a8f03?w=800&h=600&fit=crop"
+                      alt="Semester Long"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                      <p className="text-white text-xs font-medium">Upload your chapter house or group photo</p>
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Semester Long Partnership</h3>
+                  <p className="text-sm text-gray-600 mb-2">Full semester brand presence</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    <span>4-5 months</span>
+                  </div>
+                </button>
+
+                {/* Charity Event */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&h=600&fit=crop"
+                      alt="Charity Event"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Charity Event Sponsor</h3>
+                  <p className="text-sm text-gray-600 mb-2">Philanthropic event partnership</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Heart className="w-4 h-4 mr-1" />
+                    <span>Fundraiser</span>
+                  </div>
+                </button>
+
+                {/* Event Sponsor */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&h=600&fit=crop"
+                      alt="Event Sponsor"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Event Sponsorship</h3>
+                  <p className="text-sm text-gray-600 mb-2">Single event with tiered options</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Sparkles className="w-4 h-4 mr-1" />
+                    <span>Multiple tiers</span>
+                  </div>
+                </button>
+
+                {/* Intramural Sports */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&h=600&fit=crop"
+                      alt="Intramural Sports"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Intramural Sports</h3>
+                  <p className="text-sm text-gray-600 mb-2">Jersey & game day branding</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Trophy className="w-4 h-4 mr-1" />
+                    <span>Season long</span>
+                  </div>
+                </button>
+
+                {/* March Madness */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop"
+                      alt="March Madness"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">March Madness Pool</h3>
+                  <p className="text-sm text-gray-600 mb-2">NCAA bracket sponsorship</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <TrendingUp className="w-4 h-4 mr-1" />
+                    <span>March event</span>
+                  </div>
+                </button>
+
+                {/* Super Bowl Squares */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=800&h=600&fit=crop"
+                      alt="Super Bowl"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Super Bowl Squares</h3>
+                  <p className="text-sm text-gray-600 mb-2">Squares pool & watch party</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Building2 className="w-4 h-4 mr-1" />
+                    <span>February event</span>
+                  </div>
+                </button>
+
+                {/* Fantasy Football */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&h=600&fit=crop"
+                      alt="Fantasy Football"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Fantasy Football League</h3>
+                  <p className="text-sm text-gray-600 mb-2">Season-long league sponsor</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Users className="w-4 h-4 mr-1" />
+                    <span>Full season</span>
+                  </div>
+                </button>
+
+                {/* Casino Night/Poker */}
+                <button
+                  onClick={() => navigate('/app/marketplace/create')}
+                  className="group cursor-pointer text-left"
+                >
+                  <div className="relative overflow-hidden rounded-xl mb-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=800&h=600&fit=crop"
+                      alt="Casino Night"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Casino Night / Poker</h3>
+                  <p className="text-sm text-gray-600 mb-2">Tournament event sponsor</p>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Star className="w-4 h-4 mr-1" />
+                    <span>Single event</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Brands Marketplace Tab */}
           {activeTab === 'marketplace' && (
             <div className="space-y-6">

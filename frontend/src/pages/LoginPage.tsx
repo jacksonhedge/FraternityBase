@@ -83,15 +83,28 @@ const LoginPage = () => {
         return;
       }
 
-      // Check if user is a fraternity user first
-      const { data: fraternityUser, error: fraternityError } = await supabase
-        .from('fraternity_users')
-        .select('*')
-        .eq('user_id', authData.user.id)
-        .single();
+      // Check if user is a fraternity user first (via API to bypass RLS)
+      let fraternityUser = null;
+      try {
+        const fraternityResponse = await fetch('http://localhost:3001/api/fraternity/me', {
+          headers: {
+            'Authorization': `Bearer ${authData.session.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (fraternityResponse.ok) {
+          const fraternityData = await fraternityResponse.json();
+          if (fraternityData.success) {
+            fraternityUser = fraternityData.user;
+          }
+        }
+      } catch (err) {
+        // Not a fraternity user, will check for brand user below
+      }
 
       // If fraternity user found
-      if (fraternityUser && !fraternityError) {
+      if (fraternityUser) {
         // Check if they selected the right account type
         if (accountType !== 'fraternity') {
           setError('This email is registered as a fraternity account. Please select "Fraternity/Sorority" to login.');
