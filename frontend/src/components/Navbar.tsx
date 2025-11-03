@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Menu, X, Search, Users, LogIn, UserPlus, Heart } from 'lucide-react';
+import { Menu, X, LogIn, UserPlus, Heart } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -23,18 +23,6 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8">
             <div className="flex items-center gap-3">
               <Link
-                to="/dashboard-map"
-                className={`flex items-center gap-2 px-4 py-2 transition-colors ${
-                  isActive('/dashboard-map')
-                    ? 'text-blue-600 font-semibold'
-                    : 'text-gray-700 hover:text-blue-600'
-                }`}
-              >
-                <Search className="w-4 h-4" />
-                Browse All Chapters
-              </Link>
-
-              <Link
                 to="/login"
                 className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               >
@@ -44,10 +32,18 @@ const Navbar = () => {
 
               <Link
                 to="/signup"
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg"
               >
                 <UserPlus className="w-4 h-4" />
-                Sign Up
+                Sign Up (for Business)
+              </Link>
+
+              <Link
+                to="/fraternity/signup"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg"
+              >
+                <Heart className="w-4 h-4" />
+                Sign Up (for Fraternities)
               </Link>
             </div>
           </div>
@@ -71,15 +67,6 @@ const Navbar = () => {
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-4 space-y-2">
             <Link
-              to="/dashboard-map"
-              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <Search className="w-4 h-4" />
-              Browse All Chapters
-            </Link>
-
-            <Link
               to="/login"
               className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -90,11 +77,20 @@ const Navbar = () => {
 
             <Link
               to="/signup"
-              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-md mt-2"
+              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 shadow-md mt-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <UserPlus className="w-4 h-4" />
-              Sign Up
+              Sign Up (for Business)
+            </Link>
+
+            <Link
+              to="/fraternity/signup"
+              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 shadow-md"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Heart className="w-4 h-4" />
+              Sign Up (for Fraternities)
             </Link>
           </div>
         </div>
