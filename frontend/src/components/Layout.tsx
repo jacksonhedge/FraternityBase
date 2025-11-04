@@ -273,7 +273,9 @@ const Layout = () => {
       {/* Inactivity Warning Modal */}
       {showWarning && (
         <InactivityWarningModal
-          onContinue={handleStayLoggedIn}
+          isOpen={showWarning}
+          timeLeft={timeLeft}
+          onStayLoggedIn={handleStayLoggedIn}
           onLogout={handleLogout}
         />
       )}

@@ -50,6 +50,7 @@ import UnlocksTab from '../components/admin/UnlocksTab';
 import IntroductionRequestsTab from '../components/admin/IntroductionRequestsTab';
 import FraternityUsersTab from '../components/admin/FraternityUsersTab';
 import CompanyProfileTab from '../components/admin/CompanyProfileTab';
+import BrandManagementTab from '../components/admin/BrandManagementTab';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -224,9 +225,9 @@ const AdminPageV4 = () => {
 
   // Define tab type
   type AdminTab =
-    'dashboard' | 'companies' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'fraternity-users' | 'waitlist' |
+    'dashboard' | 'companies' | 'brands' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'fraternity-users' | 'waitlist' |
     'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' |
-    'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters' | string;
+    'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters' | 'brand-interests' | string;
 
   // Derive active tab from URL path
   const activeTab: AdminTab = (location.pathname.split('/')[2] || 'dashboard') as AdminTab;
@@ -289,6 +290,12 @@ const AdminPageV4 = () => {
   const [orgTypeFilter, setOrgTypeFilter] = useState<'all' | 'fraternity' | 'sorority'>('all');
   const [selectedFraternityFilter, setSelectedFraternityFilter] = useState<string>('all');
   const [recentFilter, setRecentFilter] = useState<'all' | '24h' | '7d' | '30d'>('all');
+
+  // Dropdown section states (collapsed by default)
+  const [isBusinessesOpen, setIsBusinessesOpen] = useState(false);
+  const [isFraternityDataOpen, setIsFraternityDataOpen] = useState(false);
+  const [isFraternityPartnersOpen, setIsFraternityPartnersOpen] = useState(false);
+  const [isListingsOpen, setIsListingsOpen] = useState(false);
 
   // Form states
   const [fraternityForm, setFraternityForm] = useState({
@@ -2009,7 +2016,8 @@ const AdminPageV4 = () => {
         )}
 
         {/* Navigation Menu */}
-        <nav className="flex-1 px-4 py-6 space-y-1">
+        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+          {/* Dashboard - Always Visible */}
           <button
             onClick={() => {
               navigate('/admin/dashboard');
@@ -2026,392 +2034,451 @@ const AdminPageV4 = () => {
             <span className="font-medium">Dashboard</span>
           </button>
 
-          <button
-            onClick={() => {
-              navigate('/admin/companies');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'companies'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <UserPlus className="w-5 h-5" />
-            <span className="font-medium">Accounts</span>
-            {companies.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{companies.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/colleges');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'colleges'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <GraduationCap className="w-5 h-5" />
-            <span className="font-medium">Colleges</span>
-            {universities.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{universities.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/chapters');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'chapters'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Users className="w-5 h-5" />
-            <span className="font-medium">Chapters</span>
-            {chapters.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{chapters.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/diamond-chapters');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'diamond-chapters'
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Sparkles className="w-5 h-5" />
-            <span className="font-medium">Diamond Chapters</span>
-            {diamondChapters.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{diamondChapters.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/ambassadors');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'ambassadors'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Star className="w-5 h-5" />
-            <span className="font-medium">Ambassadors</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/users');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'users'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <UserCheck className="w-5 h-5" />
-            <span className="font-medium">Users</span>
-            {users.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{users.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/fraternity-users');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'fraternity-users'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Heart className="w-5 h-5" />
-            <span className="font-medium">Fraternity Users</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/waitlist');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'waitlist'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Mail className="w-5 h-5" />
-            <span className="font-medium">Waitlist</span>
-            {waitlistEntries.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{waitlistEntries.length}</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/coming-tomorrow');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'coming-tomorrow'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <TrendingUp className="w-5 h-5" />
-            <span className="font-medium">Coming Tomorrow</span>
-            {comingTomorrowItems.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{comingTomorrowItems.length}</span>
-            )}
-          </button>
-
-          {isWizardAdmin && (
+          {/* Businesses Section */}
+          <div className="mt-4">
             <button
-              onClick={() => navigate('/admin/wizard-admin')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                activeTab === 'wizard-admin'
-                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
-                  : 'text-gray-300 hover:bg-gray-800'
-              }`}
+              onClick={() => setIsBusinessesOpen(!isBusinessesOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
             >
-              <Sparkles className="w-5 h-5" />
-              <span className="font-medium">Wizard Admin</span>
+              <div className="flex items-center space-x-3">
+                <Briefcase className="w-5 h-5" />
+                <span className="font-medium">Businesses</span>
+              </div>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isBusinessesOpen ? 'rotate-180' : ''}`} />
             </button>
-          )}
-
-          <button
-            onClick={() => navigate('/admin/roadmap')}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'roadmap'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Rocket className="w-5 h-5" />
-            <span className="font-medium">Product Roadmap</span>
-          </button>
-
-          <button
-            onClick={() => navigate('/admin/college-clubs')}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'college-clubs'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <GraduationCap className="w-5 h-5" />
-            <span className="font-medium">College Clubs</span>
-          </button>
-
-          <a
-            href="/admin/csv-upload"
-            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 border-t border-gray-700 mt-2 pt-4"
-          >
-            <Upload className="w-5 h-5" />
-            <span className="font-medium">AI CSV Upload</span>
-            <span className="ml-auto px-2 py-0.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs rounded-full">
-              AI
-            </span>
-          </a>
-
-          <button
-            onClick={() => {
-              navigate('/admin/fraternities');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'fraternities'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Building2 className="w-5 h-5" />
-            <span className="font-medium">Fraternities</span>
-            {greekOrgs.length > 0 && (
-              <span className="ml-auto bg-gray-700 px-2 py-1 rounded text-xs">{greekOrgs.length}</span>
+            {isBusinessesOpen && (
+              <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-700 pl-2">
+                <button
+                  onClick={() => {
+                    navigate('/admin/companies');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'companies'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span className="text-sm">Accounts</span>
+                  {companies.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{companies.length}</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/brands');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'brands'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-sm">Brand Management</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/payments');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'payments'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <DollarSign className="w-4 h-4" />
+                  <span className="text-sm">Payments & Revenue</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/unlocks');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'unlocks'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Unlock className="w-4 h-4" />
+                  <span className="text-sm">Chapter Unlocks</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/intro-requests');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'intro-requests'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <Handshake className="w-4 h-4" />
+                    <span className="text-sm">Introduction Requests</span>
+                  </div>
+                  {pendingIntroRequests > 0 && (
+                    <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                      {pendingIntroRequests}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/activity');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'activity'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Activity className="w-4 h-4" />
+                  <span className="text-sm">User Activity</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/credits');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'credits'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <CreditCard className="w-4 h-4" />
+                    <span className="text-sm">Credits & Pricing</span>
+                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/intelligence');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'intelligence'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <TrendingUp className="w-4 h-4" />
+                    <span className="text-sm">Company Intelligence</span>
+                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/analytics');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'analytics'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <BarChart3 className="w-4 h-4" />
+                    <span className="text-sm">Business Analytics</span>
+                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/waitlist');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'waitlist'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Mail className="w-4 h-4" />
+                  <span className="text-sm">Waitlist</span>
+                  {waitlistEntries.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{waitlistEntries.length}</span>
+                  )}
+                </button>
+              </div>
             )}
-          </button>
-
-          {/* Divider - Business Analytics Section */}
-          <div className="border-t border-gray-700 my-2 pt-2">
-            <p className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Business Analytics</p>
           </div>
 
-          <button
-            onClick={() => {
-              navigate('/admin/payments');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'payments'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <DollarSign className="w-5 h-5" />
-            <span className="font-medium">Payments & Revenue</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/unlocks');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'unlocks'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Unlock className="w-5 h-5" />
-            <span className="font-medium">Chapter Unlocks</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/intro-requests');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'intro-requests'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <Handshake className="w-5 h-5" />
-              <span className="font-medium">Introduction Requests</span>
-            </div>
-            {pendingIntroRequests > 0 && (
-              <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                {pendingIntroRequests}
-              </span>
+          {/* Fraternity Data Section */}
+          <div className="mt-2">
+            <button
+              onClick={() => setIsFraternityDataOpen(!isFraternityDataOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
+            >
+              <div className="flex items-center space-x-3">
+                <Building2 className="w-5 h-5" />
+                <span className="font-medium">Fraternity Data</span>
+              </div>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isFraternityDataOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isFraternityDataOpen && (
+              <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-700 pl-2">
+                <button
+                  onClick={() => {
+                    navigate('/admin/fraternities');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'fraternities'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span className="text-sm">Fraternities</span>
+                  {greekOrgs.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{greekOrgs.length}</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/colleges');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'colleges'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  <span className="text-sm">Colleges</span>
+                  {universities.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{universities.length}</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/chapters');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'chapters'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Users className="w-4 h-4" />
+                  <span className="text-sm">Chapters</span>
+                  {chapters.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{chapters.length}</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/users');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'users'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <UserCheck className="w-4 h-4" />
+                  <span className="text-sm">Users</span>
+                  {users.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{users.length}</span>
+                  )}
+                </button>
+                <a
+                  href="/admin/csv-upload"
+                  className="w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
+                >
+                  <Upload className="w-4 h-4" />
+                  <span className="text-sm">AI CSV Upload</span>
+                  <span className="ml-auto px-2 py-0.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs rounded-full">
+                    AI
+                  </span>
+                </a>
+              </div>
             )}
-          </button>
+          </div>
 
-          <button
-            onClick={() => {
-              navigate('/admin/credits');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'credits'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <CreditCard className="w-5 h-5" />
-              <span className="font-medium">Credits & Pricing</span>
-            </div>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/intelligence');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'intelligence'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <TrendingUp className="w-5 h-5" />
-              <span className="font-medium">Company Intelligence</span>
-            </div>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/analytics');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'analytics'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <BarChart3 className="w-5 h-5" />
-              <span className="font-medium">Business Analytics</span>
-            </div>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/activity');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'activity'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Activity className="w-5 h-5" />
-            <span className="font-medium">User Activity</span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate('/admin/intro-requests');
-              setShowForm(false);
-              setEditingId(null);
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === 'intro-requests'
-                ? 'bg-primary-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Handshake className="w-5 h-5" />
-            <span className="font-medium">Introduction Requests</span>
-            {introRequests.filter(r => r.status === 'pending').length > 0 && (
-              <span className="ml-auto bg-yellow-500 text-yellow-900 px-2 py-1 rounded-full text-xs font-semibold">
-                {introRequests.filter(r => r.status === 'pending').length}
-              </span>
+          {/* Fraternity Partners Section */}
+          <div className="mt-2">
+            <button
+              onClick={() => setIsFraternityPartnersOpen(!isFraternityPartnersOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
+            >
+              <div className="flex items-center space-x-3">
+                <Handshake className="w-5 h-5" />
+                <span className="font-medium">Fraternity Partners</span>
+              </div>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isFraternityPartnersOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isFraternityPartnersOpen && (
+              <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-700 pl-2">
+                <button
+                  onClick={() => {
+                    navigate('/admin/ambassadors');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'ambassadors'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Star className="w-4 h-4" />
+                  <span className="text-sm">Ambassadors</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/fraternity-users');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'fraternity-users'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Heart className="w-4 h-4" />
+                  <span className="text-sm">Fraternity Users</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/diamond-chapters');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'diamond-chapters'
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-sm">Diamond Chapters</span>
+                  {diamondChapters.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{diamondChapters.length}</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/brand-interests');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'brand-interests'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Heart className="w-4 h-4" />
+                  <span className="text-sm">Brand Interests</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/coming-tomorrow');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'coming-tomorrow'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="text-sm">Coming Tomorrow</span>
+                  {comingTomorrowItems.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{comingTomorrowItems.length}</span>
+                  )}
+                </button>
+              </div>
             )}
-          </button>
+          </div>
+
+          {/* Listings Section */}
+          <div className="mt-2">
+            <button
+              onClick={() => setIsListingsOpen(!isListingsOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
+            >
+              <div className="flex items-center space-x-3">
+                <ShoppingCart className="w-5 h-5" />
+                <span className="font-medium">Listings</span>
+              </div>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isListingsOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isListingsOpen && (
+              <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-700 pl-2">
+                <button
+                  onClick={() => navigate('/admin/college-clubs')}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'college-clubs'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  <span className="text-sm">College Clubs</span>
+                </button>
+                <button
+                  onClick={() => navigate('/admin/roadmap')}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'roadmap'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Rocket className="w-4 h-4" />
+                  <span className="text-sm">Product Roadmap</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Wizard Admin - Conditional, Always Visible */}
+          {isWizardAdmin && (
+            <div className="mt-4 pt-4 border-t border-gray-700">
+              <button
+                onClick={() => navigate('/admin/wizard-admin')}
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  activeTab === 'wizard-admin'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:bg-gray-800'
+                }`}
+              >
+                <Sparkles className="w-5 h-5" />
+                <span className="font-medium">Wizard Admin</span>
+              </button>
+            </div>
+          )}
         </nav>
 
         {/* Bottom Section */}
@@ -2445,6 +2512,7 @@ const AdminPageV4 = () => {
             <p className="text-gray-600 mt-1">
               {activeTab === 'dashboard' && 'Overview of system statistics'}
               {activeTab === 'companies' && 'Manage brand accounts, credits, approval status, and unlock history'}
+              {activeTab === 'brands' && 'Control which brands fraternities see - manage visibility, featured status, logos, and brand details'}
               {activeTab === 'fraternities' && 'Manage Greek organizations'}
               {activeTab === 'colleges' && 'Manage universities and colleges'}
               {activeTab === 'chapters' && 'Manage individual chapters'}
@@ -2452,6 +2520,7 @@ const AdminPageV4 = () => {
               {activeTab === 'ambassadors' && 'Manage ambassador profiles and partnerships'}
               {activeTab === 'users' && 'Manage chapter users and contacts'}
               {activeTab === 'fraternity-users' && 'Manage fraternity and sorority sign-ups for sponsorships'}
+              {activeTab === 'brand-interests' && 'View fraternity brand interests, company chapter interests, and mutual matches'}
               {activeTab === 'waitlist' && 'View and manage waitlist signups'}
               {activeTab === 'coming-tomorrow' && 'Manage upcoming chapters and roster updates for Dashboard'}
               {activeTab === 'wizard-admin' && 'Platform super admin - impersonate any company account'}
@@ -2466,6 +2535,11 @@ const AdminPageV4 = () => {
               {activeTab === 'intro-requests' && 'View and manage all warm introduction requests from companies'}
             </p>
           </div>
+
+      {/* Brand Management Tab */}
+      {activeTab === 'brands' && (
+        <BrandManagementTab />
+      )}
 
       {/* Success Message */}
       {showSuccess && (
@@ -6073,6 +6147,35 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
 
           {/* Fraternity Users Tab */}
           {activeTab === 'fraternity-users' && <FraternityUsersTab />}
+
+          {/* Brand Interests Tab */}
+          {activeTab === 'brand-interests' && (
+            <div className="space-y-6">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 border border-green-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Brand Interest Tracking</h3>
+                <p className="text-gray-600 text-sm">
+                  View and manage brand interests from fraternities and company interests in chapters. Track mutual matches for potential partnerships.
+                </p>
+              </div>
+
+              {/* Coming soon placeholder */}
+              <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+                <Heart className="w-16 h-16 mx-auto text-green-500 mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Interest Management Dashboard</h3>
+                <p className="text-gray-600 mb-4">
+                  View all fraternity interests in brands, company interests in chapters, and mutual matches.
+                </p>
+                <div className="text-sm text-gray-500">
+                  API endpoints are ready:
+                  <ul className="mt-2 space-y-1">
+                    <li>• GET /api/admin/interests/fraternities</li>
+                    <li>• GET /api/admin/interests/companies</li>
+                    <li>• GET /api/admin/interests/matches</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Product Roadmap Tab */}
           {activeTab === 'roadmap' && <RoadmapAdmin />}
