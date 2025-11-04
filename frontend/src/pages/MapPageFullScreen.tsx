@@ -131,7 +131,6 @@ const MapPageFullScreen = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showNavMenu, setShowNavMenu] = useState(false);
-  const [hoveredCollege, setHoveredCollege] = useState<{ name: string; data: any } | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true); // Toggle between radar (dark) and logo (light) mode - default to dark
   const [divisionFilter, setDivisionFilter] = useState<'all' | 'big10' | 'power4' | 'd1' | 'd2' | 'd3' | 'mychapters'>('big10'); // Default to Big 10 for public users
   const [showLockOverlay, setShowLockOverlay] = useState(false);
@@ -152,26 +151,6 @@ const MapPageFullScreen = () => {
     dispatch(logout());
     navigate('/login');
   };
-
-  // Database section - full catalog
-  const databaseNavigation = [
-    { name: 'Dashboard', href: '/app/dashboard', icon: Home },
-    { name: 'Map', href: '/app/map', icon: MapPin, badge: 'NEW' },
-    { name: 'Colleges', href: '/app/colleges', icon: Building2 },
-    { name: 'Chapters', href: '/app/chapters', icon: GraduationCap },
-    { name: 'Fraternities', href: '/app/fraternities', icon: UsersIcon },
-    { name: 'Team', href: '/app/team', icon: UsersIcon },
-  ];
-
-  // My Section - company's unlocked data
-  const mySection = [
-    { name: 'My Dashboard', href: '/app/my-dashboard', icon: Home, count: 0 },
-    { name: 'My Map', href: '/app/my-map', icon: MapPin, count: 0 },
-    { name: 'My Colleges', href: '/app/my-colleges', icon: Building2, count: 0 },
-    { name: 'My Chapters', href: '/app/my-unlocked', icon: GraduationCap, count: 0 },
-    { name: 'My Fraternities', href: '/app/my-fraternities', icon: UsersIcon, count: 0 },
-    { name: 'My Team', href: '/app/my-team', icon: UsersIcon, count: 0 },
-  ];
 
   // Load US states GeoJSON
   useEffect(() => {
@@ -1380,86 +1359,6 @@ const MapPageFullScreen = () => {
               )}
             </div>
 
-            {/* Navigation Links */}
-            <nav className="p-4 space-y-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
-              {/* Database Section */}
-              <div>
-                <h3 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider ${
-                  isDarkMode ? 'text-cyan-400/70' : 'text-gray-500'
-                }`}>
-                  Database
-                </h3>
-                <div className="space-y-1 mt-2">
-                  {databaseNavigation.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = location.pathname === item.href;
-                    return (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                          isActive
-                            ? isDarkMode
-                              ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/50'
-                              : 'bg-primary-600 text-white shadow-lg shadow-primary-500/50'
-                            : isDarkMode
-                              ? 'text-cyan-300 hover:bg-cyan-900/30 hover:text-cyan-400'
-                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                        }`}
-                        onClick={() => setShowNavMenu(false)}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span className="font-medium">{item.name}</span>
-                        {item.badge && (
-                          <span className="ml-auto px-2 py-0.5 text-xs font-semibold bg-green-500 text-white rounded-full">
-                            {item.badge}
-                          </span>
-                        )}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* My Section */}
-              <div className="pt-4">
-                <h3 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider ${
-                  isDarkMode ? 'text-cyan-400/70' : 'text-gray-500'
-                }`}>
-                  My Section
-                </h3>
-                <div className="space-y-1 mt-2">
-                  {mySection.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = location.pathname === item.href;
-                    return (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                          isActive
-                            ? isDarkMode
-                              ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/50'
-                              : 'bg-primary-600 text-white shadow-lg shadow-primary-500/50'
-                            : isDarkMode
-                              ? 'text-cyan-300 hover:bg-cyan-900/30 hover:text-cyan-400'
-                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                        }`}
-                        onClick={() => setShowNavMenu(false)}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span className="font-medium">{item.name}</span>
-                        <span className={`ml-auto px-2 py-0.5 text-xs font-semibold rounded-full ${
-                          isDarkMode ? 'bg-cyan-900 text-cyan-300' : 'bg-gray-200 text-gray-700'
-                        }`}>
-                          {item.count}
-                        </span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            </nav>
 
             {/* Logout Button */}
             <div className={`absolute bottom-0 left-0 right-0 border-t-2 p-4 ${
@@ -1800,27 +1699,6 @@ const MapPageFullScreen = () => {
         </button>
       )}
 
-      {/* Hovered College Info (Bottom Center) */}
-      {hoveredCollege && (
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[1000] bg-black/95 backdrop-blur-md border-2 border-cyan-500 rounded-lg shadow-2xl shadow-cyan-500/50 p-4 min-w-[350px] max-w-[500px]">
-          <div className="flex items-start gap-3">
-            <img
-              src={getCollegeLogo(hoveredCollege.name)}
-              alt={hoveredCollege.name}
-              className="w-16 h-16 object-contain flex-shrink-0"
-              title=""
-            />
-            <div className="flex-1">
-              <div className="font-bold text-lg text-cyan-400 mb-2 whitespace-normal break-words" title="">
-                {hoveredCollege.name}
-              </div>
-              <div className="text-sm text-cyan-300/90">
-                Click to view fraternities →
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Zoom Controls (Bottom Right) */}
       <div className="absolute bottom-6 right-6 z-[1000] flex flex-col gap-2">
@@ -1980,8 +1858,6 @@ const MapPageFullScreen = () => {
                   icon={icon}
                   eventHandlers={{
                     click: () => handleCollegeClick(collegeName, { name: collegeName, ...collegeData }),
-                    mouseover: () => setHoveredCollege({ name: collegeName, data: collegeData }),
-                    mouseout: () => setHoveredCollege(null),
                   }}
                 />
               );

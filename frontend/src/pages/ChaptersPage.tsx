@@ -30,6 +30,8 @@ import {
 } from 'lucide-react';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 import UnlockConfirmationModal from '../components/UnlockConfirmationModal';
+import ChapterCard from '../components/ChapterCard';
+import ChapterDetailSheet from '../components/ChapterDetailSheet';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -106,6 +108,8 @@ const ChaptersPage = () => {
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [isIntroModalOpen, setIsIntroModalOpen] = useState(false);
   const [selectedIntroChapter, setSelectedIntroChapter] = useState<Chapter | null>(null);
+  const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
+  const [detailChapter, setDetailChapter] = useState<Chapter | null>(null);
   const [unlocks, setUnlocks] = useState<{
     fiveStar: { remaining: number; monthly: number; isUnlimited: boolean };
     fourStar: { remaining: number; monthly: number; isUnlimited: boolean };
@@ -414,7 +418,7 @@ const ChaptersPage = () => {
   const activeDivisions = [...new Set(fraternityChapters.map(c => c.universities?.division).filter(Boolean))].sort();
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-[1760px] mx-auto px-6 md:px-10 lg:px-12 xl:px-16 py-8 space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -723,7 +727,47 @@ const ChaptersPage = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        /* Airbnb-style Grid with better spacing */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-10">
+          {loading ? (
+            <div className="col-span-full text-center py-12" style={{ color: 'var(--text-muted)' }}>
+              Loading chapters...
+            </div>
+          ) : filteredChapters.length === 0 ? (
+            <div className="col-span-full text-center py-12" style={{ color: 'var(--text-muted)' }}>
+              No chapters found
+            </div>
+          ) : (
+            filteredChapters.map((chapter) => {
+              const isUnlocked = unlockedChapterIds.has(chapter.id);
+              const isFavorited = interestedChapterIds.has(chapter.id);
+
+              return (
+                <ChapterCard
+                  key={chapter.id}
+                  chapter={chapter}
+                  isUnlocked={isUnlocked}
+                  isFavorited={isFavorited}
+                  onToggleFavorite={(e) => handleToggleInterested(e, chapter.id)}
+                  onUnlock={(e) => {
+                    e.stopPropagation();
+                    setSelectedChapter(chapter);
+                    setIsModalOpen(true);
+                  }}
+                  onClick={() => {
+                    setDetailChapter(chapter);
+                    setIsDetailSheetOpen(true);
+                  }}
+                />
+              );
+            })
+          )}
+        </div>
+      )}
+
+      {/* OLD CARD CODE - KEEPING FOR REFERENCE, DELETE LATER */}
+      {false && (
+        <div className="hidden">
           {filteredChapters.map((chapter) => {
             const isUnlocked = unlockedChapterIds.has(chapter.id);
             return (
@@ -1124,6 +1168,37 @@ const ChaptersPage = () => {
           </div>
         </div>
       )}
+
+      {/* Chapter Detail Sheet */}
+      <ChapterDetailSheet
+        chapter={detailChapter}
+        isOpen={isDetailSheetOpen}
+        onClose={() => {
+          setIsDetailSheetOpen(false);
+          setDetailChapter(null);
+        }}
+        isUnlocked={detailChapter ? unlockedChapterIds.has(detailChapter.id) : false}
+        isFavorited={detailChapter ? interestedChapterIds.has(detailChapter.id) : false}
+        onToggleFavorite={() => {
+          if (detailChapter) {
+            setInterestedChapterIds(prev => {
+              const newSet = new Set(prev);
+              if (newSet.has(detailChapter.id)) {
+                newSet.delete(detailChapter.id);
+              } else {
+                newSet.add(detailChapter.id);
+              }
+              return newSet;
+            });
+          }
+        }}
+        onUnlock={() => {
+          if (detailChapter) {
+            setSelectedChapter(detailChapter);
+            setIsModalOpen(true);
+          }
+        }}
+      />
     </div>
   );
 };
