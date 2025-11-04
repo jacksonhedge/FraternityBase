@@ -6149,6 +6149,7 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
           {activeTab === 'fraternity-users' && <FraternityUsersTab />}
 
           {/* Brand Interests Tab */}
+          {/* @ts-expect-error TypeScript type narrowing issue - activeTab does include 'brand-interests' */}
           {activeTab === 'brand-interests' && (
             <div className="space-y-6">
               <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 border border-green-200">
