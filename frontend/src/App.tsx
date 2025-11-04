@@ -71,10 +71,16 @@ import SponsorshipDetailPage from './pages/SponsorshipDetailPage';
 import SignUpPage from './pages/SignUpPage';
 import BrandSignUpPage from './pages/BrandSignUpPage';
 import FraternitySignUpPage from './pages/FraternitySignUpPage';
+import FraternitySignUpPageEnhanced from './pages/FraternitySignUpPageEnhanced';
 import AmbassadorSignUpPage from './pages/AmbassadorSignUpPage';
 import FraternityMarketplacePage from './pages/FraternityMarketplacePage';
 import FraternityDashboardPage from './pages/FraternityDashboardPage';
 import FraternityPendingApprovalPage from './pages/FraternityPendingApprovalPage';
+import GetSponsoredPage from './pages/GetSponsoredPage';
+import CreateListingPage from './pages/CreateListingPage';
+import SponsorshipMarketplacePage from './pages/SponsorshipMarketplacePage';
+import SponsorshipOpportunityDetailPageNew from './pages/SponsorshipOpportunityDetailPageNew';
+import MarketplacePricingPage from './pages/MarketplacePricingPage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -137,8 +143,10 @@ function AnimatedRoutes() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signup/brand" element={<BrandSignUpPage />} />
-          <Route path="/signup/fraternity" element={<FraternitySignUpPage />} />
+          <Route path="/signup/fraternity" element={<FraternitySignUpPageEnhanced />} />
+          <Route path="/signup/fraternity/basic" element={<FraternitySignUpPage />} />
           <Route path="/signup/ambassador" element={<AmbassadorSignUpPage />} />
+          <Route path="/get-sponsored" element={<GetSponsoredPage />} />
           <Route path="/fraternity/dashboard" element={<FraternityDashboardPage />} />
           <Route path="/fraternity/pending-approval" element={<FraternityPendingApprovalPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -215,14 +223,18 @@ function AnimatedRoutes() {
             <Route path="events/:id" element={<EventDetailPage />} />
             <Route path="partnerships" element={<PartnershipsPage />} />
             <Route path="partnerships/:id" element={<PartnershipDetailPage />} />
-            <Route path="sponsorships" element={<PartnershipOpportunitiesPage />} />
-            <Route path="sponsorships/:id" element={<SponsorshipDetailPage />} />
+            <Route path="sponsorships" element={<SponsorshipMarketplacePage />} />
+            <Route path="sponsorships/:id" element={<SponsorshipOpportunityDetailPageNew />} />
+            <Route path="sponsorships/old" element={<PartnershipOpportunitiesPage />} />
+            <Route path="sponsorships/:id/old" element={<SponsorshipDetailPage />} />
+            <Route path="marketplace/create" element={<CreateListingPage />} />
             <Route path="ambassadors" element={<AmbassadorsPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="credits" element={<CreditsPage />} />
             <Route path="credit-system" element={<CreditSystemPage />} />
             <Route path="subscription" element={<SubscriptionPage />} />
+            <Route path="marketplace-pricing" element={<MarketplacePricingPage />} />
             <Route path="roadmap" element={<ProductRoadmapPage />} />
           </Route>
         </Routes>

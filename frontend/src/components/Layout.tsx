@@ -185,18 +185,21 @@ const Layout = () => {
     navigate('/login');
   };
 
+  // Define which items are accessible for business users
+  const businessAccessiblePaths = ['/app/dashboard', '/app/map', '/app/sponsorships'];
+
   const navigationSections = [
     {
       items: [
-        { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null, requiresTeamPlan: true },
-        { name: 'Partnership Marketplace', href: '/app/sponsorships', icon: Briefcase, badge: { text: 'NEW', type: 'success' }, requiresTeamPlan: true },
+        { name: 'Dashboard', href: '/app/dashboard', icon: Home, badge: null, requiresTeamPlan: true, businessAccessible: true },
+        { name: 'Partnership Marketplace', href: '/app/sponsorships', icon: Briefcase, badge: { text: 'NEW', type: 'success' }, requiresTeamPlan: true, businessAccessible: true },
       ]
     },
     {
       title: 'Visualization',
       items: [
-        { name: 'Map', href: '/app/map', icon: MapPin, badge: null, comingSoon: false, alwaysAccessible: true, iconColor: 'text-yellow-500' },
-        { name: 'SuperMap', href: '/app/supermap', icon: MapPin, badge: import.meta.env.PROD ? 'SOON' : 'BETA', comingSoon: true, alwaysAccessible: true },
+        { name: 'Map', href: '/app/map', icon: MapPin, badge: null, comingSoon: false, alwaysAccessible: true, iconColor: 'text-yellow-500', businessAccessible: true },
+        { name: 'SuperMap', href: '/app/supermap', icon: MapPin, badge: import.meta.env.PROD ? 'SOON' : 'BETA', comingSoon: true, alwaysAccessible: true, businessAccessible: false },
       ]
     },
     {
@@ -207,37 +210,38 @@ const Layout = () => {
           href: '/app/my-unlocked',
           icon: Unlock,
           badge: unlockedChaptersCount > 0 ? { text: String(unlockedChaptersCount), type: 'gold' } : null,
-          requiresTeamPlan: true
+          requiresTeamPlan: true,
+          businessAccessible: false
         },
-        { name: 'Requested Introductions', href: '/app/requested-introductions', icon: Handshake, badge: null, requiresTeamPlan: true },
-        { name: 'My Ambassadors', href: '/app/my-ambassadors', icon: Briefcase, badge: 'SOON', requiresTeamPlan: true },
+        { name: 'Requested Introductions', href: '/app/requested-introductions', icon: Handshake, badge: null, requiresTeamPlan: true, businessAccessible: false },
+        { name: 'My Ambassadors', href: '/app/my-ambassadors', icon: Briefcase, badge: 'SOON', requiresTeamPlan: true, businessAccessible: false },
       ]
     },
     {
       title: 'All Orgs',
       items: [
-        { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null, requiresTeamPlan: true },
-        { name: 'Fraternities', href: '/app/chapters', icon: GraduationCap, badge: null, requiresTeamPlan: true },
-        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: '834 • SOON', requiresTeamPlan: true, comingSoon: true },
-        { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' }, requiresTeamPlan: true },
+        { name: 'Colleges', href: '/app/colleges', icon: Building2, badge: null, requiresTeamPlan: true, businessAccessible: false },
+        { name: 'Fraternities', href: '/app/chapters', icon: GraduationCap, badge: null, requiresTeamPlan: true, businessAccessible: false },
+        { name: 'Sororities', href: '/app/sororities', icon: Users, badge: '834 • SOON', requiresTeamPlan: true, comingSoon: true, businessAccessible: false },
+        { name: 'Ambassadors', href: '/app/ambassadors', icon: UserCheck, badge: { text: 'Locked', type: 'lock' }, requiresTeamPlan: true, businessAccessible: false },
       ]
     },
     {
       title: 'Bars/Restaurants',
       items: [
-        { name: 'Browse Venues', href: '/app/bars', icon: Utensils, badge: 'SOON', requiresTeamPlan: true },
+        { name: 'Browse Venues', href: '/app/bars', icon: Utensils, badge: 'SOON', requiresTeamPlan: true, businessAccessible: false },
       ]
     },
     {
       items: [
-        { name: 'Billing', href: '/app/credits', icon: CreditCard, badge: null, alwaysAccessible: true },
-        { name: 'Credit System', href: '/app/credit-system', icon: Zap, badge: null, alwaysAccessible: true },
-        { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null, alwaysAccessible: true },
+        { name: 'Billing', href: '/app/marketplace-pricing', icon: CreditCard, badge: null, alwaysAccessible: true, businessAccessible: true },
+        { name: 'Credit System', href: '/app/credit-system', icon: Zap, badge: null, alwaysAccessible: true, businessAccessible: true },
+        { name: 'Team', href: '/app/team', icon: UsersIcon, badge: null, alwaysAccessible: true, businessAccessible: true },
       ]
     },
     {
       items: [
-        { name: 'Product Roadmap', href: '/app/roadmap', icon: Rocket, badge: null, alwaysAccessible: true },
+        { name: 'Product Roadmap', href: '/app/roadmap', icon: Rocket, badge: null, alwaysAccessible: true, businessAccessible: true },
       ]
     },
   ];
@@ -292,18 +296,21 @@ const Layout = () => {
                     const isLockedByTier = isTrialPlan && item.requiresTeamPlan && !item.alwaysAccessible;
                     const isComingSoon = (item as any).comingSoon;
 
-                    return (isPendingAndLocked || isLockedByTier || isComingSoon) ? (
+                    // Gray out items that are not business accessible (always grayed for now)
+                    const isBusinessRestricted = !(item as any).businessAccessible;
+
+                    return (isPendingAndLocked || isLockedByTier || isComingSoon || isBusinessRestricted) ? (
                       <div
                         key={item.name}
                         className={`flex items-center ${isSidebarCollapsed ? 'justify-center px-3' : 'justify-between px-3'} py-2.5 text-sm font-medium rounded-lg opacity-50 cursor-not-allowed`}
-                        title={isSidebarCollapsed ? `${item.name} (${isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade Required'})` : (isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade to Team Plan')}
+                        title={isSidebarCollapsed ? `${item.name} (${isBusinessRestricted ? 'Coming Soon' : isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade Required'})` : (isBusinessRestricted ? 'Coming Soon' : isComingSoon ? 'Coming Soon' : isPendingAndLocked ? 'Pending Approval' : 'Upgrade to Team Plan')}
                       >
                         <div className="flex items-center">
                           <Icon className={`w-5 h-5 flex-shrink-0 ${!isSidebarCollapsed ? 'mr-3' : ''} ${(item as any).iconColor || ''}`} />
                           {!isSidebarCollapsed && <span>{item.name}</span>}
                         </div>
                         {!isSidebarCollapsed && (
-                          isComingSoon ? (
+                          isBusinessRestricted || isComingSoon ? (
                             <span className="px-2 py-0.5 text-[10px] font-bold rounded-full text-yellow-800 bg-yellow-200">SOON</span>
                           ) : (
                             <Lock className="w-4 h-4 text-yellow-600" />
@@ -423,7 +430,10 @@ const Layout = () => {
                         const isLockedByTier = isTrialPlan && item.requiresTeamPlan && !item.alwaysAccessible;
                         const isComingSoon = (item as any).comingSoon;
 
-                        return (isPendingAndLocked || isLockedByTier || isComingSoon) ? (
+                        // Gray out items that are not business accessible (always grayed for now)
+                        const isBusinessRestricted = !(item as any).businessAccessible;
+
+                        return (isPendingAndLocked || isLockedByTier || isComingSoon || isBusinessRestricted) ? (
                           <div
                             key={item.name}
                             className="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg opacity-50 cursor-not-allowed"
@@ -432,7 +442,7 @@ const Layout = () => {
                               <Icon className={`w-5 h-5 mr-3 flex-shrink-0 ${(item as any).iconColor || ''}`} />
                               <span>{item.name}</span>
                             </div>
-                            {isComingSoon ? (
+                            {isBusinessRestricted || isComingSoon ? (
                               <span className="px-2 py-0.5 text-[10px] font-bold rounded-full text-yellow-800 bg-yellow-200">SOON</span>
                             ) : (
                               <Lock className="w-4 h-4 text-yellow-600" />
