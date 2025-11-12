@@ -405,6 +405,60 @@ const PublicTravelMapPage = () => {
     });
   };
 
+  // State emoji mapping
+  const stateEmojis: { [key: string]: string } = {
+    'Michigan': '🏈',
+    'New Jersey': '🏖️',
+    'Pennsylvania': '🔔',
+    'California': '☀️',
+    'Texas': '🤠',
+    'Florida': '🌴',
+    'New York': '🗽',
+    'Illinois': '🌆',
+    'Ohio': '🌽',
+    'Georgia': '🍑',
+    'North Carolina': '🌲',
+    'Virginia': '🏛️',
+    'Massachusetts': '🦞',
+    'Washington': '🌲',
+    'Arizona': '🌵',
+    'Tennessee': '🎸',
+    'Indiana': '🏎️',
+    'Missouri': '🎭',
+    'Maryland': '🦀',
+    'Wisconsin': '🧀',
+    'Minnesota': '🏒',
+    'Colorado': '⛰️',
+    'Alabama': '🏈',
+    'South Carolina': '⛱️',
+    'Louisiana': '🎺',
+    'Kentucky': '🐴',
+    'Oregon': '🌲',
+    'Oklahoma': '🌾',
+    'Connecticut': '⚓',
+    'Iowa': '🌽',
+    'Mississippi': '🎵',
+    'Arkansas': '💎',
+    'Kansas': '🌻',
+    'Utah': '🏔️',
+    'Nevada': '🎰',
+    'New Mexico': '🌶️',
+    'West Virginia': '⛰️',
+    'Nebraska': '🌾',
+    'Idaho': '🥔',
+    'Hawaii': '🌺',
+    'Maine': '🦞',
+    'New Hampshire': '🏔️',
+    'Rhode Island': '⛵',
+    'Montana': '🦬',
+    'Delaware': '🏖️',
+    'South Dakota': '🦬',
+    'Alaska': '🐻',
+    'North Dakota': '🌾',
+    'Vermont': '🍁',
+    'Wyoming': '🤠'
+  };
+
   // Get all unique states and sort them
   const allStates = Array.from(new Set(mapData.members.map(m => m.home_location.state))).sort();
 
@@ -412,6 +466,21 @@ const PublicTravelMapPage = () => {
   const priorityStates = ['Michigan', 'New Jersey', 'Pennsylvania'];
   const otherStates = allStates.filter(state => !priorityStates.includes(state));
   const states = [...priorityStates.filter(state => allStates.includes(state)), ...otherStates];
+
+  // Get formatted state display with emoji
+  const getStateDisplay = (state: string) => {
+    const emoji = stateEmojis[state] || '📍';
+    return `${emoji} ${state}`;
+  };
+
+  // Calculate filtered member count
+  const filteredMemberCount = mapData.members.filter(member => {
+    if (!filters.under21 && (member.age === null || member.age < 21)) return false;
+    if (!filters.over21 && member.age !== null && member.age >= 21) return false;
+    if (filters.fromState !== 'all' && member.home_location.state !== filters.fromState) return false;
+    if (filters.toState !== 'all' && member.current_location.state !== filters.toState) return false;
+    return true;
+  }).length;
 
   // Main map UI with overlay
   return (
@@ -500,9 +569,9 @@ const PublicTravelMapPage = () => {
                 onChange={(e) => setDbFilters({ ...dbFilters, fromState: e.target.value })}
                 className="w-full bg-[#0a0e27] text-white border border-[#00ffff]/30 rounded px-3 py-2"
               >
-                <option value="all">All States</option>
+                <option value="all">🌎 All States</option>
                 {states.map(state => (
-                  <option key={state} value={state}>{state}</option>
+                  <option key={state} value={state}>{getStateDisplay(state)}</option>
                 ))}
               </select>
             </div>
@@ -514,9 +583,9 @@ const PublicTravelMapPage = () => {
                 onChange={(e) => setDbFilters({ ...dbFilters, toState: e.target.value })}
                 className="w-full bg-[#0a0e27] text-white border border-[#00ffff]/30 rounded px-3 py-2"
               >
-                <option value="all">All States</option>
+                <option value="all">🌎 All States</option>
                 {states.map(state => (
-                  <option key={state} value={state}>{state}</option>
+                  <option key={state} value={state}>{getStateDisplay(state)}</option>
                 ))}
               </select>
             </div>
@@ -666,9 +735,9 @@ const PublicTravelMapPage = () => {
               onChange={(e) => setFilters({ ...filters, fromState: e.target.value })}
               className="w-full bg-[#0a0e27] text-white border border-[#00ffff]/30 rounded px-2 py-1 text-sm mb-2"
             >
-              <option value="all">All States</option>
+              <option value="all">🌎 All States</option>
               {states.map(state => (
-                <option key={state} value={state}>{state}</option>
+                <option key={state} value={state}>{getStateDisplay(state)}</option>
               ))}
             </select>
 
@@ -678,11 +747,20 @@ const PublicTravelMapPage = () => {
               onChange={(e) => setFilters({ ...filters, toState: e.target.value })}
               className="w-full bg-[#0a0e27] text-white border border-[#00ffff]/30 rounded px-2 py-1 text-sm"
             >
-              <option value="all">All States</option>
+              <option value="all">🌎 All States</option>
               {states.map(state => (
-                <option key={state} value={state}>{state}</option>
+                <option key={state} value={state}>{getStateDisplay(state)}</option>
               ))}
             </select>
+          </div>
+
+          {/* Member Count Display */}
+          <div className="mt-4 pt-4 border-t border-[#00ffff]/30">
+            <div className="text-center">
+              <div className="text-[#00ffff] text-sm mb-1">Members Displayed</div>
+              <div className="text-white text-3xl font-bold">{filteredMemberCount.toLocaleString()}</div>
+              <div className="text-white/60 text-xs mt-1">of {mapData.members.length.toLocaleString()} total</div>
+            </div>
           </div>
           </div>
         </div>
