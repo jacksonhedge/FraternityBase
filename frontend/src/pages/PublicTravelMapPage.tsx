@@ -377,7 +377,13 @@ const PublicTravelMapPage = () => {
     });
   };
 
-  const states = Array.from(new Set(mapData.members.map(m => m.home_location.state))).sort();
+  // Get all unique states and sort them
+  const allStates = Array.from(new Set(mapData.members.map(m => m.home_location.state))).sort();
+
+  // Priority states at the top
+  const priorityStates = ['Michigan', 'New Jersey', 'Pennsylvania'];
+  const otherStates = allStates.filter(state => !priorityStates.includes(state));
+  const states = [...priorityStates.filter(state => allStates.includes(state)), ...otherStates];
 
   // Main map UI with overlay
   return (
