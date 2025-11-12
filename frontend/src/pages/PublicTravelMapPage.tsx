@@ -155,6 +155,7 @@ const PublicTravelMapPage = () => {
         const states = topojson.feature(us, us.objects.states) as any;
 
         zoomGroup.append('g')
+          .attr('class', 'states')
           .selectAll('path')
           .data(states.features)
           .join('path')
@@ -168,7 +169,7 @@ const PublicTravelMapPage = () => {
       });
 
     const renderVisualization = () => {
-      zoomGroup.selectAll('.route-line, .home-node, .university-node, g').remove();
+      zoomGroup.selectAll('.route-line, .home-node, .university-node').remove();
 
       const filteredMembers = mapData.members.filter(member => {
         if (!filters.under21 && (member.age === null || member.age < 21)) return false;
