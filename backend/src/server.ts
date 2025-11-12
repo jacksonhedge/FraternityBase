@@ -20,6 +20,7 @@ import fraternityRouter from './routes/fraternity';
 console.log('✅ Fraternity router loaded:', typeof fraternityRouter);
 import marketplaceRouter, { setSupabaseClient } from './routes/marketplace';
 import marketplaceSubscriptionRouter from './routes/marketplace_subscription';
+import travelMapRouter from './routes/travelMap';
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool that doesn't exist yet
 // import sharesRouter from './routes/shares';
 import CreditNotificationService from './services/CreditNotificationService';
@@ -947,6 +948,8 @@ console.log('✅ Fraternity router mounted at /api/fraternity');
 app.use('/api/marketplace', marketplaceSubscriptionRouter);
 app.use('/api/marketplace', marketplaceRouter);
 console.log('✅ Marketplace router mounted at /api/marketplace');
+app.use('/api/travel-map', travelMapRouter);
+console.log('✅ Travel map router mounted at /api/travel-map');
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool
 // app.use('/api/shares', sharesRouter);
 
