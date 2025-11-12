@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { query, body, validationResult } from 'express-validator';
-import { db } from '../database.js';
+import { body, validationResult } from 'express-validator';
+import { supabase } from '../utils/supabase.js';
 
 const router = Router();
 
@@ -25,14 +25,17 @@ router.post(
 
       const { email, token, timestamp } = req.body;
 
-      // Insert or update email in database (SQLite syntax)
-      const stmt = db.prepare(`
-        INSERT INTO travel_map_viewers (email, token, viewed_at)
-        VALUES (?, ?, ?)
-        ON CONFLICT(email, token) DO UPDATE SET viewed_at = excluded.viewed_at
-      `);
+      // Insert or update email in Supabase
+      const { error: upsertError } = await supabase
+        .from('travel_map_viewers')
+        .upsert(
+          { email, token, viewed_at: timestamp },
+          { onConflict: 'email,token' }
+        );
 
-      stmt.run(email, token, timestamp);
+      if (upsertError) {
+        throw upsertError;
+      }
 
       res.status(200).json({
         success: true,
@@ -56,17 +59,18 @@ router.get(
   '/viewers',
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const stmt = db.prepare(`
-        SELECT id, email, token, viewed_at, created_at
-        FROM travel_map_viewers
-        ORDER BY viewed_at DESC
-      `);
+      const { data, error } = await supabase
+        .from('travel_map_viewers')
+        .select('id, email, token, viewed_at, created_at')
+        .order('viewed_at', { ascending: false });
 
-      const rows = stmt.all();
+      if (error) {
+        throw error;
+      }
 
       res.status(200).json({
         success: true,
-        viewers: rows
+        viewers: data || []
       });
     } catch (error: any) {
       console.error('Error fetching travel map viewers:', error);
@@ -88,18 +92,19 @@ router.get(
     try {
       const { token } = req.params;
 
-      const stmt = db.prepare(`
-        SELECT id, email, viewed_at, created_at
-        FROM travel_map_viewers
-        WHERE token = ?
-        ORDER BY viewed_at DESC
-      `);
+      const { data, error } = await supabase
+        .from('travel_map_viewers')
+        .select('id, email, viewed_at, created_at')
+        .eq('token', token)
+        .order('viewed_at', { ascending: false });
 
-      const rows = stmt.all(token);
+      if (error) {
+        throw error;
+      }
 
       res.status(200).json({
         success: true,
-        viewers: rows
+        viewers: data || []
       });
     } catch (error: any) {
       console.error('Error fetching travel map viewers for token:', error);
