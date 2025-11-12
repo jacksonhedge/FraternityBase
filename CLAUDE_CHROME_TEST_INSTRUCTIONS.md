@@ -200,6 +200,12 @@ Provide feedback on the overall design, branding, and user experience.
 - [ ] Good use of whitespace
 - [ ] Actions are clear
 
+### Chapter Cards/Grid
+- [ ] **IMPORTANT**: Chapter cards should display 3 per row (not 2, not 4)
+- [ ] Cards are properly sized and spaced
+- [ ] Grid is responsive (may change on mobile)
+- [ ] Easy to scan and compare chapters
+
 ### Buttons/CTAs
 - [ ] Primary actions stand out
 - [ ] Consistent styling

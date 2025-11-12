@@ -249,7 +249,7 @@ const PartnershipOpportunitiesPage = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredOpportunities.map((opportunity, index) => (
               <ChapterCard
                 key={opportunity.id}
@@ -308,10 +308,10 @@ const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
   return (
     <div
       onClick={onClick}
-      className="group relative cursor-pointer"
+      className="group relative cursor-pointer transform transition-all duration-300 hover:-translate-y-2"
     >
       {/* Colorful Card */}
-      <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}>
+      <div className={`relative bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-lg group-hover:shadow-2xl transition-all duration-300 overflow-hidden`}>
         {/* Decorative circles */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
@@ -399,7 +399,7 @@ const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
 
             {opportunity.budget_range && (
               <div className="flex justify-between items-center text-xs">
-                <span className="text-white/80">Budget</span>
+                <span className="text-white/80">Payment Range</span>
                 <span className="font-semibold text-white">{opportunity.budget_range}</span>
               </div>
             )}
@@ -407,9 +407,9 @@ const ChapterCard = ({ opportunity, onClick, index }: ChapterCardProps) => {
 
           {/* View Details Button */}
           <div className="w-full pt-2">
-            <div className="bg-white/20 backdrop-blur-sm text-white text-sm font-bold py-2 px-4 rounded-lg hover:bg-white/30 transition-colors flex items-center justify-center gap-2">
-              View Opportunity
-              <Award className="w-4 h-4" />
+            <div className="bg-white/20 backdrop-blur-sm text-white text-sm font-bold py-3 px-4 rounded-lg group-hover:bg-white/40 group-hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 shadow-md group-hover:shadow-lg">
+              <span className="group-hover:translate-x-[-4px] transition-transform duration-300">View Opportunity</span>
+              <Award className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </div>
           </div>
         </div>
@@ -425,14 +425,84 @@ interface PartnershipModalProps {
 }
 
 const PartnershipModal = ({ opportunity, onClose }: PartnershipModalProps) => {
+  const [message, setMessage] = useState('');
+  const [compensation, setCompensation] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const chapter = opportunity.chapters;
   const collegeLogo = getCollegeLogoWithFallback(chapter?.universities?.name || '');
 
-  const handleRequestPartnership = () => {
-    // TODO: Implement partnership request logic
-    console.log('Request partnership for:', opportunity.id);
-    alert('Partnership request submitted! We will contact you soon.');
-    onClose();
+  // Calculate platform fee (20%) and total
+  const compensationAmount = parseFloat(compensation) || 0;
+  const platformFee = Math.round(compensationAmount * 0.20 * 100) / 100;
+  const totalAmount = Math.round((compensationAmount + platformFee) * 100) / 100;
+
+  const handleRequestPartnership = async () => {
+    if (!message.trim()) {
+      setError('Please enter a message');
+      return;
+    }
+    if (!compensation || compensationAmount < 100) {
+      setError('Minimum compensation is $100');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Please login to submit partnership requests');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Get company ID from token or user context
+      const userRes = await fetch(`${API_URL}/auth/me`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const userData = await userRes.json();
+
+      if (!userData.success || !userData.user?.company_id) {
+        setError('Company account required to submit partnership requests');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/partnerships/request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          companyId: userData.user.company_id,
+          chapterId: chapter?.id || opportunity.chapter_id,
+          message: message.trim(),
+          proposedCompensation: compensationAmount
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setIsSuccess(true);
+        // Auto-close after 3 seconds
+        setTimeout(() => {
+          onClose();
+        }, 3000);
+      } else {
+        setError(data.error || 'Failed to submit partnership request');
+      }
+    } catch (err: any) {
+      console.error('Partnership request error:', err);
+      setError('Network error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -510,7 +580,7 @@ const PartnershipModal = ({ opportunity, onClose }: PartnershipModalProps) => {
                   </div>
                   {opportunity.budget_range && (
                     <div>
-                      <div className="text-sm text-gray-500 mb-1">Budget Range</div>
+                      <div className="text-sm text-gray-500 mb-1">Payment Range</div>
                       <div className="font-semibold text-gray-900">{opportunity.budget_range}</div>
                     </div>
                   )}
@@ -554,32 +624,220 @@ const PartnershipModal = ({ opportunity, onClose }: PartnershipModalProps) => {
               </div>
             </div>
 
-            {/* About */}
+            {/* About This Chapter */}
             <div className="mb-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">About This Opportunity</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Partner with {chapter?.greek_organizations?.name || 'this chapter'} at {chapter?.universities?.name || 'this university'}
-                {' '}to reach {chapter?.member_count || 'hundreds of'} engaged students. This {opportunity.opportunity_type.replace(/_/g, ' ')}
-                {' '}opportunity offers authentic brand engagement with a highly active chapter community.
-              </p>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">About This Chapter</h3>
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100">
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  <strong>{chapter?.greek_organizations?.name || 'This chapter'}</strong> at <strong>{chapter?.universities?.name || 'this university'}</strong>
+                  {' '}is an active Greek organization with {chapter?.member_count || 'a dedicated group of'} members.
+                  Partner with this chapter to reach engaged students through authentic brand experiences.
+                </p>
+
+                {/* Chapter Highlights */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="bg-white rounded-lg p-4 border border-indigo-200">
+                    <div className="text-sm font-semibold text-indigo-600 mb-2">📍 Location</div>
+                    <div className="text-gray-800">{chapter?.universities?.location || 'Campus location'}</div>
+                  </div>
+
+                  {chapter?.instagram_handle && (
+                    <div className="bg-white rounded-lg p-4 border border-purple-200">
+                      <div className="text-sm font-semibold text-purple-600 mb-2">📱 Instagram</div>
+                      <a
+                        href={`https://instagram.com/${chapter.instagram_handle.replace('@', '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-700 hover:text-purple-900 font-medium"
+                      >
+                        {chapter.instagram_handle}
+                      </a>
+                    </div>
+                  )}
+
+                  {opportunity.opportunity_type && (
+                    <div className="bg-white rounded-lg p-4 border border-green-200">
+                      <div className="text-sm font-semibold text-green-600 mb-2">🎯 Partnership Type</div>
+                      <div className="text-gray-800 capitalize">{opportunity.opportunity_type.replace(/_/g, ' ')}</div>
+                    </div>
+                  )}
+
+                  {opportunity.budget_range && (
+                    <div className="bg-white rounded-lg p-4 border border-yellow-200">
+                      <div className="text-sm font-semibold text-yellow-600 mb-2">💰 Payment Range</div>
+                      <div className="text-gray-800 font-semibold">{opportunity.budget_range}</div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Partnership Benefits */}
+                <div className="mt-4 pt-4 border-t border-indigo-200">
+                  <div className="text-sm font-semibold text-gray-700 mb-3">Why Partner with This Chapter:</div>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-0.5">✓</span>
+                      <span>Access to {chapter?.member_count || 'dozens of'} engaged college students</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-0.5">✓</span>
+                      <span>Social media reach of {chapter?.instagram_followers ? chapter.instagram_followers.toLocaleString() : 'thousands of'} followers</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-0.5">✓</span>
+                      <span>Authentic brand engagement through chapter events and activities</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-0.5">✓</span>
+                      <span>Professional chapter with a strong campus presence</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <button
-                onClick={onClose}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Close
-              </button>
-              <button
-                onClick={handleRequestPartnership}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors shadow-lg flex items-center justify-center gap-2"
-              >
-                <Briefcase className="w-5 h-5" />
-                Request Partnership
+            {/* Partnership Request Form */}
+            <div className="mb-8 bg-indigo-50 border-2 border-indigo-200 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Submit Partnership Request</h3>
+
+              {/* Success Message */}
+              {isSuccess && (
+                <div className="mb-4 p-6 bg-green-50 border-2 border-green-300 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <div className="text-green-600 text-2xl">✅</div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-green-900 text-lg mb-2">Partnership Request Submitted!</h4>
+                      <p className="text-green-800 text-sm mb-3">
+                        Your partnership request has been sent to {chapter?.greek_organizations?.name || 'this chapter'}.
+                      </p>
+                      <div className="bg-white rounded-lg p-3 mb-3 text-sm">
+                        <div className="flex justify-between mb-1">
+                          <span className="text-gray-600">Chapter Receives:</span>
+                          <span className="font-bold text-green-600">${compensationAmount.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between mb-1">
+                          <span className="text-gray-600">Platform Fee (20%):</span>
+                          <span className="font-semibold text-gray-700">${platformFee.toFixed(2)}</span>
+                        </div>
+                        <div className="border-t border-gray-200 pt-2 mt-2"></div>
+                        <div className="flex justify-between">
+                          <span className="font-semibold text-gray-900">Total Charged:</span>
+                          <span className="font-bold text-indigo-600">${totalAmount.toFixed(2)}</span>
+                        </div>
+                      </div>
+                      <p className="text-green-700 text-xs">
+                        The chapter will be notified and can review your request. This modal will close automatically...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {error && !isSuccess && (
+                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  ❌ {error}
+                </div>
+              )}
+
+              {/* Form Fields - Hidden when success */}
+              {!isSuccess && (
+                <>
+                  {/* Message Field */}
+                  <div className="mb-4">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Partnership Message <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Describe your partnership proposal and what you can offer to the chapter..."
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                      rows={4}
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  {/* Compensation Field */}
+                  <div className="mb-4">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Proposed Compensation (USD) <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">
+                        $
+                      </span>
+                      <input
+                        type="number"
+                        value={compensation}
+                        onChange={(e) => setCompensation(e.target.value)}
+                        placeholder="1000"
+                        min="100"
+                        step="50"
+                        className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Minimum: $100</p>
+                  </div>
+
+                  {/* Fee Calculation */}
+                  {compensationAmount >= 100 && (
+                    <div className="bg-white border-2 border-indigo-300 rounded-lg p-4 mb-4">
+                      <h4 className="font-semibold text-gray-900 mb-3">Payment Breakdown</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Chapter Receives:</span>
+                          <span className="font-bold text-green-600">${compensationAmount.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Platform Fee (20%):</span>
+                          <span className="font-semibold text-gray-700">${platformFee.toFixed(2)}</span>
+                        </div>
+                        <div className="border-t border-gray-200 pt-2 mt-2"></div>
+                        <div className="flex justify-between text-base">
+                          <span className="font-semibold text-gray-900">Total You Pay:</span>
+                          <span className="font-bold text-indigo-600 text-lg">${totalAmount.toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Action Buttons - Hidden when success */}
+            {!isSuccess && (
+              <div className="flex gap-4">
+                <button
+                  onClick={onClose}
+                  disabled={isSubmitting}
+                  className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={handleRequestPartnership}
+                  disabled={isSubmitting || !message.trim() || !compensation || compensationAmount < 100}
+                  className={`flex-1 px-6 py-3 text-white font-semibold rounded-lg transition-colors shadow-lg flex items-center justify-center gap-2 ${
+                    isSubmitting || !message.trim() || !compensation || compensationAmount < 100
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700'
+                  }`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                    <Briefcase className="w-5 h-5" />
+                    Request Partnership
+                  </>
+                )}
               </button>
             </div>
+            )}
           </div>
         </div>
       </div>

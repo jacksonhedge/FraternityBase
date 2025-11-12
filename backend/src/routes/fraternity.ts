@@ -452,4 +452,270 @@ router.delete('/admin/users/:id', async (req: Request, res: Response) => {
   }
 });
 
+// =============================================================================
+// INTEREST SYSTEM - Fraternity marking interest in brands
+// =============================================================================
+
+/**
+ * POST /api/fraternity/interests/brands/:companyId
+ * Mark interest in a brand/company
+ */
+router.post('/interests/brands/:companyId', async (req: Request, res: Response) => {
+  try {
+    const { supabaseAdmin } = getSupabaseClients();
+    const authHeader = req.headers.authorization;
+    const { companyId } = req.params;
+    const { notes } = req.body;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: 'Missing or invalid authorization header'
+      });
+    }
+
+    const token = authHeader.substring(7);
+
+    // Verify JWT and get user
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
+
+    // Get fraternity user profile
+    const { data: fraternityUser, error: profileError } = await supabaseAdmin
+      .from('fraternity_users')
+      .select('id, approval_status')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !fraternityUser) {
+      return res.status(404).json({
+        success: false,
+        error: 'Fraternity profile not found'
+      });
+    }
+
+    // Check if approved
+    if (fraternityUser.approval_status !== 'approved') {
+      return res.status(403).json({
+        success: false,
+        error: 'Account must be approved to mark interests'
+      });
+    }
+
+    // Verify company exists
+    const { data: company, error: companyError } = await supabaseAdmin
+      .from('companies')
+      .select('id, company_name')
+      .eq('id', companyId)
+      .single();
+
+    if (companyError || !company) {
+      return res.status(404).json({
+        success: false,
+        error: 'Company not found'
+      });
+    }
+
+    // Insert or update interest (upsert to handle re-marking interest)
+    const { data: interest, error: interestError } = await supabaseAdmin
+      .from('fraternity_brand_interests')
+      .upsert({
+        fraternity_user_id: fraternityUser.id,
+        company_id: companyId,
+        status: 'active',
+        notes: notes || null
+      }, {
+        onConflict: 'fraternity_user_id,company_id'
+      })
+      .select()
+      .single();
+
+    if (interestError) {
+      console.error('Create interest error:', interestError);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to mark interest'
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: `Interest in ${company.company_name} marked successfully`,
+      interest
+    });
+
+  } catch (error) {
+    console.error('Mark brand interest error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
+
+/**
+ * DELETE /api/fraternity/interests/brands/:companyId
+ * Remove interest in a brand/company
+ */
+router.delete('/interests/brands/:companyId', async (req: Request, res: Response) => {
+  try {
+    const { supabaseAdmin } = getSupabaseClients();
+    const authHeader = req.headers.authorization;
+    const { companyId } = req.params;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: 'Missing or invalid authorization header'
+      });
+    }
+
+    const token = authHeader.substring(7);
+
+    // Verify JWT and get user
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
+
+    // Get fraternity user profile
+    const { data: fraternityUser, error: profileError } = await supabaseAdmin
+      .from('fraternity_users')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !fraternityUser) {
+      return res.status(404).json({
+        success: false,
+        error: 'Fraternity profile not found'
+      });
+    }
+
+    // Delete or mark as withdrawn
+    const { error: deleteError } = await supabaseAdmin
+      .from('fraternity_brand_interests')
+      .update({ status: 'withdrawn' })
+      .eq('fraternity_user_id', fraternityUser.id)
+      .eq('company_id', companyId);
+
+    if (deleteError) {
+      console.error('Remove interest error:', deleteError);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to remove interest'
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: 'Interest removed successfully'
+    });
+
+  } catch (error) {
+    console.error('Remove brand interest error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
+
+/**
+ * GET /api/fraternity/interests/brands
+ * Get all brands this fraternity has marked interest in
+ */
+router.get('/interests/brands', async (req: Request, res: Response) => {
+  try {
+    const { supabaseAdmin } = getSupabaseClients();
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: 'Missing or invalid authorization header'
+      });
+    }
+
+    const token = authHeader.substring(7);
+
+    // Verify JWT and get user
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
+
+    // Get fraternity user profile
+    const { data: fraternityUser, error: profileError } = await supabaseAdmin
+      .from('fraternity_users')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError || !fraternityUser) {
+      return res.status(404).json({
+        success: false,
+        error: 'Fraternity profile not found'
+      });
+    }
+
+    // Get all active interests with company details
+    const { data: interests, error: interestsError } = await supabaseAdmin
+      .from('fraternity_brand_interests')
+      .select(`
+        id,
+        company_id,
+        status,
+        notes,
+        created_at,
+        companies (
+          id,
+          company_name,
+          email,
+          description,
+          subscription_tier,
+          created_at
+        )
+      `)
+      .eq('fraternity_user_id', fraternityUser.id)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false });
+
+    if (interestsError) {
+      console.error('Get interests error:', interestsError);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to fetch interests'
+      });
+    }
+
+    return res.json({
+      success: true,
+      interests: interests || [],
+      count: interests?.length || 0
+    });
+
+  } catch (error) {
+    console.error('Get brand interests error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
+
 export default router;

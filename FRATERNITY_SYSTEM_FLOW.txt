@@ -1,0 +1,349 @@
+================================================================================
+           FRATERNITYBASE - FRATERNITY USER SYSTEM ARCHITECTURE
+================================================================================
+
+AUTHENTICATION & APPROVAL WORKFLOW
+==================================
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    FRATERNITY USER SIGNUP FLOW                      │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    User visits /signup/fraternity
+           ↓
+    [Step 1] Personal Info
+    - First/Last Name
+    - Email & Password
+    - College
+    - Fraternity/Sorority
+    - Position
+    - Sponsorship Type (event/chapter/both)
+           ↓
+    [Step 2] Chapter Information
+    - Instagram Handle (optional)
+    - Website (optional)
+    - Payment Method
+    - Payment Details
+           ↓
+    [Step 3] Event Information (Optional)
+    - Has Upcoming Event? (Y/N)
+    - Event Name/Date/Type
+           ↓
+    SUBMIT
+           ↓
+    Backend: POST /api/fraternity/signup
+           ↓
+    ✓ Create Supabase Auth User (JWT token issued)
+    ✓ Create fraternity_users record
+    ✓ Set approval_status = 'pending'
+    ✓ Send confirmation email
+           ↓
+    Redirect to /fraternity/pending-approval
+           ↓
+    [WAITING SCREEN]
+    "Your account is pending approval"
+    "Average approval time: < 24 hours"
+           ↓
+    ADMIN APPROVES
+           ↓
+    Admin goes to /admin/fraternity-users
+    Sees pending signups
+    Clicks "APPROVE" button
+           ↓
+    Backend: PATCH /api/admin/fraternity-users/:id/approve
+           ↓
+    ✓ Set approval_status = 'approved'
+    ✓ Set approved_at = NOW()
+    ✓ Send approval email to user
+           ↓
+    USER LOGS IN
+           ↓
+    User goes to /login
+    Enters email & password
+           ↓
+    Backend: Supabase Auth verifies credentials
+    Returns JWT token
+           ↓
+    Frontend: GET /api/fraternity/me
+           ↓
+    Check approval_status
+           ↓
+    ✓ IF 'approved' → Redirect to /fraternity/dashboard
+    ✗ IF 'pending' → Redirect to /fraternity/pending-approval
+    ✗ IF 'rejected' → Show error message
+
+
+DASHBOARD STRUCTURE
+===================
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │              /fraternity/dashboard (PRIVATE ROUTE)                  │
+    │                                                                      │
+    │  ┌─────────────────────┐  ┌──────────────────────────────────────┐ │
+    │  │  LEFT SIDEBAR       │  │         MAIN CONTENT AREA            │ │
+    │  │                     │  │                                      │ │
+    │  │ Logo & Chapter Info │  │  ┌──────────────────────────────┐   │ │
+    │  │ ┌─────────────────┐ │  │  │  STATS CARDS (Dashboard)     │   │ │
+    │  │ │ [Trophy Icon]   │ │  │  │  ├─ Available Brands: X     │   │ │
+    │  │ │ Sigma Chi       │ │  │  │  ├─ Avg Sponsorship: $750   │   │ │
+    │  │ │ UC Berkeley     │ │  │  │  ├─ Active Requests: 0      │   │ │
+    │  │ └─────────────────┘ │  │  │  └─ Total Earned: $0        │   │ │
+    │  │                     │  │  └──────────────────────────────┘   │ │
+    │  │ ━━━━━━━━━━━━━━━━━━━ │  │                                      │ │
+    │  │ NAVIGATION          │  │  ╔════════════════════════════════╗ │ │
+    │  │ ┌─ My Listings      │  │  ║  ACTIVE TAB CONTENT            ║ │ │
+    │  │ ├─ Browse Brands    │  │  ║  (varies by selected tab)      ║ │ │
+    │  │ ├─ My Sponsorships  │  │  ║                              ║ │ │
+    │  │ ├─ Assets & Media   │  │  ║  Grid of Companies/         ║ │ │
+    │  │ ├─ My Events        │  │  ║  Listings/Forms/Stats       ║ │ │
+    │  │ ├─ Analytics        │  │  ║                              ║ │ │
+    │  │ └─ Settings         │  │  ╚════════════════════════════════╝ │ │
+    │  │                     │  │                                      │ │
+    │  │ ━━━━━━━━━━━━━━━━━━━ │  │                                      │ │
+    │  │ PROFILE             │  │                                      │ │
+    │  │ ┌─────────────────┐ │  │                                      │ │
+    │  │ │  [Avatar: JF]   │ │  │                                      │ │
+    │  │ │ John Fitzgerald │ │  │                                      │ │
+    │  │ │ President       │ │  │                                      │ │
+    │  │ └─────────────────┘ │  │                                      │ │
+    │  │ [Logout Button]     │  │                                      │ │
+    │  └─────────────────────┘  └──────────────────────────────────────┘ │
+    └─────────────────────────────────────────────────────────────────────┘
+
+
+DASHBOARD TABS IN DETAIL
+==========================
+
+    Tab 1: MY LISTINGS
+    ──────────────────
+    Purpose: Create sponsorship opportunities
+    Content:
+    ├─ Existing Listings (empty state: 0 listings)
+    └─ Create New Listing
+       ├─ Semester Long Partnership
+       ├─ Charity Event Sponsor
+       ├─ Event Sponsorship
+       ├─ Intramural Sports
+       ├─ March Madness Pool
+       ├─ Super Bowl Squares
+       ├─ Fantasy Football League
+       └─ Casino Night/Poker
+
+    Tab 2: BROWSE BRANDS ⭐
+    ──────────────────────
+    Purpose: Discover brands looking to sponsor
+    Features:
+    ├─ Search Bar (search by brand name/description)
+    ├─ Filter by Industry
+    │  ├─ All Brands
+    │  ├─ Fantasy Sports
+    │  ├─ Sportsbook/Casino
+    │  ├─ Food & Beverage
+    │  ├─ Apparel
+    │  ├─ Technology
+    │  └─ Entertainment
+    └─ Grid of Brand Cards
+       Each Card Shows:
+       ├─ Company Logo (or placeholder)
+       ├─ Company Name
+       ├─ Industry Badge
+       ├─ Description
+       ├─ Social Media Links (Instagram, LinkedIn, Twitter)
+       ├─ Website Link
+       ├─ Budget Range ($500-$2,000)
+       └─ [Request] Button
+
+    Tab 3: MY SPONSORSHIPS
+    ──────────────────────
+    Purpose: Track active partnerships
+    Content:
+    └─ Empty State: "No Active Sponsorships"
+       [Browse Brands Button]
+
+    Tab 4: ASSETS & MEDIA
+    ────────────────────
+    Purpose: Upload chapter materials
+    Content:
+    ├─ Upload Chapter Logo
+    ├─ Upload Event Photos
+    ├─ Upload Promotional Materials
+    └─ [Upload Assets Button]
+
+    Tab 5: MY EVENTS
+    ───────────────
+    Purpose: Manage events
+    Content:
+    ├─ Event List (empty state)
+    └─ [Create Event Button]
+
+    Tab 6: ANALYTICS
+    ────────────────
+    Purpose: Track performance
+    Content:
+    ├─ Sponsorship Metrics
+    ├─ Event Engagement
+    └─ Earnings Reports
+
+    Tab 7: SETTINGS
+    ───────────────
+    Purpose: Manage profile
+    Content:
+    ├─ Chapter Name (read-only)
+    ├─ College (read-only)
+    ├─ Instagram (read-only)
+    └─ Website (read-only)
+
+
+DATABASE SCHEMA
+===============
+
+    ┌──────────────────────────────────────────────────────────┐
+    │ Table: fraternity_users                                  │
+    ├──────────────────────────────────────────────────────────┤
+    │ id                      UUID PRIMARY KEY                 │
+    │ user_id                 UUID (← Supabase auth.users)    │
+    │ email                   VARCHAR UNIQUE                   │
+    │ first_name, last_name   VARCHAR                          │
+    │ college                 VARCHAR                          │
+    │ fraternity_or_sorority  VARCHAR ("Sigma Chi")           │
+    │ position                VARCHAR ("President")            │
+    │ sponsorship_type        VARCHAR ("event"|"chapter")      │
+    │ instagram, website      VARCHAR                          │
+    │ preferred_payment_method VARCHAR                         │
+    │ payment_venmo, _zelle, _paypal VARCHAR                  │
+    │ payment_bank_account, _routing_number VARCHAR           │
+    │ has_upcoming_event      BOOLEAN                          │
+    │ event_name, event_date, event_type VARCHAR             │
+    │ approval_status         VARCHAR ("pending"|"approved")   │
+    │ rejection_reason        VARCHAR                          │
+    │ approved_at             TIMESTAMP                        │
+    │ created_at, updated_at  TIMESTAMP                        │
+    └──────────────────────────────────────────────────────────┘
+              ↓ links to
+    ┌──────────────────────────────────────────────────────────┐
+    │ Table: auth.users (Supabase)                             │
+    ├──────────────────────────────────────────────────────────┤
+    │ id                      UUID PRIMARY KEY                 │
+    │ email                   VARCHAR UNIQUE                   │
+    │ password_hash           VARCHAR                          │
+    │ email_confirmed_at      TIMESTAMP                        │
+    │ user_metadata          JSONB                             │
+    │  └─ user_type: "fraternity"                             │
+    └──────────────────────────────────────────────────────────┘
+
+    ┌──────────────────────────────────────────────────────────┐
+    │ Table: companies (for brands)                            │
+    ├──────────────────────────────────────────────────────────┤
+    │ id                      UUID PRIMARY KEY                 │
+    │ name                    VARCHAR                          │
+    │ logo_url                VARCHAR                          │
+    │ industry                VARCHAR                          │
+    │ description             TEXT                             │
+    │ approval_status         VARCHAR ("approved")             │
+    │ website                 VARCHAR                          │
+    │ created_at              TIMESTAMP                        │
+    └──────────────────────────────────────────────────────────┘
+
+
+API ENDPOINTS
+=============
+
+    Authentication
+    ──────────────
+    POST   /api/fraternity/signup
+           Body: {firstName, lastName, email, password, college, 
+                  fraternityOrSorority, position, sponsorshipType, 
+                  instagram, website, hasUpcomingEvent, eventName, 
+                  eventDate, eventType, paymentDetails...}
+           Response: {success: true, user: {id, email, approval_status}}
+
+    GET    /api/fraternity/me
+           Headers: Authorization: Bearer <JWT_TOKEN>
+           Response: {success: true, user: {full fraternity_users record}}
+
+    Admin Routes
+    ────────────
+    GET    /api/admin/fraternity-users
+           Headers: x-admin-token: <ADMIN_TOKEN>
+           Query: status (optional), limit, offset
+           Response: {success: true, users: [...], count: X}
+
+    PATCH  /api/admin/fraternity-users/:id/approve
+           Headers: x-admin-token: <ADMIN_TOKEN>
+           Response: {success: true, user: {..., approval_status: 'approved'}}
+
+    PATCH  /api/admin/fraternity-users/:id/reject
+           Headers: x-admin-token: <ADMIN_TOKEN>
+           Body: {reason: "optional rejection reason"}
+           Response: {success: true, user: {..., approval_status: 'rejected'}}
+
+    DELETE /api/admin/fraternity-users/:id
+           Headers: x-admin-token: <ADMIN_TOKEN>
+           Response: {success: true, message: "User deleted"}
+
+    Marketplace
+    ───────────
+    GET    /api/companies
+           Query: approval_status=approved
+           Response: {companies: [{id, name, logo_url, industry, ...}]}
+
+
+FILE LOCATIONS
+==============
+
+    Frontend Pages
+    ──────────────
+    /frontend/src/pages/FraternitySignUpPage.tsx
+    /frontend/src/pages/FraternitySignUpPageEnhanced.tsx
+    /frontend/src/pages/FraternityPendingApprovalPage.tsx
+    /frontend/src/pages/FraternityDashboardPage.tsx
+    /frontend/src/pages/FraternityMarketplacePage.tsx
+
+    Backend Routes
+    ──────────────
+    /backend/src/routes/fraternity.ts
+
+    Database
+    ────────
+    /database/sigma_chi_schema.sql (member encryption schema)
+    /database/create_user_profiles.sql (user_profiles schema)
+
+
+CURRENT STATE
+=============
+
+    ✓ COMPLETE
+    ├─ User Registration (3-step form)
+    ├─ Email/Password Authentication (Supabase)
+    ├─ Admin Approval Workflow
+    ├─ Dashboard with 7 tabs
+    ├─ Browse Brands (search, filter, display)
+    ├─ Brand Card UI
+    └─ Basic Statistics
+
+    ⏳ IN PROGRESS / PARTIAL
+    ├─ Tab: My Listings (UI only, no backend)
+    ├─ Tab: Assets & Media (UI only)
+    ├─ Tab: My Events (UI only)
+    ├─ Tab: Analytics (UI only)
+    └─ Request/Mark Interest button (no backend handler)
+
+    ✗ NOT STARTED
+    ├─ fraternity_brand_interests table
+    ├─ Mark Interest API endpoint
+    ├─ My Sponsorships population
+    ├─ Direct messaging
+    └─ Matching algorithm
+
+
+NEXT STEPS
+==========
+
+    1. Create fraternity_brand_interests table
+    2. Implement POST /api/fraternity/brands/:id/mark-interest
+    3. Implement GET /api/fraternity/my-brand-interests
+    4. Update UI: "Request" → "Mark Interest" with heart icon
+    5. Populate "My Sponsorships" tab
+    6. Add notification system for new interest
+
+================================================================================
