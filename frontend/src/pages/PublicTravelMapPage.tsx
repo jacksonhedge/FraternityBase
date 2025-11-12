@@ -163,7 +163,35 @@ const PublicTravelMapPage = () => {
           .attr('fill', '#1a1e3e')
           .attr('stroke', '#00ffff')
           .attr('stroke-width', 0.5)
-          .attr('opacity', 0.3);
+          .attr('opacity', 0.3)
+          .attr('cursor', 'pointer')
+          .on('click', function(event, d: any) {
+            event.stopPropagation();
+            const bounds = path.bounds(d);
+            const dx = bounds[1][0] - bounds[0][0];
+            const dy = bounds[1][1] - bounds[0][1];
+            const x = (bounds[0][0] + bounds[1][0]) / 2;
+            const y = (bounds[0][1] + bounds[1][1]) / 2;
+            const scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height)));
+            const translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+            svg.transition()
+              .duration(750)
+              .call(
+                zoom.transform as any,
+                d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+              );
+          })
+          .on('mouseenter', function() {
+            d3.select(this)
+              .attr('opacity', 0.5)
+              .attr('stroke-width', 1.5);
+          })
+          .on('mouseleave', function() {
+            d3.select(this)
+              .attr('opacity', 0.3)
+              .attr('stroke-width', 0.5);
+          });
 
         renderVisualization();
       });
@@ -452,7 +480,7 @@ const PublicTravelMapPage = () => {
 
       {/* Database Panel */}
       {showDatabase && (
-        <div className="absolute top-24 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[1400px] max-h-[85vh] bg-[#1a1e3e]/98 border-2 border-[#00ffff] rounded-xl p-5 z-40 shadow-2xl overflow-hidden flex flex-col">
+        <div className="absolute top-24 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[1400px] max-h-[85vh] bg-[#1a1e3e] border-2 border-[#00ffff] rounded-xl p-5 z-40 shadow-2xl overflow-hidden flex flex-col">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-[#00ffff]">Member Database</h2>
             <button
