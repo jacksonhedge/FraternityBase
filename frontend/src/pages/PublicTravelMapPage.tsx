@@ -102,7 +102,11 @@ const PublicTravelMapPage = () => {
     }
   };
 
-  // Render map (always render, but blur when no access)
+  // Store projection and zoomGroup refs
+  const projectionRef = useRef<any>(null);
+  const zoomGroupRef = useRef<any>(null);
+
+  // Initialize map once (only on mount)
   useEffect(() => {
     if (!svgRef.current) return;
 
@@ -116,10 +120,12 @@ const PublicTravelMapPage = () => {
     svg.selectAll('*').remove();
 
     const zoomGroup = svg.append('g');
+    zoomGroupRef.current = zoomGroup;
 
     const projection = d3.geoAlbersUsa()
       .translate([width / 2, height / 2])
       .scale(1000);
+    projectionRef.current = projection;
 
     const path = d3.geoPath().projection(projection);
 
@@ -192,9 +198,15 @@ const PublicTravelMapPage = () => {
               .attr('opacity', 0.3)
               .attr('stroke-width', 0.5);
           });
-
-        renderVisualization();
       });
+  }, []); // Only run once on mount
+
+  // Re-render visualization when filters change (without resetting zoom)
+  useEffect(() => {
+    if (!projectionRef.current || !zoomGroupRef.current) return;
+
+    const projection = projectionRef.current;
+    const zoomGroup = zoomGroupRef.current;
 
     const renderVisualization = () => {
       zoomGroup.selectAll('.route-line, .home-node, .university-node').remove();
@@ -360,6 +372,8 @@ const PublicTravelMapPage = () => {
         });
       }
     };
+
+    renderVisualization();
   }, [filters]);
 
   // Get filtered members for database
@@ -463,7 +477,7 @@ const PublicTravelMapPage = () => {
   const allStates = Array.from(new Set(mapData.members.map(m => m.home_location.state))).sort();
 
   // Priority states at the top
-  const priorityStates = ['Michigan', 'New Jersey', 'Pennsylvania'];
+  const priorityStates = ['New Jersey', 'Michigan', 'Pennsylvania'];
   const otherStates = allStates.filter(state => !priorityStates.includes(state));
   const states = [...priorityStates.filter(state => allStates.includes(state)), ...otherStates];
 
