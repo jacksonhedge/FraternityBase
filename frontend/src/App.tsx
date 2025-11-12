@@ -204,7 +204,7 @@ function AnimatedRoutes() {
           <Route path="/share/:token" element={<SharePage />} />
 
           {/* Public Travel Map Route */}
-          <Route path="/view-map/:token" element={<PublicTravelMapPage />} />
+          <Route path="/travel-map/:token" element={<PublicTravelMapPage />} />
 
           {/* Private Routes */}
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
