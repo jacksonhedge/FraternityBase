@@ -229,7 +229,7 @@ const PublicTravelMapPage = () => {
         return true;
       });
 
-      // Draw routes (super thin lines from college to home)
+      // Draw routes (thin lines from home to college)
       filteredRoutes.forEach(route => {
         const fromCoords = projection([route.from_lng, route.from_lat]);
         const toCoords = projection([route.to_lng, route.to_lat]);
@@ -237,17 +237,17 @@ const PublicTravelMapPage = () => {
         if (fromCoords && toCoords) {
           // Increase opacity when filtering by specific state
           const isFiltered = filters.fromState !== 'all' || filters.toState !== 'all';
-          const opacity = isFiltered ? 0.25 : 0.12;
+          const opacity = isFiltered ? 0.6 : 0.2;
+          const strokeWidth = isFiltered ? 1.5 : 0.8;
 
           zoomGroup.append('path')
             .attr('class', 'route-line')
             .attr('d', `M${fromCoords[0]},${fromCoords[1]} L${toCoords[0]},${toCoords[1]}`)
             .attr('stroke', route.age && route.age >= 21 ? '#00d9ff' : '#ff006e')
-            .attr('stroke-width', 0.5) // Super thin lines
+            .attr('stroke-width', strokeWidth)
             .attr('opacity', opacity)
             .attr('fill', 'none')
-            .attr('pointer-events', 'none')
-            .lower();
+            .attr('pointer-events', 'none');
         }
       });
 
