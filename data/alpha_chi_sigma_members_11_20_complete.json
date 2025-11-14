@@ -1,0 +1,240 @@
+{
+  "organization": "Alpha Chi Sigma",
+  "chapter": "Penn State University - Iota Psi",
+  "extraction_date": "2025-11-14",
+  "batch": "Users 11-20",
+  "total_members": 10,
+  "members": [
+    {
+      "id": 11,
+      "first_name": "Sean",
+      "last_name": "Bienkowski",
+      "full_name": "Sean Bienkowski",
+      "email": "seanbien331@gmail.com",
+      "phone": "973-941-0331",
+      "birthday": "2004-03-31",
+      "graduation_year": 2026,
+      "initiation_date": "2023-04-02",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "7 Kathay Ter.",
+        "city": "Denville",
+        "state": "New Jersey",
+        "zip": "07834",
+        "full": "7 Kathay Ter., Denville, New Jersey, 07834"
+      }
+    },
+    {
+      "id": 12,
+      "first_name": "Nicholas",
+      "last_name": "Blessing",
+      "full_name": "Nicholas Blessing",
+      "email": "nickdblessing@gmail.com",
+      "phone": "781-568-0983",
+      "birthday": "2004-11-29",
+      "graduation_year": 2027,
+      "initiation_date": "2023-11-05",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "23 Parkway Rd",
+        "city": "Stoneham",
+        "state": "Massachusetts",
+        "zip": "02180",
+        "full": "23 Parkway Rd, Stoneham, Massachusetts, 02180"
+      }
+    },
+    {
+      "id": 13,
+      "first_name": "Karl",
+      "last_name": "Bloomfield",
+      "full_name": "Karl Bloomfield",
+      "email": "karlbloomfield12@gmail.com",
+      "phone": "(856) 812-5300",
+      "birthday": "2004-02-18",
+      "graduation_year": 2026,
+      "initiation_date": "2022-11-13",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "1567 Commissioners Rd",
+        "city": "Mullica Hill",
+        "state": "New Jersey",
+        "zip": "08062",
+        "full": "1567 Commissioners Rd, Mullica Hill, New Jersey, 08062"
+      }
+    },
+    {
+      "id": 14,
+      "first_name": "Brian",
+      "last_name": "Boylan",
+      "full_name": "Brian Boylan",
+      "email": "brianboylan22@gmail.com",
+      "phone": "(516) 273-6009",
+      "birthday": "2003-10-04",
+      "graduation_year": 2025,
+      "initiation_date": "2021-11-14",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "49 Fairview Rd W",
+        "city": "Massapequa",
+        "state": "New York",
+        "zip": "11758-8041",
+        "full": "49 Fairview Rd W, Massapequa, New York, 11758-8041"
+      }
+    },
+    {
+      "id": 15,
+      "first_name": "Quinn",
+      "last_name": "Braddick",
+      "full_name": "Quinn Braddick",
+      "email": "quinnylax6@gmail.com",
+      "phone": "(203) 816-1740",
+      "birthday": "2003-03-26",
+      "graduation_year": 2025,
+      "initiation_date": "2022-03-26",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "101 Lazy Brook Rd",
+        "city": "Monroe",
+        "state": "Connecticut",
+        "zip": "06468",
+        "full": "101 Lazy Brook Rd, Monroe, Connecticut, 06468"
+      }
+    },
+    {
+      "id": 16,
+      "first_name": "Alec",
+      "last_name": "Calvitti",
+      "full_name": "Alec Calvitti",
+      "email": "aleccalvitti@icloud.com",
+      "phone": "(610) 955-1232",
+      "birthday": "2004-12-06",
+      "graduation_year": 2027,
+      "initiation_date": "2023-11-05",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "333 Beaumont Rd",
+        "city": "Devon",
+        "state": "Pennsylvania",
+        "zip": "19333",
+        "full": "333 Beaumont Rd, Devon, Pennsylvania, 19333"
+      }
+    },
+    {
+      "id": 17,
+      "first_name": "Antonio",
+      "last_name": "Campagna",
+      "full_name": "Antonio Campagna",
+      "email": "antcam1233@gmail.com",
+      "phone": "2017322815",
+      "birthday": "2006-08-23",
+      "graduation_year": 2028,
+      "initiation_date": "2025-03-30",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "New Jersey",
+        "zip": "",
+        "full": "New Jersey, United States",
+        "incomplete": true,
+        "notes": "Address data incomplete in source database"
+      }
+    },
+    {
+      "id": 18,
+      "first_name": "Nicholas",
+      "last_name": "Cannon",
+      "full_name": "Nicholas Cannon",
+      "email": "nickcannon0518@gmail.com",
+      "phone": "(215) 917-1084",
+      "birthday": "2005-05-01",
+      "graduation_year": 2027,
+      "initiation_date": "2024-03-24",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "247 Greenwich St",
+        "city": "Philadelphia",
+        "state": "Pennsylvania",
+        "zip": "19147",
+        "full": "247 Greenwich St, Philadelphia, Pennsylvania, 19147"
+      }
+    },
+    {
+      "id": 19,
+      "first_name": "Jeff",
+      "last_name": "Casparro",
+      "full_name": "Jeff Casparro",
+      "email": "jeffcasp10@gmail.com",
+      "phone": "(201) 848-2961",
+      "birthday": "2004-09-17",
+      "graduation_year": 2027,
+      "initiation_date": "2024-03-24",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "19 Giegel Court",
+        "city": "Wyckoff",
+        "state": "New Jersey",
+        "zip": "07481",
+        "full": "19 Giegel Court, Wyckoff, New Jersey, 07481"
+      }
+    },
+    {
+      "id": 20,
+      "first_name": "Anthony",
+      "last_name": "Casso",
+      "full_name": "Anthony Casso",
+      "email": "antcas777@gmail.com",
+      "phone": "3474150403",
+      "birthday": "2006-07-07",
+      "graduation_year": 2028,
+      "initiation_date": "2025-03-30",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "",
+        "city": "Brooklyn",
+        "state": "New York",
+        "zip": "",
+        "full": "Brooklyn, New York, United States",
+        "incomplete": true,
+        "notes": "Address data incomplete in source database"
+      }
+    }
+  ],
+  "metadata": {
+    "source": "Alpha Chi Sigma Database Extraction - Batch 2",
+    "data_quality": "Mostly Complete (2 incomplete addresses)",
+    "incomplete_addresses": [
+      {
+        "user_id": 17,
+        "name": "Antonio Campagna",
+        "issue": "Street address and zip code missing"
+      },
+      {
+        "user_id": 20,
+        "name": "Anthony Casso",
+        "issue": "Street address and zip code missing"
+      }
+    ],
+    "fields_included": [
+      "name",
+      "email",
+      "phone",
+      "birthday",
+      "graduation_year",
+      "initiation_date",
+      "status",
+      "address"
+    ],
+    "notes": "This is the second batch of Alpha Chi Sigma members (users 11-20). Initiation dates range from November 2021 to March 2025. Graduation years range from 2025 to 2028. Two members (Antonio Campagna and Anthony Casso) have incomplete address information in the source database."
+  }
+}

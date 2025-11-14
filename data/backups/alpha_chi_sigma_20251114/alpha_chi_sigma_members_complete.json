@@ -1,0 +1,223 @@
+{
+  "organization": "Alpha Chi Sigma",
+  "chapter": "Penn State University - Iota Psi",
+  "extraction_date": "2025-11-14",
+  "total_members": 10,
+  "members": [
+    {
+      "id": 1,
+      "first_name": "Sebastiano",
+      "last_name": "Abbatiello",
+      "full_name": "Sebastiano Abbatiello",
+      "email": "sebastianoabbatiello123@gmail.com",
+      "phone": "5169027725",
+      "birthday": "2006-08-02",
+      "graduation_year": 2028,
+      "initiation_date": "2024-11-17",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "85 mckinley ave",
+        "city": "westbury",
+        "state": "New York",
+        "zip": "11590",
+        "full": "85 mckinley ave, westbury, New York, 11590"
+      }
+    },
+    {
+      "id": 2,
+      "first_name": "Ryan",
+      "last_name": "Aber",
+      "full_name": "Ryan Aber",
+      "email": "ryaber8@gmail.com",
+      "phone": "724-393-5491",
+      "birthday": "2003-04-22",
+      "graduation_year": 2025,
+      "initiation_date": "2022-11-13",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "724 11th Street",
+        "city": "Oakmont",
+        "state": "Pennsylvania",
+        "zip": "15139",
+        "full": "724 11th Street, Oakmont, Pennsylvania, 15139"
+      }
+    },
+    {
+      "id": 3,
+      "first_name": "Andrew",
+      "last_name": "Acker",
+      "full_name": "Andrew Acker",
+      "email": "andrewacker4@gmail.com",
+      "phone": "(215) 530-0499",
+      "birthday": "2004-02-03",
+      "graduation_year": 2026,
+      "initiation_date": "2022-11-13",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "2576 North Sugan Road",
+        "city": "New Hope",
+        "state": "Pennsylvania",
+        "zip": "18938",
+        "full": "2576 North Sugan Road, New Hope, Pennsylvania, 18938"
+      }
+    },
+    {
+      "id": 4,
+      "first_name": "Tyler",
+      "last_name": "Alesso",
+      "full_name": "Tyler Alesso",
+      "email": "tda5161@psu.edu",
+      "phone": "(201) 320-8123",
+      "birthday": "2003-08-25",
+      "graduation_year": 2026,
+      "initiation_date": "2022-11-13",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "2 Meadowlake Drive",
+        "city": "Mahwah",
+        "state": "New Jersey",
+        "zip": "07430",
+        "full": "2 Meadowlake Drive, Mahwah, New Jersey, 07430"
+      }
+    },
+    {
+      "id": 5,
+      "first_name": "Zane",
+      "last_name": "Alexander",
+      "full_name": "Zane Alexander",
+      "email": "zmalexander2590@gmail.com",
+      "phone": "(814) 688-2087",
+      "birthday": "2003-07-05",
+      "graduation_year": 2025,
+      "initiation_date": "2022-11-13",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "140 Spelling Rd",
+        "city": "Bear Lake",
+        "state": "Pennsylvania",
+        "zip": "16402",
+        "full": "140 Spelling Rd, Bear Lake, Pennsylvania, 16402"
+      }
+    },
+    {
+      "id": 6,
+      "first_name": "Marcus",
+      "last_name": "Allen",
+      "full_name": "Marcus Allen",
+      "email": "marcusallen1204@gmail.com",
+      "phone": "7176689565",
+      "birthday": "2005-12-04",
+      "graduation_year": 2028,
+      "initiation_date": "2024-11-17",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "2714 MEADOW CROSS WAY",
+        "city": "YORK",
+        "state": "Pennsylvania",
+        "zip": "17402",
+        "full": "2714 MEADOW CROSS WAY, YORK, Pennsylvania, 17402"
+      }
+    },
+    {
+      "id": 7,
+      "first_name": "Brandon",
+      "last_name": "Bart",
+      "full_name": "Brandon Bart",
+      "email": "brandon.bart14@outlook.com",
+      "phone": "412-316-5874",
+      "birthday": "2003-08-12",
+      "graduation_year": 2026,
+      "initiation_date": "2023-04-02",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "34 Hawthorne Ln",
+        "city": "Irwin",
+        "state": "Pennsylvania",
+        "zip": "15642",
+        "full": "34 Hawthorne Ln, Irwin, Pennsylvania, 15642"
+      }
+    },
+    {
+      "id": 8,
+      "first_name": "Christopher",
+      "last_name": "Barto",
+      "full_name": "Christopher Barto",
+      "email": "christopherbarto87@gmail.com",
+      "phone": "(315) 368-3953",
+      "birthday": "2005-07-06",
+      "graduation_year": 2026,
+      "initiation_date": "2022-11-13",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "1309 Bedford St",
+        "city": "Rome",
+        "state": "New York",
+        "zip": "13440",
+        "full": "1309 Bedford St, Rome, New York, 13440"
+      }
+    },
+    {
+      "id": 9,
+      "first_name": "Saje",
+      "last_name": "Behari",
+      "full_name": "Saje Behari",
+      "email": "sajel.behari@gmail.com",
+      "phone": "(703) 901-1341",
+      "birthday": "2003-01-03",
+      "graduation_year": 2025,
+      "initiation_date": "2022-03-26",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "39 Sagecrest Circle",
+        "city": "Enola",
+        "state": "Pennsylvania",
+        "zip": "17025",
+        "full": "39 Sagecrest Circle, Enola, Pennsylvania, 17025"
+      }
+    },
+    {
+      "id": 10,
+      "first_name": "Carlos",
+      "last_name": "Benitez",
+      "full_name": "Carlos Benitez",
+      "email": "maxbenitez777@gmail.com",
+      "phone": "(914) 648-8311",
+      "birthday": "2005-08-23",
+      "graduation_year": 2027,
+      "initiation_date": "2023-11-05",
+      "status": "Active",
+      "member_type": "Undergrad",
+      "address": {
+        "street": "15 Bank Street Apt 108D White Plains 1",
+        "city": "White Plains",
+        "state": "New York",
+        "zip": "10583",
+        "full": "15 Bank Street Apt 108D White Plains 1, White Plains, New York, 10583"
+      }
+    }
+  ],
+  "metadata": {
+    "source": "Alpha Chi Sigma Database Extraction",
+    "data_quality": "Complete",
+    "fields_included": [
+      "name",
+      "email",
+      "phone",
+      "birthday",
+      "graduation_year",
+      "initiation_date",
+      "status",
+      "address"
+    ],
+    "notes": "All members are currently active undergraduates at Penn State University. Initiation dates range from March 2022 to November 2024. Graduation years range from 2025 to 2028."
+  }
+}
