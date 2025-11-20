@@ -18,6 +18,8 @@ import sponsorshipsRouter from './routes/sponsorships_enhanced';
 import sponsorshipNotificationsRouter from './routes/sponsorshipNotifications';
 import fraternityRouter from './routes/fraternity';
 console.log('✅ Fraternity router loaded:', typeof fraternityRouter);
+import outreachRouter from './routes/outreach';
+import crmRouter from './routes/crm';
 import marketplaceRouter, { setSupabaseClient } from './routes/marketplace';
 import marketplaceSubscriptionRouter from './routes/marketplace_subscription';
 // TEMPORARILY DISABLED - shares router needs PostgreSQL pool that doesn't exist yet
@@ -106,26 +108,9 @@ function getAdminNotificationService(): AdminNotificationService {
   return adminNotificationService;
 }
 
-// Middleware
+// Middleware - TEMPORARILY ALLOW ALL ORIGINS FOR DEBUGGING
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:5175',
-      'https://fraternitybase.com',
-      'https://www.fraternitybase.com'
-    ];
-
-    // Allow all Vercel preview deployments for frontend
-    const isVercelPreview = origin && origin.match(/^https:\/\/frontend-[a-z0-9]+-jackson-fitzgeralds-projects\.vercel\.app$/);
-
-    if (!origin || allowedOrigins.includes(origin) || isVercelPreview) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins temporarily
   credentials: true
 }));
 
@@ -940,6 +925,8 @@ app.use('/api/activity', activityTrackingRouter);
 app.use('/api/roadmap', roadmapRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/admin/notifications', adminNotificationsRouter);
+app.use('/api/admin/outreach', outreachRouter);
+app.use('/api/admin/crm', crmRouter);
 app.use('/api/sponsorships', sponsorshipsRouter);
 app.use('/api/sponsorship-notifications', sponsorshipNotificationsRouter);
 app.use('/api/fraternity', fraternityRouter);
@@ -2806,6 +2793,104 @@ app.get('/api/chapters', async (req, res) => {
     res.json({ success: true, data });
   } catch (error: any) {
     console.error('Error fetching chapters:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all chapters with Instagram handles and locations for map clustering
+app.get('/api/chapters/instagram-map', async (req, res) => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('chapters')
+      .select(`
+        id,
+        chapter_name,
+        instagram_handle,
+        member_count,
+        greek_organizations(id, name, greek_letters, organization_type),
+        universities(id, name, latitude, longitude, state)
+      `)
+      .eq('status', 'active')
+      .eq('is_viewable', true)
+      .not('instagram_handle', 'is', null)
+      .not('universities.latitude', 'is', null)
+      .not('universities.longitude', 'is', null)
+      .order('member_count', { ascending: false, nullsFirst: false })
+      .range(0, 9999); // Get up to 10,000 chapters with Instagram
+
+    if (error) throw error;
+
+    console.log(`📍 Instagram Map API returning ${data?.length || 0} chapters with Instagram handles and locations`);
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Error fetching Instagram chapters for map:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all Greek organizations with total chapter counts
+app.get('/greek-organizations', async (req, res) => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('greek_organizations')
+      .select(`
+        id,
+        name,
+        greek_letters,
+        organization_type,
+        founding_date,
+        description,
+        chapters:chapters(count)
+      `)
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+
+    // Transform data to include total_chapters count
+    const organizations = data.map(org => ({
+      ...org,
+      total_chapters: org.chapters?.[0]?.count || 0
+    })).filter(org => org.total_chapters >= 100); // Filter for 100+ chapters
+
+    console.log(`🏛️ Greek Organizations API returning ${organizations.length} organizations with 100+ chapters`);
+
+    res.json(organizations);
+  } catch (error: any) {
+    console.error('Error fetching Greek organizations:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Also add alias with /api prefix for consistency
+app.get('/api/greek-organizations', async (req, res) => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('greek_organizations')
+      .select(`
+        id,
+        name,
+        greek_letters,
+        organization_type,
+        founding_date,
+        description,
+        chapters:chapters(count)
+      `)
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+
+    // Transform data to include total_chapters count
+    const organizations = data.map(org => ({
+      ...org,
+      total_chapters: org.chapters?.[0]?.count || 0
+    })).filter(org => org.total_chapters >= 100); // Filter for 100+ chapters
+
+    console.log(`🏛️ Greek Organizations API returning ${organizations.length} organizations with 100+ chapters`);
+
+    res.json(organizations);
+  } catch (error: any) {
+    console.error('Error fetching Greek organizations:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -7645,6 +7730,372 @@ app.delete('/api/admin/coming-soon/:id', requireAdmin, async (req, res) => {
     res.json({ success: true, message: 'Coming soon item deleted successfully' });
   } catch (error: any) {
     console.error('❌ Error deleting coming soon item:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ============================================================================
+// CRM ENDPOINTS
+// ============================================================================
+
+// Get CRM dashboard data - all chapters grouped by outreach status
+app.get('/api/admin/crm/dashboard', async (req, res) => {
+  try {
+    const { data: chapters, error } = await supabaseAdmin
+      .from('chapters')
+      .select(`
+        id,
+        chapter_name,
+        instagram_handle,
+        member_count,
+        engagement_score,
+        organization_type,
+        greek_organizations(id, name, greek_letters, organization_type),
+        universities(id, name, state),
+        chapter_outreach(
+          outreach_status,
+          priority,
+          last_contact_date,
+          next_follow_up_date,
+          primary_contact_name,
+          notes,
+          fundraising_goal,
+          fundraising_benefactor,
+          fundraising_current
+        )
+      `)
+      .eq('status', 'active')
+      .eq('is_viewable', true)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    // Calculate additional metrics for each chapter
+    const enrichedChapters = await Promise.all(chapters.map(async (chapter) => {
+      // Get posts count for last 7 days (mock for now)
+      const posts_last_7_days = 0;
+
+      // Get opportunities count for last 30 days (mock for now)
+      const opportunities_last_30_days = 0;
+
+      // Get last post date (mock for now)
+      const last_post_date = null;
+
+      // Get followers from chapter_instagram_metrics table
+      const { data: metrics } = await supabaseAdmin
+        .from('chapter_instagram_metrics')
+        .select('followers_count')
+        .eq('chapter_id', chapter.id)
+        .order('scraped_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      return {
+        chapter_id: chapter.id,
+        chapter_name: chapter.chapter_name,
+        instagram_handle: chapter.instagram_handle,
+        university_name: chapter.universities?.name || 'Unknown',
+        fraternity_name: chapter.greek_organizations?.name || 'Unknown',
+        organization_type: chapter.organization_type || chapter.greek_organizations?.organization_type || 'fraternity',
+        outreach_status: chapter.chapter_outreach?.[0]?.outreach_status || 'not_contacted',
+        engagement_score: chapter.engagement_score || 0,
+        priority: chapter.chapter_outreach?.[0]?.priority || 'medium',
+        last_contact_date: chapter.chapter_outreach?.[0]?.last_contact_date,
+        next_follow_up_date: chapter.chapter_outreach?.[0]?.next_follow_up_date,
+        primary_contact_name: chapter.chapter_outreach?.[0]?.primary_contact_name,
+        notes: chapter.chapter_outreach?.[0]?.notes,
+        fundraising_goal: chapter.chapter_outreach?.[0]?.fundraising_goal,
+        fundraising_benefactor: chapter.chapter_outreach?.[0]?.fundraising_benefactor,
+        fundraising_current: chapter.chapter_outreach?.[0]?.fundraising_current,
+        followers: metrics?.followers_count || null,
+        posts_last_7_days,
+        opportunities_last_30_days,
+        last_post_date
+      };
+    }));
+
+    // Group chapters by status
+    const grouped = {
+      not_contacted: enrichedChapters.filter(c => c.outreach_status === 'not_contacted'),
+      reached_out: enrichedChapters.filter(c => c.outreach_status === 'reached_out'),
+      responded: enrichedChapters.filter(c => c.outreach_status === 'responded'),
+      in_conversation: enrichedChapters.filter(c => c.outreach_status === 'in_conversation'),
+      partnership: enrichedChapters.filter(c => c.outreach_status === 'partnership'),
+      not_interested: enrichedChapters.filter(c => c.outreach_status === 'not_interested'),
+      archived: enrichedChapters.filter(c => c.outreach_status === 'archived')
+    };
+
+    // Debug logging
+    const orgTypeCounts = {
+      fraternity: enrichedChapters.filter(c => c.organization_type === 'fraternity').length,
+      sorority: enrichedChapters.filter(c => c.organization_type === 'sorority').length,
+      other: enrichedChapters.filter(c => c.organization_type && c.organization_type !== 'fraternity' && c.organization_type !== 'sorority').length,
+      null: enrichedChapters.filter(c => !c.organization_type).length
+    };
+    console.log('📊 CRM Dashboard - Chapters by org type:', orgTypeCounts);
+    console.log('📊 Total chapters returned:', enrichedChapters.length);
+
+    res.json({ success: true, chapters: enrichedChapters, grouped });
+  } catch (error: any) {
+    console.error('❌ Error fetching CRM dashboard:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Update chapter outreach status
+app.patch('/api/admin/crm/chapters/:id/status', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Check if chapter_outreach record exists
+    const { data: existing } = await supabaseAdmin
+      .from('chapter_outreach')
+      .select('id')
+      .eq('chapter_id', id)
+      .single();
+
+    if (existing) {
+      // Update existing record
+      const { error } = await supabaseAdmin
+        .from('chapter_outreach')
+        .update({ outreach_status: status })
+        .eq('chapter_id', id);
+
+      if (error) throw error;
+    } else {
+      // Create new record
+      const { error } = await supabaseAdmin
+        .from('chapter_outreach')
+        .insert({ chapter_id: id, outreach_status: status });
+
+      if (error) throw error;
+    }
+
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error('❌ Error updating chapter status:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get chapter details (for modal)
+app.get('/api/admin/crm/chapters/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Get Instagram posts
+    const { data: posts } = await supabaseAdmin
+      .from('instagram_posts')
+      .select('id, post_url, caption, like_count, comment_count, posted_at, is_opportunity, opportunity_reason')
+      .eq('chapter_id', id)
+      .order('posted_at', { ascending: false })
+      .limit(20);
+
+    // Get communications
+    const { data: communications } = await supabaseAdmin
+      .from('chapter_communications')
+      .select('id, type, direction, subject, content, communicated_at')
+      .eq('chapter_id', id)
+      .order('communicated_at', { ascending: false })
+      .limit(20);
+
+    // Get leadership
+    const { data: leadership } = await supabaseAdmin
+      .from('chapter_officers')
+      .select('id, name, position, email, phone')
+      .eq('chapter_id', id)
+      .limit(10);
+
+    // Get chapter size
+    const { count: chapter_size } = await supabaseAdmin
+      .from('chapter_members')
+      .select('id', { count: 'exact' })
+      .eq('chapter_id', id);
+
+    res.json({
+      success: true,
+      posts: posts || [],
+      communications: communications || [],
+      leadership: leadership || [],
+      chapter_size: chapter_size || 0
+    });
+  } catch (error: any) {
+    console.error('❌ Error fetching chapter details:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Update chapter outreach info (notes, priority, contact, follow-up)
+app.post('/api/admin/crm/chapters/:id/outreach', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { primary_contact_name, notes, priority, next_follow_up_date } = req.body;
+
+    // Check if record exists
+    const { data: existing } = await supabaseAdmin
+      .from('chapter_outreach')
+      .select('id')
+      .eq('chapter_id', id)
+      .single();
+
+    if (existing) {
+      // Update
+      const { error } = await supabaseAdmin
+        .from('chapter_outreach')
+        .update({
+          primary_contact_name,
+          notes,
+          priority,
+          next_follow_up_date
+        })
+        .eq('chapter_id', id);
+
+      if (error) throw error;
+    } else {
+      // Insert
+      const { error } = await supabaseAdmin
+        .from('chapter_outreach')
+        .insert({
+          chapter_id: id,
+          primary_contact_name,
+          notes,
+          priority,
+          next_follow_up_date,
+          outreach_status: 'not_contacted'
+        });
+
+      if (error) throw error;
+    }
+
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error('❌ Error updating chapter outreach:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Log communication
+app.post('/api/admin/crm/chapters/:id/communications', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { type, direction, content } = req.body;
+
+    const { error } = await supabaseAdmin
+      .from('chapter_communications')
+      .insert({
+        chapter_id: id,
+        type,
+        direction,
+        content,
+        communicated_at: new Date().toISOString()
+      });
+
+    if (error) throw error;
+
+    // Update last_contact_date if outbound
+    if (direction === 'outbound') {
+      await supabaseAdmin
+        .from('chapter_outreach')
+        .update({ last_contact_date: new Date().toISOString() })
+        .eq('chapter_id', id);
+    }
+
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error('❌ Error logging communication:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ============================================================================
+// PAYMENT METHODS ENDPOINTS
+// ============================================================================
+
+// Get payment methods for a chapter
+app.get('/api/admin/chapters/:id/payment-methods', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { data, error } = await supabaseAdmin
+      .from('chapter_payment_methods')
+      .select('*')
+      .eq('chapter_id', id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+      throw error;
+    }
+
+    res.json({ success: true, data: data || null });
+  } catch (error: any) {
+    console.error('❌ Error fetching payment methods:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Create or update payment methods for a chapter
+app.post('/api/admin/chapters/:id/payment-methods', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const paymentData = req.body;
+
+    // Check if payment methods already exist
+    const { data: existing } = await supabaseAdmin
+      .from('chapter_payment_methods')
+      .select('id')
+      .eq('chapter_id', id)
+      .single();
+
+    if (existing) {
+      // Update existing
+      const { data, error } = await supabaseAdmin
+        .from('chapter_payment_methods')
+        .update({
+          ...paymentData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('chapter_id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      res.json({ success: true, data });
+    } else {
+      // Create new
+      const { data, error } = await supabaseAdmin
+        .from('chapter_payment_methods')
+        .insert({
+          chapter_id: id,
+          ...paymentData
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      res.json({ success: true, data });
+    }
+  } catch (error: any) {
+    console.error('❌ Error saving payment methods:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Delete payment methods for a chapter
+app.delete('/api/admin/chapters/:id/payment-methods', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { error } = await supabaseAdmin
+      .from('chapter_payment_methods')
+      .delete()
+      .eq('chapter_id', id);
+
+    if (error) throw error;
+
+    res.json({ success: true, message: 'Payment methods deleted successfully' });
+  } catch (error: any) {
+    console.error('❌ Error deleting payment methods:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
