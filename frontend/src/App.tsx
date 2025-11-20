@@ -33,6 +33,8 @@ import MapPage from './pages/MapPage';
 import MapPageFullScreen from './pages/MapPageFullScreen';
 import SuperMapPage from './pages/SuperMapPage';
 import RetroSuperMapPage from './pages/RetroSuperMapPage';
+import TravelMapPage from './pages/TravelMapPage';
+import PublicTravelMapPage from './pages/PublicTravelMapPage';
 import ChaptersPage from './pages/ChaptersPage';
 import ChapterDetailPage from './pages/ChapterDetailPage';
 import EventsPage from './pages/EventsPage';
@@ -201,6 +203,9 @@ function AnimatedRoutes() {
           {/* Public Share Route */}
           <Route path="/share/:token" element={<SharePage />} />
 
+          {/* Public Travel Map Route */}
+          <Route path="/travel-map/:token" element={<PublicTravelMapPage />} />
+
           {/* Private Routes */}
           <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Navigate to="/app/map" replace />} />
@@ -221,6 +226,7 @@ function AnimatedRoutes() {
             <Route path="map" element={<MapPageFullScreen />} />
             <Route path="supermap" element={<SuperMapPage />} />
             <Route path="retro-map" element={<RetroSuperMapPage />} />
+            <Route path="travel-map" element={<TravelMapPage />} />
             <Route path="chapters" element={<ChaptersPage />} />
             <Route path="chapters/:id" element={<ChapterDetailPage />} />
             <Route path="outreach" element={<OutreachPage />} />

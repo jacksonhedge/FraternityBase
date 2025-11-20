@@ -62,12 +62,28 @@ export function initializeDatabase() {
     )
   `);
 
+  // Travel map viewers table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS travel_map_viewers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL,
+      token TEXT NOT NULL,
+      viewed_at TEXT NOT NULL,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(email, token)
+    )
+  `);
+
   // Create indexes for better performance
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_waitlist_email ON waitlist(email);
     CREATE INDEX IF NOT EXISTS idx_waitlist_date ON waitlist(signup_date);
     CREATE INDEX IF NOT EXISTS idx_company_email ON company_signups(email);
     CREATE INDEX IF NOT EXISTS idx_company_status ON company_signups(status);
+    CREATE INDEX IF NOT EXISTS idx_travel_map_email ON travel_map_viewers(email);
+    CREATE INDEX IF NOT EXISTS idx_travel_map_token ON travel_map_viewers(token);
+    CREATE INDEX IF NOT EXISTS idx_travel_map_viewed_at ON travel_map_viewers(viewed_at);
   `);
 
   console.log('✅ Database initialized successfully');
