@@ -1,0 +1,468 @@
+[
+  {
+    "chapterName": "Iota Phi",
+    "university": "University of North Texas",
+    "members": [
+      {
+        "firstName": "Jamil",
+        "lastName": "Alvarez",
+        "fullName": "Jamil Alvarez",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jamilalvarez2006@hotmail.com",
+        "phone": "9568212228"
+      },
+      {
+        "firstName": "Conner",
+        "lastName": "Anthony",
+        "fullName": "Conner Patrick Anthony",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "conneranthony512@gmail.com",
+        "phone": "6827048551"
+      },
+      {
+        "firstName": "Elliott",
+        "lastName": "Bynum",
+        "fullName": "Elliott Jacob Bynum",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "elliottbynum1@gmail.com",
+        "phone": ""
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Campbell",
+        "fullName": "Andrew Carson Campbell",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "drewemailtx@gmail.com",
+        "phone": "5126600429"
+      },
+      {
+        "firstName": "Brady",
+        "lastName": "Cates",
+        "fullName": "Brady Lawrence Cates",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bboy90303@gmail.com",
+        "phone": "972-971-7744"
+      },
+      {
+        "firstName": "Joel",
+        "lastName": "Chavez",
+        "fullName": "Joel Sammy Chavez",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "2004jchavez@gmail.com",
+        "phone": "8175659867"
+      },
+      {
+        "firstName": "Zane",
+        "lastName": "Collins",
+        "fullName": "Zane Edward Collins",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zane.one.nine@gmail.com",
+        "phone": "7605938111"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Echterhoff",
+        "fullName": "Jacob N. Echterhoff",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacob.echterhoff@gmail.com",
+        "phone": "(318) 218-3120"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Erwin",
+        "fullName": "Ethan Brett Erwin",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethanberwin12@gmail.com",
+        "phone": ""
+      },
+      {
+        "firstName": "Heath",
+        "lastName": "Fromme",
+        "fullName": "Heath Aiden Fromme",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "heathfromme@gmail.com",
+        "phone": "804-221-2718"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Garcia",
+        "fullName": "Christopher Isaiah Garcia",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "chrisig188@gmail.com",
+        "phone": "(972) 904-4484"
+      },
+      {
+        "firstName": "Deontae",
+        "lastName": "George",
+        "fullName": "Deontae Maurice George",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "deontae195@icloud.com",
+        "phone": "(817) 899-8839"
+      },
+      {
+        "firstName": "Jordan",
+        "lastName": "Guerra",
+        "fullName": "Jordan Jalen Guerra",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jordan23guerra@gmail.com",
+        "phone": "(469)9395706"
+      },
+      {
+        "firstName": "Derek",
+        "lastName": "Gunther",
+        "fullName": "Derek Chase Gunther",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "derekgunther69@gmail.com",
+        "phone": "(360) 473-6162"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Henderson",
+        "fullName": "Ian Henderson",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ianhend22@gmail.com",
+        "phone": "(972) 523-0123"
+      },
+      {
+        "firstName": "Krishna",
+        "lastName": "Karna",
+        "fullName": "Krishna Karna",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "krishnakarna2006@gmail.com",
+        "phone": "4696396271"
+      },
+      {
+        "firstName": "Brayden",
+        "lastName": "Linker",
+        "fullName": "Brayden Robert Linker",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brlink05@gmail.com",
+        "phone": "(214) 790-3828"
+      },
+      {
+        "firstName": "Arnoldo",
+        "lastName": "Lopez",
+        "fullName": "Arnoldo Lopez",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "arnoldolopez6523@gmail.com",
+        "phone": "(214) 980-6204"
+      },
+      {
+        "firstName": "Emilio",
+        "lastName": "Martinez",
+        "fullName": "Emilio Martinez",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "emiliosnap123@gmail.com",
+        "phone": "(469) 980-0327"
+      },
+      {
+        "firstName": "Lisandro",
+        "lastName": "Mascorro",
+        "fullName": "Lisandro Mascorro",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lisandromascorro2435@gmail.com",
+        "phone": "2148009594"
+      },
+      {
+        "firstName": "William",
+        "lastName": "McBroom",
+        "fullName": "William Mitchell McBroom",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mcbroommitchell@gmail.com",
+        "phone": "6824021014"
+      },
+      {
+        "firstName": "Hunter",
+        "lastName": "McFaul",
+        "fullName": "Hunter Lee McFaul",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "huntermcfaul5@gmail.com",
+        "phone": ""
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Mclaughlin",
+        "fullName": "Jack Tyler Mclaughlin",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacktylermclaughlin@gmail.com",
+        "phone": "(512) 422-7010"
+      },
+      {
+        "firstName": "Matt",
+        "lastName": "Mehl",
+        "fullName": "Matt Francis Mehl",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mmehl101@gmail.com",
+        "phone": "4697717307"
+      },
+      {
+        "firstName": "Douglass",
+        "lastName": "Melchior",
+        "fullName": "Douglass Gerard Melchior",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "melchiordouglass@gmail.com",
+        "phone": "8179089418"
+      },
+      {
+        "firstName": "Trevor",
+        "lastName": "Million",
+        "fullName": "Trevor William Million",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tmilliontx22@gmail.com",
+        "phone": "(469) 426-2432"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Moran",
+        "fullName": "Lucas Kirk Moran",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucas.moran777@gmail.com",
+        "phone": "(940) 999-1639"
+      },
+      {
+        "firstName": "Jorge",
+        "lastName": "Moreno",
+        "fullName": "Jorge Ivan Moreno",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jm4320871@gmail.com",
+        "phone": "2148569732"
+      },
+      {
+        "firstName": "Aidan",
+        "lastName": "Nelson",
+        "fullName": "Aidan Rithik-Ferdinand Nelson",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aidannelsonwork@gmail.com",
+        "phone": "(763) 291-9516"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Nitcholas",
+        "fullName": "William Bryler Nitcholas",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brylernitcholas@yahoo.com",
+        "phone": ""
+      },
+      {
+        "firstName": "Kenny",
+        "lastName": "Nyguyen",
+        "fullName": "Kenny T Nyguyen",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kennyn2024@gmail.com",
+        "phone": "2145923737"
+      },
+      {
+        "firstName": "Jesse",
+        "lastName": "Omakor",
+        "fullName": "Jesse Omakor",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jesse_omakor@outlook.com",
+        "phone": "(817) 908-0659"
+      },
+      {
+        "firstName": "Goktug",
+        "lastName": "Ozkan",
+        "fullName": "Goktug Ozkan",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ozkangoktug41@gmail.com",
+        "phone": "469-212-6219"
+      },
+      {
+        "firstName": "Ramon",
+        "lastName": "Pedroza",
+        "fullName": "Ramon Pedroza",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ramonpedroza711@gmail.com",
+        "phone": "4695319859"
+      },
+      {
+        "firstName": "Grayson",
+        "lastName": "Ramsey",
+        "fullName": "Grayson Harper Ramsey",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "graysonramsey8@yahoo.com",
+        "phone": "6823091193"
+      },
+      {
+        "firstName": "Chaiden",
+        "lastName": "Rios",
+        "fullName": "Chaiden joseph Rios",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "chaidenrios83@gmail.com",
+        "phone": "6829780392"
+      },
+      {
+        "firstName": "Eli",
+        "lastName": "Rogers",
+        "fullName": "Eli Nolan Rogers",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "elinolanrogers@gmail.com",
+        "phone": "(817) 907-6269"
+      },
+      {
+        "firstName": "Elvin",
+        "lastName": "Santiago",
+        "fullName": "Elvin Santiago",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "elvinignacio@gmail.com",
+        "phone": "(787) 222-6611"
+      },
+      {
+        "firstName": "Jalil",
+        "lastName": "Santos",
+        "fullName": "Jalil Miguel Eugenia Santos",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jalil.eugenia256@gmail.com",
+        "phone": "4699706980"
+      },
+      {
+        "firstName": "Hayden",
+        "lastName": "Stager",
+        "fullName": "Hayden Walker Stager",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "hayden.stager@icloud.com",
+        "phone": "(214) 226-1680"
+      },
+      {
+        "firstName": "Cooper",
+        "lastName": "Sullivan",
+        "fullName": "Cooper J Sullivan",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coopsully@gmail.com",
+        "phone": "9725331321"
+      },
+      {
+        "firstName": "Aiden",
+        "lastName": "Taylor",
+        "fullName": "Aiden James Taylor",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aidentaylor0210@gmail.com",
+        "phone": "(214) 490-9100"
+      },
+      {
+        "firstName": "Parker",
+        "lastName": "Thomas",
+        "fullName": "Parker Allen Thomas",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "parkerspartan@gmail.com",
+        "phone": "469-408-8782"
+      },
+      {
+        "firstName": "Spencer",
+        "lastName": "Webb",
+        "fullName": "Spencer Dalton Webb",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "spencerdwebb5@gmail.com",
+        "phone": "(817) 994-0110"
+      },
+      {
+        "firstName": "Nathan",
+        "lastName": "Wilson",
+        "fullName": "Nathan Daniel Wilson",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wilsonfhw5@gmail.com",
+        "phone": "(512) 786-0811"
+      },
+      {
+        "firstName": "Derrick",
+        "lastName": "Wise",
+        "fullName": "Derrick Wise",
+        "chapterGreekLetters": "Iota Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dswag9307@gmail.com",
+        "phone": "9096889479"
+      }
+    ]
+  }
+]

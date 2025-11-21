@@ -1,0 +1,308 @@
+[
+  {
+    "chapterName": "Alpha Kappa",
+    "university": "Hillsdale College",
+    "members": [
+      {
+        "firstName": "James",
+        "lastName": "Bieser",
+        "fullName": "James Oliver Robert Bieser",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "oliverbieser6@gmail.com",
+        "phone": "(614) 284-6694"
+      },
+      {
+        "firstName": "Ephraim",
+        "lastName": "Bittner",
+        "fullName": "Ephraim Daniel Bittner",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ephraimbittner@gmail.com",
+        "phone": "5635797001"
+      },
+      {
+        "firstName": "Jackson",
+        "lastName": "Casey",
+        "fullName": "Jackson Brian Casey",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacksonbcasey@icloud.com",
+        "phone": "5184107228"
+      },
+      {
+        "firstName": "Ben",
+        "lastName": "Cassin",
+        "fullName": "Ben Cassin",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cassinb46@gmail.com",
+        "phone": "248-252-6332"
+      },
+      {
+        "firstName": "Blaise",
+        "lastName": "Cerne",
+        "fullName": "Blaise Sullivan Cerne",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bscerne23@gmail.com",
+        "phone": "(248) 839-9191"
+      },
+      {
+        "firstName": "Symeon",
+        "lastName": "Clark",
+        "fullName": "Symeon Clark",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "symeonclark@gmail.com",
+        "phone": "5704684230"
+      },
+      {
+        "firstName": "Parker",
+        "lastName": "Dillon",
+        "fullName": "Parker Gage Dillon",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dillonparker4404@gmail.com",
+        "phone": "(405) 693-7771"
+      },
+      {
+        "firstName": "Gavin",
+        "lastName": "Drill",
+        "fullName": "Gavin W. Drill",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "g3drill@gmail.com",
+        "phone": "(612) 805-6676"
+      },
+      {
+        "firstName": "Jackson",
+        "lastName": "Foley",
+        "fullName": "Jackson Emmett Foley",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackson.emmett.foley@gmail.com",
+        "phone": "(651) 245-9600"
+      },
+      {
+        "firstName": "Ronan",
+        "lastName": "Gardner",
+        "fullName": "Ronan Gardner",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ronangardner773@gmail.com",
+        "phone": "8474718322"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Hamilton",
+        "fullName": "Jack Roger Hamilton",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackcaloiv@gmail.com",
+        "phone": "4074191561"
+      },
+      {
+        "firstName": "Davis",
+        "lastName": "Hay",
+        "fullName": "Davis Gordon Hay",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "davishay03@gmail.com",
+        "phone": "(763) 337-2820"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Hoffman",
+        "fullName": "Alexander Hoffman",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ahoffman765@gmail.com",
+        "phone": "(734) 660-2333"
+      },
+      {
+        "firstName": "Joel",
+        "lastName": "Holler",
+        "fullName": "Joel Michael Holler",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joel.holler333@gmail.com",
+        "phone": "6025875413"
+      },
+      {
+        "firstName": "Jesse",
+        "lastName": "Ingalsbe",
+        "fullName": "Jesse Ingalsbe",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jingalsbec34@gmail.com",
+        "phone": "7349289101"
+      },
+      {
+        "firstName": "Avery",
+        "lastName": "Johnson",
+        "fullName": "Avery Johnson",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "awj0406@gmail.com",
+        "phone": "7632675667"
+      },
+      {
+        "firstName": "Sam",
+        "lastName": "Jones",
+        "fullName": "Sam Jones",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "indian.2936@gmail.com",
+        "phone": "4173091935"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Kuntz",
+        "fullName": "Andrew Allen Kuntz",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "andrewakuntz@yahoo.com",
+        "phone": "(502) 500-9030"
+      },
+      {
+        "firstName": "Isaac",
+        "lastName": "Larkin",
+        "fullName": "Isaac Larkin",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ijudelarkin@gmail.com",
+        "phone": "760-573-9594"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Larocca",
+        "fullName": "John Larocca",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jtlarocca1900@gmail.com",
+        "phone": "(586) 817-3079"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "McAuliffe",
+        "fullName": "Colin Michael McAuliffe",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "shyguy3grand@gmail.com",
+        "phone": "(734) 787-2215"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Metz",
+        "fullName": "Lucas Eugene Metz",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "32metz@gmail.com",
+        "phone": "(248) 938-9647"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Mistry",
+        "fullName": "Joshua Mistry",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joshmistry123@gmail.com",
+        "phone": "4699866589"
+      },
+      {
+        "firstName": "Nikolas",
+        "lastName": "Nisidis",
+        "fullName": "Nikolas John Nisidis",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "niknis005@gmail.com",
+        "phone": "989-274-3739"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "Ogden",
+        "fullName": "Colin Ogden",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "colindonogden@gmail.com",
+        "phone": "(331) 442-7530"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "Popper",
+        "fullName": "Owen William Popper",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "opopper3@gmail.com",
+        "phone": "(813) 765-0481"
+      },
+      {
+        "firstName": "Jordan",
+        "lastName": "Sapp",
+        "fullName": "Jordan Douglas Sapp",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sappattack911@gmail.com",
+        "phone": "(480) 206-2572"
+      },
+      {
+        "firstName": "Luke",
+        "lastName": "Suddeth",
+        "fullName": "Luke Raymond Suddeth",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lukesuddeth26@gmail.com",
+        "phone": "4703045528"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Tufaro",
+        "fullName": "Christopher Besch Tufaro",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ctufaro29@gmail.com",
+        "phone": "(281) 387-1107"
+      },
+      {
+        "firstName": "Graham",
+        "lastName": "Wesbury",
+        "fullName": "Graham Cole Wesbury",
+        "chapterGreekLetters": "Alpha Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gwesbury@gmail.com",
+        "phone": "(312) 835-9988"
+      }
+    ]
+  }
+]

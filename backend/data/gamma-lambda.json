@@ -1,0 +1,228 @@
+[
+  {
+    "chapterName": "Gamma Lambda",
+    "university": "McGill University",
+    "members": [
+      {
+        "firstName": "Misheel",
+        "lastName": "Battulga",
+        "fullName": "Misheel Battulga",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "misheelbattulga30@gmail.com",
+        "phone": "5146064526"
+      },
+      {
+        "firstName": "Ernest",
+        "lastName": "Bragg",
+        "fullName": "Ernest Bragg",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ernestbragg2004@gmail.com",
+        "phone": "438 365 5795"
+      },
+      {
+        "firstName": "Walid",
+        "lastName": "Chaaban",
+        "fullName": "Walid Chaaban",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "walidchaaban20@gmail.com",
+        "phone": "5149745261"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Cherneski",
+        "fullName": "Andrew Cherneski",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "acherneski@gmail.com",
+        "phone": "5147436179"
+      },
+      {
+        "firstName": "Theodore",
+        "lastName": "Collingwood",
+        "fullName": "Theodore Donald James Collingwood",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "theo.collingwood@outlook.com",
+        "phone": "14384543923"
+      },
+      {
+        "firstName": "Elias",
+        "lastName": "Deleger",
+        "fullName": "Elias Deleger",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "elias.deleger@icloud.com",
+        "phone": "609-651-7672"
+      },
+      {
+        "firstName": "Axel",
+        "lastName": "Demaret",
+        "fullName": "Axel Demaret",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "axelpdemaret@gmail.com",
+        "phone": "+33695368875"
+      },
+      {
+        "firstName": "Ali Eren",
+        "lastName": "Dinc",
+        "fullName": "Ali Eren Dinc",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alierendincc@gmail.com",
+        "phone": "4385191461"
+      },
+      {
+        "firstName": "Markus",
+        "lastName": "Edwards",
+        "fullName": "Markus Alexander Landbo Edwards",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "markus4368@gmail.com",
+        "phone": "+15148914368"
+      },
+      {
+        "firstName": "Juan",
+        "lastName": "Fonseca",
+        "fullName": "Juan Camilo Fonseca",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "juan.c.fonseca@mail.mcgill.ca",
+        "phone": "(514) 237-2093"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Guerrier",
+        "fullName": "Samuel Therence Guerrier",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "guerriersamuel1@gmail.com",
+        "phone": "(514) 975-5246"
+      },
+      {
+        "firstName": "Francesco",
+        "lastName": "Guinand",
+        "fullName": "Francesco Guinand",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "francesco129guinand@gmail.com",
+        "phone": "Hidden"
+      },
+      {
+        "firstName": "Dawson",
+        "lastName": "Jurovich",
+        "fullName": "Dawson Daniel Jurovich",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jurovich22@gmail.com",
+        "phone": "6043636368"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Livni",
+        "fullName": "Jacob Livni",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacob.livni@gmail.com",
+        "phone": "(312) 826-5690"
+      },
+      {
+        "firstName": "Cole",
+        "lastName": "Martins",
+        "fullName": "Cole McGovern Martins",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cole.martins2007@gmail.com",
+        "phone": "4169900447"
+      },
+      {
+        "firstName": "Julian",
+        "lastName": "Pavelescu",
+        "fullName": "Julian Pavelescu",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "julian.pavelescu@icloud.com",
+        "phone": "5148020377"
+      },
+      {
+        "firstName": "Nate",
+        "lastName": "Pellerin",
+        "fullName": "Nate Pellerin",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nxpellerin@gmail.com",
+        "phone": "2062589988"
+      },
+      {
+        "firstName": "Marc",
+        "lastName": "Pujol",
+        "fullName": "Marc Pujol",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pujolmarcs@gmail.com",
+        "phone": "(438)470-3390"
+      },
+      {
+        "firstName": "Aidan",
+        "lastName": "Robb",
+        "fullName": "Aidan Jeffrey Robb",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aidan.robb@mail.mcgill.ca",
+        "phone": "(425) 219-3345"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Sabri",
+        "fullName": "Ryan Sabri",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ryan.sabri2005@gmail.com",
+        "phone": "4385281839"
+      },
+      {
+        "firstName": "Paul",
+        "lastName": "Winkler",
+        "fullName": "Paul Cedric Winkler",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "paul.winkler@mail.mcgill.ca",
+        "phone": "(438) 226-7413"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Xu",
+        "fullName": "Michael Xu",
+        "chapterGreekLetters": "Gamma Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "michaelthebeast02@gmail.com",
+        "phone": "5145929712"
+      }
+    ]
+  }
+]

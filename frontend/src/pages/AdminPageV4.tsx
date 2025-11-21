@@ -38,7 +38,12 @@ import {
   Loader,
   Sparkles,
   AlertCircle,
-  Heart
+  Heart,
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  FileSpreadsheet,
+  Cake
 } from 'lucide-react';
 import ChapterEditModal from '../components/ChapterEditModal';
 import PaymentsRevenueTab from '../components/admin/PaymentsRevenueTab';
@@ -51,6 +56,7 @@ import IntroductionRequestsTab from '../components/admin/IntroductionRequestsTab
 import FraternityUsersTab from '../components/admin/FraternityUsersTab';
 import CompanyProfileTab from '../components/admin/CompanyProfileTab';
 import BrandManagementTab from '../components/admin/BrandManagementTab';
+import OutreachPortalTab from '../components/admin/OutreachPortalTab';
 import { getCollegeLogoWithFallback } from '../utils/collegeLogos';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -227,14 +233,18 @@ const AdminPageV4 = () => {
   type AdminTab =
     'dashboard' | 'companies' | 'brands' | 'fraternities' | 'colleges' | 'chapters' | 'ambassadors' | 'users' | 'fraternity-users' | 'waitlist' |
     'payments' | 'unlocks' | 'credits' | 'intelligence' | 'analytics' | 'activity' | 'roadmap' | 'coming-tomorrow' |
-    'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters' | 'brand-interests' | string;
+    'wizard-admin' | 'college-clubs' | 'intro-requests' | 'diamond-chapters' | 'brand-interests' | 'outreach-portal' | string;
 
   // Derive active tab from URL path
   const activeTab: AdminTab = (location.pathname.split('/')[2] || 'dashboard') as AdminTab;
+
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [showBirthdayCalendar, setShowBirthdayCalendar] = useState(false);
+  const [birthdayStateFilter, setBirthdayStateFilter] = useState<string>('All States');
 
   // Data states
   const [greekOrgs, setGreekOrgs] = useState<GreekOrg[]>([]);
@@ -1994,11 +2004,26 @@ const AdminPageV4 = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar */}
-      <div className="w-64 bg-gray-900 text-white flex flex-col">
+      <div className={`${sidebarCollapsed ? 'w-20' : 'w-64'} bg-gray-900 text-white flex flex-col transition-all duration-300 relative`}>
+        {/* Toggle Button */}
+        <button
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          className="absolute -right-3 top-6 bg-gray-800 hover:bg-gray-700 text-white p-1.5 rounded-full shadow-lg z-10 transition-colors"
+          title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        </button>
+
         {/* Logo/Header */}
         <div className="p-6 border-b border-gray-800">
-          <h1 className="text-2xl font-bold">FraternityBase</h1>
-          <p className="text-sm text-gray-400 mt-1">Admin Panel</p>
+          {!sidebarCollapsed ? (
+            <>
+              <h1 className="text-2xl font-bold">FraternityBase</h1>
+              <p className="text-sm text-gray-400 mt-1">Admin Panel</p>
+            </>
+          ) : (
+            <h1 className="text-2xl font-bold text-center">FB</h1>
+          )}
         </div>
 
         {/* AI Status Badge */}
@@ -2024,205 +2049,52 @@ const AdminPageV4 = () => {
               setShowForm(false);
               setEditingId(null);
             }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+            className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'space-x-3'} px-4 py-3 rounded-lg transition-colors ${
               activeTab === 'dashboard'
                 ? 'bg-primary-600 text-white'
                 : 'text-gray-300 hover:bg-gray-800'
             }`}
+            title={sidebarCollapsed ? 'Dashboard' : ''}
           >
             <Home className="w-5 h-5" />
-            <span className="font-medium">Dashboard</span>
+            {!sidebarCollapsed && <span className="font-medium">Dashboard</span>}
           </button>
 
-          {/* Businesses Section */}
-          <div className="mt-4">
-            <button
-              onClick={() => setIsBusinessesOpen(!isBusinessesOpen)}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
-            >
-              <div className="flex items-center space-x-3">
-                <Briefcase className="w-5 h-5" />
-                <span className="font-medium">Businesses</span>
-              </div>
-              <ChevronDown className={`w-4 h-4 transition-transform ${isBusinessesOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {isBusinessesOpen && (
-              <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-700 pl-2">
-                <button
-                  onClick={() => {
-                    navigate('/admin/companies');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'companies'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <UserPlus className="w-4 h-4" />
-                  <span className="text-sm">Accounts</span>
-                  {companies.length > 0 && (
-                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{companies.length}</span>
-                  )}
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/brands');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'brands'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span className="text-sm">Brand Management</span>
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/payments');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'payments'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <DollarSign className="w-4 h-4" />
-                  <span className="text-sm">Payments & Revenue</span>
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/unlocks');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'unlocks'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <Unlock className="w-4 h-4" />
-                  <span className="text-sm">Chapter Unlocks</span>
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/intro-requests');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'intro-requests'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <Handshake className="w-4 h-4" />
-                    <span className="text-sm">Introduction Requests</span>
-                  </div>
-                  {pendingIntroRequests > 0 && (
-                    <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                      {pendingIntroRequests}
-                    </span>
-                  )}
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/activity');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'activity'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <Activity className="w-4 h-4" />
-                  <span className="text-sm">User Activity</span>
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/credits');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'credits'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <CreditCard className="w-4 h-4" />
-                    <span className="text-sm">Credits & Pricing</span>
-                  </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/intelligence');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'intelligence'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <TrendingUp className="w-4 h-4" />
-                    <span className="text-sm">Company Intelligence</span>
-                  </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/analytics');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'analytics'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <BarChart3 className="w-4 h-4" />
-                    <span className="text-sm">Business Analytics</span>
-                  </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
-                </button>
-                <button
-                  onClick={() => {
-                    navigate('/admin/waitlist');
-                    setShowForm(false);
-                    setEditingId(null);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === 'waitlist'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <Mail className="w-4 h-4" />
-                  <span className="text-sm">Waitlist</span>
-                  {waitlistEntries.length > 0 && (
-                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{waitlistEntries.length}</span>
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
+          {/* CRM - Kanban Board */}
+          <button
+            onClick={() => {
+              navigate('/admin/crm');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'space-x-3'} px-4 py-3 rounded-lg transition-colors ${
+              activeTab === 'crm'
+                ? 'bg-primary-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+            title={sidebarCollapsed ? 'CRM' : ''}
+          >
+            <Users className="w-5 h-5" />
+            {!sidebarCollapsed && <span className="font-medium">CRM</span>}
+          </button>
+
+          {/* Data Export Guide */}
+          <button
+            onClick={() => {
+              navigate('/admin/crm/data-export-guide');
+              setShowForm(false);
+              setEditingId(null);
+            }}
+            className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'space-x-3'} px-4 py-3 rounded-lg transition-colors ${
+              window.location.pathname === '/admin/crm/data-export-guide'
+                ? 'bg-purple-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800'
+            }`}
+            title={sidebarCollapsed ? 'Data Export Guide' : ''}
+          >
+            <FileSpreadsheet className="w-5 h-5" />
+            {!sidebarCollapsed && <span className="font-medium">Data Export Guide</span>}
+          </button>
 
           {/* Fraternity Data Section */}
           <div className="mt-2">
@@ -2463,9 +2335,211 @@ const AdminPageV4 = () => {
             )}
           </div>
 
+          {/* Businesses Section */}
+          <div className="mt-2">
+            <button
+              onClick={() => setIsBusinessesOpen(!isBusinessesOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800"
+            >
+              <div className="flex items-center space-x-3">
+                <Briefcase className="w-5 h-5" />
+                <span className="font-medium">Businesses</span>
+              </div>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isBusinessesOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isBusinessesOpen && (
+              <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-700 pl-2">
+                <button
+                  onClick={() => {
+                    navigate('/admin/companies');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'companies'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span className="text-sm">Accounts</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/brands');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'brands'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-sm">Brand Management</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/payments');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'payments'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <DollarSign className="w-4 h-4" />
+                  <span className="text-sm">Payments & Revenue</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/unlocks');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'unlocks'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Unlock className="w-4 h-4" />
+                  <span className="text-sm">Chapter Unlocks</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/intro-requests');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'intro-requests'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <Handshake className="w-4 h-4" />
+                    <span className="text-sm">Introduction Requests</span>
+                  </div>
+                  {pendingIntroRequests > 0 && (
+                    <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                      {pendingIntroRequests}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/outreach-portal');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'outreach-portal'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-sm">Outreach Portal</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/activity');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'activity'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Activity className="w-4 h-4" />
+                  <span className="text-sm">User Activity</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/credits');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'credits'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <CreditCard className="w-4 h-4" />
+                    <span className="text-sm">Credits & Pricing</span>
+                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/intelligence');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'intelligence'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <TrendingUp className="w-4 h-4" />
+                    <span className="text-sm">Company Intelligence</span>
+                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/analytics');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'analytics'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <BarChart3 className="w-4 h-4" />
+                    <span className="text-sm">Business Analytics</span>
+                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500 text-yellow-900 font-medium">Soon</span>
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/admin/waitlist');
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === 'waitlist'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <Mail className="w-4 h-4" />
+                  <span className="text-sm">Waitlist</span>
+                  {waitlistEntries.length > 0 && (
+                    <span className="ml-auto bg-gray-700 px-2 py-0.5 rounded text-xs">{waitlistEntries.length}</span>
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
+
           {/* Wizard Admin - Conditional, Always Visible */}
           {isWizardAdmin && (
-            <div className="mt-4 pt-4 border-t border-gray-700">
+            <div className="mt-4 pt-4 border-t border-gray-700 space-y-2">
               <button
                 onClick={() => navigate('/admin/wizard-admin')}
                 className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
@@ -2476,6 +2550,17 @@ const AdminPageV4 = () => {
               >
                 <Sparkles className="w-5 h-5" />
                 <span className="font-medium">Wizard Admin</span>
+              </button>
+              <button
+                onClick={() => navigate('/admin/outreach-portal')}
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  activeTab === 'outreach-portal'
+                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:bg-gray-800'
+                }`}
+              >
+                <Sparkles className="w-5 h-5" />
+                <span className="font-medium">Outreach Portal</span>
               </button>
             </div>
           )}
@@ -2533,13 +2618,19 @@ const AdminPageV4 = () => {
               {activeTab === 'roadmap' && 'Manage product roadmap features and data coverage'}
               {activeTab === 'college-clubs' && 'Manage college investment groups, blockchain groups, and poker clubs'}
               {activeTab === 'intro-requests' && 'View and manage all warm introduction requests from companies'}
+              {activeTab === 'outreach-portal' && 'AI-powered Instagram post filtering for targeted chapter outreach campaigns'}
             </p>
           </div>
 
-      {/* Brand Management Tab */}
-      {activeTab === 'brands' && (
-        <BrandManagementTab />
-      )}
+          {/* Outreach Portal Tab */}
+          {activeTab === 'outreach-portal' && (
+            <OutreachPortalTab />
+          )}
+
+          {/* Brand Management Tab */}
+          {activeTab === 'brands' && (
+            <BrandManagementTab />
+          )}
 
       {/* Success Message */}
       {showSuccess && (
@@ -2562,278 +2653,412 @@ const AdminPageV4 = () => {
         </div>
       )}
 
-      {/* Dashboard Tab Content */}
+      {/* Dashboard Tab Content - Simplified 3 Sections */}
       {activeTab === 'dashboard' && (
-        <div className="space-y-6">
-          {/* Top Row - Revenue & Financial KPIs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-lg shadow-lg text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-100 uppercase font-medium">Total Revenue</p>
-                  <p className="text-3xl font-bold mt-1">
-                    ${companies.reduce((sum, c) => sum + (c.total_spent || 0), 0).toLocaleString()}
-                  </p>
-                  <p className="text-xs text-green-100 mt-1">Credits spent</p>
-                </div>
-                <DollarSign className="w-12 h-12 text-green-200 opacity-80" />
-              </div>
+        <div className="space-y-8">
+          {/* Section 1: Current Philanthropy Events by Chapter */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Heart className="w-6 h-6 text-pink-600" />
+              <h2 className="text-2xl font-bold text-gray-900">Current Philanthropy Events</h2>
             </div>
-
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-lg shadow-lg text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-100 uppercase font-medium">Active Credits</p>
-                  <p className="text-3xl font-bold mt-1">
-                    {companies.reduce((sum, c) => sum + (c.credits_balance || 0), 0).toLocaleString()}
-                  </p>
-                  <p className="text-xs text-blue-100 mt-1">Total balance</p>
-                </div>
-                <CreditCard className="w-12 h-12 text-blue-200 opacity-80" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-lg shadow-lg text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-purple-100 uppercase font-medium">Total Unlocks</p>
-                  <p className="text-3xl font-bold mt-1">
-                    {companies.reduce((sum, c) => sum + (c.unlocks?.length || 0), 0).toLocaleString()}
-                  </p>
-                  <p className="text-xs text-purple-100 mt-1">Chapter unlocks</p>
-                </div>
-                <Lock className="w-12 h-12 text-purple-200 opacity-80" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-lg shadow-lg text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-orange-100 uppercase font-medium">Avg Revenue/Company</p>
-                  <p className="text-3xl font-bold mt-1">
-                    ${companies.length > 0
-                      ? (companies.reduce((sum, c) => sum + (c.total_spent || 0), 0) / companies.length).toFixed(0)
-                      : '0'}
-                  </p>
-                  <p className="text-xs text-orange-100 mt-1">Per company</p>
-                </div>
-                <TrendingUp className="w-12 h-12 text-orange-200 opacity-80" />
-              </div>
-            </div>
-          </div>
-
-          {/* Second Row - Core Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Companies</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{companies.length}</p>
-                  <p className="text-xs text-gray-500 mt-1">Registered accounts</p>
-                </div>
-                <Briefcase className="w-10 h-10 text-blue-500" />
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Fraternities</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{greekOrgs.length}</p>
-                  <p className="text-xs text-gray-500 mt-1">Greek organizations</p>
-                </div>
-                <Building2 className="w-10 h-10 text-purple-500" />
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Colleges</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{universities.length}</p>
-                  <p className="text-xs text-gray-500 mt-1">Universities listed</p>
-                </div>
-                <GraduationCap className="w-10 h-10 text-green-500" />
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Chapters</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{chapters.length}</p>
-                  <p className="text-xs text-gray-500 mt-1">Active chapters</p>
-                </div>
-                <Users className="w-10 h-10 text-orange-500" />
-              </div>
-            </div>
-          </div>
-
-          {/* Third Row - Additional KPIs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-indigo-500">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Users</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{users.length}</p>
-                  <p className="text-xs text-gray-500 mt-1">Chapter contacts</p>
-                </div>
-                <UserCheck className="w-10 h-10 text-indigo-500" />
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-pink-500">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Waitlist</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{waitlistEntries.length}</p>
-                  <p className="text-xs text-gray-500 mt-1">Pending signups</p>
-                </div>
-                <UserPlus className="w-10 h-10 text-pink-500" />
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-teal-500">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Active Companies</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">
-                    {companies.filter(c => (c.unlocks?.length || 0) > 0).length}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">With unlocks</p>
-                </div>
-                <BarChart3 className="w-10 h-10 text-teal-500" />
-              </div>
-            </div>
-          </div>
-
-          {/* Recent Activity Section */}
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Companies by Revenue</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Company</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Spent</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Credits Balance</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unlocks</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Event Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cause</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Goal</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Raised</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {companies
-                    .sort((a, b) => (b.total_spent || 0) - (a.total_spent || 0))
-                    .slice(0, 5)
-                    .map((company) => (
-                      <tr key={company.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 text-sm font-medium text-gray-900">{company.company_name}</td>
-                        <td className="px-4 py-3 text-sm text-gray-600">
-                          <span className="font-semibold text-green-600">{company.total_spent || 0}</span> credits
+                  {chapters
+                    .filter(c => c.philanthropy_name)
+                    .slice(0, 10)
+                    .map((chapter) => (
+                      <tr key={chapter.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          {chapter.greek_organization_name} - {chapter.university_name}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-600">${(company.credits_balance || 0).toFixed(2)}</td>
-                        <td className="px-4 py-3 text-sm text-gray-600">{company.unlocks?.length || 0}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{chapter.philanthropy_name || 'N/A'}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          <span className="px-2 py-1 bg-pink-100 text-pink-800 rounded text-xs font-medium">
+                            Community Service
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">Ongoing</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          ${(chapter.philanthropy_amount_raised || 5000).toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-semibold text-green-600">
+                          ${(chapter.philanthropy_amount_raised || 0).toLocaleString()}
+                        </td>
                       </tr>
                     ))}
                 </tbody>
               </table>
-              {companies.length === 0 && (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No companies registered yet</p>
+              {chapters.filter(c => c.philanthropy_name).length === 0 && (
+                <div className="text-center py-12">
+                  <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No active philanthropy events</p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Recent Activity Feed */}
-          <div className="bg-white p-6 rounded-lg shadow-sm">
+          {/* Section 2: Birthdays - Kanban Board */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-blue-600" />
-                Recent Activity
-              </h3>
-              <select
-                value={activityFilter}
-                onChange={(e) => setActivityFilter(e.target.value)}
-                className="px-3 py-1 border border-gray-300 rounded-lg text-sm"
+              <div className="flex items-center gap-3">
+                <Cake className="w-6 h-6 text-orange-600" />
+                <h2 className="text-2xl font-bold text-gray-900">Upcoming Birthdays</h2>
+              </div>
+              <button
+                onClick={() => setShowBirthdayCalendar(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-colors"
               >
-                <option value="all">All Events</option>
-                <option value="purchase">Purchases</option>
-                <option value="new_client">New Clients</option>
-                <option value="unlock">Unlocks</option>
-                <option value="warm_intro_request">Warm Intros</option>
-                <option value="admin_upload">Admin Uploads</option>
-              </select>
+                <Activity className="w-4 h-4" />
+                Full Calendar
+              </button>
             </div>
-            <div className="space-y-3">
-              {activityLog
-                .filter(log => activityFilter === 'all' || log.event_type === activityFilter)
-                .slice(0, activityVisibleCount)
-                .map((log) => {
-                  const getEventIcon = () => {
-                    switch (log.event_type) {
-                      case 'purchase': return <ShoppingCart className="w-5 h-5 text-green-600" />;
-                      case 'new_client': return <UserPlus className="w-5 h-5 text-blue-600" />;
-                      case 'unlock': return <Unlock className="w-5 h-5 text-purple-600" />;
-                      case 'warm_intro_request': return <Handshake className="w-5 h-5 text-orange-600" />;
-                      case 'admin_upload': return <FileUp className="w-5 h-5 text-teal-600" />;
-                      default: return <Activity className="w-5 h-5 text-gray-600" />;
-                    }
-                  };
 
-                  const getEventBadgeColor = () => {
-                    switch (log.event_type) {
-                      case 'purchase': return 'bg-green-100 text-green-800';
-                      case 'new_client': return 'bg-blue-100 text-blue-800';
-                      case 'unlock': return 'bg-purple-100 text-purple-800';
-                      case 'warm_intro_request': return 'bg-orange-100 text-orange-800';
-                      case 'admin_upload': return 'bg-teal-100 text-teal-800';
-                      default: return 'bg-gray-100 text-gray-800';
-                    }
-                  };
+            {/* State Filter Buttons */}
+            <div className="flex items-center gap-2 mb-6">
+              {['All States', 'New Jersey', 'PA', 'Michigan'].map((state) => (
+                <button
+                  key={state}
+                  onClick={() => setBirthdayStateFilter(state)}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                    birthdayStateFilter === state
+                      ? 'bg-orange-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {state}
+                </button>
+              ))}
+            </div>
 
-                  return (
-                    <div key={log.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                      <div className="mt-0.5">{getEventIcon()}</div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="text-sm font-semibold text-gray-900">{log.event_title}</p>
-                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${getEventBadgeColor()}`}>
-                            {log.event_type.replace('_', ' ')}
-                          </span>
+            <div className="overflow-x-auto">
+              {(() => {
+                // Generate birthday data for 5 columns
+                const today = new Date();
+                const columns = [
+                  { offset: -2, label: '2 Days Ago', isToday: false },
+                  { offset: -1, label: 'Yesterday', isToday: false },
+                  { offset: 0, label: 'TODAY', isToday: true },
+                  { offset: 1, label: 'Tomorrow', isToday: false },
+                  { offset: 2, label: 'In 2 Days', isToday: false }
+                ];
+
+                // Generate birthday data with Luka Kuzmanovic and state info
+                const states = ['New Jersey', 'PA', 'Michigan', 'Illinois', 'New York', 'California'];
+                const lukaBirthday = {
+                  id: 'luka-kuzmanovic',
+                  memberName: 'Luka Kuzmanovic',
+                  chapter: 'Delta Tau Delta',
+                  university: 'University of Illinois',
+                  birthdayDate: new Date(today.getFullYear(), today.getMonth(), 22),
+                  age: 21,
+                  offset: 22 - today.getDate(), // Days until the 22nd
+                  currentState: 'Active',
+                  travelState: 'Campus',
+                  state: 'Illinois'
+                };
+
+                const mockBirthdays = chapters
+                  .filter(c => c.member_count && c.member_count > 0)
+                  .slice(0, 24)
+                  .map((chapter, idx) => {
+                    const columnIdx = idx % 5;
+                    const offset = columns[columnIdx].offset;
+                    const birthdayDate = new Date(today);
+                    birthdayDate.setDate(today.getDate() + offset);
+                    const age = 20 + (idx % 4);
+                    const state = states[idx % states.length];
+
+                    return {
+                      id: `${chapter.id}-${idx}`,
+                      memberName: `${chapter.chapter_name || 'Member'} ${idx + 1}`,
+                      chapter: chapter.greek_organization_name,
+                      university: chapter.university_name,
+                      birthdayDate: birthdayDate,
+                      age: age,
+                      offset: offset,
+                      currentState: ['Active', 'New', 'Returning', 'Alumni'][idx % 4],
+                      travelState: ['Campus', 'Remote', 'Study Abroad', 'Home'][idx % 4],
+                      state: state
+                    };
+                  });
+
+                // Add Luka's birthday to the list
+                const allBirthdaysUnfiltered = [lukaBirthday, ...mockBirthdays];
+
+                // Filter by state
+                const allBirthdays = birthdayStateFilter === 'All States'
+                  ? allBirthdaysUnfiltered
+                  : allBirthdaysUnfiltered.filter(b => b.state === birthdayStateFilter);
+
+                return (
+                  <div className="flex gap-4 pb-4 min-w-max">
+                    {columns.map((column) => {
+                      const columnBirthdays = allBirthdays.filter(b => b.offset === column.offset);
+
+                      return (
+                        <div key={column.offset} className={`flex-1 min-w-[280px] ${column.isToday ? 'ring-2 ring-orange-500' : ''}`}>
+                          {/* Column Header */}
+                          <div className={`p-3 rounded-t-lg font-semibold text-sm ${
+                            column.isToday
+                              ? 'bg-orange-500 text-white'
+                              : 'bg-gray-100 text-gray-700'
+                          }`}>
+                            <div className="flex items-center justify-between">
+                              <span>{column.label}</span>
+                              <span className={`px-2 py-0.5 rounded text-xs ${
+                                column.isToday
+                                  ? 'bg-orange-600'
+                                  : 'bg-gray-200 text-gray-600'
+                              }`}>
+                                {columnBirthdays.length}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Cards Container */}
+                          <div className={`p-3 space-y-3 min-h-[400px] rounded-b-lg ${
+                            column.isToday ? 'bg-orange-50/50' : 'bg-gray-50'
+                          }`}>
+                            {columnBirthdays.length === 0 ? (
+                              <div className="text-center py-8 text-gray-400 text-sm">
+                                No birthdays
+                              </div>
+                            ) : (
+                              columnBirthdays.map((birthday) => (
+                                <div
+                                  key={birthday.id}
+                                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
+                                >
+                                  {/* Member Info */}
+                                  <div className="mb-3">
+                                    <h4 className="font-semibold text-gray-900 text-sm mb-1">
+                                      {birthday.memberName}
+                                    </h4>
+                                    <p className="text-xs text-gray-600">{birthday.chapter}</p>
+                                    <p className="text-xs text-gray-500">{birthday.university}</p>
+                                  </div>
+
+                                  {/* Age Badge */}
+                                  <div className="mb-3">
+                                    <span className="inline-flex items-center px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs font-medium">
+                                      <Cake className="w-3 h-3 mr-1" />
+                                      Age {birthday.age}
+                                    </span>
+                                  </div>
+
+                                  {/* State Labels - Bottom */}
+                                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                                    <div className="flex items-center gap-1">
+                                      <span className="text-xs font-medium text-gray-500">From:</span>
+                                      <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">
+                                        {birthday.currentState}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <span className="text-xs font-medium text-gray-500">To:</span>
+                                      <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">
+                                        {birthday.travelState}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600">{log.event_description}</p>
-                        {log.company_name && (
-                          <p className="text-xs text-gray-500 mt-1">
-                            <span className="font-medium">Company:</span> {log.company_name}
-                          </p>
-                        )}
-                        <p className="text-xs text-gray-400 mt-1">
-                          {new Date(log.created_at).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              {activityLog.length === 0 && (
-                <div className="text-center py-8">
-                  <Activity className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-                  <p className="text-gray-500">No recent activity</p>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+
+          {/* Section 3: New Roster Updates and Testers */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Users className="w-6 h-6 text-blue-600" />
+              <h2 className="text-2xl font-bold text-gray-900">New Roster Updates & Testers</h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">University</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Members</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Updated</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {chapters
+                    .filter(c => c.member_count && c.member_count > 0)
+                    .sort((a, b) => new Date(b.updated_at || 0).getTime() - new Date(a.updated_at || 0).getTime())
+                    .slice(0, 15)
+                    .map((chapter) => (
+                      <tr key={chapter.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          {chapter.greek_organization_name}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{chapter.university_name}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          <span className="font-semibold">{chapter.member_count || 0}</span> members
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {chapter.updated_at ? new Date(chapter.updated_at).toLocaleDateString() : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
+                            Updated
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              {chapters.filter(c => c.member_count && c.member_count > 0).length === 0 && (
+                <div className="text-center py-12">
+                  <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No roster updates yet</p>
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Load More Button */}
-            {activityLog.filter(log => activityFilter === 'all' || log.event_type === activityFilter).length > activityVisibleCount && (
-              <div className="mt-4 text-center">
-                <button
-                  onClick={() => setActivityVisibleCount(prev => prev + 10)}
-                  className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors inline-flex items-center gap-2"
-                >
-                  <ChevronDown className="w-4 h-4" />
-                  Load More Activity ({activityLog.filter(log => activityFilter === 'all' || log.event_type === activityFilter).length - activityVisibleCount} remaining)
-                </button>
-              </div>
-            )}
+          {/* Section 3: New Chapters Added or Database Additions */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Rocket className="w-6 h-6 text-purple-600" />
+              <h2 className="text-2xl font-bold text-gray-900">New Chapters & Database Additions</h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {chapters
+                    .sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime())
+                    .slice(0, 20)
+                    .map((chapter) => (
+                      <tr key={chapter.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-sm">
+                          <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs font-medium">
+                            Chapter
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          {chapter.greek_organization_name} {chapter.chapter_name}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {chapter.university_name}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {chapter.created_at ? new Date(chapter.created_at).toLocaleDateString() : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                            <span className="font-semibold">{chapter.grade || 'N/A'}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              {chapters.length === 0 && (
+                <div className="text-center py-12">
+                  <Rocket className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No new chapters added yet</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Section 4: Blackjack Tournaments */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Sparkles className="w-6 h-6 text-red-600" />
+              <h2 className="text-2xl font-bold text-gray-900">Blackjack Tournaments</h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tournament Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buy-In</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Players</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prize Pool</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {chapters
+                    .filter(c => c.member_count && c.member_count > 50)
+                    .slice(0, 10)
+                    .map((chapter, idx) => (
+                      <tr key={chapter.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          {chapter.greek_organization_name}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {chapter.chapter_name} Casino Night
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {new Date(Date.now() + idx * 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          <span className="font-semibold">$25</span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {Math.floor(Math.random() * 30) + 20} / {chapter.member_count}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-semibold text-green-600">
+                          ${(Math.floor(Math.random() * 20) + 10) * 25}
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            idx % 3 === 0
+                              ? 'bg-green-100 text-green-800'
+                              : idx % 3 === 1
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {idx % 3 === 0 ? 'Open' : idx % 3 === 1 ? 'Registration' : 'Upcoming'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              {chapters.filter(c => c.member_count && c.member_count > 50).length === 0 && (
+                <div className="text-center py-12">
+                  <Sparkles className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No upcoming blackjack tournaments</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -5693,7 +5918,6 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
           {activeTab === 'unlocks' && (
             <UnlocksTab />
           )}
-
           {/* Introduction Requests Tab */}
           {/* Diamond Chapters Tab */}
           {(activeTab as string) === 'diamond-chapters' && (
@@ -6493,6 +6717,169 @@ Ohio State,4.5,roster_update,Sigma Chi,95,2024-03-20`}
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Birthday Calendar Modal */}
+      {showBirthdayCalendar && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Cake className="w-6 h-6 text-orange-600" />
+                <h2 className="text-2xl font-bold text-gray-900">Full Birthday Calendar</h2>
+              </div>
+              <button
+                onClick={() => setShowBirthdayCalendar(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            {/* Calendar Content */}
+            <div className="p-6">
+              {(() => {
+                const today = new Date();
+                const currentMonth = today.getMonth();
+                const currentYear = today.getFullYear();
+
+                // Generate calendar for current month
+                const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+                const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+                const daysInMonth = lastDayOfMonth.getDate();
+                const startingDayOfWeek = firstDayOfMonth.getDay();
+
+                // Generate all birthdays for the month (mock data)
+                const monthBirthdays = chapters
+                  .filter(c => c.member_count && c.member_count > 0)
+                  .slice(0, 60)
+                  .map((chapter, idx) => {
+                    const dayOfMonth = (idx % daysInMonth) + 1;
+                    const birthdayDate = new Date(currentYear, currentMonth, dayOfMonth);
+
+                    return {
+                      id: `${chapter.id}-${idx}`,
+                      memberName: `${chapter.chapter_name || 'Member'} ${idx + 1}`,
+                      chapter: chapter.greek_organization_name,
+                      university: chapter.university_name,
+                      date: birthdayDate,
+                      dayOfMonth: dayOfMonth,
+                      age: 20 + (idx % 4)
+                    };
+                  })
+                  .reduce((acc, birthday) => {
+                    if (!acc[birthday.dayOfMonth]) {
+                      acc[birthday.dayOfMonth] = [];
+                    }
+                    acc[birthday.dayOfMonth].push(birthday);
+                    return acc;
+                  }, {} as Record<number, typeof monthBirthdays>);
+
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                // Create calendar grid
+                const calendarDays = [];
+                for (let i = 0; i < startingDayOfWeek; i++) {
+                  calendarDays.push(null);
+                }
+                for (let day = 1; day <= daysInMonth; day++) {
+                  calendarDays.push(day);
+                }
+
+                return (
+                  <div>
+                    {/* Month Header */}
+                    <div className="text-center mb-6">
+                      <h3 className="text-3xl font-bold text-gray-900">
+                        {monthNames[currentMonth]} {currentYear}
+                      </h3>
+                    </div>
+
+                    {/* Calendar Grid */}
+                    <div className="grid grid-cols-7 gap-2">
+                      {/* Day Headers */}
+                      {dayNames.map(day => (
+                        <div key={day} className="text-center font-semibold text-gray-600 text-sm py-2">
+                          {day}
+                        </div>
+                      ))}
+
+                      {/* Calendar Days */}
+                      {calendarDays.map((day, idx) => {
+                        const isToday = day === today.getDate();
+                        const birthdaysOnDay = day ? monthBirthdays[day] || [] : [];
+                        const hasBirthdays = birthdaysOnDay.length > 0;
+
+                        return (
+                          <div
+                            key={idx}
+                            className={`min-h-[120px] p-2 rounded-lg border-2 transition-all ${
+                              day === null
+                                ? 'bg-gray-50 border-transparent'
+                                : isToday
+                                ? 'bg-orange-50 border-orange-500'
+                                : hasBirthdays
+                                ? 'bg-purple-50 border-purple-300 hover:border-purple-500'
+                                : 'bg-white border-gray-200 hover:border-gray-400'
+                            }`}
+                          >
+                            {day !== null && (
+                              <>
+                                <div className={`text-sm font-semibold mb-1 ${
+                                  isToday ? 'text-orange-600' : 'text-gray-700'
+                                }`}>
+                                  {day}
+                                </div>
+
+                                {hasBirthdays && (
+                                  <div className="space-y-1">
+                                    {birthdaysOnDay.slice(0, 3).map((birthday) => (
+                                      <div
+                                        key={birthday.id}
+                                        className="bg-white rounded p-1 text-xs border border-purple-200"
+                                      >
+                                        <div className="font-medium text-gray-900 truncate">
+                                          {birthday.memberName}
+                                        </div>
+                                        <div className="text-gray-500 truncate text-[10px]">
+                                          {birthday.chapter}
+                                        </div>
+                                      </div>
+                                    ))}
+                                    {birthdaysOnDay.length > 3 && (
+                                      <div className="text-xs text-purple-600 font-medium">
+                                        +{birthdaysOnDay.length - 3} more
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Legend */}
+                    <div className="mt-6 flex items-center justify-center gap-6 text-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 bg-orange-50 border-2 border-orange-500 rounded"></div>
+                        <span className="text-gray-600">Today</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 bg-purple-50 border-2 border-purple-300 rounded"></div>
+                        <span className="text-gray-600">Has Birthdays</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>

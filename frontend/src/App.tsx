@@ -85,6 +85,8 @@ import SponsorshipMarketplacePage from './pages/SponsorshipMarketplacePage';
 import SponsorshipOpportunityDetailPageNew from './pages/SponsorshipOpportunityDetailPageNew';
 import MarketplacePricingPage from './pages/MarketplacePricingPage';
 import MyListingsPage from './pages/MyListingsPage';
+import CRMPage from './pages/CRMPage';
+import DataExportGuidePage from './pages/DataExportGuidePage';
 
 // Animated wrapper for all routes
 function AnimatedRoutes() {
@@ -193,6 +195,10 @@ function AnimatedRoutes() {
           <Route path="/admin/coming-tomorrow" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/wizard-admin" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
           <Route path="/admin/college-clubs" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/intro-requests" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/outreach-portal" element={<AdminRoute><AdminPageV4 /></AdminRoute>} />
+          <Route path="/admin/crm" element={<AdminRoute><CRMPage /></AdminRoute>} />
+          <Route path="/admin/crm/data-export-guide" element={<AdminRoute><DataExportGuidePage /></AdminRoute>} />
           <Route path="/admin/csv-upload" element={<AdminRoute><AdminCSVUploadPage /></AdminRoute>} />
           <Route path="/admin/analytics-events" element={<AdminRoute><AdminAnalyticsEventsPage /></AdminRoute>} />
           <Route path="/admin-analytics" element={<AdminRoute><AdminAnalyticsDashboard /></AdminRoute>} />

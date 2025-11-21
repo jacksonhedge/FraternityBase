@@ -1,0 +1,98 @@
+[
+  {
+    "chapterName": "Gamma Tau",
+    "university": "North Dakota State University",
+    "members": [
+      {
+        "firstName": "Caleb",
+        "lastName": "A Ivy",
+        "fullName": "Caleb Alan A Ivy",
+        "chapterGreekLetters": "Lambda Xi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "deoog7@gmail.com",
+        "phone": "(360) 510-8596"
+      },
+      {
+        "firstName": "Mitchell",
+        "lastName": "A Lamoriello",
+        "fullName": "Mitchell A. A Lamoriello",
+        "chapterGreekLetters": "Gamma Theta",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mitchellalamoriello@gmail.com",
+        "phone": "(407) 687-0962"
+      },
+      {
+        "firstName": "William",
+        "lastName": "A Long",
+        "fullName": "William A. A Long",
+        "chapterGreekLetters": "Gamma Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "blong317@comcast.net",
+        "phone": "(678) 592-6638"
+      },
+      {
+        "firstName": "Kirubel",
+        "lastName": "A Nemaga",
+        "fullName": "Kirubel Alemu A Nemaga",
+        "chapterGreekLetters": "Eta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kirubelalemu1234@gmail.com",
+        "phone": "(224) 550-2603"
+      },
+      {
+        "firstName": "GodFried",
+        "lastName": "Seglah",
+        "fullName": "GodFried Seglah",
+        "chapterGreekLetters": "Gamma Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pray2save@gmail.com",
+        "phone": "7015808037"
+      },
+      {
+        "firstName": "Nathan",
+        "lastName": "Thompson-Hershman",
+        "fullName": "Nathan Wade Thompson-Hershman",
+        "chapterGreekLetters": "Gamma Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nathanhershman05@gmail.com",
+        "phone": "(920) 939-5252"
+      },
+      {
+        "firstName": "Zakkary",
+        "lastName": "Volk",
+        "fullName": "Zakkary Halen Volk",
+        "chapterGreekLetters": "Gamma Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zakky.h.v@gmail.com",
+        "phone": "(701) 200-4978"
+      },
+      {
+        "firstName": "Charles",
+        "lastName": "Welter",
+        "fullName": "Charles Nicholas Welter",
+        "chapterGreekLetters": "Gamma Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "charlie.welter13@gmail.com",
+        "phone": "9522504063"
+      },
+      {
+        "firstName": "Jonah",
+        "lastName": "Zikmund",
+        "fullName": "Jonah Jackson Zikmund",
+        "chapterGreekLetters": "Gamma Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zikmundjonah6@gmail.com",
+        "phone": "(701) 331-9136"
+      }
+    ]
+  }
+]

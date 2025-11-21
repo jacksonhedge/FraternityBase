@@ -1,0 +1,308 @@
+[
+  {
+    "chapterName": "Theta Psi",
+    "university": "University of Waterloo",
+    "members": [
+      {
+        "firstName": "Roshan",
+        "lastName": "Arun Kumar",
+        "fullName": "Roshan Antony Arun Kumar",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "roshan.arun.k@gmail.com",
+        "phone": "(604) 767-6027"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Beacom",
+        "fullName": "Jared Beacom",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jsbeacom@gmail.com",
+        "phone": "(226) 989-5656"
+      },
+      {
+        "firstName": "Dhruv",
+        "lastName": "Bekal",
+        "fullName": "Dhruv Bekal",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bekaldhruv@gmail.com",
+        "phone": "(226) 899-8166"
+      },
+      {
+        "firstName": "Donavon",
+        "lastName": "Berry",
+        "fullName": "Donavon Berry",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "donnyberry1014@gmail.com",
+        "phone": "6473275675"
+      },
+      {
+        "firstName": "Naksh",
+        "lastName": "Budhiraja",
+        "fullName": "Naksh Budhiraja",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nakshbudhiraja@gmail.com",
+        "phone": "(647) 986-5951"
+      },
+      {
+        "firstName": "Jaydeep",
+        "lastName": "Chandak",
+        "fullName": "Jaydeep Chandak",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jaydeepchandak15@gmail.com",
+        "phone": "(647)928 2136"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Clayton",
+        "fullName": "Benjamin Geravis Clayton",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bgclayto@uwaterloo.ca",
+        "phone": "(873) 688-3435"
+      },
+      {
+        "firstName": "Omar",
+        "lastName": "Ghazal",
+        "fullName": "Omar Ghazal",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "oghazal1911@gmail.com",
+        "phone": "6474257366"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Ghimici",
+        "fullName": "Alexander Joshua Ghimici",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ajghimici@gmail.com",
+        "phone": "416 992 3776"
+      },
+      {
+        "firstName": "Vedant",
+        "lastName": "Grover",
+        "fullName": "Vedant Grover",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vedantgrover135@gmail.com",
+        "phone": "(437) 962-0070"
+      },
+      {
+        "firstName": "Mohamed",
+        "lastName": "Hassan",
+        "fullName": "Mohamed Hassan",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mm6hassa@uwaterloo.ca",
+        "phone": "(289) 680-1982"
+      },
+      {
+        "firstName": "Austin",
+        "lastName": "Lethbridge",
+        "fullName": "Austin maddux Lethbridge",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "austinlethbridge2006@gmail.com",
+        "phone": "2267587810"
+      },
+      {
+        "firstName": "Rex",
+        "lastName": "Liu",
+        "fullName": "Rex Liu",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rexliu75@gmail.com",
+        "phone": "(902) 209-6369"
+      },
+      {
+        "firstName": "Lukas",
+        "lastName": "Merabian",
+        "fullName": "Lukas Kai Merabian",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lukasmerabian@gmail.com",
+        "phone": "2369925705"
+      },
+      {
+        "firstName": "Tristan",
+        "lastName": "Morlet",
+        "fullName": "Tristan Vincent Rene Morlet",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tristanmorlet@hotmail.com",
+        "phone": "(604) 710-6052"
+      },
+      {
+        "firstName": "Bogdan-Ioan",
+        "lastName": "Radu",
+        "fullName": "Bogdan-Ioan Radu",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ioan.bogdan.radu@gmail.com",
+        "phone": "(438) 497-6006"
+      },
+      {
+        "firstName": "Tristan",
+        "lastName": "Richards",
+        "fullName": "Tristan Richards",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "trichard3814@gmail.com",
+        "phone": "(289) 880-7808"
+      },
+      {
+        "firstName": "Anshul",
+        "lastName": "Ruhil",
+        "fullName": "Anshul Ruhil",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "anshulruhil02@gmail.com",
+        "phone": "(519) 729-1483"
+      },
+      {
+        "firstName": "Rohan",
+        "lastName": "Saha",
+        "fullName": "Rohan Saha",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rohan.saha027@gmail.com",
+        "phone": "+14162743223"
+      },
+      {
+        "firstName": "Jayden",
+        "lastName": "Samarasekera",
+        "fullName": "Jayden Samarasekera",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jspsamar@uwaterloo.ca",
+        "phone": "4373282053"
+      },
+      {
+        "firstName": "Yosaf",
+        "lastName": "Shah",
+        "fullName": "Yosaf Shah",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "yosaf.shah21@gmail.com",
+        "phone": "647-786-5173"
+      },
+      {
+        "firstName": "Baaran",
+        "lastName": "Sheraz",
+        "fullName": "Baaran Sheraz",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "baaran.sheraz3717@gmail.com",
+        "phone": "4375772424"
+      },
+      {
+        "firstName": "Mathieu",
+        "lastName": "Smith",
+        "fullName": "Mathieu Michel Smith",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mathieu_smith09@outlook.com",
+        "phone": "647-261-4514"
+      },
+      {
+        "firstName": "Alexei",
+        "lastName": "Sokolovski",
+        "fullName": "Alexei Sokolovski",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexei.sokolovski2005@gmail.com",
+        "phone": "6473957534"
+      },
+      {
+        "firstName": "Vraj",
+        "lastName": "Thakar",
+        "fullName": "Vraj Thakar",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "v3thakar@uwaterloo.ca",
+        "phone": "(647) 870-4861"
+      },
+      {
+        "firstName": "Arayansh",
+        "lastName": "Thapar",
+        "fullName": "Arayansh Thapar",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "a4thapar@uwaterloo.ca",
+        "phone": "4378087325"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "Thrasher",
+        "fullName": "Owen Martin Cameron Thrasher",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "123thrashercameron123@gmail.com",
+        "phone": "(519) 498-2313"
+      },
+      {
+        "firstName": "MARK",
+        "lastName": "TUREZKI",
+        "fullName": "MARK TUREZKI",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "markturezki@gmail.com",
+        "phone": "6479786275"
+      },
+      {
+        "firstName": "Talal",
+        "lastName": "Wolf",
+        "fullName": "Talal Wolf",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "talalwolf05@gmail.com",
+        "phone": "(604) 500-0411"
+      },
+      {
+        "firstName": "Howard",
+        "lastName": "Zhu",
+        "fullName": "Howard Zhu",
+        "chapterGreekLetters": "Theta Psi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "howieforuw@gmail.com",
+        "phone": "4167053940"
+      }
+    ]
+  }
+]

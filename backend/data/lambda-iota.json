@@ -1,0 +1,408 @@
+[
+  {
+    "chapterName": "Lambda Iota",
+    "university": "Florida International University",
+    "members": [
+      {
+        "firstName": "David",
+        "lastName": "Acosta",
+        "fullName": "David Alexander Acosta",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "daacosta19@gmail.com",
+        "phone": "(954) 913-4243"
+      },
+      {
+        "firstName": "Sebastian",
+        "lastName": "Amezaga",
+        "fullName": "Sebastian Roque Amezaga",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sebastian.amezaga@icloud.com",
+        "phone": "(305) 833-1947"
+      },
+      {
+        "firstName": "Andres",
+        "lastName": "Arumani",
+        "fullName": "Andres Nagib Arumani",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "andresaramuni8@gmail.com",
+        "phone": "9542322283"
+      },
+      {
+        "firstName": "Francisco",
+        "lastName": "Baella",
+        "fullName": "Francisco Baella",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "fbaella04@gmail.com",
+        "phone": "(305) 332-7705"
+      },
+      {
+        "firstName": "Renzo",
+        "lastName": "Brown",
+        "fullName": "Renzo Alejandro Brown",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "renzobrown73@gmail.com",
+        "phone": "9544396072"
+      },
+      {
+        "firstName": "German",
+        "lastName": "Calderon",
+        "fullName": "German Calderon",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "germancalderon1510@gmail.com",
+        "phone": "7865318321"
+      },
+      {
+        "firstName": "Justin",
+        "lastName": "Castillo",
+        "fullName": "Justin M Castillo",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bustercas77@gmail.com",
+        "phone": "5165341820"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Cobos",
+        "fullName": "Matthew Cobos",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mattcobos10@gmail.com",
+        "phone": "(516) 993-7235"
+      },
+      {
+        "firstName": "Jayden",
+        "lastName": "Dari",
+        "fullName": "Jayden Dari",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jaydari2007@gmail.com",
+        "phone": "9544108051"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Diaz",
+        "fullName": "Dylan Marel Diaz",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylanmdiaz@icloud.com",
+        "phone": "(305) 878-6175"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Dickens",
+        "fullName": "Joshua Ryan Dickens",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joshrdickens@gmail.com",
+        "phone": "3052067443"
+      },
+      {
+        "firstName": "Jonathan",
+        "lastName": "Fuentes",
+        "fullName": "Jonathan Fuentes",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jonnyf574@gmail.com",
+        "phone": "7863878397"
+      },
+      {
+        "firstName": "Alejandro",
+        "lastName": "Gonzalez",
+        "fullName": "Alejandro Andres Gonzalez",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "agonz6000@gmail.com",
+        "phone": "7864821447"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Hernandez",
+        "fullName": "Matthew Andrew Hernandez",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "matth0705@aol.com",
+        "phone": "(786) 479-9484"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Hernandez",
+        "fullName": "Alexander David Hernandez",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "datboi0307@gmail.com",
+        "phone": "3058787644"
+      },
+      {
+        "firstName": "Ashton",
+        "lastName": "Jacomino",
+        "fullName": "Ashton Jacomino",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ashtonjacomino@gmail.com",
+        "phone": "7867691769"
+      },
+      {
+        "firstName": "Nathan",
+        "lastName": "Kaminski",
+        "fullName": "Nathan Kaminski",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nathankaminski2025@gmail.com",
+        "phone": "2246057144"
+      },
+      {
+        "firstName": "Bryan",
+        "lastName": "Lima",
+        "fullName": "Bryan Lima",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "blima23232@aol.com",
+        "phone": "(305) 812-2218"
+      },
+      {
+        "firstName": "Fabian",
+        "lastName": "Martinez",
+        "fullName": "Fabian jesus Martinez",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "fabianmartinez670@yahoo.com",
+        "phone": "7867349445"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Mercado",
+        "fullName": "Dylan Mercado",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylmerk@icloud.com",
+        "phone": "(917) 482-2012"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "Morales",
+        "fullName": "Daniel Enrique Morales",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dmora2023@gmail.com",
+        "phone": "(786) 527-5595"
+      },
+      {
+        "firstName": "Joseph",
+        "lastName": "Nerey",
+        "fullName": "Joseph Nerey",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nereyj04@gmail.com",
+        "phone": "(786) 747-5450"
+      },
+      {
+        "firstName": "Evan",
+        "lastName": "Noval",
+        "fullName": "Evan Evelio Noval",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "evan.noval@icloud.com",
+        "phone": "3053012210"
+      },
+      {
+        "firstName": "Anthony",
+        "lastName": "Orrego",
+        "fullName": "Anthony Orrego",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "anthonyorrego112@gmail.com",
+        "phone": "2523825428"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Padron",
+        "fullName": "Michael Alfredo Padron",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mpadron2019@outlook.com",
+        "phone": "(305) 302-3586"
+      },
+      {
+        "firstName": "Davis",
+        "lastName": "Patrick",
+        "fullName": "Davis Ward Patrick",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "davispatrick006@yahoo.com",
+        "phone": "321-262-7754"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Perez-Rios",
+        "fullName": "Alexander Perez-Rios",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexander.perezrios13@gmail.com",
+        "phone": "7867401332"
+      },
+      {
+        "firstName": "Cameron",
+        "lastName": "Pimentel",
+        "fullName": "Cameron Christopher Pimentel",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cameronpimentel0@gmail.com",
+        "phone": "3053996072"
+      },
+      {
+        "firstName": "Derek",
+        "lastName": "Ramos",
+        "fullName": "Derek Ramos",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "derekdr3737@gmail.com",
+        "phone": "3055044984"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Rebozo",
+        "fullName": "Ethan Rebozo",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethanrebozo@gmail.com",
+        "phone": "(786) 209-8675"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Roberts",
+        "fullName": "Benjamin Rasheed Roberts",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "beni.roberts4359@gmail.com",
+        "phone": "(305) 498-9293"
+      },
+      {
+        "firstName": "Jose",
+        "lastName": "Rodriguez",
+        "fullName": "Jose Ramon Rodriguez",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jrod9063@gmail.com",
+        "phone": "7867193614"
+      },
+      {
+        "firstName": "Paccino",
+        "lastName": "Romain",
+        "fullName": "Paccino Romain",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "paccino12@gmail.com",
+        "phone": "7863841773"
+      },
+      {
+        "firstName": "Franco",
+        "lastName": "Romano",
+        "fullName": "Franco Romano",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "fr4363764@gmail.com",
+        "phone": "786-397-1934"
+      },
+      {
+        "firstName": "Brian",
+        "lastName": "Rubino",
+        "fullName": "Brian William Rubino",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "maestrorubino@gmail.com",
+        "phone": "(954) 663-6877"
+      },
+      {
+        "firstName": "Josue",
+        "lastName": "Soriano",
+        "fullName": "Josue Daniel Soriano",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "josues22@icloud.com",
+        "phone": "7865802217"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Tavares",
+        "fullName": "Lucas Manuel Tavares",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucastavares65915@gmail.com",
+        "phone": "3053016026"
+      },
+      {
+        "firstName": "Noah",
+        "lastName": "Trujillo",
+        "fullName": "Noah Alexander Trujillo",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "noah1110@icloud.com",
+        "phone": "3059870977"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Villanueva",
+        "fullName": "Lucas Villanueva",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucasv012@icloud.com",
+        "phone": "3057961514"
+      },
+      {
+        "firstName": "Stephen",
+        "lastName": "Zayas",
+        "fullName": "Stephen Isaac Zayas",
+        "chapterGreekLetters": "Lambda Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "btnrtsiz89@gmail.com",
+        "phone": "(305) 833-4175"
+      }
+    ]
+  }
+]

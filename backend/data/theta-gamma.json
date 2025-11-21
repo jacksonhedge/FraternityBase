@@ -1,0 +1,128 @@
+[
+  {
+    "chapterName": "Theta Gamma",
+    "university": "Drake University",
+    "members": [
+      {
+        "firstName": "Phelan",
+        "lastName": "Finley",
+        "fullName": "Phelan Finley",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wallacefinley@icloud.com",
+        "phone": "5153398133"
+      },
+      {
+        "firstName": "Ra’Kyme",
+        "lastName": "Forbes",
+        "fullName": "Ra’Kyme israel osaze Forbes",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rakyme.forbes242@gmail.com",
+        "phone": "515-5611658"
+      },
+      {
+        "firstName": "Brett",
+        "lastName": "Ingamells",
+        "fullName": "Brett Matthew Ingamells",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jinglemells1324@gmail.com",
+        "phone": "(641) 660-7595"
+      },
+      {
+        "firstName": "Isaac",
+        "lastName": "Keninger",
+        "fullName": "Isaac Andrew Keninger",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "isaac.keninger@gmail.com",
+        "phone": "5156398617"
+      },
+      {
+        "firstName": "Garrett",
+        "lastName": "Provence",
+        "fullName": "Garrett Peter Provence",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gpprovence@gmail.com",
+        "phone": "(720) 737-7502"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Rouhani",
+        "fullName": "William Rouhani",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "willrou502@yahoo.com",
+        "phone": "4174256006"
+      },
+      {
+        "firstName": "Kale",
+        "lastName": "Sykora",
+        "fullName": "Kale Joseph Sykora",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kjsykora1@icloud.com",
+        "phone": "531-541-7175"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Thomas-Gonzales",
+        "fullName": "Ethan Zachery Thomas-Gonzales",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethantg04@gmail.com",
+        "phone": "720-381-9853"
+      },
+      {
+        "firstName": "Charlie",
+        "lastName": "Timm",
+        "fullName": "Charlie Edward Timm",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "charlesetimm@gmail.com",
+        "phone": "515-480-8006"
+      },
+      {
+        "firstName": "Dakarai",
+        "lastName": "Turnquest",
+        "fullName": "Dakarai Turnquest",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "turnquestdakarai@gmail.com",
+        "phone": "Hidden"
+      },
+      {
+        "firstName": "Kyler",
+        "lastName": "Willenborg",
+        "fullName": "Kyler Jon Willenborg",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kylerw382@gmail.com",
+        "phone": "5155872837"
+      },
+      {
+        "firstName": "Harrison",
+        "lastName": "Ziegler",
+        "fullName": "Harrison JosephDalton Ziegler",
+        "chapterGreekLetters": "Theta Gamma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "harrisonziegler0@gmail.com",
+        "phone": "(479) 282-8845"
+      }
+    ]
+  }
+]

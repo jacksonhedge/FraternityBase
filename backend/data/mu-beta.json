@@ -1,0 +1,518 @@
+[
+  {
+    "chapterName": "Mu Beta",
+    "university": "California State University-San Marcos",
+    "members": [
+      {
+        "firstName": "Charles",
+        "lastName": "Ahearn",
+        "fullName": "Charles Bannigan Ahearn",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "charles.ahearns@gmail.com",
+        "phone": "(714) 380-7088"
+      },
+      {
+        "firstName": "Bashar",
+        "lastName": "Alam",
+        "fullName": "Bashar Alam",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "basharalam2424@gmail.com",
+        "phone": "(619) 654-4077"
+      },
+      {
+        "firstName": "Cooper",
+        "lastName": "Altopp",
+        "fullName": "Cooper Douglas Altopp",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cooperaltopp@gmail.com",
+        "phone": "9097626673"
+      },
+      {
+        "firstName": "Kai",
+        "lastName": "Brown",
+        "fullName": "Kai Brown",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kaibr531@gmail.com",
+        "phone": "(442) 264-5324"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Brown",
+        "fullName": "Jacob Christopher Brown",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacobbrown3331@gmail.com",
+        "phone": "951-531-3331"
+      },
+      {
+        "firstName": "Scott",
+        "lastName": "Buckmaster",
+        "fullName": "Scott Robert Buckmaster",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "scottisboss2006@gmail.com",
+        "phone": "9162577319"
+      },
+      {
+        "firstName": "Leticia",
+        "lastName": "Castaneda",
+        "fullName": "Leticia Castaneda",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jdcasta2015@gmail.com",
+        "phone": "(714) 614-8392"
+      },
+      {
+        "firstName": "Christian",
+        "lastName": "Castillo",
+        "fullName": "Christian Louis Castillo",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "christian.castillo2013@gmail.com",
+        "phone": "Hidden"
+      },
+      {
+        "firstName": "Nick",
+        "lastName": "Christian",
+        "fullName": "Nick Christian",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nickchristian.2004@gmail.com",
+        "phone": "8584492709"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "Cipolla",
+        "fullName": "Logan Cipolla",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "logancharles05@icloud.com",
+        "phone": "916-2573267"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Delavari",
+        "fullName": "Jacob Luke Delavari",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacobdelavari1@gmail.com",
+        "phone": "(805) 908-9949"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Dew",
+        "fullName": "Connor Dew",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "connordew732@gmail.com",
+        "phone": "951-218-3035"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Edwards",
+        "fullName": "Samuel Edwards",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sj.edwards2233@gmail.com",
+        "phone": "8582438820"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Fox",
+        "fullName": "Dylan Fox",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylanfox19.2004@gmail.com",
+        "phone": "(916) 953-8306"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Francis",
+        "fullName": "Kyle N. Francis",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kyhle22@gmail.com",
+        "phone": "951-7046728"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Freedman",
+        "fullName": "Ryan Jacob Freedman",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ryanfreedz11@gmail.com",
+        "phone": "858-735-1648"
+      },
+      {
+        "firstName": "Luis",
+        "lastName": "Garcia",
+        "fullName": "Luis Garcia",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lagarcia07@icloud.com",
+        "phone": "(719) 440-8471"
+      },
+      {
+        "firstName": "Marshall",
+        "lastName": "Gex",
+        "fullName": "Marshall Gex",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "marshgex31@gmail.com",
+        "phone": "9168057402"
+      },
+      {
+        "firstName": "Anthony",
+        "lastName": "Giammanco",
+        "fullName": "Anthony Giammanco",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "giammancoanthony6@gmail.com",
+        "phone": "(831) 238-1992"
+      },
+      {
+        "firstName": "Yaniv",
+        "lastName": "Gottlib",
+        "fullName": "Yaniv Gottlib",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "yanivgottlib@sbcglobal.net",
+        "phone": "9256402832"
+      },
+      {
+        "firstName": "Vincent",
+        "lastName": "Hanley",
+        "fullName": "Vincent Kelly Hanley",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vincent.hanley55@gmail.com",
+        "phone": "9097678406"
+      },
+      {
+        "firstName": "Dustin",
+        "lastName": "Hayes",
+        "fullName": "Dustin Hayes",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dustinhayes2003@gmail.com",
+        "phone": "4806896357"
+      },
+      {
+        "firstName": "Pedro",
+        "lastName": "Hernandez",
+        "fullName": "Pedro Hernandez",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "phcowboy760@gmail.com",
+        "phone": "7602969817"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "Hill",
+        "fullName": "Logan Hill",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "loganemoryhill@gmail.com",
+        "phone": "7143099417"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "Hobson",
+        "fullName": "Owen James Hobson",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "owenhobson@icloud.com",
+        "phone": "9092835314"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Jacobo",
+        "fullName": "Ian Jacobo",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ian.jacobo96@gmail.com",
+        "phone": "(760) 458-1230"
+      },
+      {
+        "firstName": "Nathan",
+        "lastName": "Laventure",
+        "fullName": "Nathan Miguel Laventure",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nathanlaventure2222@gmail.com",
+        "phone": "(949) 229-9665"
+      },
+      {
+        "firstName": "Joey",
+        "lastName": "Leonardi",
+        "fullName": "Joey Leonardi",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jtleonardi@yahoo.com",
+        "phone": "9164672895"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Lewis",
+        "fullName": "Zachary Lewis",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zacharylew777@gmail.com",
+        "phone": "(310) 612-4723"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Luna",
+        "fullName": "Ethan Nikolas Luna",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "enluna52@gmail.com",
+        "phone": "7606221133"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "McCarty",
+        "fullName": "Colin John McCarty",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "colinmccarty91@gmail.com",
+        "phone": "7602129073"
+      },
+      {
+        "firstName": "Julian",
+        "lastName": "Mendoza",
+        "fullName": "Julian Mendoza",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jmen2425@gmail.com",
+        "phone": "562-321-8352"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Michalik",
+        "fullName": "Dylan Robert Michalik",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylan.michalik05@gmail.com",
+        "phone": "7607107579"
+      },
+      {
+        "firstName": "Max",
+        "lastName": "Miles",
+        "fullName": "Max Miles",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "maxmorganmiles@gmail.com",
+        "phone": "8082714031"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Mills",
+        "fullName": "Benjamin James Mills",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "benmills824@gmail.com",
+        "phone": "3109096090"
+      },
+      {
+        "firstName": "Cyrus",
+        "lastName": "Mivehchi",
+        "fullName": "Cyrus Mivehchi",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cmivehchi1@gmail.com",
+        "phone": "(619) 990-9229"
+      },
+      {
+        "firstName": "Donovan",
+        "lastName": "Morrison",
+        "fullName": "Donovan E Morrison",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "donovanm3147@gmail.com",
+        "phone": "9092395458"
+      },
+      {
+        "firstName": "Rohan",
+        "lastName": "Mulakaluri",
+        "fullName": "Rohan Mulakaluri",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rohan.mulakaluri@gmail.com",
+        "phone": "9165865796"
+      },
+      {
+        "firstName": "Justin",
+        "lastName": "Nash",
+        "fullName": "Justin Nash",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "just_nat0507@yahoo.com",
+        "phone": "16196462539"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Navarra",
+        "fullName": "Michael Alan Navarra",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "m.navarra2005@gmail.com",
+        "phone": "2094000334"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Nieto",
+        "fullName": "Lucas Armand Nieto",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nieto8788@gmail.com",
+        "phone": "7609693191"
+      },
+      {
+        "firstName": "Francisco",
+        "lastName": "Quezada",
+        "fullName": "Francisco Samuel Quezada",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "franciscoqez@outlook.com",
+        "phone": "8583564458"
+      },
+      {
+        "firstName": "Alex",
+        "lastName": "Rowe",
+        "fullName": "Alex Rowe",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexrowe781@gmail.com",
+        "phone": "9162958549"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "Schwab",
+        "fullName": "Owen Schwab",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "owen.schwab6@icloud.com",
+        "phone": "4084422760"
+      },
+      {
+        "firstName": "Verik",
+        "lastName": "Shoup",
+        "fullName": "Verik Shoup",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "verikshoupcollege@gmail.com",
+        "phone": "7608597081"
+      },
+      {
+        "firstName": "Trent",
+        "lastName": "Taylor",
+        "fullName": "Trent Taylor",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "trentoffer@gmail.com",
+        "phone": "9092789653"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Tomas",
+        "fullName": "Dylan Tomas",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylantomas92@gmail.com",
+        "phone": "8184472809"
+      },
+      {
+        "firstName": "Govanni",
+        "lastName": "Trejo Anaya",
+        "fullName": "Govanni Trejo Anaya",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "govannitrejo101@gmail.com",
+        "phone": "(760) 390-4211"
+      },
+      {
+        "firstName": "Addai",
+        "lastName": "Vazquez",
+        "fullName": "Addai Vazquez",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "addaiv2@gmail.com",
+        "phone": "(760) 481-2574"
+      },
+      {
+        "firstName": "Garen",
+        "lastName": "Wright",
+        "fullName": "Garen A. Wright",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "garenwright213@gmail.com",
+        "phone": "(310) 621-2897"
+      },
+      {
+        "firstName": "Aidan",
+        "lastName": "Zapata",
+        "fullName": "Aidan Zapata",
+        "chapterGreekLetters": "Mu Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zapataac18@gmail.com",
+        "phone": "9494333067"
+      }
+    ]
+  }
+]

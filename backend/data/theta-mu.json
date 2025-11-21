@@ -1,0 +1,108 @@
+[
+  {
+    "chapterName": "Theta Mu",
+    "university": "Spring Hill College",
+    "members": [
+      {
+        "firstName": "Caleb",
+        "lastName": "A Ivy",
+        "fullName": "Caleb Alan A Ivy",
+        "chapterGreekLetters": "Lambda Xi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "deoog7@gmail.com",
+        "phone": "(360) 510-8596"
+      },
+      {
+        "firstName": "Mitchell",
+        "lastName": "A Lamoriello",
+        "fullName": "Mitchell A. A Lamoriello",
+        "chapterGreekLetters": "Gamma Theta",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mitchellalamoriello@gmail.com",
+        "phone": "(407) 687-0962"
+      },
+      {
+        "firstName": "Christian",
+        "lastName": "Durham",
+        "fullName": "Christian Michael Durham",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "christian.m.durham@gmail.com",
+        "phone": "7132774926"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Gutierrez",
+        "fullName": "Lucas Raul Gutierrez",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucasguti108@gmail.com",
+        "phone": "7868437716"
+      },
+      {
+        "firstName": "Aiden",
+        "lastName": "Kent",
+        "fullName": "Aiden John Kent",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aidkent10@icloud.com",
+        "phone": "7085526794"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "McCall",
+        "fullName": "Jack Patrick McCall",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jack.mccall98@yahoo.com",
+        "phone": "773-704-8851"
+      },
+      {
+        "firstName": "Justin",
+        "lastName": "McDowell",
+        "fullName": "Justin Daniel McDowell",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mcdboysjustin@gmail.com",
+        "phone": "(205) 789-5534"
+      },
+      {
+        "firstName": "Gabriel",
+        "lastName": "Navas",
+        "fullName": "Gabriel Alexander Navas",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gaboaln05@gmail.com",
+        "phone": "(251) 381-9708"
+      },
+      {
+        "firstName": "Spencer",
+        "lastName": "Schlagel",
+        "fullName": "Spencer Brian Schlagel",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "spencer.schlagel@icloud.com",
+        "phone": "7206265900"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Thapar",
+        "fullName": "Nicholas Joseph Thapar",
+        "chapterGreekLetters": "Theta Mu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nickdutch24@gmail.com",
+        "phone": "(859) 322-0915"
+      }
+    ]
+  }
+]

@@ -1,0 +1,348 @@
+[
+  {
+    "chapterName": "Theta Nu",
+    "university": "Alma College",
+    "members": [
+      {
+        "firstName": "Andrew",
+        "lastName": "Barrett",
+        "fullName": "Andrew Michael Barrett",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "barrettandrew2005@gmail.com",
+        "phone": "248-770-2401"
+      },
+      {
+        "firstName": "Gerrit",
+        "lastName": "Barth",
+        "fullName": "Gerrit Barth",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "111gtb111@gmail.com",
+        "phone": "9894306024"
+      },
+      {
+        "firstName": "Gabe",
+        "lastName": "Barth",
+        "fullName": "Gabe Jason Barth",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "222gjb222@gmail.com",
+        "phone": "9894304807"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Berry",
+        "fullName": "Christopher Joel Berry",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "chrisbmoney21@gmail.com",
+        "phone": "5863448563"
+      },
+      {
+        "firstName": "Khalil Allah",
+        "lastName": "Chalouati",
+        "fullName": "Khalil Allah Chalouati",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "khalilallahchalouati@gmail.com",
+        "phone": "(989) 285-5459"
+      },
+      {
+        "firstName": "Grayson",
+        "lastName": "Clifford",
+        "fullName": "Grayson Daniel Clifford",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "graysondclifford07@gmail.com",
+        "phone": "2483969171"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Dickieson",
+        "fullName": "Benjamin Dickieson",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bendickieson1@gmail.com",
+        "phone": "(313) 407-3555"
+      },
+      {
+        "firstName": "Jaden",
+        "lastName": "Ducharme",
+        "fullName": "Jaden Ducharme",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ducharmejad@gmail.com",
+        "phone": "6164857488"
+      },
+      {
+        "firstName": "Brett",
+        "lastName": "Gaff",
+        "fullName": "Brett Michael Gaff",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brettgaff587@gmail.com",
+        "phone": "9062814823"
+      },
+      {
+        "firstName": "DanielDaniel",
+        "lastName": "Hickey",
+        "fullName": "DanielDaniel Steven Hickey",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "danielhickey20@gmail.com",
+        "phone": "734-301-9251"
+      },
+      {
+        "firstName": "Nic",
+        "lastName": "Honaker",
+        "fullName": "Nic Robert Honaker",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nichonaker2022@gmail.com",
+        "phone": "2485683851"
+      },
+      {
+        "firstName": "Tyler",
+        "lastName": "Horstman",
+        "fullName": "Tyler Alden Horstman",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "taldensw@outlook.com",
+        "phone": "(419) 889-0736"
+      },
+      {
+        "firstName": "Lorenzo",
+        "lastName": "Hunter",
+        "fullName": "Lorenzo Hunter",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lorenzo20001189@gmail.com",
+        "phone": "2488810670"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Jonas",
+        "fullName": "Alexander Thomas Jonas",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexjonas323@gmail.com",
+        "phone": "5179361411"
+      },
+      {
+        "firstName": "Grant",
+        "lastName": "Kaifas",
+        "fullName": "Grant Steven Kaifas",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "grantk21@icloud.com",
+        "phone": "6147536583"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Kavanagh",
+        "fullName": "Benjamin Hayes Kavanagh",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "hayeskavanagh4634@gmail.com",
+        "phone": "6163503742"
+      },
+      {
+        "firstName": "Anthony",
+        "lastName": "Kulka",
+        "fullName": "Anthony Joseph Kulka",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "anthonykulka1280@gmail.com",
+        "phone": "5179626545"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Lasceski",
+        "fullName": "Jake Matthew Lasceski",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jakelasceski@gmail.com",
+        "phone": "(989) 224-4342"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Laxton",
+        "fullName": "John Cauley Laxton",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "johnclaxton28@gmail.com",
+        "phone": "(517) 897-2258"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Lightle",
+        "fullName": "William Arthur Lightle",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "williamlightle6@gmail.com",
+        "phone": "2487569741"
+      },
+      {
+        "firstName": "Edward",
+        "lastName": "Markarian",
+        "fullName": "Edward James Markarian",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "phatcam53@gmail.com",
+        "phone": "7346582426"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "Moran",
+        "fullName": "Colin Anthony Moran",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "colinamoran@icloud.com",
+        "phone": "Hidden"
+      },
+      {
+        "firstName": "Yaw",
+        "lastName": "Poku-Agyemang",
+        "fullName": "Yaw Micah-Philip Poku-Agyemang",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "yawpoku411@gmail.com",
+        "phone": "(301) 708-1128"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Princer",
+        "fullName": "Zachary R. Princer",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "princerzach@gmail.com",
+        "phone": "(616)-450-3043"
+      },
+      {
+        "firstName": "Colton",
+        "lastName": "Ralko",
+        "fullName": "Colton Mathew Ralko",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cmralko07@gmail.com",
+        "phone": "2487904816"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "Reed",
+        "fullName": "Owen Reed",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "owen@mreed.org",
+        "phone": "5179933657"
+      },
+      {
+        "firstName": "Brent",
+        "lastName": "Riehl",
+        "fullName": "Brent Hunter Riehl",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brentreal9@gmail.com",
+        "phone": "(313) 799-5825"
+      },
+      {
+        "firstName": "Joseph",
+        "lastName": "Riggsby Jr",
+        "fullName": "Joseph Michael Riggsby Jr",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jjmriggsby@icloud.com",
+        "phone": "9375372136"
+      },
+      {
+        "firstName": "Max",
+        "lastName": "Roberts",
+        "fullName": "Max James Roberts",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mrobertsshs10@gmail.com",
+        "phone": "2487892313"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Skellenger",
+        "fullName": "Andrew Wayne Skellenger",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "andrewskellenger@gmail.com",
+        "phone": "(810) 279-8672"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Stone",
+        "fullName": "James Jennings Stone",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "stonejames2007@outlook.com",
+        "phone": "5173165665"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Stone",
+        "fullName": "William Jennings Stone",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "stonewill2005@outlook.com",
+        "phone": "7032555930"
+      },
+      {
+        "firstName": "Nate",
+        "lastName": "Toth",
+        "fullName": "Nate Andrew Toth",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nathan1toth@gmail.com",
+        "phone": "(586) 265-6163"
+      },
+      {
+        "firstName": "Devyn",
+        "lastName": "Whitford",
+        "fullName": "Devyn Lyle Whitford",
+        "chapterGreekLetters": "Theta Nu",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dev.whitford@gmail.com",
+        "phone": "(989) 763-5428"
+      }
+    ]
+  }
+]

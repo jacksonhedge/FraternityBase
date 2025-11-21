@@ -1,0 +1,88 @@
+[
+  {
+    "chapterName": "Alpha Chi",
+    "university": "Penn State University",
+    "members": [
+      {
+        "firstName": "Contact",
+        "lastName": "1-001",
+        "fullName": "Contact 1-001",
+        "chapterGreekLetters": "Chapter 1",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "",
+        "phone": ""
+      },
+      {
+        "firstName": "Contact",
+        "lastName": "1-002",
+        "fullName": "Contact 1-002",
+        "chapterGreekLetters": "Chapter 1",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "",
+        "phone": ""
+      },
+      {
+        "firstName": "Contact",
+        "lastName": "2 - 001",
+        "fullName": "Contact 2 - 001",
+        "chapterGreekLetters": "Chapter 2",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "",
+        "phone": ""
+      },
+      {
+        "firstName": "Contact",
+        "lastName": "2 - 002",
+        "fullName": "Contact 2 - 002",
+        "chapterGreekLetters": "Chapter 2",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "",
+        "phone": ""
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "A Ivy",
+        "fullName": "Caleb Alan A Ivy",
+        "chapterGreekLetters": "Lambda Xi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "deoog7@gmail.com",
+        "phone": "(360) 510-8596"
+      },
+      {
+        "firstName": "Mitchell",
+        "lastName": "A Lamoriello",
+        "fullName": "Mitchell A. A Lamoriello",
+        "chapterGreekLetters": "Gamma Theta",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mitchellalamoriello@gmail.com",
+        "phone": "(407) 687-0962"
+      },
+      {
+        "firstName": "William",
+        "lastName": "A Long",
+        "fullName": "William A. A Long",
+        "chapterGreekLetters": "Gamma Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "blong317@comcast.net",
+        "phone": "(678) 592-6638"
+      },
+      {
+        "firstName": "Kirubel",
+        "lastName": "A Nemaga",
+        "fullName": "Kirubel Alemu A Nemaga",
+        "chapterGreekLetters": "Eta Mu",
+        "memberType": "Undergrad",
+        "status": "",
+        "email": "",
+        "phone": ""
+      }
+    ]
+  }
+]

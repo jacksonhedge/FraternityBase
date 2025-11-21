@@ -1,0 +1,1304 @@
+[
+  {
+    "chapter": "Gamma Xi",
+    "university": "University of Wyoming",
+    "success": true,
+    "memberCount": 27
+  },
+  {
+    "chapter": "Mu Mu",
+    "university": "West Virginia University",
+    "success": true,
+    "memberCount": 44
+  },
+  {
+    "chapter": "Alpha Zeta",
+    "university": "Beloit College",
+    "success": true,
+    "memberCount": 7
+  },
+  {
+    "chapter": "Epsilon Lambda",
+    "university": "Ripon College",
+    "success": true,
+    "memberCount": 16
+  },
+  {
+    "chapter": "Iota Pi",
+    "university": "Marquette University",
+    "success": true,
+    "memberCount": 2
+  },
+  {
+    "chapter": "Lambda Chi",
+    "university": "University of Wisconsin-Milwaukee",
+    "success": true,
+    "memberCount": 33
+  },
+  {
+    "chapter": "Beta Upsilon",
+    "university": "Washington State University",
+    "success": true,
+    "memberCount": 102
+  },
+  {
+    "chapter": "Delta Phi",
+    "university": "University of Puget Sound",
+    "success": true,
+    "memberCount": 32
+  },
+  {
+    "chapter": "Gamma Epsilon",
+    "university": "Whitman College",
+    "success": true,
+    "memberCount": 16
+  },
+  {
+    "chapter": "Upsilon Upsilon",
+    "university": "University of Washington",
+    "success": true,
+    "memberCount": 5
+  },
+  {
+    "chapter": "Iota Xi",
+    "university": "George Mason University",
+    "success": true,
+    "memberCount": 26
+  },
+  {
+    "chapter": "Kappa Zeta",
+    "university": "Radford University",
+    "success": true,
+    "memberCount": 36
+  },
+  {
+    "chapter": "Psi",
+    "university": "University of Virginia",
+    "success": true,
+    "memberCount": 7
+  },
+  {
+    "chapter": "Sigma Sigma",
+    "university": "Hampden-Sydney College",
+    "success": true,
+    "memberCount": 28
+  },
+  {
+    "chapter": "Tau",
+    "university": "Roanoke College",
+    "success": true,
+    "memberCount": 485
+  },
+  {
+    "chapter": "Beta Epsilon",
+    "university": "University of Utah",
+    "success": true,
+    "memberCount": 199
+  },
+  {
+    "chapter": "Gamma Kappa",
+    "university": "Utah State University",
+    "success": true,
+    "memberCount": 61
+  },
+  {
+    "chapter": "Kappa Iota",
+    "university": "Southern Utah University",
+    "success": true,
+    "memberCount": 30
+  },
+  {
+    "chapter": "Alpha Nu",
+    "university": "University of Texas-Austin",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Delta Mu",
+    "university": "Southern Methodist University",
+    "success": true,
+    "memberCount": 151
+  },
+  {
+    "chapter": "Epsilon Mu",
+    "university": "Texas Christian University",
+    "success": true,
+    "memberCount": 220
+  },
+  {
+    "chapter": "Epsilon Nu",
+    "university": "Texas Tech University",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Epsilon Psi",
+    "university": "Sam Houston State University",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Epsilon Xi",
+    "university": "University of Houston",
+    "success": true,
+    "memberCount": 86
+  },
+  {
+    "chapter": "Eta Omega",
+    "university": "Baylor University",
+    "success": true,
+    "memberCount": 246
+  },
+  {
+    "chapter": "Eta Tau",
+    "university": "Stephen F. Austin State University",
+    "success": true,
+    "memberCount": 160
+  },
+  {
+    "chapter": "Eta Upsilon",
+    "university": "Texas A&M University-College Station",
+    "success": true,
+    "memberCount": 275
+  },
+  {
+    "chapter": "Iota Phi",
+    "university": "University of North Texas",
+    "success": true,
+    "memberCount": 46
+  },
+  {
+    "chapter": "Kappa Xi",
+    "university": "Tarleton State University",
+    "success": true,
+    "memberCount": 26
+  },
+  {
+    "chapter": "Mu Iota",
+    "university": "University of Texas-San Antonio",
+    "success": true,
+    "memberCount": 25
+  },
+  {
+    "chapter": "Theta Tau",
+    "university": "Texas State University",
+    "success": true,
+    "memberCount": 95
+  },
+  {
+    "chapter": "Beta Sigma",
+    "university": "University of Tennessee-Knoxville",
+    "success": true,
+    "memberCount": 254
+  },
+  {
+    "chapter": "Delta Theta",
+    "university": "University of Tennessee-Chattanooga",
+    "success": true,
+    "memberCount": 38
+  },
+  {
+    "chapter": "Epsilon Kappa",
+    "university": "University of Memphis",
+    "success": true,
+    "memberCount": 37
+  },
+  {
+    "chapter": "Eta Delta",
+    "university": "Tennessee Tech University",
+    "success": true,
+    "memberCount": 132
+  },
+  {
+    "chapter": "Eta Gamma",
+    "university": "Middle Tennessee State University",
+    "success": true,
+    "memberCount": 111
+  },
+  {
+    "chapter": "Eta Xi",
+    "university": "Austin Peay State University",
+    "success": true,
+    "memberCount": 64
+  },
+  {
+    "chapter": "Kappa Psi",
+    "university": "University of Tennessee-Martin",
+    "success": true,
+    "memberCount": 21
+  },
+  {
+    "chapter": "Nu",
+    "university": "Cumberland University",
+    "success": true,
+    "memberCount": 46
+  },
+  {
+    "chapter": "Gamma Nu",
+    "university": "University of South Carolina",
+    "success": true,
+    "memberCount": 117
+  },
+  {
+    "chapter": "Iota Epsilon",
+    "university": "College of Charleston",
+    "success": true,
+    "memberCount": 13
+  },
+  {
+    "chapter": "Iota Nu",
+    "university": "Furman University",
+    "success": true,
+    "memberCount": 1
+  },
+  {
+    "chapter": "Delta Sigma",
+    "university": "University of Rhode Island",
+    "success": true,
+    "memberCount": 29
+  },
+  {
+    "chapter": "Lambda Eta",
+    "university": "Bryant University",
+    "success": true,
+    "memberCount": 50
+  },
+  {
+    "chapter": "Gamma Lambda",
+    "university": "McGill University",
+    "success": true,
+    "memberCount": 22
+  },
+  {
+    "chapter": "Alpha Chi",
+    "university": "Pennsylvania State University",
+    "success": true,
+    "memberCount": 95
+  },
+  {
+    "chapter": "Eta Omicron",
+    "university": "Indiana University of Pennsylvania",
+    "success": true,
+    "memberCount": 171
+  },
+  {
+    "chapter": "Kappa",
+    "university": "Bucknell University",
+    "success": true,
+    "memberCount": 1409
+  },
+  {
+    "chapter": "Kappa Chi",
+    "university": "Villanova University",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Lambda Pi",
+    "university": "Carnegie Mellon University",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Mu Eta",
+    "university": "West Chester University of Pennsylvania",
+    "success": true,
+    "memberCount": 23
+  },
+  {
+    "chapter": "Phi Phi",
+    "university": "University of Pennsylvania",
+    "success": true,
+    "memberCount": 13
+  },
+  {
+    "chapter": "Theta",
+    "university": "Gettysburg College",
+    "success": true,
+    "memberCount": 1358
+  },
+  {
+    "chapter": "Beta Iota",
+    "university": "University of Oregon",
+    "success": true,
+    "memberCount": 126
+  },
+  {
+    "chapter": "Beta Pi",
+    "university": "Oregon State University",
+    "success": true,
+    "memberCount": 115
+  },
+  {
+    "chapter": "Delta Zeta",
+    "university": "Willamette University",
+    "success": true,
+    "memberCount": 1403
+  },
+  {
+    "chapter": "Beta Omega",
+    "university": "University of Toronto-Toronto Metropolitan University",
+    "success": true,
+    "memberCount": 6
+  },
+  {
+    "chapter": "Epsilon Omicron",
+    "university": "Western University",
+    "success": true,
+    "memberCount": 52
+  },
+  {
+    "chapter": "Iota Mu",
+    "university": "Wilfrid Laurier University",
+    "success": true,
+    "memberCount": 42
+  },
+  {
+    "chapter": "Kappa Mu",
+    "university": "University of Windsor",
+    "success": true,
+    "memberCount": 20
+  },
+  {
+    "chapter": "Lambda Theta",
+    "university": "University of Ottawa",
+    "success": true,
+    "memberCount": 33
+  },
+  {
+    "chapter": "Mu Zeta",
+    "university": "Brock University",
+    "success": true,
+    "memberCount": 20
+  },
+  {
+    "chapter": "Theta Psi",
+    "university": "University of Waterloo",
+    "success": true,
+    "memberCount": 30
+  },
+  {
+    "chapter": "Beta Kappa",
+    "university": "University of Oklahoma",
+    "success": true,
+    "memberCount": 196
+  },
+  {
+    "chapter": "Delta Omega",
+    "university": "University of Tulsa",
+    "success": true,
+    "memberCount": 23
+  },
+  {
+    "chapter": "Gamma Delta",
+    "university": "Oklahoma State University",
+    "success": true,
+    "memberCount": 149
+  },
+  {
+    "chapter": "Alpha",
+    "university": "Miami University",
+    "success": true,
+    "memberCount": 44
+  },
+  {
+    "chapter": "Alpha Gamma",
+    "university": "Ohio State University",
+    "success": true,
+    "memberCount": 164
+  },
+  {
+    "chapter": "Beta Eta",
+    "university": "Case Western Reserve University",
+    "success": true,
+    "memberCount": 58
+  },
+  {
+    "chapter": "Delta Kappa",
+    "university": "Bowling Green State University",
+    "success": true,
+    "memberCount": 50
+  },
+  {
+    "chapter": "Eta Chi",
+    "university": "Youngstown State University",
+    "success": true,
+    "memberCount": 127
+  },
+  {
+    "chapter": "Mu",
+    "university": "Denison University",
+    "success": true,
+    "memberCount": 1562
+  },
+  {
+    "chapter": "Alpha Alpha",
+    "university": "Hobart College",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Alpha Phi",
+    "university": "Cornell University",
+    "success": true,
+    "memberCount": 67
+  },
+  {
+    "chapter": "Delta Psi",
+    "university": "Rensselaer Polytechnic Institute",
+    "success": true,
+    "memberCount": 51
+  },
+  {
+    "chapter": "Gamma Pi",
+    "university": "University of Rochester",
+    "success": true,
+    "memberCount": 44
+  },
+  {
+    "chapter": "Gamma Zeta",
+    "university": "Union College",
+    "success": true,
+    "memberCount": 54
+  },
+  {
+    "chapter": "Iota Zeta",
+    "university": "Clarkson University",
+    "success": true,
+    "memberCount": 23
+  },
+  {
+    "chapter": "Lambda Kappa",
+    "university": "Rochester Institute of Technology",
+    "success": true,
+    "memberCount": 63
+  },
+  {
+    "chapter": "Mu Gamma",
+    "university": "Binghamton University",
+    "success": true,
+    "memberCount": 36
+  },
+  {
+    "chapter": "Nu Nu",
+    "university": "Columbia University",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Psi Psi",
+    "university": "Syracuse University",
+    "success": true,
+    "memberCount": 68
+  },
+  {
+    "chapter": "Gamma Rho",
+    "university": "Dalhousie University-St. Mary's University",
+    "success": true,
+    "memberCount": 21
+  },
+  {
+    "chapter": "Beta Xi",
+    "university": "University of New Mexico",
+    "success": true,
+    "memberCount": 44
+  },
+  {
+    "chapter": "Iota Kappa",
+    "university": "Fairleigh Dickinson University",
+    "success": true,
+    "memberCount": 24
+  },
+  {
+    "chapter": "Sigma",
+    "university": "Princeton University",
+    "success": true,
+    "memberCount": 928
+  },
+  {
+    "chapter": "Lambda Sigma",
+    "university": "University of New Hampshire",
+    "success": true,
+    "memberCount": 256
+  },
+  {
+    "chapter": "Alpha Epsilon",
+    "university": "University of Nebraska",
+    "success": true,
+    "memberCount": 127
+  },
+  {
+    "chapter": "Beta Zeta",
+    "university": "University of North Dakota",
+    "success": true,
+    "memberCount": 88
+  },
+  {
+    "chapter": "Gamma Tau",
+    "university": "North Dakota State University",
+    "success": true,
+    "memberCount": 9
+  },
+  {
+    "chapter": "Alpha Tau",
+    "university": "University of North Carolina",
+    "success": true,
+    "memberCount": 38
+  },
+  {
+    "chapter": "Beta Lambda",
+    "university": "Duke University",
+    "success": true,
+    "memberCount": 81
+  },
+  {
+    "chapter": "Delta Epsilon",
+    "university": "North Carolina State University",
+    "success": true,
+    "memberCount": 67
+  },
+  {
+    "chapter": "Delta Nu",
+    "university": "Wake Forest University",
+    "success": true,
+    "memberCount": 74
+  },
+  {
+    "chapter": "Kappa Gamma",
+    "university": "Western Carolina University",
+    "success": true,
+    "memberCount": 24
+  },
+  {
+    "chapter": "Mu Alpha",
+    "university": "University of North Carolina-Charlotte",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Mu Kappa",
+    "university": "University of North Carolina-Wilmington",
+    "success": true,
+    "memberCount": 86
+  },
+  {
+    "chapter": "Theta Omega",
+    "university": "Elon University",
+    "success": true,
+    "memberCount": 55
+  },
+  {
+    "chapter": "Beta Delta",
+    "university": "University of Montana",
+    "success": true,
+    "memberCount": 43
+  },
+  {
+    "chapter": "Beta Rho",
+    "university": "Montana State University",
+    "success": true,
+    "memberCount": 100
+  },
+  {
+    "chapter": "Eta",
+    "university": "University of Mississippi",
+    "success": true,
+    "memberCount": 2
+  },
+  {
+    "chapter": "Gamma Upsilon",
+    "university": "Mississippi State University",
+    "success": true,
+    "memberCount": 265
+  },
+  {
+    "chapter": "Epsilon Phi",
+    "university": "Southeast Missouri State University",
+    "success": true,
+    "memberCount": 39
+  },
+  {
+    "chapter": "Eta Kappa",
+    "university": "Missouri State University",
+    "success": true,
+    "memberCount": 242
+  },
+  {
+    "chapter": "Theta Eta",
+    "university": "Missouri University of Science & Technology",
+    "success": true,
+    "memberCount": 26
+  },
+  {
+    "chapter": "Theta Iota",
+    "university": "Saint Louis University",
+    "success": true,
+    "memberCount": 50
+  },
+  {
+    "chapter": "Alpha Sigma",
+    "university": "University of Minnesota",
+    "success": true,
+    "memberCount": 101
+  },
+  {
+    "chapter": "Iota Tau",
+    "university": "University of St. Thomas",
+    "success": true,
+    "memberCount": 372
+  },
+  {
+    "chapter": "Kappa Tau",
+    "university": "Minnesota State University-Mankato",
+    "success": true,
+    "memberCount": 13
+  },
+  {
+    "chapter": "Alpha Kappa",
+    "university": "Hillsdale College",
+    "success": true,
+    "memberCount": 30
+  },
+  {
+    "chapter": "Alpha Pi",
+    "university": "Albion College",
+    "success": true,
+    "memberCount": 25
+  },
+  {
+    "chapter": "Theta Nu",
+    "university": "Alma College",
+    "success": true,
+    "memberCount": 34
+  },
+  {
+    "chapter": "Theta Theta",
+    "university": "University of Michigan",
+    "success": true,
+    "memberCount": 1996
+  },
+  {
+    "chapter": "Rho Rho",
+    "university": "University of Maine",
+    "success": true,
+    "memberCount": 16
+  },
+  {
+    "chapter": "Gamma Chi",
+    "university": "University of Maryland",
+    "success": true,
+    "memberCount": 86
+  },
+  {
+    "chapter": "Kappa Pi",
+    "university": "Towson University",
+    "success": true,
+    "memberCount": 56
+  },
+  {
+    "chapter": "Alpha Theta",
+    "university": "Massachusetts Institute of Technology",
+    "success": true,
+    "memberCount": 36
+  },
+  {
+    "chapter": "Iota Upsilon",
+    "university": "Boston University",
+    "success": true,
+    "memberCount": 54
+  },
+  {
+    "chapter": "Kappa Eta",
+    "university": "Harvard University",
+    "success": true,
+    "memberCount": 21
+  },
+  {
+    "chapter": "Lambda Upsilon",
+    "university": "Bentley University",
+    "success": true,
+    "memberCount": 57
+  },
+  {
+    "chapter": "Mu Epsilon",
+    "university": "University of Massachusetts-Amherst",
+    "success": true,
+    "memberCount": 58
+  },
+  {
+    "chapter": "Theta Zeta",
+    "university": "Bridgewater State University",
+    "success": true,
+    "memberCount": 37
+  },
+  {
+    "chapter": "Alpha Omicron",
+    "university": "Tulane University",
+    "success": true,
+    "memberCount": 68
+  },
+  {
+    "chapter": "Gamma Iota",
+    "university": "Louisiana State University",
+    "success": true,
+    "memberCount": 169
+  },
+  {
+    "chapter": "Lambda Psi",
+    "university": "University of Louisiana-Lafayette",
+    "success": true,
+    "memberCount": 90
+  },
+  {
+    "chapter": "Epsilon Tau",
+    "university": "Murray State University",
+    "success": true,
+    "memberCount": 58
+  },
+  {
+    "chapter": "Eta Alpha",
+    "university": "Eastern Kentucky University",
+    "success": true,
+    "memberCount": 59
+  },
+  {
+    "chapter": "Iota Lambda",
+    "university": "University of Louisville",
+    "success": true,
+    "memberCount": 78
+  },
+  {
+    "chapter": "Lambda Lambda",
+    "university": "University of Kentucky",
+    "success": true,
+    "memberCount": 162
+  },
+  {
+    "chapter": "Delta Upsilon",
+    "university": "Kansas State University",
+    "success": true,
+    "memberCount": 43
+  },
+  {
+    "chapter": "Chi",
+    "university": "Hanover College",
+    "success": true,
+    "memberCount": 1036
+  },
+  {
+    "chapter": "Delta Chi",
+    "university": "Wabash College",
+    "success": true,
+    "memberCount": 83
+  },
+  {
+    "chapter": "Delta Delta",
+    "university": "Purdue University",
+    "success": true,
+    "memberCount": 105
+  },
+  {
+    "chapter": "Epsilon Omega",
+    "university": "Ball State University",
+    "success": true,
+    "memberCount": 75
+  },
+  {
+    "chapter": "Iota Sigma",
+    "university": "Valparaiso University",
+    "success": true,
+    "memberCount": 26
+  },
+  {
+    "chapter": "Lambda",
+    "university": "Indiana University",
+    "success": true,
+    "memberCount": 1639
+  },
+  {
+    "chapter": "Rho",
+    "university": "Butler University",
+    "success": true,
+    "memberCount": 429
+  },
+  {
+    "chapter": "Delta Rho",
+    "university": "Bradley University",
+    "success": true,
+    "memberCount": 60
+  },
+  {
+    "chapter": "Eta Mu",
+    "university": "Eastern Illinois University",
+    "success": true,
+    "memberCount": 262
+  },
+  {
+    "chapter": "Iota Omicron",
+    "university": "Western Illinois University",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Kappa Kappa",
+    "university": "University of Illinois",
+    "success": true,
+    "memberCount": 1996
+  },
+  {
+    "chapter": "Lambda Alpha",
+    "university": "Knox College",
+    "success": true,
+    "memberCount": 1
+  },
+  {
+    "chapter": "Lambda Nu",
+    "university": "Loyola University-Chicago",
+    "success": true,
+    "memberCount": 45
+  },
+  {
+    "chapter": "Lambda Omega",
+    "university": "DePaul University",
+    "success": true,
+    "memberCount": 53
+  },
+  {
+    "chapter": "Lambda Omicron",
+    "university": "Southern Illinois University-Carbondale",
+    "success": true,
+    "memberCount": 67
+  },
+  {
+    "chapter": "Omicron Omicron",
+    "university": "University of Chicago",
+    "success": true,
+    "memberCount": 75
+  },
+  {
+    "chapter": "Theta Rho",
+    "university": "Illinois State University",
+    "success": true,
+    "memberCount": 54
+  },
+  {
+    "chapter": "Gamma Eta",
+    "university": "University of Idaho",
+    "success": true,
+    "memberCount": 70
+  },
+  {
+    "chapter": "Kappa Lambda",
+    "university": "The College of Idaho",
+    "success": true,
+    "memberCount": 5
+  },
+  {
+    "chapter": "Lambda Xi",
+    "university": "Boise State University",
+    "success": true,
+    "memberCount": 133
+  },
+  {
+    "chapter": "Theta Gamma",
+    "university": "Drake University",
+    "success": true,
+    "memberCount": 12
+  },
+  {
+    "chapter": "Beta Chi",
+    "university": "Emory University",
+    "success": true,
+    "memberCount": 57
+  },
+  {
+    "chapter": "Beta Psi",
+    "university": "Georgia Institute of Technology",
+    "success": true,
+    "memberCount": 96
+  },
+  {
+    "chapter": "Delta",
+    "university": "University of Georgia",
+    "success": true,
+    "memberCount": 1966
+  },
+  {
+    "chapter": "Eta Theta",
+    "university": "Georgia Southwestern State University",
+    "success": true,
+    "memberCount": 216
+  },
+  {
+    "chapter": "Eta Zeta",
+    "university": "Georgia Southern University",
+    "success": true,
+    "memberCount": 277
+  },
+  {
+    "chapter": "Lambda Mu",
+    "university": "Valdosta State University",
+    "success": true,
+    "memberCount": 23
+  },
+  {
+    "chapter": "Lambda Phi",
+    "university": "University of West Georgia",
+    "success": true,
+    "memberCount": 18
+  },
+  {
+    "chapter": "Theta Epsilon",
+    "university": "University of North Georgia",
+    "success": true,
+    "memberCount": 54
+  },
+  {
+    "chapter": "Epsilon Sigma",
+    "university": "Florida Southern College",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Epsilon Zeta",
+    "university": "Florida State University",
+    "success": true,
+    "memberCount": 133
+  },
+  {
+    "chapter": "Eta Iota",
+    "university": "Embry-Riddle Aeronautical University-Daytona Beach",
+    "success": true,
+    "memberCount": 283
+  },
+  {
+    "chapter": "Eta Pi",
+    "university": "University of Central Florida",
+    "success": true,
+    "memberCount": 113
+  },
+  {
+    "chapter": "Gamma Phi",
+    "university": "University of Miami",
+    "success": true,
+    "memberCount": 127
+  },
+  {
+    "chapter": "Gamma Theta",
+    "university": "University of Florida",
+    "success": true,
+    "memberCount": 167
+  },
+  {
+    "chapter": "Iota Gamma",
+    "university": "Jacksonville University",
+    "success": true,
+    "memberCount": 67
+  },
+  {
+    "chapter": "Kappa Beta",
+    "university": "University of North Florida",
+    "success": true,
+    "memberCount": 57
+  },
+  {
+    "chapter": "Lambda Iota",
+    "university": "Florida International University",
+    "success": true,
+    "memberCount": 40
+  },
+  {
+    "chapter": "Lambda Tau",
+    "university": "Florida Atlantic University",
+    "success": true,
+    "memberCount": 60
+  },
+  {
+    "chapter": "Lambda Zeta",
+    "university": "Florida Gulf Coast University",
+    "success": true,
+    "memberCount": 63
+  },
+  {
+    "chapter": "Theta Beta",
+    "university": "University of South Florida",
+    "success": true,
+    "memberCount": 36
+  },
+  {
+    "chapter": "Kappa Epsilon",
+    "university": "University of Delaware",
+    "success": true,
+    "memberCount": 55
+  },
+  {
+    "chapter": "Epsilon",
+    "university": "George Washington University",
+    "success": true,
+    "memberCount": 1765
+  },
+  {
+    "chapter": "Kappa Rho",
+    "university": "American University",
+    "success": true,
+    "memberCount": 22
+  },
+  {
+    "chapter": "Mu Theta",
+    "university": "Georgetown University",
+    "success": true,
+    "memberCount": 22
+  },
+  {
+    "chapter": "Gamma Omega",
+    "university": "University of Connecticut",
+    "success": true,
+    "memberCount": 66
+  },
+  {
+    "chapter": "Iota Eta",
+    "university": "Western Connecticut State University",
+    "success": true,
+    "memberCount": 20
+  },
+  {
+    "chapter": "Lambda Epsilon",
+    "university": "University of New Haven",
+    "success": true,
+    "memberCount": 49
+  },
+  {
+    "chapter": "Mu Lambda",
+    "university": "Sacred Heart University",
+    "success": true,
+    "memberCount": 43
+  },
+  {
+    "chapter": "Theta Upsilon",
+    "university": "Yale University",
+    "success": true,
+    "memberCount": 17
+  },
+  {
+    "chapter": "Beta Gamma",
+    "university": "Colorado College",
+    "success": true,
+    "memberCount": 54
+  },
+  {
+    "chapter": "Beta Mu",
+    "university": "University of Colorado-Boulder",
+    "success": true,
+    "memberCount": 154
+  },
+  {
+    "chapter": "Delta Iota",
+    "university": "University of Denver",
+    "success": true,
+    "memberCount": 110
+  },
+  {
+    "chapter": "Alpha Beta",
+    "university": "University of California-Berkeley",
+    "success": true,
+    "memberCount": 33
+  },
+  {
+    "chapter": "Alpha Omega",
+    "university": "Stanford University",
+    "success": true,
+    "memberCount": 1807
+  },
+  {
+    "chapter": "Alpha Upsilon",
+    "university": "University of Southern California",
+    "success": true,
+    "memberCount": 189
+  },
+  {
+    "chapter": "Delta Eta",
+    "university": "University of California-Los Angeles",
+    "success": true,
+    "memberCount": 168
+  },
+  {
+    "chapter": "Delta Xi",
+    "university": "San Diego State University",
+    "success": true,
+    "memberCount": 168
+  },
+  {
+    "chapter": "Epsilon Eta",
+    "university": "California State University-Fresno",
+    "success": true,
+    "memberCount": 45
+  },
+  {
+    "chapter": "Epsilon Theta",
+    "university": "San Jose State University",
+    "success": true,
+    "memberCount": 63
+  },
+  {
+    "chapter": "Eta Beta",
+    "university": "California State University-Long Beach",
+    "success": true,
+    "memberCount": 124
+  },
+  {
+    "chapter": "Eta Sigma",
+    "university": "University of California-Irvine",
+    "success": true,
+    "memberCount": 389
+  },
+  {
+    "chapter": "Iota Omega",
+    "university": "Loyola Marymount University",
+    "success": true,
+    "memberCount": 867
+  },
+  {
+    "chapter": "Kappa Omicron",
+    "university": "Pepperdine University",
+    "success": true,
+    "memberCount": 59
+  },
+  {
+    "chapter": "Kappa Sigma",
+    "university": "University of the Pacific",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Kappa Theta",
+    "university": "California State University-Chico",
+    "success": true,
+    "memberCount": 735
+  },
+  {
+    "chapter": "Lambda Delta",
+    "university": "University of California-Merced",
+    "success": true,
+    "memberCount": 35
+  },
+  {
+    "chapter": "Lambda Gamma",
+    "university": "Santa Clara University",
+    "success": true,
+    "memberCount": 111
+  },
+  {
+    "chapter": "Mu Beta",
+    "university": "California State University-San Marcos",
+    "success": true,
+    "memberCount": 51
+  },
+  {
+    "chapter": "Theta Omicron",
+    "university": "University of California-Davis",
+    "success": false,
+    "skipped": true,
+    "memberCount": 0
+  },
+  {
+    "chapter": "Theta Sigma",
+    "university": "California State Polytechnic University-Pomona",
+    "success": true,
+    "memberCount": 708
+  },
+  {
+    "chapter": "Delta Omicron",
+    "university": "University of British Columbia-Simon Fraser University",
+    "success": true,
+    "memberCount": 81
+  },
+  {
+    "chapter": "Beta Phi",
+    "university": "University of Arizona",
+    "success": true,
+    "memberCount": 104
+  },
+  {
+    "chapter": "Kappa Phi",
+    "university": "Embry-Riddle Aeronautical University-Prescott",
+    "success": true,
+    "memberCount": 23
+  },
+  {
+    "chapter": "Omega Omega",
+    "university": "University of Arkansas",
+    "success": true,
+    "memberCount": 206
+  },
+  {
+    "chapter": "Theta Chi",
+    "university": "Arkansas State University",
+    "success": true,
+    "memberCount": 55
+  },
+  {
+    "chapter": "Chi Chi",
+    "university": "Birmingham-Southern College",
+    "success": true,
+    "memberCount": 1
+  },
+  {
+    "chapter": "Eta Epsilon",
+    "university": "University of South Alabama",
+    "success": true,
+    "memberCount": 320
+  },
+  {
+    "chapter": "Eta Phi",
+    "university": "Troy University",
+    "success": true,
+    "memberCount": 240
+  },
+  {
+    "chapter": "Eta Rho",
+    "university": "University of North Alabama",
+    "success": true,
+    "memberCount": 192
+  },
+  {
+    "chapter": "Gamma Sigma",
+    "university": "Auburn University",
+    "success": true,
+    "memberCount": 217
+  },
+  {
+    "chapter": "Iota Iota",
+    "university": "University of Alabama",
+    "success": true,
+    "memberCount": 186
+  },
+  {
+    "chapter": "Pi",
+    "university": "Samford University",
+    "success": true,
+    "memberCount": 1410
+  },
+  {
+    "chapter": "Theta Mu",
+    "university": "Spring Hill College",
+    "success": true,
+    "memberCount": 10
+  },
+  {
+    "chapter": "Mu Delta",
+    "university": "Virginia Commonwealth",
+    "success": true,
+    "memberCount": 1
+  }
+]

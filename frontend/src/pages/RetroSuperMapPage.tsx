@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup, useMap, CircleMarker, Tooltip } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
@@ -173,11 +174,16 @@ const RetroStatsBox = ({ title, stats, icon: Icon }: {
 
       <div className="space-y-2">
         {stats.map((stat, idx) => (
-          <div key={idx} className="flex justify-between items-center">
-            <span className="text-green-300/70 font-mono text-xs">{stat.label}</span>
-            <span className="text-green-400 font-mono font-bold text-lg"
-                  style={{ textShadow: '0 0 6px rgba(34, 197, 94, 0.6)' }}>
-              {stat.value}
+          <div key={idx} className="flex justify-between items-center gap-3">
+            <span className="text-green-300/80 font-mono text-xs font-medium">{stat.label}</span>
+            <span className="text-green-400 font-mono font-bold text-xl tracking-wider"
+                  style={{
+                    textShadow: '0 0 8px rgba(34, 197, 94, 0.9), 0 0 4px rgba(34, 197, 94, 0.6)',
+                    filter: 'brightness(1.2)'
+                  }}>
+              {typeof stat.value === 'number' && stat.value > 999
+                ? stat.value.toLocaleString()
+                : stat.value}
             </span>
           </div>
         ))}
@@ -376,6 +382,10 @@ const RetroSuperMapPage = () => {
     members: 0,
     activeNow: 0
   });
+  const [instagramChapters, setInstagramChapters] = useState<any[]>([]);
+  const [showInstagramClusters, setShowInstagramClusters] = useState(true);
+  const [organizationType, setOrganizationType] = useState<'all' | 'fraternity' | 'sorority'>('all');
+  const [showPower5Only, setShowPower5Only] = useState(false);
 
   // Load GeoJSON data
   useEffect(() => {
@@ -428,6 +438,84 @@ const RetroSuperMapPage = () => {
       activeNow: Math.floor(totalMembers * 0.23) // Simulated 23% active
     });
   }, []);
+
+  // Fetch Instagram chapters for clustering on the map
+  useEffect(() => {
+    const fetchInstagramChapters = async () => {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3050';
+        console.log('📸 [RetroSuperMap] Fetching Instagram chapters for clustering...');
+
+        const response = await fetch(`${API_URL}/api/chapters/instagram-map`);
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          console.log(`📸 [RetroSuperMap] Loaded ${data.data.length} chapters with Instagram and coordinates`);
+          setInstagramChapters(data.data);
+        }
+      } catch (error) {
+        console.error('❌ [RetroSuperMap] Error fetching Instagram chapters:', error);
+      }
+    };
+
+    fetchInstagramChapters();
+  }, []);
+
+  // Update body data attribute for dynamic styling
+  useEffect(() => {
+    document.body.setAttribute('data-org-type', organizationType);
+    return () => {
+      document.body.removeAttribute('data-org-type');
+    };
+  }, [organizationType]);
+
+  // Power 5 conferences
+  const POWER_5_CONFERENCES = ['BIG 10', 'ACC', 'BIG 12', 'SEC', 'PAC - 12'];
+
+  // Filter chapters by organization type and Power 5
+  const getFilteredChapters = () => {
+    let filtered = instagramChapters;
+
+    // Filter by organization type
+    if (organizationType !== 'all') {
+      filtered = filtered.filter(
+        chapter => chapter.greek_organizations?.organization_type === organizationType
+      );
+    }
+
+    // Filter by Power 5
+    if (showPower5Only) {
+      filtered = filtered.filter(
+        chapter => chapter.universities?.conference && POWER_5_CONFERENCES.includes(chapter.universities.conference)
+      );
+    }
+
+    return filtered;
+  };
+
+  // Get color scheme based on organization type
+  const getColorScheme = () => {
+    if (organizationType === 'sorority') {
+      return {
+        primary: '#EC4899', // Pink-500
+        secondary: '#F9A8D4', // Pink-300
+        glow: 'rgba(236, 72, 153, 0.6)',
+        border: '#EC4899',
+        text: 'pink'
+      };
+    }
+    // Default green for fraternities and all
+    return {
+      primary: '#22C55E', // Green-500
+      secondary: '#4ADE80', // Green-400
+      glow: 'rgba(34, 197, 94, 0.6)',
+      border: '#22C55E',
+      text: 'green'
+    };
+  };
+
+  const colorScheme = getColorScheme();
+  const filteredChapters = getFilteredChapters();
 
   // Get or assign neon color for state
   const getStateNeonColor = (stateName: string) => {
@@ -522,30 +610,36 @@ const RetroSuperMapPage = () => {
     if (stateAbbr && mapRef.current) {
       const bounds = STATE_BOUNDS[stateAbbr as keyof typeof STATE_BOUNDS];
       if (bounds) {
-        // Get colleges in this state
-        const stateColleges = Object.values(COLLEGE_LOCATIONS)
-          .filter(college => college.state === stateAbbr)
-          .filter(college => college.lat && college.lng); // Filter out colleges without coordinates
-
-        const totalChapters = stateColleges.reduce(
-          (sum, college) => sum + college.fraternities + college.sororities, 0
-        );
-        const totalMembers = stateColleges.reduce(
-          (sum, college) => sum + college.totalMembers, 0
+        // Get filtered Instagram chapters in this state from database
+        const filtered = getFilteredChapters();
+        const stateChapters = filtered.filter(
+          chapter => chapter.universities?.state === stateAbbr
         );
 
-        // Set selected state data
+        // Get unique universities
+        const uniqueUniversities = new Set(
+          stateChapters.map(chapter => chapter.universities?.id).filter(Boolean)
+        );
+
+        const totalChapters = stateChapters.length;
+        const totalMembers = stateChapters.reduce(
+          (sum, chapter) => sum + (chapter.member_count || 0), 0
+        );
+
+        console.log(`📊 State: ${stateName}, Universities: ${uniqueUniversities.size}, Chapters: ${totalChapters}, Members: ${totalMembers}`);
+
+        // Set selected state data with real database info
         setSelectedStateData({
           name: stateName,
           abbr: stateAbbr,
-          colleges: stateColleges.map(c => ({
-            name: (c as any).name || 'Unknown',
-            lat: c.lat,
-            lng: c.lng,
-            state: c.state,
-            fraternities: c.fraternities,
-            sororities: c.sororities,
-            totalMembers: c.totalMembers
+          colleges: stateChapters.map(chapter => ({
+            name: chapter.universities?.name || 'Unknown',
+            lat: chapter.universities?.latitude || 0,
+            lng: chapter.universities?.longitude || 0,
+            state: stateAbbr,
+            fraternities: 0, // Not tracked per college in this view
+            sororities: 0,
+            totalMembers: chapter.member_count || 0
           })),
           totalChapters,
           totalMembers
@@ -561,7 +655,7 @@ const RetroSuperMapPage = () => {
           }
         );
         setViewMode('state');
-        console.log('🗺️ State clicked:', stateName, 'Colleges:', stateColleges.length, 'ViewMode set to: state');
+        console.log('🗺️ State clicked:', stateName, 'Universities:', uniqueUniversities.size, 'Chapters:', totalChapters);
       }
     }
   };
@@ -614,12 +708,23 @@ const RetroSuperMapPage = () => {
             <RetroStatsBox
               title={`${selectedStateData.name.toUpperCase()} - STATE VIEW`}
               icon={MapPin}
-              stats={[
-                { label: 'COLLEGES', value: selectedStateData.colleges.length },
-                { label: 'TOTAL CHAPTERS', value: selectedStateData.totalChapters.toLocaleString() },
-                { label: 'TOTAL MEMBERS', value: selectedStateData.totalMembers.toLocaleString() },
-                { label: 'AVG MEMBERS/COLLEGE', value: selectedStateData.colleges.length > 0 ? Math.floor(selectedStateData.totalMembers / selectedStateData.colleges.length) : 0 }
-              ]}
+              stats={(() => {
+                // Count unique universities in this state with filtered Instagram chapters
+                const stateChapters = filteredChapters.filter(
+                  chapter => chapter.universities?.state === selectedStateData.abbr
+                );
+                const uniqueUniversities = new Set(
+                  stateChapters.map(chapter => chapter.universities?.id).filter(Boolean)
+                );
+                const uniqueUnivCount = uniqueUniversities.size;
+
+                return [
+                  { label: 'UNIVERSITIES', value: uniqueUnivCount },
+                  { label: 'INSTAGRAM CHAPTERS', value: selectedStateData.totalChapters },
+                  { label: 'TOTAL MEMBERS', value: selectedStateData.totalMembers },
+                  { label: 'AVG MEMBERS/CHAPTER', value: selectedStateData.totalChapters > 0 ? Math.floor(selectedStateData.totalMembers / selectedStateData.totalChapters) : 0 }
+                ];
+              })()}
             />
             <motion.div
               initial={{ opacity: 0, x: 50 }}
@@ -629,30 +734,60 @@ const RetroSuperMapPage = () => {
                 boxShadow: '0 0 20px rgba(0, 255, 255, 0.4)'
               }}
             >
-              <h3 className="text-cyan-400 font-mono font-bold text-sm tracking-wider uppercase mb-3 pb-2 border-b border-cyan-500/30"
-                  style={{ textShadow: '0 0 8px rgba(0, 255, 255, 0.8)' }}>
-                COLLEGES ({selectedStateData.colleges.length})
-              </h3>
-              <div className="space-y-2">
-                {selectedStateData.colleges.length === 0 ? (
-                  <div className="text-xs font-mono text-cyan-300/60 italic text-center py-4">
-                    No college data available for this state
-                  </div>
-                ) : (
+              {(() => {
+                // Get unique universities with chapter counts (filtered by org type)
+                const stateChapters = filteredChapters.filter(
+                  chapter => chapter.universities?.state === selectedStateData.abbr
+                );
+
+                const universitiesMap = new Map();
+                stateChapters.forEach(chapter => {
+                  const univId = chapter.universities?.id;
+                  const univName = chapter.universities?.name;
+                  if (univId && univName) {
+                    if (!universitiesMap.has(univId)) {
+                      universitiesMap.set(univId, {
+                        name: univName,
+                        chapterCount: 0
+                      });
+                    }
+                    universitiesMap.get(univId).chapterCount++;
+                  }
+                });
+
+                const universities = Array.from(universitiesMap.values())
+                  .sort((a, b) => b.chapterCount - a.chapterCount);
+
+                return (
                   <>
-                    {selectedStateData.colleges.slice(0, 10).map((college, idx) => (
-                      <div key={idx} className="text-xs font-mono text-cyan-300/80 hover:text-cyan-400 cursor-pointer">
-                        • {college.name}
-                      </div>
-                    ))}
-                    {selectedStateData.colleges.length > 10 && (
-                      <div className="text-xs font-mono text-cyan-300/60 italic pt-2">
-                        + {selectedStateData.colleges.length - 10} more colleges...
-                      </div>
-                    )}
+                    <h3 className="text-cyan-400 font-mono font-bold text-sm tracking-wider uppercase mb-3 pb-2 border-b border-cyan-500/30"
+                        style={{ textShadow: '0 0 8px rgba(0, 255, 255, 0.8)' }}>
+                      UNIVERSITIES ({universities.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {universities.length === 0 ? (
+                        <div className="text-xs font-mono text-cyan-300/60 italic text-center py-4">
+                          No universities with Instagram chapters in this state
+                        </div>
+                      ) : (
+                        <>
+                          {universities.slice(0, 10).map((univ, idx) => (
+                            <div key={idx} className="text-xs font-mono text-cyan-300/80 hover:text-cyan-400 cursor-pointer flex justify-between">
+                              <span>• {univ.name}</span>
+                              <span className="text-cyan-400/60">({univ.chapterCount})</span>
+                            </div>
+                          ))}
+                          {universities.length > 10 && (
+                            <div className="text-xs font-mono text-cyan-300/60 italic pt-2">
+                              + {universities.length - 10} more universities...
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </>
-                )}
-              </div>
+                );
+              })()}
             </motion.div>
           </>
         ) : (
@@ -708,6 +843,8 @@ const RetroSuperMapPage = () => {
           <MapContainer
             center={[39.8283, -98.5795]}
             zoom={4.2}
+            maxZoom={18}
+            minZoom={2}
             className="h-full w-full"
             zoomControl={false}
             ref={mapRef}
@@ -726,44 +863,142 @@ const RetroSuperMapPage = () => {
             />
           )}
 
-          {/* College Markers - Show in State View */}
-          {viewMode === 'state' && selectedStateData && selectedStateData.colleges.map((college, idx) => (
-            <CircleMarker
-              key={`${college.name}-${idx}`}
-              center={[college.lat, college.lng]}
-              radius={8}
-              pathOptions={{
-                fillColor: '#00ffff',
-                color: '#00ffff',
-                weight: 2,
-                opacity: 1,
-                fillOpacity: 0.6
-              }}
-              eventHandlers={{
-                mouseover: (e) => {
-                  e.target.setRadius(12);
-                  e.target.setStyle({ fillOpacity: 0.9 });
-                },
-                mouseout: (e) => {
-                  e.target.setRadius(8);
-                  e.target.setStyle({ fillOpacity: 0.6 });
-                }
+          {/* Instagram Chapter Clusters - Show in USA view */}
+          {showInstagramClusters && viewMode === 'usa' && (
+            <MarkerClusterGroup
+              key={organizationType}
+              chunkedLoading
+              maxClusterRadius={50}
+              spiderfyOnMaxZoom={true}
+              showCoverageOnHover={false}
+              zoomToBoundsOnClick={true}
+              iconCreateFunction={(cluster) => {
+                const count = cluster.getChildCount();
+                let size = 'small';
+                if (count >= 50) size = 'large';
+                else if (count >= 20) size = 'medium';
+
+                const clusterClass = organizationType === 'sorority' ? 'sorority' : 'fraternity';
+
+                return L.divIcon({
+                  html: `<div class="${clusterClass}-cluster-icon ${clusterClass}-cluster-${size}">
+                           <span>${count}</span>
+                         </div>`,
+                  className: `${clusterClass}-cluster`,
+                  iconSize: L.point(40, 40, true)
+                });
               }}
             >
-              <Tooltip direction="top" offset={[0, -10]} opacity={1} className="retro-tooltip">
-                <div className="font-mono">
-                  <div className="font-bold text-cyan-400">{college.name}</div>
-                  <div className="text-xs text-cyan-300 mt-1">
-                    {college.fraternities} Fraternities • {college.sororities} Sororities
-                  </div>
-                  <div className="text-xs text-cyan-300">
-                    {college.totalMembers.toLocaleString()} Members
-                  </div>
-                </div>
-              </Tooltip>
-            </CircleMarker>
-          ))}
+              {filteredChapters.map((chapter) => {
+                if (!chapter.universities?.latitude || !chapter.universities?.longitude) return null;
+
+                const markerColor = organizationType === 'sorority' ? '#EC4899' : '#E11D48';
+
+                return (
+                  <CircleMarker
+                    key={chapter.id}
+                    center={[chapter.universities.latitude, chapter.universities.longitude]}
+                    radius={6}
+                    pathOptions={{
+                      fillColor: markerColor,
+                      color: '#FFFFFF',
+                      weight: 2,
+                      fillOpacity: 0.8
+                    }}
+                  >
+                    <Tooltip direction="top" offset={[0, -10]} opacity={1} className="retro-tooltip instagram-tooltip">
+                      <div className="font-mono">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="text-pink-400 font-bold">📸</div>
+                          <div className="font-bold text-base text-pink-400">
+                            {chapter.greek_organizations?.name || 'Unknown Chapter'}
+                          </div>
+                        </div>
+                        <div className="text-sm space-y-1">
+                          <div className="text-cyan-300">🏫 {chapter.universities?.name}</div>
+                          <div className="flex items-center gap-1 text-pink-300">
+                            <span className="font-semibold">Instagram:</span>
+                            <a
+                              href={`https://instagram.com/${chapter.instagram_handle?.replace('@', '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-pink-400 hover:text-pink-300 font-medium underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {chapter.instagram_handle}
+                            </a>
+                          </div>
+                          <div className="text-cyan-300">👥 {chapter.member_count || 0} members</div>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  </CircleMarker>
+                );
+              })}
+            </MarkerClusterGroup>
+          )}
+
+          {/* Instagram Chapter Markers - Show in State View with accurate coordinates */}
+          {viewMode === 'state' && selectedStateData && filteredChapters
+            .filter(chapter => chapter.universities?.state === selectedStateData.abbr)
+            .map((chapter) => {
+              if (!chapter.universities?.latitude || !chapter.universities?.longitude) return null;
+
+              return (
+                <CircleMarker
+                  key={`state-${chapter.id}`}
+                  center={[chapter.universities.latitude, chapter.universities.longitude]}
+                  radius={8}
+                  pathOptions={{
+                    fillColor: '#00ffff',
+                    color: '#00ffff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.6
+                  }}
+                  eventHandlers={{
+                    mouseover: (e) => {
+                      e.target.setRadius(12);
+                      e.target.setStyle({ fillOpacity: 0.9 });
+                    },
+                    mouseout: (e) => {
+                      e.target.setRadius(8);
+                      e.target.setStyle({ fillOpacity: 0.6 });
+                    }
+                  }}
+                >
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} className="retro-tooltip">
+                    <div className="font-mono">
+                      <div className="font-bold text-cyan-400">{chapter.universities?.name}</div>
+                      <div className="text-xs text-cyan-300 mt-1">
+                        {chapter.greek_organizations?.name}
+                      </div>
+                      <div className="text-xs text-pink-300 mt-1">
+                        📸 {chapter.instagram_handle}
+                      </div>
+                      <div className="text-xs text-cyan-300">
+                        {chapter.member_count?.toLocaleString() || 0} Members
+                      </div>
+                    </div>
+                  </Tooltip>
+                </CircleMarker>
+              );
+            })
+          }
+
+          {/* Old College Markers - Disabled, now using Instagram chapter markers with accurate coordinates */}
         </MapContainer>
+        </div>
+      </div>
+
+      {/* Radar Background Effect */}
+      <div className="absolute inset-0 pointer-events-none z-[1]">
+        {/* Pulsing Radar Circles */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="radar-circle radar-circle-1"></div>
+          <div className="radar-circle radar-circle-2"></div>
+          <div className="radar-circle radar-circle-3"></div>
+          <div className="radar-circle radar-circle-4"></div>
         </div>
       </div>
 
@@ -772,18 +1007,80 @@ const RetroSuperMapPage = () => {
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="bg-black/80 border-2 border-green-500 rounded-lg px-6 py-3 backdrop-blur-sm"
+          className="bg-black/80 border-2 rounded-lg px-6 py-3 backdrop-blur-sm"
           style={{
-            boxShadow: '0 0 30px rgba(34, 197, 94, 0.5)'
+            borderColor: colorScheme.border,
+            boxShadow: `0 0 30px ${colorScheme.glow}`
           }}
         >
-          <h1 className="text-green-400 font-mono font-bold text-2xl tracking-wider text-center"
-              style={{ textShadow: '0 0 10px rgba(34, 197, 94, 0.8)' }}>
-            GREEK LIFE COMMAND CENTER
+          <h1 className="font-mono font-bold text-2xl tracking-wider text-center"
+              style={{
+                color: colorScheme.primary,
+                textShadow: `0 0 10px ${colorScheme.glow}`
+              }}>
+            {organizationType === 'sorority' ? 'SORORITY' : organizationType === 'fraternity' ? 'FRATERNITY' : 'GREEK LIFE'} PARTNERSHIP MAP
           </h1>
-          <p className="text-green-400/60 font-mono text-xs text-center mt-1">
+          <p className="font-mono text-xs text-center mt-1"
+             style={{ color: `${colorScheme.primary}99` }}>
             REAL-TIME MONITORING SYSTEM v2.5.1
           </p>
+
+          {/* Organization Type Toggle */}
+          <div className="flex gap-2 mt-3 justify-center">
+            <button
+              onClick={() => setOrganizationType('all')}
+              className={`px-3 py-1 text-xs font-mono font-semibold rounded transition-all ${
+                organizationType === 'all'
+                  ? 'bg-green-500 text-black'
+                  : 'bg-black/50 text-green-400 border border-green-500/50 hover:bg-green-500/20'
+              }`}
+              style={organizationType === 'all' ? { boxShadow: '0 0 10px rgba(34, 197, 94, 0.6)' } : {}}
+            >
+              ALL
+            </button>
+            <button
+              onClick={() => setOrganizationType('fraternity')}
+              className={`px-3 py-1 text-xs font-mono font-semibold rounded transition-all ${
+                organizationType === 'fraternity'
+                  ? 'bg-green-500 text-black'
+                  : 'bg-black/50 text-green-400 border border-green-500/50 hover:bg-green-500/20'
+              }`}
+              style={organizationType === 'fraternity' ? { boxShadow: '0 0 10px rgba(34, 197, 94, 0.6)' } : {}}
+            >
+              FRATERNITIES
+            </button>
+            <button
+              onClick={() => setOrganizationType('sorority')}
+              className={`px-3 py-1 text-xs font-mono font-semibold rounded transition-all ${
+                organizationType === 'sorority'
+                  ? 'bg-pink-500 text-black'
+                  : 'bg-black/50 text-pink-400 border border-pink-500/50 hover:bg-pink-500/20'
+              }`}
+              style={organizationType === 'sorority' ? { boxShadow: '0 0 10px rgba(236, 72, 153, 0.6)' } : {}}
+            >
+              SORORITIES
+            </button>
+          </div>
+
+          {/* Power 5 Toggle */}
+          <div className="flex gap-2 mt-2 justify-center">
+            <button
+              onClick={() => setShowPower5Only(!showPower5Only)}
+              className={`px-3 py-1 text-xs font-mono font-semibold rounded transition-all ${
+                showPower5Only
+                  ? 'bg-yellow-500 text-black'
+                  : 'bg-black/50 text-yellow-400 border border-yellow-500/50 hover:bg-yellow-500/20'
+              }`}
+              style={showPower5Only ? { boxShadow: '0 0 10px rgba(234, 179, 8, 0.6)' } : {}}
+            >
+              {showPower5Only ? '⭐ POWER 5 ONLY' : 'POWER 5'}
+            </button>
+            {showPower5Only && (
+              <span className="text-xs font-mono text-yellow-400 self-center">
+                SEC • BIG 10 • ACC • BIG 12 • PAC-12
+              </span>
+            )}
+          </div>
         </motion.div>
       </div>
 
@@ -798,6 +1095,67 @@ const RetroSuperMapPage = () => {
           0%, 100% { opacity: 0.97; }
           50% { opacity: 1; }
         }
+
+        /* Radar Pulsing Circles */
+        @keyframes radarPulse {
+          0% {
+            transform: scale(0);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 0;
+          }
+        }
+
+        .radar-circle {
+          position: absolute;
+          border-radius: 50%;
+          animation: radarPulse 4s ease-out infinite;
+        }
+
+        /* Dynamic radar colors based on organization type */
+        body[data-org-type="sorority"] .radar-circle {
+          border: 2px solid rgba(236, 72, 153, 0.4);
+        }
+
+        body[data-org-type="fraternity"] .radar-circle,
+        body[data-org-type="all"] .radar-circle {
+          border: 2px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .radar-circle-1 {
+          width: 400px;
+          height: 400px;
+          margin-left: -200px;
+          margin-top: -200px;
+          animation-delay: 0s;
+        }
+
+        .radar-circle-2 {
+          width: 800px;
+          height: 800px;
+          margin-left: -400px;
+          margin-top: -400px;
+          animation-delay: 1s;
+        }
+
+        .radar-circle-3 {
+          width: 1200px;
+          height: 1200px;
+          margin-left: -600px;
+          margin-top: -600px;
+          animation-delay: 2s;
+        }
+
+        .radar-circle-4 {
+          width: 1600px;
+          height: 1600px;
+          margin-left: -800px;
+          margin-top: -800px;
+          animation-delay: 3s;
+        }
+
 
         .retro-tooltip {
           background: rgba(0, 0, 0, 0.9) !important;
@@ -848,6 +1206,136 @@ const RetroSuperMapPage = () => {
 
         ::-webkit-scrollbar-thumb:hover {
           background: rgba(34, 197, 94, 0.7);
+        }
+
+        /* Fraternity Cluster Styling */
+        .fraternity-cluster {
+          background: transparent !important;
+        }
+
+        .fraternity-cluster-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          font-weight: bold;
+          color: white;
+          box-shadow: 0 0 15px rgba(225, 29, 72, 0.6), 0 0 8px rgba(225, 29, 72, 0.4);
+          border: 3px solid rgba(255, 255, 255, 0.8);
+          transition: all 0.3s ease;
+        }
+
+        .fraternity-cluster-small {
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+          font-size: 14px;
+        }
+
+        .fraternity-cluster-medium {
+          width: 50px;
+          height: 50px;
+          background: linear-gradient(135deg, #E11D48 0%, #9F1239 100%);
+          font-size: 16px;
+        }
+
+        .fraternity-cluster-large {
+          width: 60px;
+          height: 60px;
+          background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+          font-size: 18px;
+        }
+
+        .fraternity-cluster-icon:hover {
+          transform: scale(1.15);
+          box-shadow: 0 0 25px rgba(225, 29, 72, 0.8), 0 0 15px rgba(225, 29, 72, 0.6);
+        }
+
+        @keyframes fraternityPulse {
+          0%, 100% {
+            box-shadow: 0 0 15px rgba(225, 29, 72, 0.6), 0 0 8px rgba(225, 29, 72, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 25px rgba(225, 29, 72, 0.9), 0 0 15px rgba(225, 29, 72, 0.7);
+          }
+        }
+
+        .fraternity-cluster-icon {
+          animation: fraternityPulse 2s ease-in-out infinite;
+        }
+
+        /* Sorority Cluster Styling - PINK */
+        .sorority-cluster {
+          background: transparent !important;
+        }
+
+        .sorority-cluster-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          font-weight: bold;
+          color: white;
+          box-shadow: 0 0 15px rgba(236, 72, 153, 0.6), 0 0 8px rgba(236, 72, 153, 0.4);
+          border: 3px solid rgba(255, 255, 255, 0.8);
+          transition: all 0.3s ease;
+        }
+
+        .sorority-cluster-small {
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+          font-size: 14px;
+        }
+
+        .sorority-cluster-medium {
+          width: 50px;
+          height: 50px;
+          background: linear-gradient(135deg, #EC4899 0%, #BE185D 100%);
+          font-size: 16px;
+        }
+
+        .sorority-cluster-large {
+          width: 60px;
+          height: 60px;
+          background: linear-gradient(135deg, #F472B6 0%, #BE185D 100%);
+          font-size: 18px;
+        }
+
+        .sorority-cluster-icon:hover {
+          transform: scale(1.15);
+          box-shadow: 0 0 25px rgba(236, 72, 153, 0.8), 0 0 15px rgba(236, 72, 153, 0.6);
+        }
+
+        @keyframes sororityPulse {
+          0%, 100% {
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.6), 0 0 8px rgba(236, 72, 153, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.9), 0 0 15px rgba(236, 72, 153, 0.7);
+          }
+        }
+
+        .sorority-cluster-icon {
+          animation: sororityPulse 2s ease-in-out infinite;
+        }
+
+        /* Instagram Tooltip Styling */
+        .instagram-tooltip {
+          background: rgba(0, 0, 0, 0.95) !important;
+          border: 2px solid #E11D48 !important;
+          border-radius: 6px !important;
+          box-shadow: 0 0 20px rgba(225, 29, 72, 0.6) !important;
+        }
+
+        /* Glow effect for Instagram markers */
+        .leaflet-interactive[fill="#E11D48"] {
+          filter: drop-shadow(0 0 8px #E11D48) drop-shadow(0 0 4px #E11D48);
+          transition: all 0.3s ease;
+        }
+
+        .leaflet-interactive[fill="#E11D48"]:hover {
+          filter: drop-shadow(0 0 15px #E11D48) drop-shadow(0 0 8px #E11D48);
         }
       `}</style>
     </div>

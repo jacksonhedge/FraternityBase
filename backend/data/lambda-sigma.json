@@ -1,0 +1,2568 @@
+[
+  {
+    "chapterName": "Lambda Sigma",
+    "university": "University of New Hampshire",
+    "members": [
+      {
+        "firstName": "Evan",
+        "lastName": "Ackroyd",
+        "fullName": "Evan Thomas Ackroyd",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ackroyde1999@gmail.com",
+        "phone": "(617) 869-9346"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Almeida",
+        "fullName": "Ethan Almeida",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ealmeida1022@gmail.com",
+        "phone": "9086742260"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Anastasi",
+        "fullName": "Nicholas James Anastasi",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "njanastasi66@gmail.com",
+        "phone": "(603)-234-8147"
+      },
+      {
+        "firstName": "Jeffrey",
+        "lastName": "Anderson",
+        "fullName": "Jeffrey M. Anderson",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jeffreyjeffrey1414@gmail.com",
+        "phone": "(207) 251-9337"
+      },
+      {
+        "firstName": "George",
+        "lastName": "Anderson",
+        "fullName": "George Hilden Anderson III",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "georgea3@comcast.net",
+        "phone": "(603) 715-6475"
+      },
+      {
+        "firstName": "Brendan",
+        "lastName": "Andros",
+        "fullName": "Brendan John Andros",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "brendanandros1@gmail.com",
+        "phone": "(203) 893-8189"
+      },
+      {
+        "firstName": "Cullen",
+        "lastName": "Aubin",
+        "fullName": "Cullen A. Aubin",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "caa2001@wildcats.unh.edu",
+        "phone": "(401) 787-2938"
+      },
+      {
+        "firstName": "Garritt",
+        "lastName": "Aucoin",
+        "fullName": "Garritt Aucoin",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "gaucoin9@gmail.com",
+        "phone": "(603) 748-9065"
+      },
+      {
+        "firstName": "Aidan",
+        "lastName": "Barber",
+        "fullName": "Aidan Cruz Barber",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "adn120706@gmail.com",
+        "phone": "3392135097"
+      },
+      {
+        "firstName": "Leo",
+        "lastName": "Barrieau",
+        "fullName": "Leo Robert Barrieau",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "robbiebarrieau12@gmail.com",
+        "phone": "(860) 490-3311"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Bateman",
+        "fullName": "Nicholas T. Bateman",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ntz4@wildcats.unh.edu",
+        "phone": "(978) 460-4290"
+      },
+      {
+        "firstName": "Brendan",
+        "lastName": "Beale",
+        "fullName": "Brendan Beale",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "bak249@wildcats.unh.edu",
+        "phone": "(978) 501-1703"
+      },
+      {
+        "firstName": "Cameron",
+        "lastName": "Bellemore",
+        "fullName": "Cameron Steven Bellemore",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cambellemore@gmail.com",
+        "phone": "6037651249"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Bentley",
+        "fullName": "Ian J. Bentley",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ianjamesbentley@gmail.com",
+        "phone": "(603) 502-3633"
+      },
+      {
+        "firstName": "Clayton",
+        "lastName": "Bentley",
+        "fullName": "Clayton E. Bentley",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ceb1022@wildcats.unh.com",
+        "phone": "(603) 397-7976"
+      },
+      {
+        "firstName": "Oliver",
+        "lastName": "Berardino",
+        "fullName": "Oliver Matthew Berardino",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "oliverberardino@gmail.com",
+        "phone": "(603)583-8278"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Berens",
+        "fullName": "Ian Berens",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jfcacomet@gmail.com",
+        "phone": "(508) 287-0785"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Bingman",
+        "fullName": "Ryan M. Bingman",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "rybing88@gmail.com",
+        "phone": "(203) 312-4933"
+      },
+      {
+        "firstName": "Aaron",
+        "lastName": "Bistany",
+        "fullName": "Aaron Jacob Bistany",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "aaronjbis@icloud.com",
+        "phone": "603-395-7237"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Bistany",
+        "fullName": "Jared Alexander Bistany",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jaredbistany@gmail.com",
+        "phone": "(603) 770-5523"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Boothby",
+        "fullName": "William Boothby",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "williamcboothby@gmail.com",
+        "phone": "(571) 835-0656"
+      },
+      {
+        "firstName": "Maxwell",
+        "lastName": "Bortz",
+        "fullName": "Maxwell T. Bortz",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "maxbortz@outlook.com",
+        "phone": "(603) 988-7591"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Boulanger",
+        "fullName": "Jared H. Boulanger",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jhb1003@wildcats.unh.edu",
+        "phone": "(401) 871-1414"
+      },
+      {
+        "firstName": "Carson",
+        "lastName": "Boulden",
+        "fullName": "Carson McClaine Boulden",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "24bouldenc@gmail.com",
+        "phone": "2523416380"
+      },
+      {
+        "firstName": "Vincent",
+        "lastName": "Bowman",
+        "fullName": "Vincent Joseph Bowman",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "vincentjbowman@gmail.com",
+        "phone": "(603) 801-2950"
+      },
+      {
+        "firstName": "Campbell",
+        "lastName": "Boynton",
+        "fullName": "Campbell Chase Boynton",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "campbellcboynton@gmail.com",
+        "phone": "(310) 997-8769"
+      },
+      {
+        "firstName": "Kevin",
+        "lastName": "Brault",
+        "fullName": "Kevin T. Brault",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "kevin.brault96@gmail.com",
+        "phone": "(860) 748-2878"
+      },
+      {
+        "firstName": "Robbie",
+        "lastName": "Briggs",
+        "fullName": "Robbie Anthony Briggs",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "robebriggs@outlook.com",
+        "phone": "(781) 206-7198"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Brown",
+        "fullName": "Connor Steven Wayne Brown",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "connorbrown87@hotmail.com",
+        "phone": "(603) 915-0690"
+      },
+      {
+        "firstName": "Brandon",
+        "lastName": "Bryant",
+        "fullName": "Brandon R. Bryant",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "brs47@wildcats.unh.edu",
+        "phone": "(603) 391-7700"
+      },
+      {
+        "firstName": "Taylor",
+        "lastName": "Buchalter",
+        "fullName": "Taylor J. Buchalter",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "tje472@wildcats.unh.edu",
+        "phone": "(845) 826-3292"
+      },
+      {
+        "firstName": "Eric",
+        "lastName": "Buchwald",
+        "fullName": "Eric W. Buchwald",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ewb2001@wildcats.unh.edu",
+        "phone": "(603) 553-4929"
+      },
+      {
+        "firstName": "Peter",
+        "lastName": "Bullard",
+        "fullName": "Peter Q. Bullard",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "bullardquinn@gmail.com",
+        "phone": "(603) 933-0128"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Byrne",
+        "fullName": "Nicholas James Byrne",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "nickbyrne104@yahoo.com",
+        "phone": "(603) 247-6835"
+      },
+      {
+        "firstName": "Eric",
+        "lastName": "Cadreact",
+        "fullName": "Eric Lee Cadreact",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ericcad321@gmail.com",
+        "phone": "(603) 728-7364"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Campbell",
+        "fullName": "Michael J. Campbell",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "sigmachi.unh.quaestor@gmail.com",
+        "phone": "(978) 987-3242"
+      },
+      {
+        "firstName": "Dominic",
+        "lastName": "Carignan",
+        "fullName": "Dominic Edmond Carignan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "dcarignan9@gmail.com",
+        "phone": "(603) 581-4415"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Carter",
+        "fullName": "Matthew E. Carter",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mcarter1717@gmail.com",
+        "phone": "(978) 833-3393"
+      },
+      {
+        "firstName": "Eric",
+        "lastName": "Carter",
+        "fullName": "Eric David Carter",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ec1231.wildcats.unh.edu@gmail.com",
+        "phone": "(603) 952-9627"
+      },
+      {
+        "firstName": "Shawn",
+        "lastName": "Casey",
+        "fullName": "Shawn J. Casey",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "sjcasey1110@gmail.com",
+        "phone": "(603) 845-8174"
+      },
+      {
+        "firstName": "Marley",
+        "lastName": "Cedrone",
+        "fullName": "Marley Derek Cedrone",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "marleycedrone@gmail.com",
+        "phone": "(781) 856-6660"
+      },
+      {
+        "firstName": "Stanley",
+        "lastName": "Chan",
+        "fullName": "Stanley C. Chan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mr.stanley.c.chan@gmail.com",
+        "phone": "(781) 808-1407"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Cheever",
+        "fullName": "James Wendell Cheever",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "james.cheever19@gmail.com",
+        "phone": "603-268-2774"
+      },
+      {
+        "firstName": "Robert",
+        "lastName": "Cheever",
+        "fullName": "Robert P. Cheever",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "bo.cheever@gmail.com",
+        "phone": "(603) 988-1541"
+      },
+      {
+        "firstName": "Johnny",
+        "lastName": "Chen",
+        "fullName": "Johnny Chen",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jc2037@wildcats.unh.edu",
+        "phone": "(603) 845-9424"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Cherry",
+        "fullName": "Dylan Brian Cherry",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "dcherry2016@gmail.com",
+        "phone": "(603) 205-6339"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Cicci",
+        "fullName": "John M. Cicci",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "johnmcicci@gmail.com",
+        "phone": "(603) 732-6197"
+      },
+      {
+        "firstName": "Cameron",
+        "lastName": "Claiborne",
+        "fullName": "Cameron A. Claiborne",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "cac1039@wildcats.unh.edu",
+        "phone": "(508) 330-7736"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Claire",
+        "fullName": "Jacob B. Claire",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jacobclaire98@gmail.com",
+        "phone": "(603) 320-2296"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Clark",
+        "fullName": "William Joseph Clark",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "williamclark102297@gmail.com",
+        "phone": "(781) 408-1862"
+      },
+      {
+        "firstName": "Patrick",
+        "lastName": "Clayton",
+        "fullName": "Patrick Scott Clayton",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "patrickclayton1202@gmail.com",
+        "phone": "203 733 6092"
+      },
+      {
+        "firstName": "Joseph",
+        "lastName": "Cocozella",
+        "fullName": "Joseph Edward Cocozella",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joe.cocozella@comcast.net",
+        "phone": "603-554-0242"
+      },
+      {
+        "firstName": "Baxter",
+        "lastName": "Cohen",
+        "fullName": "Baxter P. Cohen",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "baxcat13@gmail.com",
+        "phone": "(603) 721-9015"
+      },
+      {
+        "firstName": "Camren",
+        "lastName": "Conant",
+        "fullName": "Camren Jaros Conant",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "camchowder33@outlook.com",
+        "phone": "Hidden"
+      },
+      {
+        "firstName": "Faolan",
+        "lastName": "Connelly",
+        "fullName": "Faolan T. Connelly",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ftu4@wildcats.unh.edu",
+        "phone": "(603) 387-2780"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Connor",
+        "fullName": "Kyle T. Connor",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ktd24@wildcats.unh.edu",
+        "phone": "(603) 809-0905"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Connors",
+        "fullName": "William Patrick Connors",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "willconnors44@gmail.com",
+        "phone": "774 570 0443"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Connors",
+        "fullName": "Ethan Matthew Connors",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "emc@outlook.com",
+        "phone": "(508) 320-4192"
+      },
+      {
+        "firstName": "Marc",
+        "lastName": "Conrad",
+        "fullName": "Marc Conrad",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "marcconrad05@gmail.com",
+        "phone": "(978)-869-4816"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "Consoli",
+        "fullName": "Logan Consoli",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "loganconsoli879@gmail.com",
+        "phone": "6034756702"
+      },
+      {
+        "firstName": "Nelson",
+        "lastName": "Cross",
+        "fullName": "Nelson C. Cross",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "nelson@family-cross.com",
+        "phone": "(603) 818-3401"
+      },
+      {
+        "firstName": "Christian",
+        "lastName": "Cunio",
+        "fullName": "Christian Kenyada Cunio",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "christiank3904@icloud.com",
+        "phone": "6039883468"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Decker",
+        "fullName": "Michael Decker",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "med2005@wildcats.unh.edu",
+        "phone": "(860) 338-7888"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "DeLutrie",
+        "fullName": "Matthew Lawrence DeLutrie",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "delutrie15@gmail.com",
+        "phone": "(860) 490-1531"
+      },
+      {
+        "firstName": "Tyler",
+        "lastName": "Denning",
+        "fullName": "Tyler S. Denning",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "tsdenning@gmail.com",
+        "phone": "(603) 401-8445"
+      },
+      {
+        "firstName": "Sebastian",
+        "lastName": "Derousi",
+        "fullName": "Sebastian Jacob Derousi",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sderuosi@gmail.com",
+        "phone": "603-508-4287"
+      },
+      {
+        "firstName": "Darius",
+        "lastName": "Desnoes",
+        "fullName": "Darius Delroy Desnoes",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "desnoes28@gmail.com",
+        "phone": "(607) 227-8913"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Diedrich",
+        "fullName": "William Laurence Diedrich",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "wlmdiedrich@gmail.com",
+        "phone": "(781) 413-6028"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "DiLella",
+        "fullName": "Daniel Reilly DiLella",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dilelladaniel@gmail.com",
+        "phone": "609-787-4850"
+      },
+      {
+        "firstName": "Sean",
+        "lastName": "Dolan",
+        "fullName": "Sean O. Dolan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "soi8@wildcats.unh.edu",
+        "phone": "(603) 479-6424"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Domaingue",
+        "fullName": "Benjamin John Domaingue",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "bjdomaingue411@gmail.com",
+        "phone": "(508) 887-6939"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Donnelly",
+        "fullName": "Ryan P. Donnelly",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "rndnnll@gmail.com",
+        "phone": "(978) 660-5304"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Dorr",
+        "fullName": "Jack Hunter Dorr",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackdorr4@gmail.com",
+        "phone": "9737693564"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "Dorsey",
+        "fullName": "Colin Francis Dorsey",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "colindorsey1@gmail.com",
+        "phone": "609-389-3667"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Doucette",
+        "fullName": "Jack Peter Doucette",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jdouce923@gmail.com",
+        "phone": "9786972820"
+      },
+      {
+        "firstName": "Parker",
+        "lastName": "Dukas",
+        "fullName": "Parker Dukas",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "pjdukas95@gmail.com",
+        "phone": ""
+      },
+      {
+        "firstName": "Wyatt",
+        "lastName": "Duval",
+        "fullName": "Wyatt Ashton Duval",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "waduval@gmail.com",
+        "phone": "(603) 562-9646"
+      },
+      {
+        "firstName": "Jason",
+        "lastName": "Dyment",
+        "fullName": "Jason Dyment",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jasondymentt@gmail.com",
+        "phone": "6037486425"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Eisfeller",
+        "fullName": "Joshua A. Eisfeller",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jao336@wildcats.unh.edu",
+        "phone": "(603) 617-5717"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Eno",
+        "fullName": "Michael S. Eno",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "msr52@wildcats.unh.edu",
+        "phone": "(603) 475-7241"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Evans",
+        "fullName": "John Evans",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jme1003@wildcats.unh.edu",
+        "phone": "(603) 970-1009"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Facey",
+        "fullName": "Matthew B. Facey",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mbd39@wildcats.unh.edu",
+        "phone": "(603) 918-9969"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Femino",
+        "fullName": "Ryan Rocco Femino",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "rrfemino@icloud.com",
+        "phone": "(978) 799-6294"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Fisher",
+        "fullName": "Jared Fisher",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "sportsfan092@gmail.com",
+        "phone": "(508) 513-5126"
+      },
+      {
+        "firstName": "Arthur",
+        "lastName": "Flinton",
+        "fullName": "Arthur Shea Flinton",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sheaflinton8@gmail.com",
+        "phone": "603-674-5480"
+      },
+      {
+        "firstName": "Declan",
+        "lastName": "Foley",
+        "fullName": "Declan Kevin Foley",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "declankevinfoley@gmail.com",
+        "phone": "(401) 787-2612"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Foster",
+        "fullName": "Michael R. Foster",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mike.foster1995@gmail.com",
+        "phone": "(603) 819-6414"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Franco",
+        "fullName": "Jack Avery Franco",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "otter176@gmail.com",
+        "phone": "(508) 808-5193"
+      },
+      {
+        "firstName": "Rowan",
+        "lastName": "Frawley",
+        "fullName": "Rowan Patrick Frawley",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rowanfrawley9@gmail.com",
+        "phone": "6034839075"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Friedman",
+        "fullName": "Thomas Robert Friedman",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "trfsammy7@gmail.com",
+        "phone": "(732) 245-8049"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Fulton",
+        "fullName": "Connor William Fulton",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "connorfulton16@gmail.com",
+        "phone": "(603) 714-2232"
+      },
+      {
+        "firstName": "Zach",
+        "lastName": "Gabriel",
+        "fullName": "Zach Tyler Gabriel",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zacharyfelix13@gmail.com",
+        "phone": "617-775-6675"
+      },
+      {
+        "firstName": "Brian",
+        "lastName": "Gagne",
+        "fullName": "Brian M. Gagne",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "g.brian@comcast.net",
+        "phone": "(603) 918-8593"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Gagnon",
+        "fullName": "Samuel R. Gagnon",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "srj45@wildcats.unh.edu",
+        "phone": "(508) 364-1692"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Garcia",
+        "fullName": "Christopher Louis Garcia",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "chrisg98@tds.net",
+        "phone": "(603) 674-8726"
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "Gazaway",
+        "fullName": "Caleb Jonathan Gazaway",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cgazaway0@gmail.com",
+        "phone": "6032700678"
+      },
+      {
+        "firstName": "Brian",
+        "lastName": "Gioia",
+        "fullName": "Brian R. Gioia",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "bgioia1@gmail.com",
+        "phone": "(603) 401-1987"
+      },
+      {
+        "firstName": "Vincent",
+        "lastName": "Giovinelli",
+        "fullName": "Vincent Giovinelli",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vingiovinelli@yahoo.com",
+        "phone": "6032682463"
+      },
+      {
+        "firstName": "Marc-Anthony",
+        "lastName": "Giudice",
+        "fullName": "Marc-Anthony Giudice",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "marc.ag@yahoo.com",
+        "phone": "(781) 666-0159"
+      },
+      {
+        "firstName": "Adam",
+        "lastName": "Glidden",
+        "fullName": "Adam S. Glidden",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "adamglidden13@gmail.com",
+        "phone": "(603) 285-3377"
+      },
+      {
+        "firstName": "Tyler",
+        "lastName": "Goff",
+        "fullName": "Tyler J. Goff",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "tyjgoff@gmail.com",
+        "phone": "(603) 244-9442"
+      },
+      {
+        "firstName": "Zackary",
+        "lastName": "Gorman",
+        "fullName": "Zackary Brady Gorman",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zackarygorman05@gmail.com",
+        "phone": "603497-7560"
+      },
+      {
+        "firstName": "Nicolas",
+        "lastName": "Grafton",
+        "fullName": "Nicolas J. Grafton",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "njs36@wildcats.unh.edu",
+        "phone": "(603) 568-3704"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Grizzetti",
+        "fullName": "Thomas Grizzetti",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "trg1002@wildcats.unh.edu",
+        "phone": "(401) 742-6014"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Guarino",
+        "fullName": "Christopher Raymond Guarino",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "chris.guarino10@gmail.com",
+        "phone": "(603) 438-2907"
+      },
+      {
+        "firstName": "Peter",
+        "lastName": "Guarino",
+        "fullName": "Peter E. Guarino",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "peo25@wildcats.unh.edu",
+        "phone": "(978) 766-4518"
+      },
+      {
+        "firstName": "Tyler",
+        "lastName": "Gullbrand",
+        "fullName": "Tyler N. Gullbrand",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "tgullbrand@gmail.com",
+        "phone": "(603) 502-8867"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Hall",
+        "fullName": "Ian Patrick Hall",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ihall2023@gmail.com",
+        "phone": "(978) 891-2584"
+      },
+      {
+        "firstName": "Tristin",
+        "lastName": "Hallin",
+        "fullName": "Tristin Angelo Hallin",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tristinhallin@gmail.com",
+        "phone": "6035544020"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Hankins",
+        "fullName": "Nicholas J. Hankins",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "nicholasjhankins@gmail.com",
+        "phone": "(908) 455-0135"
+      },
+      {
+        "firstName": "Ross",
+        "lastName": "Harvie",
+        "fullName": "Ross T. Harvie",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "rta27@wildcats.unh.edu",
+        "phone": "(978) 870-4539"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Hattub",
+        "fullName": "Christopher George Hattub",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "chattub@gmail.com",
+        "phone": "(774) 644-1330"
+      },
+      {
+        "firstName": "George",
+        "lastName": "Henrich",
+        "fullName": "George Trenton Henrich",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "thenrich33@gmail.com",
+        "phone": "(603) 714-3366"
+      },
+      {
+        "firstName": "Cristian",
+        "lastName": "Herrera",
+        "fullName": "Cristian Deric Herrera",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "deric09110@gmail.com",
+        "phone": "(603) 348-2225"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Hewitt",
+        "fullName": "John A. Hewitt",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jah2012@wildcats.unh.edu",
+        "phone": "(603) 515-6970"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Howard",
+        "fullName": "William W. Howard",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "howardbilly528@gmail.com",
+        "phone": "(609) 661-5504"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Howard",
+        "fullName": "Samuel Howard",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "sthoward17@gmail.com",
+        "phone": "(609) 389-1212"
+      },
+      {
+        "firstName": "River",
+        "lastName": "Iannaccone",
+        "fullName": "River Iannaccone",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "riveraspen@gmail.com",
+        "phone": "(718) 715-5741"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Ivanov",
+        "fullName": "Alexander V. Ivanov",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "avj22@wildcats.unh.edu",
+        "phone": "(603) 276-5452"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Jarosz",
+        "fullName": "Zachary T. Jarosz",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "zacharytjarosz@gmail.com",
+        "phone": "(603) 686-4081"
+      },
+      {
+        "firstName": "David",
+        "lastName": "Johnson",
+        "fullName": "David Johnson",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "dmj2002@wildcats.unh.edu",
+        "phone": "(508) 723-2987"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Jones",
+        "fullName": "Connor William Jones",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "cwjhoops@gmail.com",
+        "phone": "(508) 733-1939"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Joyce",
+        "fullName": "Connor M. Joyce",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "connjoyce99@gmail.com",
+        "phone": "(603) 897-5260"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Kaldy",
+        "fullName": "Kyle W. Kaldy",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "kwk1000@wildcats.unh.edu",
+        "phone": "(508) 733-9881"
+      },
+      {
+        "firstName": "Sean",
+        "lastName": "Kalil",
+        "fullName": "Sean P. Kalil",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "kseans8@gmail.com",
+        "phone": "(978) 460-0398"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Kaplan",
+        "fullName": "Jacob Seth Kaplan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jakekap7@comcast.net",
+        "phone": "(603) 657-4378"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Kelly",
+        "fullName": "Connor James Kelly",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "connorkelly151@gmail.com",
+        "phone": "(401) 999-8386"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Kiefer",
+        "fullName": "Jake Ferris Kiefer",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jf.kief23@gmail.com",
+        "phone": "7742750574"
+      },
+      {
+        "firstName": "Charles",
+        "lastName": "Klewicki",
+        "fullName": "Charles J. Klewicki",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "charlesklewicki@gmail.com",
+        "phone": "(801) 824-7105"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Koeck",
+        "fullName": "Jared F. Koeck",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jfo35@wildcats.unh.edu",
+        "phone": "(603) 943-0806"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Krupp",
+        "fullName": "Kyle Krupp",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "kyle.krupp@gmail.com",
+        "phone": "(616) 951-2685"
+      },
+      {
+        "firstName": "Jalen",
+        "lastName": "Lacasse",
+        "fullName": "Jalen Roland Lacasse",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jalen_lacasse@yahoo.com",
+        "phone": "(603) 326-9500"
+      },
+      {
+        "firstName": "Carter",
+        "lastName": "LaLiberte",
+        "fullName": "Carter James LaLiberte",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "carterjlaliberte@gmail.com",
+        "phone": "6037157882"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Lampey",
+        "fullName": "Ryan Louis Lampey",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ryanlampey631@gmail.com",
+        "phone": "2019136355"
+      },
+      {
+        "firstName": "Derek",
+        "lastName": "Lampey",
+        "fullName": "Derek William Lampey",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dereklampey@gmail.com",
+        "phone": "2017455224"
+      },
+      {
+        "firstName": "Brian",
+        "lastName": "Landolt",
+        "fullName": "Brian G. Landolt",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "bryanlandolt@live.com",
+        "phone": "(603) 554-6087"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Lawrence",
+        "fullName": "Jack Gardner Lawrence",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacklawrence147@gmail.com",
+        "phone": "(518) 524-8405"
+      },
+      {
+        "firstName": "Nick",
+        "lastName": "Lazzaro",
+        "fullName": "Nick Francis Lazzaro",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nflazz.14@gmail.com",
+        "phone": "6035831448"
+      },
+      {
+        "firstName": "Trevor",
+        "lastName": "Legros",
+        "fullName": "Trevor Scott Legros",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "trevor.legros@gmail.com",
+        "phone": "(603) 391-5528"
+      },
+      {
+        "firstName": "Peter",
+        "lastName": "Lennox",
+        "fullName": "Peter James Lennox",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "peterlennox145@gmail.com",
+        "phone": "(603) 801-6494"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Loesch",
+        "fullName": "Zachary James Loesch",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "zjloesch@gmail.com",
+        "phone": "(978) 732-4117"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Looney",
+        "fullName": "Jack Thomas Looney",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "looneyjt108@gmail.com",
+        "phone": "(603) 316-8112"
+      },
+      {
+        "firstName": "Aiden",
+        "lastName": "Lopes",
+        "fullName": "Aiden Antonio Lopes",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "luckylopes24@gmail.com",
+        "phone": "5088515544"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "LoPresti",
+        "fullName": "Logan John LoPresti",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "loganopresti@gmail.com",
+        "phone": "(860) 638-7642"
+      },
+      {
+        "firstName": "Hayden",
+        "lastName": "Lord",
+        "fullName": "Hayden Holt Lord",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "haydenhl.720@gmail.com",
+        "phone": "6036306826"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Luciano",
+        "fullName": "Thomas James Luciano",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "tjluciano99@gmail.com",
+        "phone": "(781) 686-3648"
+      },
+      {
+        "firstName": "Hugh",
+        "lastName": "Lynch",
+        "fullName": "Hugh Mullin Lynch",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "hughmullinl@comcast.net",
+        "phone": "(781) 941-6566"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "MacLennan",
+        "fullName": "Connor W. MacLennan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "cmaclennan22@gmail.com",
+        "phone": "(508) 265-9245"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Mager",
+        "fullName": "Benjamin I. Mager",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "biw2@wildcats.unh.edu",
+        "phone": "(978) 501-5938"
+      },
+      {
+        "firstName": "Ardalan",
+        "lastName": "Mahdavieh",
+        "fullName": "Ardalan Mahdavieh",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ardalanmahdavieh@gmail.com",
+        "phone": "(914) 354-7604"
+      },
+      {
+        "firstName": "Sean",
+        "lastName": "Mahoney",
+        "fullName": "Sean M. Mahoney",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "smt736@wildcats.unh.edu",
+        "phone": "(603) 397-8063"
+      },
+      {
+        "firstName": "Joseph",
+        "lastName": "Maio",
+        "fullName": "Joseph A. Maio",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "joe.maio@icloud.com",
+        "phone": "(603) 247-5933"
+      },
+      {
+        "firstName": "Joe",
+        "lastName": "Majewski",
+        "fullName": "Joe Majewski",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joemaj22@gmail.com",
+        "phone": "(973) 902-6726"
+      },
+      {
+        "firstName": "Johnny",
+        "lastName": "Marin",
+        "fullName": "Johnny Marin",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "johnny.marin017@gmail.com",
+        "phone": "(603) 818-7153"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Marrone",
+        "fullName": "Michael Lawrence Marrone",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mmarrone47@gmail.com",
+        "phone": "(603)998-6267"
+      },
+      {
+        "firstName": "Nick",
+        "lastName": "Martel",
+        "fullName": "Nick John Martel",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "njmartellie@gmail.com",
+        "phone": "6033336526"
+      },
+      {
+        "firstName": "Trevor",
+        "lastName": "Martin",
+        "fullName": "Trevor M. Martin",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "tmy74@wildcats.unh.edu",
+        "phone": "(603) 300-2660"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Maschio",
+        "fullName": "Dylan Samuel Maschio",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "dsmaschio2019@gmai.com",
+        "phone": "(781) 999-4558"
+      },
+      {
+        "firstName": "John",
+        "lastName": "McCarte",
+        "fullName": "John William McCarte",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jack.mccarte@comcast.net",
+        "phone": "(603) 715-6023"
+      },
+      {
+        "firstName": "Patrick",
+        "lastName": "McDonough",
+        "fullName": "Patrick F. McDonough",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "pfs9@wildcats.unh.edu",
+        "phone": "(603) 781-9946"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "McDonough",
+        "fullName": "Connor McDonough",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "cam1047@wildcats.unh.edu",
+        "phone": "603-978-8870"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Mcfarlin",
+        "fullName": "Ian M. Mcfarlin",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "imc9@wildcats.unh.edu",
+        "phone": "(603) 918-6919"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "McGonagle",
+        "fullName": "Colin J. McGonagle",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "cjm1045@wildcats.unh.edu",
+        "phone": "(603) 809-8017"
+      },
+      {
+        "firstName": "Coleman",
+        "lastName": "McKaig",
+        "fullName": "Coleman C. McKaig",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ccm1018@wildcats.unh.edu",
+        "phone": "(802) 299-9720"
+      },
+      {
+        "firstName": "Mitchell",
+        "lastName": "McQuillan",
+        "fullName": "Mitchell James McQuillan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mcq12678@gmail.com",
+        "phone": "(860) 986-3988"
+      },
+      {
+        "firstName": "Alex",
+        "lastName": "Meehan",
+        "fullName": "Alex William Meehan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "alexmee603@gmail.com",
+        "phone": "(603) 479-6524"
+      },
+      {
+        "firstName": "Tyler",
+        "lastName": "Meyers",
+        "fullName": "Tyler james Meyers",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tylerjmeyers8830@gmail.com",
+        "phone": "7819873646"
+      },
+      {
+        "firstName": "Davis",
+        "lastName": "Miller",
+        "fullName": "Davis Charles Miller",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "davismill17@gmail.com",
+        "phone": "(716) 913-8673"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Milroy",
+        "fullName": "Andrew J. Milroy",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ajbro.milroy@gmail.com",
+        "phone": "(203) 694-9502"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Monti",
+        "fullName": "Benjamin Monti",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "bmm1034@wildcats.unh.edu",
+        "phone": "(401) 545-0059"
+      },
+      {
+        "firstName": "Kellen",
+        "lastName": "Moran",
+        "fullName": "Kellen Churchill Moran",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kellenator07@gmail.com",
+        "phone": "9782900931"
+      },
+      {
+        "firstName": "David",
+        "lastName": "Moss",
+        "fullName": "David Lawrence Moss",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "davidmoss072@gmail.com",
+        "phone": "(603) 801-6105"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Mouser",
+        "fullName": "Matthew R. Mouser",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mrm6824@gmail.com",
+        "phone": "(603) 820-1627"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Mouser",
+        "fullName": "Thomas R. Mouser",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "trmouser@gmail.com",
+        "phone": "(603) 331-1329"
+      },
+      {
+        "firstName": "Mateusz",
+        "lastName": "Mroz",
+        "fullName": "Mateusz Mroz",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mm1158@wildcats.unh.edu",
+        "phone": "(857) 939-8599"
+      },
+      {
+        "firstName": "Reed",
+        "lastName": "Nelson",
+        "fullName": "Reed Prentiss Nelson",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "reedpnelson@gmail.com",
+        "phone": "603-714-7153"
+      },
+      {
+        "firstName": "Siddharth",
+        "lastName": "Nigam",
+        "fullName": "Siddharth P. Nigam",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "siddharth.nigam1994@gmail.com",
+        "phone": "(603) 261-1843"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Nolan",
+        "fullName": "William Nolan",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "will_n23@yahoo.com",
+        "phone": "(781) 936-5356"
+      },
+      {
+        "firstName": "Justin",
+        "lastName": "O'Brien",
+        "fullName": "Justin J. O'Brien",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jjs77@wildcats.unh.edu",
+        "phone": ""
+      },
+      {
+        "firstName": "Liam",
+        "lastName": "O'Connell",
+        "fullName": "Liam M. O'Connell",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "liam.oconnell11@gmail.com",
+        "phone": "(603) 627-5873"
+      },
+      {
+        "firstName": "Timothy",
+        "lastName": "O'Leary",
+        "fullName": "Timothy F. O'Leary",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "timoleary11@gmail.com",
+        "phone": "(781) 733-6206"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "O'Leary",
+        "fullName": "Ethan Patrick O'Leary",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethano1850@gmail.com",
+        "phone": "(978) 880-2479"
+      },
+      {
+        "firstName": "Aaron",
+        "lastName": "O'Reilly-Spencer",
+        "fullName": "Aaron Christopher O'Reilly-Spencer",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aaronospencer@gmail.com",
+        "phone": "732-939-0504"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Olver",
+        "fullName": "Ryan D. Olver",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ryan.d.olver@gmail.com",
+        "phone": "(414) 331-9155"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Palmer",
+        "fullName": "Jacob Edward Palmer",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "palmplays41@gmail.com",
+        "phone": "(860) 436-7790"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Parks-Damon",
+        "fullName": "Kyle Parks-Damon",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "kyledamon96@gmail.com",
+        "phone": "(207) 432-7023"
+      },
+      {
+        "firstName": "Kevin",
+        "lastName": "Parsons",
+        "fullName": "Kevin W. Parsons",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "kwb27@wildcats.unh.edu",
+        "phone": "(603) 843-5184"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Pasciuto",
+        "fullName": "Michael V. Pasciuto",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mvp1005@wildcats.unh.edu",
+        "phone": "(781) 308-7193"
+      },
+      {
+        "firstName": "Weston",
+        "lastName": "Pate",
+        "fullName": "Weston Timothy Pate",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "westonpate15@gmail.com",
+        "phone": "(603) 402-0063"
+      },
+      {
+        "firstName": "Oliver",
+        "lastName": "Pender",
+        "fullName": "Oliver Berkeley Pender",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "oliverbpender@gmail.com",
+        "phone": "9078888194"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Penttinen",
+        "fullName": "Jacob Richard Penttinen",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jpent3467@gmail.com",
+        "phone": "603-689-8971"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Perkins",
+        "fullName": "William Kent Perkins",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "willp2023@gmail.com",
+        "phone": "(603) 661-3098"
+      },
+      {
+        "firstName": "Noah",
+        "lastName": "Perron",
+        "fullName": "Noah J. Perron",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "noahperron22@gmail.com",
+        "phone": "(207) 713-1063"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Petroni",
+        "fullName": "Jared N. Petroni",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jnj37@wildcats.unh.edu",
+        "phone": "(603) 818-1780"
+      },
+      {
+        "firstName": "Shane",
+        "lastName": "Price-Lynam",
+        "fullName": "Shane Peter Price-Lynam",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "shane060306@gmail.com",
+        "phone": "5082415703"
+      },
+      {
+        "firstName": "Jordan",
+        "lastName": "Pritikin",
+        "fullName": "Jordan M. Pritikin",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jmt2249@wildcats.unh.edu",
+        "phone": "(603) 440-3713"
+      },
+      {
+        "firstName": "Steven",
+        "lastName": "Reddy",
+        "fullName": "Steven Jeffery Reddy",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "stevenreddy@proton.me",
+        "phone": "6037483914"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Redman",
+        "fullName": "Jake M. Redman",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jredman2425@gmail.com",
+        "phone": "(603) 508-8421"
+      },
+      {
+        "firstName": "Marshall",
+        "lastName": "Reedenauer",
+        "fullName": "Marshall Stephen Reedenauer",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "marshallreedenauer@gmail.com",
+        "phone": "(603) 731-1509"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Reilly",
+        "fullName": "Michael Jonathan Reilly",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "reillym669@gmail.com",
+        "phone": "(508) 415-8379"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Reynolds",
+        "fullName": "Jack Fenway Reynolds",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackfenway8@yahoo.com",
+        "phone": "(603) 491-4923"
+      },
+      {
+        "firstName": "David",
+        "lastName": "Ricard",
+        "fullName": "David R. Ricard",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "davidricard15@gmail.com",
+        "phone": "(603) 682-2294"
+      },
+      {
+        "firstName": "Franklin",
+        "lastName": "Robinson",
+        "fullName": "Franklin Hartwell Robinson",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "fhrob4@gmail.com",
+        "phone": "860-310-6787"
+      },
+      {
+        "firstName": "Anthony",
+        "lastName": "Rocco",
+        "fullName": "Anthony P. Rocco",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "tonytaco21@gmail.com",
+        "phone": "(603) 918-1892"
+      },
+      {
+        "firstName": "Bryce",
+        "lastName": "Rochford",
+        "fullName": "Bryce Allen Rochford",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brycerochford3@gmail.com",
+        "phone": "9786757804"
+      },
+      {
+        "firstName": "Fineas",
+        "lastName": "Rohlfing",
+        "fullName": "Fineas Cole Rohlfing",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "fineasrohlfing@outlook.com",
+        "phone": "8574159981"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Romero",
+        "fullName": "Kyle S. Romero",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "kyky746@yahoo.com",
+        "phone": "(207) 449-2697"
+      },
+      {
+        "firstName": "Anthony",
+        "lastName": "Rosa",
+        "fullName": "Anthony Rosa III",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "aar2006@wildcats.unh.edu",
+        "phone": "(603) 339-8230"
+      },
+      {
+        "firstName": "Stephen",
+        "lastName": "Rosenberg",
+        "fullName": "Stephen F. Rosenberg",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "stephenrosen92@gmail.com",
+        "phone": "(603) 845-6305"
+      },
+      {
+        "firstName": "Christian",
+        "lastName": "Roys",
+        "fullName": "Christian F. Roys",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "rllsroys@gmail.com",
+        "phone": "(603) 828-9961"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Ruonala",
+        "fullName": "Ryan S. Ruonala",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ryanruonala10@gmail.com",
+        "phone": "(603) 953-8689"
+      },
+      {
+        "firstName": "Bailey",
+        "lastName": "Saladino",
+        "fullName": "Bailey Ryan Saladino",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "brssaladino@gmail.com",
+        "phone": "(603) 915-0918"
+      },
+      {
+        "firstName": "Cory",
+        "lastName": "Scandalis",
+        "fullName": "Cory Scandalis",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "cjh224@wildcats.unh.edu",
+        "phone": "(732) 492-0962"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Scanlon",
+        "fullName": "Alexander M. Scanlon",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "amc573@wildcats.unh.edu",
+        "phone": "(603) 724-4148"
+      },
+      {
+        "firstName": "Dominick",
+        "lastName": "Schiavi",
+        "fullName": "Dominick Mario Schiavi",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "dominickschiavi7@gmail.com",
+        "phone": "(201) 965-0707"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Schnare",
+        "fullName": "Lucas Henry Schnare",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "lschnare2000@gmail.com",
+        "phone": "(603) 325-1930"
+      },
+      {
+        "firstName": "Rudy",
+        "lastName": "Schnare",
+        "fullName": "Rudy David Schnare",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "rudyschnare@gmail.com",
+        "phone": "(603) 325-3037"
+      },
+      {
+        "firstName": "Jenson",
+        "lastName": "Scott",
+        "fullName": "Jenson Amyas-Keeling Scott",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jscott7728@gmail.com",
+        "phone": "(862) 268-7728"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Sharpe",
+        "fullName": "Jack Christopher Sharpe",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jacksharpie326@gmail.com",
+        "phone": "(603) 703-4152"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Sherts",
+        "fullName": "William Hervey Sherts",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "williamsherts@gmail.com",
+        "phone": "(203) 299-7425"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Simon",
+        "fullName": "Jake Simon",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "24jsimon@gmail.com",
+        "phone": "9788216746"
+      },
+      {
+        "firstName": "Cole",
+        "lastName": "Sirafos",
+        "fullName": "Cole Michael Sirafos",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "cosirafos617@gmail.com",
+        "phone": "(774) 286-0751"
+      },
+      {
+        "firstName": "Jason",
+        "lastName": "Skibinski",
+        "fullName": "Jason S. Skibinski",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jss1019@wildcats.unh.edu",
+        "phone": "(508) 846-8326"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Skilling",
+        "fullName": "Samuel Roy Skilling",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "samskilling1024@gmail.com",
+        "phone": "(603) 275-5706"
+      },
+      {
+        "firstName": "Liam",
+        "lastName": "Slane",
+        "fullName": "Liam Allaire Slane",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "liamslane11@gmail.com",
+        "phone": "(781) 738-5639"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Smith",
+        "fullName": "Connor Michael Smith",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "smithco2525@gmail.com",
+        "phone": "(401) 602-2412"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Smith",
+        "fullName": "Dylan Seamus Smith",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylanscool78@gmail.com",
+        "phone": "9787045118"
+      },
+      {
+        "firstName": "Carter",
+        "lastName": "Snay",
+        "fullName": "Carter R. Snay",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "crs1029@wildcats.unh.edu",
+        "phone": "(978) 504-1463"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Spina",
+        "fullName": "James Spina",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jamesedmundspina@gmail.com",
+        "phone": "(781) 850-6399"
+      },
+      {
+        "firstName": "Landon",
+        "lastName": "Sprague",
+        "fullName": "Landon Vincent Sprague",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "landonsprague563@gmail.com",
+        "phone": "6032126392"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Steed",
+        "fullName": "Michael L. Steed",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mls2015@wildcats.unh.edu",
+        "phone": "(603) 312-7211"
+      },
+      {
+        "firstName": "Ben",
+        "lastName": "Stone",
+        "fullName": "Ben Thomas Stone",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "benstone272@gmail.com",
+        "phone": "(603) 397-9243"
+      },
+      {
+        "firstName": "Dustin",
+        "lastName": "Swanson",
+        "fullName": "Dustin D. Swanson",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ddc8@wildcats.unh.edu",
+        "phone": "(603) 401-5690"
+      },
+      {
+        "firstName": "Josh",
+        "lastName": "Tattelman",
+        "fullName": "Josh Michael Tattelman",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jmtattelman123@gmail.com",
+        "phone": "(774) 249-8734"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Tatti",
+        "fullName": "William Finn Tatti",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "finn.tatti25@gmail.com",
+        "phone": "(516) 305-1512"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Telaak",
+        "fullName": "Ethan Charles Telaak",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "etelaak@gmail.com",
+        "phone": "(716) 495-2040"
+      },
+      {
+        "firstName": "Valentin",
+        "lastName": "Tenev",
+        "fullName": "Valentin Tenev",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "valentintenevjunior@gmail.com",
+        "phone": "(781) 354-9971"
+      },
+      {
+        "firstName": "Anthony",
+        "lastName": "Terrile",
+        "fullName": "Anthony Robert Terrile",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "anthony.terrile@gmail.com",
+        "phone": "6035606454"
+      },
+      {
+        "firstName": "Olva",
+        "lastName": "Timorry",
+        "fullName": "Olva Timorry",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ot2@wildcats.unh.edu",
+        "phone": ""
+      },
+      {
+        "firstName": "David",
+        "lastName": "Tripp",
+        "fullName": "David Robert Tripp",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "trippd102568@gmail.com",
+        "phone": "2073810145"
+      },
+      {
+        "firstName": "Bruno",
+        "lastName": "Trombino",
+        "fullName": "Bruno Joseph Trombino",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jttrombino@gmail.com",
+        "phone": "401-742-5161"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Turi",
+        "fullName": "Nicholas F. Turi",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "nfo7@wildcats.unh.edu",
+        "phone": "(774) 277-2427"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Turner",
+        "fullName": "Matthew M. Turner",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mmt2004@wildcats.unh.edu",
+        "phone": "(603) 425-4110"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Tzavalas",
+        "fullName": "Nicholas J. Tzavalas",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ntzavalas@gmail.com",
+        "phone": "(603) 560-6033"
+      },
+      {
+        "firstName": "Justin",
+        "lastName": "Wang",
+        "fullName": "Justin Wang",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "justinlwang@comcast.net",
+        "phone": "(203) 814-7364"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Ward",
+        "fullName": "Ryan S. Ward",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ryan.ward0213@gmail.com",
+        "phone": "(617) 538-2823"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Welsh",
+        "fullName": "Christopher J. Welsh",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "chriswelsh92@gmail.com",
+        "phone": "(603) 548-8821"
+      },
+      {
+        "firstName": "Suzanne",
+        "lastName": "Welsh",
+        "fullName": "Suzanne Conners Welsh",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "ccw1025@wildcats.unh.edu",
+        "phone": "(973) 803-7469"
+      },
+      {
+        "firstName": "Blake",
+        "lastName": "Winberry",
+        "fullName": "Blake Hess Winberry",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "blakewinberry@gmail.com",
+        "phone": "(973) 864-0196"
+      },
+      {
+        "firstName": "Brian",
+        "lastName": "Winslow",
+        "fullName": "Brian B. Winslow",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brian.winslow.iii@gmail.com",
+        "phone": "(207) 583-7295"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Winter",
+        "fullName": "Michael Winter",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "michaeltwinter@hotmail.com",
+        "phone": ""
+      },
+      {
+        "firstName": "John",
+        "lastName": "Woodworth",
+        "fullName": "John Harmon Woodworth",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "jack.woodworth14@icloud.com",
+        "phone": "(973) 886-8943"
+      },
+      {
+        "firstName": "Frank",
+        "lastName": "Wynters",
+        "fullName": "Frank C. Wynters",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "fweardo5@gmail.com",
+        "phone": "(603) 913-4927"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Yang",
+        "fullName": "Thomas Tien-Ming Yang",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "thomasyang61@gmail.com",
+        "phone": "(781) 664-0468"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Zagrodny",
+        "fullName": "Ryan k Zagrodny",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zagrodny224@gmail.com",
+        "phone": "508-570-8526"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Zunski",
+        "fullName": "Zachary D. Zunski",
+        "chapterGreekLetters": "Lambda Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zachzunski@gmail.com",
+        "phone": "(203) 666-9464"
+      }
+    ]
+  }
+]

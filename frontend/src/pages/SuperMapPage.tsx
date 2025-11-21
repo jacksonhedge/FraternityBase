@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup, useMap, CircleMarker, Tooltip } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
@@ -215,6 +216,8 @@ const SuperMapPage = () => {
   const [dataLoading, setDataLoading] = useState(true);
   const [filterTransitioning, setFilterTransitioning] = useState(false);
   const [organizationType, setOrganizationType] = useState<'fraternity' | 'sorority'>('fraternity');
+  const [instagramChapters, setInstagramChapters] = useState<any[]>([]);
+  const [showInstagramClusters, setShowInstagramClusters] = useState(true);
   // SUPERMAP - Enhanced version - Force rebuild - timestamp: 2025-10-10
 
   // Check subscription status for Enterprise access
@@ -371,6 +374,32 @@ const SuperMapPage = () => {
       handleCollegeClick(selectedCollege.name, selectedCollege);
     }
   }, [organizationType]);
+
+  // Fetch Instagram chapters for clustering on the map
+  useEffect(() => {
+    const fetchInstagramChapters = async () => {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+        console.log('📸 [SuperMap] Fetching Instagram chapters for clustering...');
+
+        const response = await fetch(`${API_URL}/chapters/instagram-map`);
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          // Filter by organization type
+          const filtered = data.data.filter((chapter: any) =>
+            chapter.greek_organizations?.organization_type === organizationType
+          );
+          console.log(`📸 [SuperMap] Loaded ${filtered.length} ${organizationType} chapters with Instagram`);
+          setInstagramChapters(filtered);
+        }
+      } catch (error) {
+        console.error('❌ [SuperMap] Error fetching Instagram chapters:', error);
+      }
+    };
+
+    fetchInstagramChapters();
+  }, [organizationType]); // Re-fetch when organization type changes
 
   // Fetch real college data from API to replace hardcoded COLLEGE_LOCATIONS
   useEffect(() => {
@@ -1272,6 +1301,74 @@ const SuperMapPage = () => {
             </CircleMarker>
           ))}
 
+          {/* Instagram Chapter Clusters - Show all chapters with Instagram handles */}
+          {showInstagramClusters && viewMode === 'usa' && (
+            <MarkerClusterGroup
+              chunkedLoading
+              maxClusterRadius={50}
+              spiderfyOnMaxZoom={true}
+              showCoverageOnHover={false}
+              zoomToBoundsOnClick={true}
+              iconCreateFunction={(cluster) => {
+                const count = cluster.getChildCount();
+                let size = 'small';
+                if (count >= 50) size = 'large';
+                else if (count >= 20) size = 'medium';
+
+                return L.divIcon({
+                  html: `<div class="instagram-cluster-icon instagram-cluster-${size}">
+                           <span>${count}</span>
+                         </div>`,
+                  className: 'instagram-cluster',
+                  iconSize: L.point(40, 40, true)
+                });
+              }}
+            >
+              {instagramChapters.map((chapter) => {
+                if (!chapter.universities?.latitude || !chapter.universities?.longitude) return null;
+
+                return (
+                  <CircleMarker
+                    key={chapter.id}
+                    center={[chapter.universities.latitude, chapter.universities.longitude]}
+                    radius={6}
+                    fillColor="#E11D48"
+                    color="#FFFFFF"
+                    weight={2}
+                    fillOpacity={0.8}
+                  >
+                    <Tooltip>
+                      <div style={{ padding: '6px', minWidth: '200px' }}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="text-pink-600 font-bold">📸</div>
+                          <div className="font-bold text-base">
+                            {chapter.greek_organizations?.name || 'Unknown Chapter'}
+                          </div>
+                        </div>
+                        <div className="text-sm text-gray-600 space-y-1">
+                          <div>🏫 {chapter.universities?.name}</div>
+                          <div className="flex items-center gap-1">
+                            <span className="font-semibold">Instagram:</span>
+                            <a
+                              href={`https://instagram.com/${chapter.instagram_handle?.replace('@', '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-pink-600 hover:text-pink-700 font-medium"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {chapter.instagram_handle}
+                            </a>
+                          </div>
+                          <div>👥 {chapter.member_count || 0} members</div>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  </CircleMarker>
+                );
+              })}
+            </MarkerClusterGroup>
+          )}
+
           {/* Map controls */}
           <MapControls
             map={mapRef.current}
@@ -1803,6 +1900,68 @@ style.textContent = `
 
   .leaflet-interactive.leaflet-circle:hover {
     animation: gentlePulse 2s infinite;
+  }
+
+  /* Instagram Cluster Styling */
+  .instagram-cluster {
+    background: transparent !important;
+  }
+
+  .instagram-cluster-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+    border: 3px solid white;
+    transition: all 0.3s ease;
+  }
+
+  .instagram-cluster-small {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+    font-size: 14px;
+  }
+
+  .instagram-cluster-medium {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #E11D48 0%, #9F1239 100%);
+    font-size: 16px;
+  }
+
+  .instagram-cluster-large {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+    font-size: 18px;
+  }
+
+  .instagram-cluster-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(225, 29, 72, 0.5);
+  }
+
+  .instagram-cluster span {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Add pulse animation to Instagram clusters */
+  @keyframes instagramPulse {
+    0%, 100% {
+      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 20px rgba(225, 29, 72, 0.6);
+    }
+  }
+
+  .instagram-cluster-icon {
+    animation: instagramPulse 2s ease-in-out infinite;
   }
 `;
 document.head.appendChild(style);

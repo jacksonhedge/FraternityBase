@@ -1,0 +1,508 @@
+[
+  {
+    "chapterName": "Delta Kappa",
+    "university": "Bowling Green State University",
+    "members": [
+      {
+        "firstName": "Jaxson",
+        "lastName": "Ahlborn",
+        "fullName": "Jaxson Hawke Ahlborn",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jaxsonahlborn@gmail.com",
+        "phone": "3306360911"
+      },
+      {
+        "firstName": "Grey",
+        "lastName": "Baedke",
+        "fullName": "Grey Baedke",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "grey.baedke@gmail.com",
+        "phone": "804-904-2114"
+      },
+      {
+        "firstName": "Joesph",
+        "lastName": "Banister",
+        "fullName": "Joesph S Banister",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joeb1468@icloud.com",
+        "phone": "3308425257"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Beets",
+        "fullName": "Kyle Joseph Beets",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kyle002beets@gmail.com",
+        "phone": "4408657036"
+      },
+      {
+        "firstName": "Ambrose",
+        "lastName": "Blazer",
+        "fullName": "Ambrose Leppert Blazer",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alblazer05@gmail.com",
+        "phone": "5134984161"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Bohm",
+        "fullName": "Andrew Carl Bohm",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ajcbohm@gmail.com",
+        "phone": "4192658304"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Brace",
+        "fullName": "William Benjamin Brace",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bracew8@gmail.com",
+        "phone": "(614) 795-7530"
+      },
+      {
+        "firstName": "Kellan",
+        "lastName": "Bruni",
+        "fullName": "Kellan Grandt Bruni",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kellanbruni5@gmail.com",
+        "phone": "5672949629"
+      },
+      {
+        "firstName": "Austin",
+        "lastName": "Byers",
+        "fullName": "Austin William Byers",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "austinbyers072005@gmail.com",
+        "phone": "4192155358"
+      },
+      {
+        "firstName": "Gino",
+        "lastName": "Carcelli",
+        "fullName": "Gino Andrew Carcelli",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gcarcelli16@gmail.com",
+        "phone": "3303979520"
+      },
+      {
+        "firstName": "Lathan",
+        "lastName": "Chapman",
+        "fullName": "Lathan Robert Chapman",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lathanplays@gmail.com",
+        "phone": "419-367-2995"
+      },
+      {
+        "firstName": "Will",
+        "lastName": "Cunningham",
+        "fullName": "Will Robert Cunningham",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wrcunni13@gmail.com",
+        "phone": "4432014117"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Dietrich",
+        "fullName": "Ryan Charles Dietrich",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dietrichryan9@gmail.com",
+        "phone": "(567) 230-2150"
+      },
+      {
+        "firstName": "Keegan",
+        "lastName": "Dingle",
+        "fullName": "Keegan Dingle",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "keegandingle@gmail.com",
+        "phone": "4195159115"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "Donofrio",
+        "fullName": "Daniel V Donofrio",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ddonofrio07@gmail.com",
+        "phone": "2162189177"
+      },
+      {
+        "firstName": "Patrick",
+        "lastName": "Driscoll",
+        "fullName": "Patrick Michael Driscoll",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pmd012@icloud.com",
+        "phone": "3302558690"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Elsner",
+        "fullName": "Ethan charles Elsner",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethan2006a@gmail.com",
+        "phone": "3172523407"
+      },
+      {
+        "firstName": "Liam",
+        "lastName": "Farmer",
+        "fullName": "Liam Farmer",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "liambaseball07@gmail.com",
+        "phone": "3473722901"
+      },
+      {
+        "firstName": "Cooper",
+        "lastName": "Fought",
+        "fullName": "Cooper Edward Fought",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cooperfought8@gmail.com",
+        "phone": "(567) 267-8466"
+      },
+      {
+        "firstName": "Conner",
+        "lastName": "Gibson",
+        "fullName": "Conner Cameron Gibson",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "connergibson310@gmail.com",
+        "phone": "(937) 418-9288"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Goodwin",
+        "fullName": "Michael Lawrence Goodwin",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "michaelgw43@gmail.com",
+        "phone": "(440) 226-4158"
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "Grubbs",
+        "fullName": "Caleb Thomas Grubbs",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cgrubbs3242@gmail.com",
+        "phone": "4195088007"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "Hildebrand",
+        "fullName": "Owen Michael Hildebrand",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ohildebrand829@gmail.com",
+        "phone": "4194612987"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "Hollenbacher",
+        "fullName": "Logan Hollenbacher",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "loganhollenbacher@gmail.com",
+        "phone": "9377221448"
+      },
+      {
+        "firstName": "Christian",
+        "lastName": "Jarvis",
+        "fullName": "Christian tyler Jarvis",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "christianjarvi@gmail.com",
+        "phone": "9374140356"
+      },
+      {
+        "firstName": "Carson",
+        "lastName": "Kegg",
+        "fullName": "Carson Riley Kegg",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "carkegg@icloud.com",
+        "phone": "614-902-2326"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Koty",
+        "fullName": "James Koty",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jkoty2008@gmail.com",
+        "phone": "3305911582"
+      },
+      {
+        "firstName": "Evan",
+        "lastName": "Kuhl",
+        "fullName": "Evan Michael Kuhl",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "evankuhl0@gmail.com",
+        "phone": "4402264826"
+      },
+      {
+        "firstName": "Brant",
+        "lastName": "Langham",
+        "fullName": "Brant Robert Langham",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brantrlangham@gmail.com",
+        "phone": "4197868554"
+      },
+      {
+        "firstName": "Jordan",
+        "lastName": "Luzader",
+        "fullName": "Jordan Luzader",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "juzader05@gmail.com",
+        "phone": "4195035449"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Macha II",
+        "fullName": "Matthew Francis Macha II",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mfmacha@gmail.com",
+        "phone": "3304186782"
+      },
+      {
+        "firstName": "Aaron Jacob",
+        "lastName": "Maddy",
+        "fullName": "Aaron Jacob Jacob Maddy",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aaronmaddy06@gmail.com",
+        "phone": "9377267784"
+      },
+      {
+        "firstName": "Kellen",
+        "lastName": "Moore",
+        "fullName": "Kellen Charles Moore",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kellemoore34@gmail.com",
+        "phone": "4195151232"
+      },
+      {
+        "firstName": "Christian",
+        "lastName": "Mulica",
+        "fullName": "Christian Michael Mulica",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "christianmulica@yahoo.com",
+        "phone": "2163892831"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Myers",
+        "fullName": "Zachary Myers",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zacharynmyers2006@gmail.com",
+        "phone": "4197043789"
+      },
+      {
+        "firstName": "Collin",
+        "lastName": "Philipps",
+        "fullName": "Collin Howard Philipps",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "collinphilipps3@gmail.com",
+        "phone": "9374185873"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "Potts",
+        "fullName": "Logan Potts",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "loganp975@gmail.com",
+        "phone": "9375103189"
+      },
+      {
+        "firstName": "Dalton",
+        "lastName": "Rohrbaugh",
+        "fullName": "Dalton Rohrbaugh",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dalton0612@icloud.com",
+        "phone": "419-515-8511"
+      },
+      {
+        "firstName": "Jackson",
+        "lastName": "Runyon",
+        "fullName": "Jackson Michael Runyon",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "runyonjackson1@gmail.com",
+        "phone": "9375248713"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Rusnak",
+        "fullName": "Connor Francis Rusnak",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rusnakconnor@gmail.com",
+        "phone": "(513)518-9309"
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "Salo",
+        "fullName": "Caleb Ryan Salo",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "calebsalo85@gmail.com",
+        "phone": "(216) 385-4250"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Sessler",
+        "fullName": "Joshua James Sessler",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joshuasessler2772@gmail.com",
+        "phone": "4404294610"
+      },
+      {
+        "firstName": "Reice",
+        "lastName": "Sloan",
+        "fullName": "Reice Preston Sloan",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "reicesloan@hotmail.com",
+        "phone": "9376706296"
+      },
+      {
+        "firstName": "Cord",
+        "lastName": "Steigmeier",
+        "fullName": "Cord Terrance Steigmeier",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cordsteigs08@gmail.com",
+        "phone": "330-808-4992"
+      },
+      {
+        "firstName": "Simon",
+        "lastName": "Steirer",
+        "fullName": "Simon Thomas Steirer",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "simonsteirer@gmail.com",
+        "phone": "3304410738"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Sullivan",
+        "fullName": "Ryan Patrick Sullivan",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rpsullivan2014@gmail.com",
+        "phone": "216-213-4506"
+      },
+      {
+        "firstName": "Oliver",
+        "lastName": "Thomas",
+        "fullName": "Oliver Thomas",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "otbball1@gmail.com",
+        "phone": "7342774706"
+      },
+      {
+        "firstName": "Cole",
+        "lastName": "Uhlenhake",
+        "fullName": "Cole Uhlenhake",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coleku73@gmail.com",
+        "phone": "4193058351"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Vidrick",
+        "fullName": "Jacob Vidrick",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacob.vidrick@outlook.com",
+        "phone": "6148009709"
+      },
+      {
+        "firstName": "Jacob Chester",
+        "lastName": "Williams",
+        "fullName": "Jacob Chester Chester Williams",
+        "chapterGreekLetters": "Delta Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacobw061404@gmail.com",
+        "phone": "(440) 487-8547"
+      }
+    ]
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "chapterName": "Eta",
+    "university": "University of Mississippi",
+    "members": [
+      {
+        "firstName": "Vince",
+        "lastName": "Catano",
+        "fullName": "Vince Catano",
+        "chapterGreekLetters": "Beta Iota",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vincecatano08@gmail.com",
+        "phone": "(425) 241-7103"
+      },
+      {
+        "firstName": "Skyler",
+        "lastName": "Hickman",
+        "fullName": "Skyler Lee Hickman",
+        "chapterGreekLetters": "Zeta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "skylerhickman05@gmail.com",
+        "phone": "(480) 392-6616"
+      }
+    ]
+  }
+]

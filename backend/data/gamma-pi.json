@@ -1,0 +1,448 @@
+[
+  {
+    "chapterName": "Gamma Pi",
+    "university": "University of Rochester",
+    "members": [
+      {
+        "firstName": "Thomas",
+        "lastName": "Anderson",
+        "fullName": "Thomas Winlow Anderson",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "t.anderson04@yahoo.com",
+        "phone": "(585) 857-0233"
+      },
+      {
+        "firstName": "Olin",
+        "lastName": "Archer",
+        "fullName": "Olin Gregory Archer",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "olinarcher@gmail.com",
+        "phone": "(207) 712-9127"
+      },
+      {
+        "firstName": "Eric",
+        "lastName": "Bang",
+        "fullName": "Eric Gregory Bang",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "eric.bang13@yahoo.com",
+        "phone": "(315) 956-1288"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Bartlett",
+        "fullName": "Samuel Tracey Bartlett",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sambart315@gmail.com",
+        "phone": "(315) 956-0023"
+      },
+      {
+        "firstName": "Evan",
+        "lastName": "Bryant",
+        "fullName": "Evan Morgan Bryant",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "evanbryant1024@gmail.com",
+        "phone": "8609603669"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Cavallerano",
+        "fullName": "Nicholas Marc Cavallerano",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nicholascav@gmail.com",
+        "phone": "781-708-3110"
+      },
+      {
+        "firstName": "Emil",
+        "lastName": "Clepaci",
+        "fullName": "Emil Alexander Clepaci",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "emilclepaci@gmail.com",
+        "phone": "(250) 580-8420"
+      },
+      {
+        "firstName": "Alex",
+        "lastName": "Donahue",
+        "fullName": "Alex Michael Donahue",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexdonahue31@gmail.com",
+        "phone": "(848) 444-7339"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Duggal",
+        "fullName": "Jared Duggal",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jaredduggal@gmail.com",
+        "phone": "3152648038"
+      },
+      {
+        "firstName": "Peter Brett",
+        "lastName": "Emery",
+        "fullName": "Peter Brett Salladin Emery",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pbse05@yahoo.com",
+        "phone": "6144938403"
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "Haley",
+        "fullName": "Caleb Patrick Haley",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "caleb.haley@icloud.com",
+        "phone": "4014772120"
+      },
+      {
+        "firstName": "Tyler",
+        "lastName": "Hancock",
+        "fullName": "Tyler John Hancock",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "thancock870@gmail.com",
+        "phone": "5854811336"
+      },
+      {
+        "firstName": "Sean",
+        "lastName": "Henry",
+        "fullName": "Sean Brennan Henry",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "seanbhenry2@gmail.com",
+        "phone": "914-319-5460"
+      },
+      {
+        "firstName": "Julio",
+        "lastName": "Hernandez",
+        "fullName": "Julio Alberto Hernandez",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "treshernandez004@outlook.com",
+        "phone": "4437937955"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Hess",
+        "fullName": "Ethan Hess",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethanhess@gmail.com",
+        "phone": "5854514693"
+      },
+      {
+        "firstName": "Edward",
+        "lastName": "Hoffman",
+        "fullName": "Edward Joseph Rubin Hoffman",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "edwardjosephhoffman@gmail.com",
+        "phone": "9148192466"
+      },
+      {
+        "firstName": "Hudson",
+        "lastName": "Holzbaur",
+        "fullName": "Hudson James Holzbaur",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "hudsonhj42@gmail.com",
+        "phone": "7166221194"
+      },
+      {
+        "firstName": "Nikolas",
+        "lastName": "Ivanov",
+        "fullName": "Nikolas Jordan Ivanov",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nikolasjordan03@gmail.com",
+        "phone": "(412) 277-8919"
+      },
+      {
+        "firstName": "Spencer",
+        "lastName": "Johnson",
+        "fullName": "Spencer Heffner Johnson",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "spencerhj32@gmail.com",
+        "phone": "5856946869"
+      },
+      {
+        "firstName": "Jonah",
+        "lastName": "Kim",
+        "fullName": "Jonah Byungmin Kim",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jonahkim99@gmail.com",
+        "phone": "(631) 372-1956"
+      },
+      {
+        "firstName": "Luca",
+        "lastName": "Laport",
+        "fullName": "Luca Castro Laport",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "laport.luca@gmail.com",
+        "phone": "(917) 847-7552"
+      },
+      {
+        "firstName": "Paul",
+        "lastName": "Liang",
+        "fullName": "Paul Liang",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "paul20030909@gmail.com",
+        "phone": "2063353524"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Lin",
+        "fullName": "Kyle Lin",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kylelin645@gmail.com",
+        "phone": "6464314360"
+      },
+      {
+        "firstName": "Brendan",
+        "lastName": "Mariano",
+        "fullName": "Brendan Mariano",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brenmar110@gmail.com",
+        "phone": "5853143779"
+      },
+      {
+        "firstName": "Peter",
+        "lastName": "McCole",
+        "fullName": "Peter James McCole",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "peterjmccole@gmail.com",
+        "phone": "(315) 530-7970"
+      },
+      {
+        "firstName": "Jorge",
+        "lastName": "Melendez-Burgos",
+        "fullName": "Jorge Andres Melendez-Burgos",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "melendez.jorge2023@gmail.com",
+        "phone": "(787) 449-0079"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Mogyordy",
+        "fullName": "John Paul Mogyordy",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jpmogyordy@gmail.com",
+        "phone": "216-385-0264"
+      },
+      {
+        "firstName": "Domenic",
+        "lastName": "Morelli",
+        "fullName": "Domenic Morelli",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "domenicmorelli9@gmail.com",
+        "phone": "(617) 504-8347"
+      },
+      {
+        "firstName": "Eric",
+        "lastName": "Morrell",
+        "fullName": "Eric Morrell",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "emorrell.23@bridgtonacademy.org",
+        "phone": "(585) 576-3248"
+      },
+      {
+        "firstName": "Luke",
+        "lastName": "Orup",
+        "fullName": "Luke Anderson Orup",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lorup2003@gmail.com",
+        "phone": "(978) 460-1997"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Pagan-Nieves",
+        "fullName": "Ian Gabriel Pagan-Nieves",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "igpagan210@gmail.com",
+        "phone": "(516) 743-7079"
+      },
+      {
+        "firstName": "Luke",
+        "lastName": "Pezzano",
+        "fullName": "Luke William Pezzano",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lpezzano23@gmail.com",
+        "phone": "(518) 944-6368"
+      },
+      {
+        "firstName": "Evan",
+        "lastName": "Phelps",
+        "fullName": "Evan Chandler Phelps",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "evanphelps352@gmail.com",
+        "phone": "5187289351"
+      },
+      {
+        "firstName": "Joseph",
+        "lastName": "Pons",
+        "fullName": "Joseph Patrick Pons",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joepons19@gmail.com",
+        "phone": "(413) 426-8959"
+      },
+      {
+        "firstName": "Elliot",
+        "lastName": "Raynor",
+        "fullName": "Elliot Benjamin Raynor",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "elliotraynor75@gmail.com",
+        "phone": "(585) 285-3131"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Rudin",
+        "fullName": "Michael Rudin",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "1michaelrudin@gmail.com",
+        "phone": "(949) 331-7475"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Sanna",
+        "fullName": "Ethan Robert Sanna",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sannaethan@gmail.com",
+        "phone": "(914) 588-3516"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Schwab",
+        "fullName": "Benjamin Kurt Schwab",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "benjamin@haybeach.com",
+        "phone": "(917) 975-3952"
+      },
+      {
+        "firstName": "Oliver",
+        "lastName": "Shevick",
+        "fullName": "Oliver Benjamin Shevick",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "oshevick@gmail.com",
+        "phone": "(917) 868-4787"
+      },
+      {
+        "firstName": "Jungwoo",
+        "lastName": "Suh",
+        "fullName": "Jungwoo Suh",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "99suhjw@gmail.com",
+        "phone": "(585) 910-5237"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Tokar",
+        "fullName": "William John Tokar",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tokar.william@gmail.com",
+        "phone": "862-703-0430"
+      },
+      {
+        "firstName": "Gordon",
+        "lastName": "Tsang",
+        "fullName": "Gordon Tsang",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gordontsang111@gmail.com",
+        "phone": "Hidden"
+      },
+      {
+        "firstName": "Diego",
+        "lastName": "Velazquez",
+        "fullName": "Diego Alexis Velazquez",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dvelazquezsant@hotmail.com",
+        "phone": "(787) 455-2154"
+      },
+      {
+        "firstName": "Enzo",
+        "lastName": "Wen",
+        "fullName": "Enzo Jay Wen",
+        "chapterGreekLetters": "Gamma Pi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wenenzo@gmail.com",
+        "phone": "7166047873"
+      }
+    ]
+  }
+]

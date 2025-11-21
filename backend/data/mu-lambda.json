@@ -1,0 +1,438 @@
+[
+  {
+    "chapterName": "Mu Lambda",
+    "university": "Sacred Heart University",
+    "members": [
+      {
+        "firstName": "Matthew",
+        "lastName": "Aceto",
+        "fullName": "Matthew Aceto",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "matthew.aceto@icloud.com",
+        "phone": "(401) 536-4355"
+      },
+      {
+        "firstName": "Eric",
+        "lastName": "Andersen",
+        "fullName": "Eric Andersen",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ericandersen29@gmail.com",
+        "phone": "978-810-7475"
+      },
+      {
+        "firstName": "Wyatt",
+        "lastName": "Beaudoin",
+        "fullName": "Wyatt Beaudoin",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wawabeaudoin@aol.com",
+        "phone": "2012868289"
+      },
+      {
+        "firstName": "Henri",
+        "lastName": "Boneu",
+        "fullName": "Henri Boneu",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "henriboneu@gmail.com",
+        "phone": "4012002279"
+      },
+      {
+        "firstName": "Sebastiano",
+        "lastName": "Braccioforte",
+        "fullName": "Sebastiano Braccioforte",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sebastianobraccioforte@gmail.com",
+        "phone": "516-784-8753"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Bracero",
+        "fullName": "Michael Bracero",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "michael.bracero23@gmail.com",
+        "phone": "(908) 415-6490"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Burns",
+        "fullName": "Dylan Burns",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylanburns615@gmail.com",
+        "phone": "201-744-7154"
+      },
+      {
+        "firstName": "Jason",
+        "lastName": "Caccavo",
+        "fullName": "Jason Paul Caccavo",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jasoncaccavo@icloud.com",
+        "phone": "347-216-0469"
+      },
+      {
+        "firstName": "Peter",
+        "lastName": "Cadaret",
+        "fullName": "Peter Cadaret",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pjcadaret@gmail.com",
+        "phone": "2014175966"
+      },
+      {
+        "firstName": "Gavin",
+        "lastName": "Carrubba",
+        "fullName": "Gavin Ryan Carrubba",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gavin44006@icloud.com",
+        "phone": "860-914-4701"
+      },
+      {
+        "firstName": "Jared",
+        "lastName": "Carter",
+        "fullName": "Jared Daniel Carter",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "carterjared5454@gmail.com",
+        "phone": "9089528273"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Coolidge",
+        "fullName": "William Coolidge",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "liamcoolidge@gmail.com",
+        "phone": "(203) 212-0893"
+      },
+      {
+        "firstName": "Vincent",
+        "lastName": "Cuomo",
+        "fullName": "Vincent Edward Cuomo",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vecuomo11@yahoo.com",
+        "phone": "(443) 504-7886"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "DiLapi",
+        "fullName": "Nicholas DiLapi",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ndilapi06@gmail.com",
+        "phone": "5166806195"
+      },
+      {
+        "firstName": "Luca",
+        "lastName": "DiLello",
+        "fullName": "Luca Anthony DiLello",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucadilello1@gmail.com",
+        "phone": "8452047822"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Dugan",
+        "fullName": "John Dugan",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jdugan561@gmail.com",
+        "phone": "9786041278"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Farrow",
+        "fullName": "Connor Farrow",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "connorfarrow18@yahoo.com",
+        "phone": "(201) 788-2603"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Gunneson",
+        "fullName": "Andrew Gunneson",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "andygunn257888@gmail.com",
+        "phone": "(973) 590-4832"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Hoerning",
+        "fullName": "Ethan Hoerning",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "echoerning@gmail.com",
+        "phone": "6314187789"
+      },
+      {
+        "firstName": "Luke",
+        "lastName": "Hoffman",
+        "fullName": "Luke David Hoffman",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lkhoff11@gmail.com",
+        "phone": "7749999093"
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "Kim",
+        "fullName": "Caleb Kim",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "calebk0302@gmail.com",
+        "phone": "2015607322"
+      },
+      {
+        "firstName": "Josh",
+        "lastName": "Lech",
+        "fullName": "Josh Lech",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lechjosh23@gmail.com",
+        "phone": "(860) 876-4975"
+      },
+      {
+        "firstName": "Jett",
+        "lastName": "Londell",
+        "fullName": "Jett Londell",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jettlondell@gmail.com",
+        "phone": "7327781671"
+      },
+      {
+        "firstName": "Zach",
+        "lastName": "Martin",
+        "fullName": "Zach Martin",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zmartin0605@aol.com",
+        "phone": "(848) 287-4335"
+      },
+      {
+        "firstName": "Frank",
+        "lastName": "Montalbano",
+        "fullName": "Frank Anthony Montalbano",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "montalbanofrank49@gmail.com",
+        "phone": "(631) 987-0844"
+      },
+      {
+        "firstName": "Brendan",
+        "lastName": "Morin",
+        "fullName": "Brendan Daniel Morin",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bdmorin546@gmail.com",
+        "phone": "9784099257"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Novara",
+        "fullName": "Ryan James Novara",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ryannovara@gmail.com",
+        "phone": "(631) 637-1506"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "O'Connor",
+        "fullName": "Daniel O'Connor",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "daniielloconnor@gmail.com",
+        "phone": "(603) 714-7129"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Orwicz",
+        "fullName": "Lucas Orwicz",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucasorwicz@gmail.com",
+        "phone": "203-970-0426"
+      },
+      {
+        "firstName": "Joe",
+        "lastName": "Papalia",
+        "fullName": "Joe Thomas Papalia",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joebaseball0613@gmail.com",
+        "phone": "9089024167"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Putt",
+        "fullName": "Michael Walter Putt",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "puttm23@gmail.com",
+        "phone": "9784931016"
+      },
+      {
+        "firstName": "Jordan",
+        "lastName": "Rosati",
+        "fullName": "Jordan Rosati",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jordancr24@outlook.com",
+        "phone": "(631) 983-9779"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Rutowski",
+        "fullName": "Jack Richard Rutowski",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackrutowski123@gmail.com",
+        "phone": "2014016042"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "Shagawat",
+        "fullName": "Colin Luke Shagawat",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cshag2005@gmail.com",
+        "phone": "(973) 529-2663"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "Shkreli",
+        "fullName": "Daniel Shkreli",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "xt5eagle@gmail.com",
+        "phone": "914-513-1953"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Sinor",
+        "fullName": "Alexander Zubin Sinor",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alex4sinor@gmail.com",
+        "phone": "203-970-0119"
+      },
+      {
+        "firstName": "Brent",
+        "lastName": "Sirafos",
+        "fullName": "Brent Sirafos",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bsirafos@gmail.com",
+        "phone": "774-286-0745"
+      },
+      {
+        "firstName": "Brian",
+        "lastName": "Straus",
+        "fullName": "Brian Alan Straus",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brianstraus@msn.com",
+        "phone": "914-355-0313"
+      },
+      {
+        "firstName": "Tucker",
+        "lastName": "Terranova",
+        "fullName": "Tucker Terranova",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tuckerterranova@icloud.com",
+        "phone": "(516) 289-6653"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Thompson",
+        "fullName": "William Thompson",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lilwillyt101@gmail.com",
+        "phone": "(978) 831-8677"
+      },
+      {
+        "firstName": "Jonathan",
+        "lastName": "Vitti",
+        "fullName": "Jonathan Vitti",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jonathanvitti16@gmail.com",
+        "phone": "(201) 881-9552"
+      },
+      {
+        "firstName": "Quintin",
+        "lastName": "Vizza",
+        "fullName": "Quintin Vizza",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "qmviz23@gmail.com",
+        "phone": "(631) 747-4497"
+      },
+      {
+        "firstName": "Marc",
+        "lastName": "Woods",
+        "fullName": "Marc Woods",
+        "chapterGreekLetters": "Mu Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "marcwoods616@gmail.com",
+        "phone": "8454990585"
+      }
+    ]
+  }
+]

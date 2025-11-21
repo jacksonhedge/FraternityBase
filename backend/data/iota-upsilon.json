@@ -1,0 +1,548 @@
+[
+  {
+    "chapterName": "Iota Upsilon",
+    "university": "Boston University",
+    "members": [
+      {
+        "firstName": "Zachary",
+        "lastName": "Becker",
+        "fullName": "Zachary Martin Becker",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zbeckernola@gmail.com",
+        "phone": "5047173539"
+      },
+      {
+        "firstName": "Ersin",
+        "lastName": "Bekcioglu",
+        "fullName": "Ersin Bekcioglu",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ersinbekcioglu@gmail.com",
+        "phone": "05456790311"
+      },
+      {
+        "firstName": "Nomaan",
+        "lastName": "Bilal",
+        "fullName": "Nomaan Bilal",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nomaanab@gmail.com",
+        "phone": "6312354172"
+      },
+      {
+        "firstName": "Henry",
+        "lastName": "Braun",
+        "fullName": "Henry Braun",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "henrybraun2014@icloud.com",
+        "phone": "(949) 413-5117"
+      },
+      {
+        "firstName": "Fynn",
+        "lastName": "Buesnel",
+        "fullName": "Fynn Ericson Buesnel",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "fynnbuesnel@gmail.com",
+        "phone": "(415) 629-0145"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Caliendo",
+        "fullName": "William Edward Caliendo",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "willcal21@icloud.com",
+        "phone": "2039219554"
+      },
+      {
+        "firstName": "Jeremy",
+        "lastName": "Cammayo",
+        "fullName": "Jeremy Cammayo",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jeremycammayo@gmail.com",
+        "phone": "2019375076"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Chiccino",
+        "fullName": "Matthew Chiccino",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pepe.chiccino@gmail.com",
+        "phone": "5857293415"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Chipashvili",
+        "fullName": "Nicholas Chipashvili",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nickgc50@gmail.com",
+        "phone": "(781) 879-7141"
+      },
+      {
+        "firstName": "Phillip",
+        "lastName": "Choi",
+        "fullName": "Phillip Choi",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coolphil501@gmail.com",
+        "phone": "2137056880"
+      },
+      {
+        "firstName": "Scott",
+        "lastName": "Cousins",
+        "fullName": "Scott Cousins",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "scottcousins32@gmail.com",
+        "phone": "(631) 223-6536"
+      },
+      {
+        "firstName": "Seth",
+        "lastName": "Culberson",
+        "fullName": "Seth Culberson",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "seth.culberson@comcast.net",
+        "phone": "(832) 334-8505"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Davis",
+        "fullName": "John Braden Davis",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackbdav1@gmail.com",
+        "phone": "929-321-9491"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Freedman",
+        "fullName": "Jacob Freedman",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacobjhf@gmail.com",
+        "phone": "8572704037"
+      },
+      {
+        "firstName": "Vincent",
+        "lastName": "Fung",
+        "fullName": "Vincent Fung",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vincentkfung@gmail.com",
+        "phone": "9178924103"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Gatti",
+        "fullName": "Lucas Gatti",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucasgatti06@gmail.com",
+        "phone": "3392062625"
+      },
+      {
+        "firstName": "Alfred",
+        "lastName": "Gu",
+        "fullName": "Alfred Gu",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alfredgu0624@gmail.com",
+        "phone": "9292889288"
+      },
+      {
+        "firstName": "Rodrigo",
+        "lastName": "Gutierrez Gonzalez",
+        "fullName": "Rodrigo Gutierrez Gutierrez Gonzalez",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rodrigoggfm@gmail.com",
+        "phone": "(210) 718-5711"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Henderson",
+        "fullName": "Matthew Eric Henderson",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "iammatt119@gmail.com",
+        "phone": "(267) 309-4429"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Hodas",
+        "fullName": "Jake Hodas",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jhhodas@gmail.com",
+        "phone": "(720) 298-8766"
+      },
+      {
+        "firstName": "Philip",
+        "lastName": "Hu",
+        "fullName": "Philip Hu",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "philipalexhu@gmail.com",
+        "phone": "6508628772"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Kim",
+        "fullName": "John Kim",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "johnjkim31@gmail.com",
+        "phone": "(949) 395-2225"
+      },
+      {
+        "firstName": "Sebastien",
+        "lastName": "Kiyabu",
+        "fullName": "Sebastien Kiyabu",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sebastienkiyabu2004@gmail.com",
+        "phone": "(808) 425-3799"
+      },
+      {
+        "firstName": "Brayden",
+        "lastName": "Lane",
+        "fullName": "Brayden Lane",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brayden.lane.23@gmail.com",
+        "phone": "9172752658"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Leeds",
+        "fullName": "Joshua Geibar Leeds",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joshgleeds@gmail.com",
+        "phone": "(609) 235-2995"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "Lennox",
+        "fullName": "Owen Lennox",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lennoxo2023@gmail.com",
+        "phone": "(973) 868-7474"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Liu",
+        "fullName": "Ethan Liu",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "2025liue@gmail.com",
+        "phone": "8605267881"
+      },
+      {
+        "firstName": "Enrico",
+        "lastName": "Luiz de Almeida",
+        "fullName": "Enrico Luiz de Almeida",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "enricolalmeida@gmail.com",
+        "phone": "(617)842-9803"
+      },
+      {
+        "firstName": "Egor",
+        "lastName": "Marey",
+        "fullName": "Egor Marey",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "egor.marey2003@gmail.com",
+        "phone": "(857) 313-2063"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Matott",
+        "fullName": "Jack Gray Matott",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "matott2604@gmail.com",
+        "phone": "(610) 312-6061"
+      },
+      {
+        "firstName": "Tim",
+        "lastName": "McCorry",
+        "fullName": "Tim McCorry",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tim.mcc10320@gmail.com",
+        "phone": "518-779-2480"
+      },
+      {
+        "firstName": "Reza",
+        "lastName": "Mehrinfar",
+        "fullName": "Reza Mehrinfar",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "r3zalutions@gmail.com",
+        "phone": "7149436307"
+      },
+      {
+        "firstName": "Cole",
+        "lastName": "Ouyang",
+        "fullName": "Cole Ouyang",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coleouyang@icloud.com",
+        "phone": "(847) 767-2653"
+      },
+      {
+        "firstName": "Boaz",
+        "lastName": "Park",
+        "fullName": "Boaz B Park",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "boazpark789@gmail.com",
+        "phone": "9149182424"
+      },
+      {
+        "firstName": "Alex",
+        "lastName": "Perera",
+        "fullName": "Alex Xavier Perera",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexanderperera1218@gmail.com",
+        "phone": "(408) 596-6484"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Pollock",
+        "fullName": "Thomas Henry Pollock",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "thp004@icloud.com",
+        "phone": "(570) 359-7474"
+      },
+      {
+        "firstName": "Tim",
+        "lastName": "Riedl",
+        "fullName": "Tim Riedl",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "triedl118@gmail.com",
+        "phone": "(774) 473-0367"
+      },
+      {
+        "firstName": "Shailen",
+        "lastName": "Savalia",
+        "fullName": "Shailen Savalia",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "shailensavalia@gmail.com",
+        "phone": "(714) 747-7220"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "Schipfer",
+        "fullName": "Daniel James Schipfer",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "djschipfer@gmail.com",
+        "phone": "(913)9983129"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Sears",
+        "fullName": "Andrew Sears",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "asearstower@gmail.com",
+        "phone": "(314) 303-0925"
+      },
+      {
+        "firstName": "Nathaniel",
+        "lastName": "Shalett",
+        "fullName": "Nathaniel Jacob Shalett",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nathanielshalett@gmail.com",
+        "phone": "(301) 633-0715"
+      },
+      {
+        "firstName": "Tommy",
+        "lastName": "Sheedy",
+        "fullName": "Tommy William Sheedy",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tombat54@gmail.com",
+        "phone": "508-631-8102"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Sheedy",
+        "fullName": "James Paul Sheedy",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jsheeds17@gmail.com",
+        "phone": "508-631-7599"
+      },
+      {
+        "firstName": "Reese",
+        "lastName": "Stichter",
+        "fullName": "Reese Stichter",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "reese.stichter@gmail.com",
+        "phone": "813-557-2550"
+      },
+      {
+        "firstName": "Nicolas",
+        "lastName": "Stone",
+        "fullName": "Nicolas Rainer Stone",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nicorstone@gmail.com",
+        "phone": "(504) 913-0272"
+      },
+      {
+        "firstName": "Ramana",
+        "lastName": "Sundaram",
+        "fullName": "Ramana Sundaram",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ramana.sundaram2014@gmail.com",
+        "phone": "4087227043"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Troderman",
+        "fullName": "Zachary Murray Troderman",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zachtrod@gmail.com",
+        "phone": "(508) 808-2580"
+      },
+      {
+        "firstName": "Veydaant",
+        "lastName": "Varshney",
+        "fullName": "Veydaant Varshney",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "veydaant.v@gmail.com",
+        "phone": "7147470740"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Vitale",
+        "fullName": "Benjamin Vitale",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "benjaminvitale06@gmail.com",
+        "phone": "9177107269"
+      },
+      {
+        "firstName": "Wilson",
+        "lastName": "Von Rohr",
+        "fullName": "Wilson Von Rohr",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wovr24@gmail.com",
+        "phone": "2068668105"
+      },
+      {
+        "firstName": "Xingyu",
+        "lastName": "Wang",
+        "fullName": "Xingyu Wang",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wanglovewfs@gmail.com",
+        "phone": "3025889688"
+      },
+      {
+        "firstName": "Nigel",
+        "lastName": "Wiggins",
+        "fullName": "Nigel Wiggins",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nigelwiggins49@gmail.com",
+        "phone": "2063805168"
+      },
+      {
+        "firstName": "David",
+        "lastName": "Wu",
+        "fullName": "David Wu",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "davidwu23@outlook.com",
+        "phone": "9254135782"
+      },
+      {
+        "firstName": "Jay",
+        "lastName": "Zhao",
+        "fullName": "Jay Zhao",
+        "chapterGreekLetters": "Iota Upsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jayzhaonys@gmail.com",
+        "phone": "518 812 5682"
+      }
+    ]
+  }
+]

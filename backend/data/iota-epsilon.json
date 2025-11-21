@@ -1,0 +1,138 @@
+[
+  {
+    "chapterName": "Iota Epsilon",
+    "university": "College of Charleston",
+    "members": [
+      {
+        "firstName": "Caleb",
+        "lastName": "A Ivy",
+        "fullName": "Caleb Alan A Ivy",
+        "chapterGreekLetters": "Lambda Xi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "deoog7@gmail.com",
+        "phone": "(360) 510-8596"
+      },
+      {
+        "firstName": "Mitchell",
+        "lastName": "A Lamoriello",
+        "fullName": "Mitchell A. A Lamoriello",
+        "chapterGreekLetters": "Gamma Theta",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mitchellalamoriello@gmail.com",
+        "phone": "(407) 687-0962"
+      },
+      {
+        "firstName": "Kieran",
+        "lastName": "Hyland",
+        "fullName": "Kieran Hyland",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kieranhyland22@gmail.com",
+        "phone": "(973) 452-1652"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Lovell",
+        "fullName": "John Nicholson Lovell",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nlovell770@gmail.com",
+        "phone": "(504) 919-6767"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Luthy",
+        "fullName": "Jake Charles Luthy",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jakeluthy2242@gmail.com",
+        "phone": "203-945-8028"
+      },
+      {
+        "firstName": "Marshall",
+        "lastName": "Moss",
+        "fullName": "Marshall William Moss",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "marshallmoss4@gmail.com",
+        "phone": "804-356-8060"
+      },
+      {
+        "firstName": "Ben",
+        "lastName": "Pearsall",
+        "fullName": "Ben Alden Pearsall",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ben.pearsall27@gmail.com",
+        "phone": "(571) 420-1081"
+      },
+      {
+        "firstName": "Evan",
+        "lastName": "Rich",
+        "fullName": "Evan Havell Rich",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ehr555@icloud.com",
+        "phone": "(301) 641-3220"
+      },
+      {
+        "firstName": "Thayer",
+        "lastName": "Smith",
+        "fullName": "Thayer Baird Smith",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bairdsmith626@gmail.com",
+        "phone": "(646) 256-7156"
+      },
+      {
+        "firstName": "Spencer",
+        "lastName": "Spivey",
+        "fullName": "Spencer LaneKanye Spivey",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lanespivey2001@gmail.com",
+        "phone": "336-944-2752"
+      },
+      {
+        "firstName": "Luke",
+        "lastName": "Sullivan",
+        "fullName": "Luke Ashton Sullivan",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sully17hb@gmail.com",
+        "phone": "(301) 771-1376"
+      },
+      {
+        "firstName": "Gray",
+        "lastName": "Wilson",
+        "fullName": "Gray Birdwell Wilson",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wilsongb1@g.cofc.edu",
+        "phone": "(214) 729-0124"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Wolf",
+        "fullName": "Samuel Macneil Wolf",
+        "chapterGreekLetters": "Iota Epsilon",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mwolf111@icloud.com",
+        "phone": "(262) 490-9722"
+      }
+    ]
+  }
+]

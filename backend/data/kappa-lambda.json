@@ -1,0 +1,58 @@
+[
+  {
+    "chapterName": "Kappa Lambda",
+    "university": "The College of Idaho",
+    "members": [
+      {
+        "firstName": "Bryan",
+        "lastName": "Arreola",
+        "fullName": "Bryan Arreola",
+        "chapterGreekLetters": "Kappa Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "208barreola@gmail.com",
+        "phone": "2082190647"
+      },
+      {
+        "firstName": "Aayush",
+        "lastName": "Nathwani",
+        "fullName": "Aayush Hiten Nathwani",
+        "chapterGreekLetters": "Kappa Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aayushnathwani@gmail.com",
+        "phone": "2086009588"
+      },
+      {
+        "firstName": "Aayush",
+        "lastName": "Pandey",
+        "fullName": "Aayush Pandey",
+        "chapterGreekLetters": "Kappa Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pandeyaayushraj@gmail.com",
+        "phone": "9862682400"
+      },
+      {
+        "firstName": "Shubha",
+        "lastName": "Singh",
+        "fullName": "Shubha Swarnim Singh",
+        "chapterGreekLetters": "Kappa Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "shubhasingh116@gmail.com",
+        "phone": "(986) 666-3464"
+      },
+      {
+        "firstName": "Armaan",
+        "lastName": "Virani",
+        "fullName": "Armaan Yunus Virani",
+        "chapterGreekLetters": "Kappa Lambda",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "armaanyunusvirani@gmail.com",
+        "phone": "2083713849"
+      }
+    ]
+  }
+]

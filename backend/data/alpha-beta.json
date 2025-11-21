@@ -1,0 +1,338 @@
+[
+  {
+    "chapterName": "Alpha Beta",
+    "university": "University of California-Berkeley",
+    "members": [
+      {
+        "firstName": "Caleb",
+        "lastName": "A Ivy",
+        "fullName": "Caleb Alan A Ivy",
+        "chapterGreekLetters": "Lambda Xi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "deoog7@gmail.com",
+        "phone": "(360) 510-8596"
+      },
+      {
+        "firstName": "Mitchell",
+        "lastName": "A Lamoriello",
+        "fullName": "Mitchell A. A Lamoriello",
+        "chapterGreekLetters": "Gamma Theta",
+        "memberType": "Alumni",
+        "status": "Active",
+        "email": "mitchellalamoriello@gmail.com",
+        "phone": "(407) 687-0962"
+      },
+      {
+        "firstName": "Robert",
+        "lastName": "Gao",
+        "fullName": "Robert Jianyuan Gao",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "robertgao123@gmail.com",
+        "phone": "6095923819"
+      },
+      {
+        "firstName": "Johnathan",
+        "lastName": "Guerrero",
+        "fullName": "Johnathan Guerrero",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jhguerrero024@gmail.com",
+        "phone": "5624841368"
+      },
+      {
+        "firstName": "Alexander",
+        "lastName": "Han",
+        "fullName": "Alexander Han",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexanderhan00@gmail.com",
+        "phone": "(858) 280-6885"
+      },
+      {
+        "firstName": "Phillip",
+        "lastName": "Ho",
+        "fullName": "Phillip Phi Ho",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "phillipho426@gmail.com",
+        "phone": "2093618967"
+      },
+      {
+        "firstName": "Advait",
+        "lastName": "Huggahalli",
+        "fullName": "Advait Huggahalli",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "advait.huggahalli@gmail.com",
+        "phone": "8452608496"
+      },
+      {
+        "firstName": "Goten",
+        "lastName": "Huynh",
+        "fullName": "Goten P Huynh",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "got10.huynh@gmail.com",
+        "phone": "7148375734"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "Jeznach",
+        "fullName": "Daniel Jeznach",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "danjeznach@gmail.com",
+        "phone": "6699003072"
+      },
+      {
+        "firstName": "Yumin",
+        "lastName": "Kim",
+        "fullName": "Yumin Kim",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "yuminkim43@gmail.com",
+        "phone": "(310) 513-3571"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Kim",
+        "fullName": "Samuel B. Kim",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "samkim1122345@gmail.com",
+        "phone": "(808) 321-8195"
+      },
+      {
+        "firstName": "Rohan",
+        "lastName": "Kulkarni",
+        "fullName": "Rohan Kulkarni",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rohan.kulkz@gmail.com",
+        "phone": "9169349210"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Lau",
+        "fullName": "William Lau",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wowitswilliamlau@gmail.com",
+        "phone": "(510) 499-1363"
+      },
+      {
+        "firstName": "Mark",
+        "lastName": "Lee",
+        "fullName": "Mark Lee",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mite9777@gmail.com",
+        "phone": "2068331071"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "Lee",
+        "fullName": "Kyle Lee",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kylelee8612@gmail.com",
+        "phone": "510-701-8835"
+      },
+      {
+        "firstName": "HyungJoon",
+        "lastName": "Lee",
+        "fullName": "HyungJoon Lee",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "hjoon0521@gmail.com",
+        "phone": "6506027642"
+      },
+      {
+        "firstName": "Fernando",
+        "lastName": "Lopez",
+        "fullName": "Fernando Antonio Lopez",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "fernandlopez326@gmail.com",
+        "phone": "5104618892"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Loth",
+        "fullName": "Ethan Lee Loth",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethanleeloth@gmail.com",
+        "phone": "2099051645"
+      },
+      {
+        "firstName": "Luca",
+        "lastName": "Mangiaracina",
+        "fullName": "Luca Mangiaracina",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "luca.mangiaracina2003@gmail.com",
+        "phone": "(646) 573-7773"
+      },
+      {
+        "firstName": "Daniel",
+        "lastName": "Moreno Soria",
+        "fullName": "Daniel Moreno Soria",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "danymorenok@gmail.com",
+        "phone": "5105299690"
+      },
+      {
+        "firstName": "Prabhav",
+        "lastName": "Pagadala",
+        "fullName": "Prabhav Pagadala",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "prabhav.pagadala@gmail.com",
+        "phone": "913-601-2685"
+      },
+      {
+        "firstName": "Brij",
+        "lastName": "Patel",
+        "fullName": "Brij Patel",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brijpatel2106012@gmail.com",
+        "phone": "7147071488"
+      },
+      {
+        "firstName": "Jim",
+        "lastName": "Phieffer",
+        "fullName": "Jim Phieffer",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jameslp7324@gmail.com",
+        "phone": "6145128647"
+      },
+      {
+        "firstName": "Angel",
+        "lastName": "Ramirez",
+        "fullName": "Angel Ramirez",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ang.priv07@gmail.com",
+        "phone": "2098147405"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Shackleton-Harper",
+        "fullName": "William Duke Shackleton-Harper",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bshackletonharper@gmail.com",
+        "phone": "(562) 810-0746"
+      },
+      {
+        "firstName": "Saarim",
+        "lastName": "Shafqat",
+        "fullName": "Saarim Shafqat",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "saarim.shafqat@gmail.com",
+        "phone": "+1 510 301-6155"
+      },
+      {
+        "firstName": "Cole",
+        "lastName": "Skillern",
+        "fullName": "Cole Ryan Skillern",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coleskillern@gmail.com",
+        "phone": "(916) 672-7503"
+      },
+      {
+        "firstName": "Kevin",
+        "lastName": "Solano",
+        "fullName": "Kevin Solano",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kevinsolano099@gmail.com",
+        "phone": "(818) 388-4170"
+      },
+      {
+        "firstName": "Alan",
+        "lastName": "Tran",
+        "fullName": "Alan Tran",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alan.tran910@gmail.com",
+        "phone": "(714) 909-3446"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Vincent",
+        "fullName": "Joshua David Vincent",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "blxccjosh@gmail.com",
+        "phone": "8313133432"
+      },
+      {
+        "firstName": "Bagas",
+        "lastName": "Wicaksono",
+        "fullName": "Bagas Haryo Wicaksono",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bagasshryo@gmail.com",
+        "phone": "5105709165"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Wong",
+        "fullName": "Ethan Wong",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "emoney343434@gmail.com",
+        "phone": "8189224360"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Wu",
+        "fullName": "Ethan Wu",
+        "chapterGreekLetters": "Alpha Beta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethansunwu@gmail.com",
+        "phone": "9294548855"
+      }
+    ]
+  }
+]

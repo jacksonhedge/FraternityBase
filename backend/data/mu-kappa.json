@@ -1,0 +1,868 @@
+[
+  {
+    "chapterName": "Mu Kappa",
+    "university": "University of North Carolina-Wilmington",
+    "members": [
+      {
+        "firstName": "Braden",
+        "lastName": "Amick",
+        "fullName": "Braden Addison Amick",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bradenamick08@gmail.com",
+        "phone": "704-308-8803"
+      },
+      {
+        "firstName": "Zalan",
+        "lastName": "Balassy",
+        "fullName": "Zalan Balassy",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zalan@balassy.net",
+        "phone": "(704) 777-0578"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Barrow",
+        "fullName": "Thomas Patrick Barrow",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tbarrow.314@gmail.com",
+        "phone": "443-257-8276"
+      },
+      {
+        "firstName": "Mike",
+        "lastName": "Bateman",
+        "fullName": "Mike Munley Bateman",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mikebatman060@gmail.com",
+        "phone": "7047773851"
+      },
+      {
+        "firstName": "Cohen",
+        "lastName": "Beane",
+        "fullName": "Cohen Beane",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cohenbeane@gmail.com",
+        "phone": "(336) 690-7907"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Black",
+        "fullName": "William Jonah Black",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wjblack414@icloud.com",
+        "phone": "9109872170"
+      },
+      {
+        "firstName": "Davin",
+        "lastName": "Blackwell",
+        "fullName": "Davin Joseph Blackwell",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dblack12713@gmail.com",
+        "phone": "3369084388"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Carwile",
+        "fullName": "Ian Parker Carwile",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ianpcarwile@gmail.com",
+        "phone": "7046084555"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Clayton",
+        "fullName": "Jake Owen Clayton",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "claytonjake83@gmail.com",
+        "phone": "(704) 712-2424"
+      },
+      {
+        "firstName": "Jullian",
+        "lastName": "Cline",
+        "fullName": "Jullian Cline",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jullian_brooks@yahoo.com",
+        "phone": "9109954487"
+      },
+      {
+        "firstName": "Bryson",
+        "lastName": "Cook",
+        "fullName": "Bryson Cook",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "acook2604@gmail.com",
+        "phone": "(412) 526-4747"
+      },
+      {
+        "firstName": "Soyer",
+        "lastName": "Cornelison",
+        "fullName": "Soyer Cornelison",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "soyercornelison@gmail.com",
+        "phone": "704-640-7113"
+      },
+      {
+        "firstName": "Camden",
+        "lastName": "Crocker",
+        "fullName": "Camden Crocker",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "camden.crocker@gmail.com",
+        "phone": "(919) 464-6264"
+      },
+      {
+        "firstName": "Arman",
+        "lastName": "Danielyan",
+        "fullName": "Arman Andrew Danielyan",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "armanandrew326@gmail.com",
+        "phone": "9802216999"
+      },
+      {
+        "firstName": "Eddie",
+        "lastName": "Dauksys",
+        "fullName": "Eddie Christopher Dauksys",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "eddiedauksys@gmail.com",
+        "phone": "(980) 875-1427"
+      },
+      {
+        "firstName": "Kyle",
+        "lastName": "DeSantis",
+        "fullName": "Kyle Anthony DeSantis",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kyled2007@icloud.com",
+        "phone": "9802261892"
+      },
+      {
+        "firstName": "Joey",
+        "lastName": "Ditomasso",
+        "fullName": "Joey Ditomasso",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "steelerjoefish@gmail.com",
+        "phone": "4437135535"
+      },
+      {
+        "firstName": "Parker",
+        "lastName": "Earey",
+        "fullName": "Parker Earey",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pookster893@gmail.com",
+        "phone": "(910) 515-2116"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Everson",
+        "fullName": "Jack Tate Everson",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "eversonjack@yahoo.com",
+        "phone": "(704) 640-6308"
+      },
+      {
+        "firstName": "Marcus",
+        "lastName": "Everson",
+        "fullName": "Marcus Everson",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "marcuseverson02@yahoo.com",
+        "phone": "7046404108"
+      },
+      {
+        "firstName": "Grayson",
+        "lastName": "Ferguson",
+        "fullName": "Grayson Ferguson",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "graysonjeff9@gmail.com",
+        "phone": "9194370257"
+      },
+      {
+        "firstName": "Sawyer",
+        "lastName": "Forcash",
+        "fullName": "Sawyer Patrick Forcash",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sawyerforcash35@gmail.com",
+        "phone": "9194181502"
+      },
+      {
+        "firstName": "George",
+        "lastName": "Foster",
+        "fullName": "George Anderson Foster",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "georgurson@gmail.com",
+        "phone": "2024000315"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Fry",
+        "fullName": "Jake Fry",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "davidjacobfry@gmail.com",
+        "phone": "706-830-9956"
+      },
+      {
+        "firstName": "Gavin",
+        "lastName": "Giolitti",
+        "fullName": "Gavin Anthony Giolitti",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gavingiolitti13@gmail.com",
+        "phone": "(704) 796-3873"
+      },
+      {
+        "firstName": "Tyler",
+        "lastName": "Haan",
+        "fullName": "Tyler Haan",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tylerjhaan@gmail.com",
+        "phone": "980-240-4589"
+      },
+      {
+        "firstName": "Griffin",
+        "lastName": "Hales",
+        "fullName": "Griffin Hales",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "griffinhales22@gmail.com",
+        "phone": "(910) 899-7036"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Higgins",
+        "fullName": "Connor McFadden Higgins",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "connorhiggins2021@gmail.com",
+        "phone": "(704) 975-8100"
+      },
+      {
+        "firstName": "Wesley",
+        "lastName": "Honea",
+        "fullName": "Wesley Honea",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wesleyhonea@icloud.com",
+        "phone": "(704) 496-0452"
+      },
+      {
+        "firstName": "Aaron",
+        "lastName": "Howard",
+        "fullName": "Aaron Chase Howard",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aaronchoward123@gmail.com",
+        "phone": "3368620833"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Jones",
+        "fullName": "William Deacon Jones",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "willdeaconjones@gmail.com",
+        "phone": "3369700001"
+      },
+      {
+        "firstName": "Keefe",
+        "lastName": "Kalil",
+        "fullName": "Keefe Kalil",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "keefekalil1@gmail.com",
+        "phone": "8287084839"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Kupiec",
+        "fullName": "Zachary Kupiec",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zachcarolina@icloud.com",
+        "phone": "3363392375"
+      },
+      {
+        "firstName": "Matt",
+        "lastName": "Lapeirre",
+        "fullName": "Matt David Lapeirre",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "matthewlapeirre@icloud.com",
+        "phone": "3366608816"
+      },
+      {
+        "firstName": "Scott",
+        "lastName": "Leach",
+        "fullName": "Scott Thomas Leach",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "scottleach05@gmail.com",
+        "phone": "7047778857"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Leighton",
+        "fullName": "Jake Brosnan Leighton",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jakeleighton33@gmail.com",
+        "phone": "9194444100"
+      },
+      {
+        "firstName": "Noah",
+        "lastName": "Loeblein",
+        "fullName": "Noah Douglas Loeblein",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "noahloeblein98@gmail.com",
+        "phone": "(980) 330-0794"
+      },
+      {
+        "firstName": "Nicki k",
+        "lastName": "Loeblein",
+        "fullName": "Nicki k True Loeblein",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "loebleinnick0@gmail.com",
+        "phone": "9803300610"
+      },
+      {
+        "firstName": "Eric",
+        "lastName": "Lynn",
+        "fullName": "Eric G. Lynn",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ericlynn0904@gmail.com",
+        "phone": "7047778354"
+      },
+      {
+        "firstName": "Harrison",
+        "lastName": "Martin",
+        "fullName": "Harrison Martin",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bermudaharris@gmail.com",
+        "phone": "(704) 605-0275"
+      },
+      {
+        "firstName": "Nathan",
+        "lastName": "Mattern",
+        "fullName": "Nathan James Mattern",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nmpackers@gmail.com",
+        "phone": "(715) 450-4440"
+      },
+      {
+        "firstName": "Sean",
+        "lastName": "McCauley",
+        "fullName": "Sean Michael McCauley",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cauleymc27@gmail.com",
+        "phone": "(910) 880-8789"
+      },
+      {
+        "firstName": "Owen",
+        "lastName": "McDaniel",
+        "fullName": "Owen Ross McDaniel",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "owen1mcdaniel@gmail.com",
+        "phone": "9199464330"
+      },
+      {
+        "firstName": "Brennan",
+        "lastName": "McDermott",
+        "fullName": "Brennan Joseph McDermott",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brennanmcdermott28@gmail.com",
+        "phone": "8435406598"
+      },
+      {
+        "firstName": "Morris",
+        "lastName": "McMinn",
+        "fullName": "Morris Christopher McMinn",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mcminnchris47@gmail.com",
+        "phone": "(336)-549-1155"
+      },
+      {
+        "firstName": "Brendon",
+        "lastName": "Morton",
+        "fullName": "Brendon Noah Morton",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mortonbrendon4@gmail.com",
+        "phone": "3366908118"
+      },
+      {
+        "firstName": "Braden",
+        "lastName": "Mueller",
+        "fullName": "Braden Alan Mueller",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bmueller2006@icloud.com",
+        "phone": "7047749015"
+      },
+      {
+        "firstName": "Ty",
+        "lastName": "Murray",
+        "fullName": "Ty Roscoe Murray",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tymurray335@gmail.com",
+        "phone": "9102063395"
+      },
+      {
+        "firstName": "Cowan",
+        "lastName": "Myers",
+        "fullName": "Cowan Michael Myers",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cocomyers3@gmail.com",
+        "phone": "9842024800"
+      },
+      {
+        "firstName": "Everett",
+        "lastName": "Nason",
+        "fullName": "Everett Allen Nason",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nasonev5555@gmail.com",
+        "phone": "8434890157"
+      },
+      {
+        "firstName": "Lucas",
+        "lastName": "Newton",
+        "fullName": "Lucas Alexander Newton",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lucasnewton135@gmail.com",
+        "phone": "3365438336"
+      },
+      {
+        "firstName": "Nicolas",
+        "lastName": "Nowick",
+        "fullName": "Nicolas Devlin Nowick",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nnowick05@gmail.com",
+        "phone": "704-430-4114"
+      },
+      {
+        "firstName": "Jackson",
+        "lastName": "Odaniel",
+        "fullName": "Jackson Craig Odaniel",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jacksonodaniel28@gmail.com",
+        "phone": "9802392453"
+      },
+      {
+        "firstName": "Cooper",
+        "lastName": "Ogden",
+        "fullName": "Cooper Joseph Ogden",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ogdencooper8@gmail.com",
+        "phone": "9107226111"
+      },
+      {
+        "firstName": "Keegan",
+        "lastName": "Pado",
+        "fullName": "Keegan Christopher Pado",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "keeganpado@yahoo.com",
+        "phone": "5714555533"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Pannenbacker",
+        "fullName": "Ryan David Pannenbacker",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ryanp200411@icloud.com",
+        "phone": "(631) 352-6307"
+      },
+      {
+        "firstName": "Nolan",
+        "lastName": "Patterson",
+        "fullName": "Nolan Charles Patterson",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nolanpatterson16@gmail.com",
+        "phone": "3368167447"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Powell",
+        "fullName": "Andrew Powell",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dcp0815@gmail.com",
+        "phone": "704-995-0763"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "Quintero",
+        "fullName": "Colin Quintero",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "colinquintero44@gmail.com",
+        "phone": "(336) 897-4665"
+      },
+      {
+        "firstName": "Chase",
+        "lastName": "Radle",
+        "fullName": "Chase Albert Radle",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "caradle8@gmail.com",
+        "phone": "(443) 388-3120"
+      },
+      {
+        "firstName": "Casey",
+        "lastName": "Reilly",
+        "fullName": "Casey Robert Reilly",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cr2reilly@gmail.com",
+        "phone": "915031045"
+      },
+      {
+        "firstName": "Jeremiah",
+        "lastName": "Ritter",
+        "fullName": "Jeremiah charles Ritter",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jeremiahritter06@yahoo.com",
+        "phone": "9106103697"
+      },
+      {
+        "firstName": "Will",
+        "lastName": "Rives",
+        "fullName": "Will Leon Rives",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "riveswill4@gmail.com",
+        "phone": "3368702121"
+      },
+      {
+        "firstName": "Henry",
+        "lastName": "Roach",
+        "fullName": "Henry Walker Roach",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "henryroach20407@gmail.com",
+        "phone": "7047772622"
+      },
+      {
+        "firstName": "Henry",
+        "lastName": "Roney",
+        "fullName": "Henry James Roney",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "henryr@hrsportsmedia.com",
+        "phone": "919-749-9331"
+      },
+      {
+        "firstName": "Colton",
+        "lastName": "Royster",
+        "fullName": "Colton Samuel Royster",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "colton.royster@gmail.com",
+        "phone": "9197418625"
+      },
+      {
+        "firstName": "Mason",
+        "lastName": "Russell",
+        "fullName": "Mason Scott Russell",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mrussellsigmachi@gmail.com",
+        "phone": "(336) 688-4846"
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "Simmons",
+        "fullName": "Caleb John Simmons",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "calebsimmons3507@gmail.com",
+        "phone": "9103750262"
+      },
+      {
+        "firstName": "Jackson",
+        "lastName": "Sparger",
+        "fullName": "Jackson wade Sparger",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bucksparger@gmail.com",
+        "phone": "9805655009"
+      },
+      {
+        "firstName": "Caleb",
+        "lastName": "Talton",
+        "fullName": "Caleb Andrew Talton",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "caleb.talton0@gmail.com",
+        "phone": "(910) 995-7583"
+      },
+      {
+        "firstName": "Tanner",
+        "lastName": "Thorson",
+        "fullName": "Tanner Payne Thorson",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tpthorson@gmail.com",
+        "phone": "984-232-1406"
+      },
+      {
+        "firstName": "Barrett",
+        "lastName": "Thurman",
+        "fullName": "Barrett Thurman",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cbarrettthurman@gmail.com",
+        "phone": "3362073779"
+      },
+      {
+        "firstName": "Alex",
+        "lastName": "Udwadia",
+        "fullName": "Alex Rusi Udwadia",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexudwadia@gmail.com",
+        "phone": "2522872631"
+      },
+      {
+        "firstName": "Parker",
+        "lastName": "Uriarte",
+        "fullName": "Parker Thomas Uriarte",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "uriarteparker@gmail.com",
+        "phone": "7046895431"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Vandewouw",
+        "fullName": "Ethan Alexander Vandewouw",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "evdwouw06@icloud.com",
+        "phone": "305-299-4599"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Veverka",
+        "fullName": "Dylan Michael Veverka",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dylan.veverka27@gmail.com",
+        "phone": "704-995-1043"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Wagner",
+        "fullName": "John Geddie Wagner",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "johnwag13@icloud.com",
+        "phone": "(336) 823-5489"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Walder",
+        "fullName": "Ethan Edward Walder",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "eew1108@gmail.com",
+        "phone": "(704) 914-5250"
+      },
+      {
+        "firstName": "Richard",
+        "lastName": "Walters",
+        "fullName": "Richard Sheridan Walters",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "richardwalters1122@gmail.com",
+        "phone": "(910)-530-2159"
+      },
+      {
+        "firstName": "Bryce",
+        "lastName": "Waltman",
+        "fullName": "Bryce Thonas Waltman",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brycewaltman12@gmail.com",
+        "phone": "(919) 492-8941"
+      },
+      {
+        "firstName": "Blake",
+        "lastName": "Waltman",
+        "fullName": "Blake Christopher Waltman",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "blakewaltman@icloud.com",
+        "phone": "9192647791"
+      },
+      {
+        "firstName": "Luke",
+        "lastName": "Warpula",
+        "fullName": "Luke Christian Warpula",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lcwarpula@me.com",
+        "phone": "(704) 288-7507"
+      },
+      {
+        "firstName": "Cole",
+        "lastName": "Webb",
+        "fullName": "Cole Webb",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cwebb52001@gmail.com",
+        "phone": "7046773404"
+      },
+      {
+        "firstName": "Sam",
+        "lastName": "Weber",
+        "fullName": "Sam Scott Weber",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "samsweber88@gmail.com",
+        "phone": "7045199075"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Whitt",
+        "fullName": "Matthew Colton Whitt",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coltonwhitt123@gmail.com",
+        "phone": "3365010705"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Wooten",
+        "fullName": "James Todd Wooten",
+        "chapterGreekLetters": "Mu Kappa",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jtoddwooten@icloud.com",
+        "phone": "3365542282"
+      }
+    ]
+  }
+]

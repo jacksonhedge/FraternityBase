@@ -1,0 +1,138 @@
+[
+  {
+    "chapterName": "Phi Phi",
+    "university": "University of Pennsylvania",
+    "members": [
+      {
+        "firstName": "Massi Mari",
+        "lastName": "Sia",
+        "fullName": "Massi Mari Chi Sia",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "massisia12@gmail.com",
+        "phone": "(650) 977-8501"
+      },
+      {
+        "firstName": "William",
+        "lastName": "Snead",
+        "fullName": "William Ricardo Snead",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "williamrsnead@gmail.com",
+        "phone": "2032521280"
+      },
+      {
+        "firstName": "Keiichi",
+        "lastName": "Taketsuna",
+        "fullName": "Keiichi Taketsuna",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "keitaketsuna@gmail.com",
+        "phone": "9145529937"
+      },
+      {
+        "firstName": "Hemza",
+        "lastName": "Tarawneh",
+        "fullName": "Hemza Husam Tarawneh",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "hemzatarawneh10@gmail.com",
+        "phone": "(262) 307-5188"
+      },
+      {
+        "firstName": "Roman",
+        "lastName": "Vandemark",
+        "fullName": "Roman Carrease Vandemark",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "romanvandemark@me.com",
+        "phone": "(559) 917-2906"
+      },
+      {
+        "firstName": "Theodore",
+        "lastName": "Wallen",
+        "fullName": "Theodore Vasilis Wallen",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "teddyvwallen@gmail.com",
+        "phone": "9194913870"
+      },
+      {
+        "firstName": "Joel",
+        "lastName": "Wang",
+        "fullName": "Joel Yue er Wang",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joelwg01@gmail.com",
+        "phone": "3204551865"
+      },
+      {
+        "firstName": "Malcolm",
+        "lastName": "Wengel",
+        "fullName": "Malcolm Hutchinson Wengel",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "malcolmwengel@gmail.com",
+        "phone": "5017656957"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "West",
+        "fullName": "Michael Broda West",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "westbmike23@gmail.com",
+        "phone": "(804) 912-4850"
+      },
+      {
+        "firstName": "Zachary",
+        "lastName": "Whiting",
+        "fullName": "Zachary Robert Whiting",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "zdubbs01@gmail.com",
+        "phone": "2159072370"
+      },
+      {
+        "firstName": "Cameron",
+        "lastName": "Wilson",
+        "fullName": "Cameron Wilson",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cameronwilson6931@outlook.com",
+        "phone": "(540) 319-3270"
+      },
+      {
+        "firstName": "Mohammad",
+        "lastName": "Yaghi",
+        "fullName": "Mohammad Yaghi",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mojr.yaghi@gmail.com",
+        "phone": "(281) 651-8262"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Zack",
+        "fullName": "Michael Nathan Zack",
+        "chapterGreekLetters": "Phi Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "michaelnzack18@gmail.com",
+        "phone": "(203) 908-1967"
+      }
+    ]
+  }
+]

@@ -1,0 +1,338 @@
+[
+  {
+    "chapterName": "Lambda Theta",
+    "university": "University of Ottawa",
+    "members": [
+      {
+        "firstName": "Manil",
+        "lastName": "Aitouares",
+        "fullName": "Manil Aitouares",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aitouaresmanil@gmail.com",
+        "phone": "8196619186"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Armstrong",
+        "fullName": "Jacob Armstrong",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "j.armstrong0117@gmail.com",
+        "phone": "(705) 796-4701"
+      },
+      {
+        "firstName": "Aland",
+        "lastName": "Basem",
+        "fullName": "Aland Basem",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alandbasem.ab@gmail.com",
+        "phone": "6139130710"
+      },
+      {
+        "firstName": "Scott",
+        "lastName": "Baxter-Derro",
+        "fullName": "Scott Francis Baxter-Derro",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "scott.baxter.derro@gmail.com",
+        "phone": "(343) 254-8118"
+      },
+      {
+        "firstName": "Dylan",
+        "lastName": "Bercovitch",
+        "fullName": "Dylan Dov Bercovitch",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ddberco@rogers.com",
+        "phone": "(613) 266-4067"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Bond",
+        "fullName": "Joshua Daniel Bond",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "007joshua.bond@gmail.com",
+        "phone": "(647) 464-4101"
+      },
+      {
+        "firstName": "Phoenix",
+        "lastName": "Bruneau",
+        "fullName": "Phoenix Luke Bruneau",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bruneauphoenix@gmail.com",
+        "phone": "514-754-6370"
+      },
+      {
+        "firstName": "Bernardo",
+        "lastName": "Caiado",
+        "fullName": "Bernardo Beltrao Caiado",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "becaiado@gmail.com",
+        "phone": "(343) 575-6203"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Calendino",
+        "fullName": "Thomas Calendino",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "thomascalendino2003@gmail.com",
+        "phone": "(647) 991-4316"
+      },
+      {
+        "firstName": "Ryan",
+        "lastName": "Comeau",
+        "fullName": "Ryan Comeau",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rcome025@uottawa.ca",
+        "phone": "819-334-5344"
+      },
+      {
+        "firstName": "Patrick",
+        "lastName": "Dawes",
+        "fullName": "Patrick William Dawes",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pwdawes13@outlook.com",
+        "phone": "613-710-3438"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Esselaar",
+        "fullName": "Ethan Caspar Esselaar",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethan@esselaar.com",
+        "phone": "(613) 878-0757"
+      },
+      {
+        "firstName": "Diego",
+        "lastName": "Estrada",
+        "fullName": "Diego Sebastian Estrada",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "diego.estrada.t@gmail.com",
+        "phone": "6138534806"
+      },
+      {
+        "firstName": "Benjamin",
+        "lastName": "Fisher",
+        "fullName": "Benjamin Wyatt Russell Fisher",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "benyfisher@icloud.com",
+        "phone": "(613) 866-0123"
+      },
+      {
+        "firstName": "Christian",
+        "lastName": "Ford",
+        "fullName": "Christian Phillip Ford",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ford.christian709999@gmail.com",
+        "phone": "(705) 934-0995"
+      },
+      {
+        "firstName": "Edouard",
+        "lastName": "Guimond",
+        "fullName": "Edouard Jean-Philippe Guimond",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "guimondedouard@gmail.com",
+        "phone": "(819) 576-7774"
+      },
+      {
+        "firstName": "Duncan",
+        "lastName": "Katsube",
+        "fullName": "Duncan Takeshi Katsube",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "d.katsube19@gmail.com",
+        "phone": "(343) 202-3686"
+      },
+      {
+        "firstName": "Ege",
+        "lastName": "Kiratlioglu",
+        "fullName": "Ege Gonenc Kiratlioglu",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ege.kiratlioglu@gmail.com",
+        "phone": "(343) 558-6551"
+      },
+      {
+        "firstName": "Dyson",
+        "lastName": "Lansing",
+        "fullName": "Dyson john Lansing",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dysonlansing44@gmail.com",
+        "phone": "4163166900"
+      },
+      {
+        "firstName": "Roman",
+        "lastName": "Lombardi",
+        "fullName": "Roman Lombardi",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lomromwork@gmail.com",
+        "phone": "613-983-8543"
+      },
+      {
+        "firstName": "Adam",
+        "lastName": "Londynski",
+        "fullName": "Adam Raphael Londynski",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "arlondynski@gmail.com",
+        "phone": "6138055010"
+      },
+      {
+        "firstName": "Russell",
+        "lastName": "Lonsdale",
+        "fullName": "Russell Willis Lonsdale",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rwlonsdale@outlook.com",
+        "phone": "613-890-1220"
+      },
+      {
+        "firstName": "Sascha",
+        "lastName": "Lowry",
+        "fullName": "Sascha Cornelius Lowry",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lowrycsascha@gmail.com",
+        "phone": "6475638352"
+      },
+      {
+        "firstName": "Aidan",
+        "lastName": "McLean",
+        "fullName": "Aidan Paul-Sachin McLean",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aidansmclean@gmail.com",
+        "phone": "(519) 200-3041"
+      },
+      {
+        "firstName": "Cullen",
+        "lastName": "Merrimen",
+        "fullName": "Cullen O'Grady Merrimen",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cullenom@bell.net",
+        "phone": "6478210522"
+      },
+      {
+        "firstName": "Francisco",
+        "lastName": "Moncada Matamoros",
+        "fullName": "Francisco Jose Moncada Matamoros",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "francisco@moncada.me",
+        "phone": "4384090554"
+      },
+      {
+        "firstName": "Alper",
+        "lastName": "Ortabaşı",
+        "fullName": "Alper Ortabaşı",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alper.ortabasi@gmail.com",
+        "phone": "+1 613 878 1871"
+      },
+      {
+        "firstName": "Parker",
+        "lastName": "Quinn",
+        "fullName": "Parker Jacob Quinn",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "parkerquinn2004@gmail.com",
+        "phone": "416-949-0522"
+      },
+      {
+        "firstName": "Declan",
+        "lastName": "Ryan",
+        "fullName": "Declan Matthew Ryan",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "declanryan@gmail.com",
+        "phone": "(613) 292-9482"
+      },
+      {
+        "firstName": "Qasim",
+        "lastName": "Sadeed",
+        "fullName": "Qasim Sadeed",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "qasimyaqoob.sadeed@gmail.com",
+        "phone": "(905) 251-6136"
+      },
+      {
+        "firstName": "Harveer",
+        "lastName": "Sangha",
+        "fullName": "Harveer Singh Sangha",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "hsangha2020@gmail.com",
+        "phone": "6472716076"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Trudel",
+        "fullName": "Thomas Trudel",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "trudel.thomas04@gmail.com",
+        "phone": "2897631290"
+      },
+      {
+        "firstName": "Will",
+        "lastName": "Vallee",
+        "fullName": "Will Vallee",
+        "chapterGreekLetters": "Lambda Theta",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "willval99@gmail.com",
+        "phone": "(819) 665-5233"
+      }
+    ]
+  }
+]

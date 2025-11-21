@@ -1,0 +1,758 @@
+[
+  {
+    "chapterName": "Omicron Omicron",
+    "university": "University of Chicago",
+    "members": [
+      {
+        "firstName": "Fred",
+        "lastName": "Again",
+        "fullName": "Fred Again",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lump.bulrush0v@icloud.com",
+        "phone": "(202) 255-4667"
+      },
+      {
+        "firstName": "Alejandro",
+        "lastName": "Alonso",
+        "fullName": "Alejandro Alonso",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "axalonso12@gmail.com",
+        "phone": "(917) 855-4471"
+      },
+      {
+        "firstName": "Ilan",
+        "lastName": "Asis",
+        "fullName": "Ilan Asis",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ilanasis@outlook.com",
+        "phone": "3057998914"
+      },
+      {
+        "firstName": "Aurian",
+        "lastName": "Azghandi",
+        "fullName": "Aurian Zachary Azghandi",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aurianazg@gmail.com",
+        "phone": "(240) 330-3639"
+      },
+      {
+        "firstName": "Hamilton john",
+        "lastName": "Barnes",
+        "fullName": "Hamilton john Finnegan Barnes",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "barnzie23@gmail.com",
+        "phone": "4153675669"
+      },
+      {
+        "firstName": "Jarrett",
+        "lastName": "Chen",
+        "fullName": "Jarrett Chen",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jarrett.h.chen@gmail.com",
+        "phone": "(857) 529-9502"
+      },
+      {
+        "firstName": "Arsene",
+        "lastName": "Cherpion",
+        "fullName": "Arsene Cherpion",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "arsenec2013@gmail.com",
+        "phone": "(312) 451-0161"
+      },
+      {
+        "firstName": "Leo",
+        "lastName": "Courbe",
+        "fullName": "Leo Lambert Courbe",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lelecourbe@gmail.com",
+        "phone": "(646) 946-3570"
+      },
+      {
+        "firstName": "Cameron",
+        "lastName": "Cunningham",
+        "fullName": "Cameron Thomas Cunningham",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ccunningham64@icloud.com",
+        "phone": "8609088053"
+      },
+      {
+        "firstName": "Vivan",
+        "lastName": "Das",
+        "fullName": "Vivan Sen Das",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vivansendas@gmail.com",
+        "phone": "9787511561"
+      },
+      {
+        "firstName": "Samuel",
+        "lastName": "Davis",
+        "fullName": "Samuel Chase Davis",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "samuelchasedavis@gmail.com",
+        "phone": "617 359 1869"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "Devine",
+        "fullName": "Colin Thomas Devine",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "colintdevine@gmail.com",
+        "phone": "9143550725"
+      },
+      {
+        "firstName": "Kailas",
+        "lastName": "Devulapally",
+        "fullName": "Kailas Domingo Devulapally",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kdode1908@gmail.com",
+        "phone": "9179039814"
+      },
+      {
+        "firstName": "Aly",
+        "lastName": "Elkaffas",
+        "fullName": "Aly Khaled Elkaffas",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alyelkaffas4@gmail.com",
+        "phone": "(312)912-2499"
+      },
+      {
+        "firstName": "Eitan",
+        "lastName": "Fischer",
+        "fullName": "Eitan Fischer",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "eitanfischer360@gmail.com",
+        "phone": "(737) 707-8982"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Fung",
+        "fullName": "Christopher Fung",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "fungchris6@gmail.com",
+        "phone": "(626) 278-9308"
+      },
+      {
+        "firstName": "Jeremy",
+        "lastName": "Gall",
+        "fullName": "Jeremy Isaiah Lenzel Gall",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jeremygall41@gmail.com",
+        "phone": "6469720447"
+      },
+      {
+        "firstName": "Marcus",
+        "lastName": "Gao",
+        "fullName": "Marcus Gao",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gaomx9@gmail.com",
+        "phone": "(978) 289-7697"
+      },
+      {
+        "firstName": "Matthew",
+        "lastName": "Geiling",
+        "fullName": "Matthew Geiling",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "993mrg@gmail.com",
+        "phone": "(917) 993-2401"
+      },
+      {
+        "firstName": "Alex",
+        "lastName": "Gianuzzi",
+        "fullName": "Alex Michael Gianuzzi",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "alexganz18@gmail.com",
+        "phone": "2039217299"
+      },
+      {
+        "firstName": "Marlowe",
+        "lastName": "Glass",
+        "fullName": "Marlowe Glass",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "pokemar007@gmail.com",
+        "phone": "(917) 856-8487"
+      },
+      {
+        "firstName": "Ari",
+        "lastName": "Goldberg",
+        "fullName": "Ari Goldberg",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ajg4awesomelife@gmail.com",
+        "phone": "(310) 849-7435"
+      },
+      {
+        "firstName": "Elliott",
+        "lastName": "Gordon",
+        "fullName": "Elliott Gordon",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "elliottwgordon@gmail.com",
+        "phone": "(203) 832-6706"
+      },
+      {
+        "firstName": "Emil",
+        "lastName": "Grantcharov",
+        "fullName": "Emil Grantcharov",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "grantcharovem@gmail.com",
+        "phone": "(914) 354-7903"
+      },
+      {
+        "firstName": "Duke",
+        "lastName": "Hogan-Murphy",
+        "fullName": "Duke Baker Hogan-Murphy",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dukehoganmurphy@gmail.com",
+        "phone": "(518) 955-1948"
+      },
+      {
+        "firstName": "Philip",
+        "lastName": "Horrigan",
+        "fullName": "Philip Horrigan",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "philhorrigan20@gmail.com",
+        "phone": "(202) 236-2379"
+      },
+      {
+        "firstName": "Alec",
+        "lastName": "Iaconis",
+        "fullName": "Alec Iaconis",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aleciaconis@gmail.com",
+        "phone": "(203) 309-9865"
+      },
+      {
+        "firstName": "Seth",
+        "lastName": "Julie",
+        "fullName": "Seth Aaron Julie",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "julieseth13@gmail.com",
+        "phone": "914-536-4270"
+      },
+      {
+        "firstName": "Edward",
+        "lastName": "Kaneb",
+        "fullName": "Edward Jackson Kaneb",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ejk11ned@icloud.com",
+        "phone": "617-388-3679"
+      },
+      {
+        "firstName": "Kane",
+        "lastName": "Kelley",
+        "fullName": "Kane Kelley",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kanekelley@gmail.com",
+        "phone": "(818) 231-7601"
+      },
+      {
+        "firstName": "Gopal",
+        "lastName": "Koduri",
+        "fullName": "Gopal Koduri",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gopalkodurird@gmail.com",
+        "phone": "4699258978"
+      },
+      {
+        "firstName": "ChanWoo",
+        "lastName": "Kook",
+        "fullName": "ChanWoo Kook",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "chanwoo.kook@gmail.com",
+        "phone": "(203) 921-5176"
+      },
+      {
+        "firstName": "Nicolas",
+        "lastName": "Koutsonicolis",
+        "fullName": "Nicolas Koutsonicolis",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "nkoutsonicolis@gmail.com",
+        "phone": "3123840277"
+      },
+      {
+        "firstName": "Arjun",
+        "lastName": "Kulkarni",
+        "fullName": "Arjun Kulkarni",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "arjunkulkarni22@gmail.com",
+        "phone": "805-338-9285"
+      },
+      {
+        "firstName": "Leon",
+        "lastName": "Liao",
+        "fullName": "Leon J. Liao",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "leon44a@gmail.com",
+        "phone": "(626) 399-8659"
+      },
+      {
+        "firstName": "Seung-Hoo Sean",
+        "lastName": "Lim",
+        "fullName": "Seung-Hoo Sean Lim",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "seunghoo.sean.lim@gmail.com",
+        "phone": "3129348873"
+      },
+      {
+        "firstName": "Sebastian",
+        "lastName": "Lopez",
+        "fullName": "Sebastian Antonio Lopez",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sebbylopez@gmail.com",
+        "phone": "(203) 918-1425"
+      },
+      {
+        "firstName": "Anibal",
+        "lastName": "Loureda",
+        "fullName": "Anibal Loureda",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "anibal.loureda@gmail.com",
+        "phone": "(475) 419-4057"
+      },
+      {
+        "firstName": "David",
+        "lastName": "Makoyo",
+        "fullName": "David Makoyo",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "makoyo.david@me.com",
+        "phone": "(484) 942-4413"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "McGraw",
+        "fullName": "Connor McGraw",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "connor.q.mcgraw@gmail.com",
+        "phone": "(650) 605-5877"
+      },
+      {
+        "firstName": "William",
+        "lastName": "McMullan",
+        "fullName": "William Michael McMullan",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mcmullan.william24@icloud.com",
+        "phone": "4042734287"
+      },
+      {
+        "firstName": "Matteo",
+        "lastName": "Monti",
+        "fullName": "Matteo Avram Vittorio Monti",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "matt.monti@gmail.com",
+        "phone": "9177704040"
+      },
+      {
+        "firstName": "Matteo",
+        "lastName": "Musicco",
+        "fullName": "Matteo Daniel Musicco",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mdmusicco@gmail.com",
+        "phone": "9166947107"
+      },
+      {
+        "firstName": "Raphael",
+        "lastName": "Nahon",
+        "fullName": "Raphael Isaac Nahon",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rnahonfutbol99@gmail.com",
+        "phone": "3473101051"
+      },
+      {
+        "firstName": "Louis",
+        "lastName": "Nahon",
+        "fullName": "Louis Salomon Nahon",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lnahonfutbol55@gmail.com",
+        "phone": "(917) 504-9204"
+      },
+      {
+        "firstName": "Gregory",
+        "lastName": "Owen",
+        "fullName": "Gregory Charles Owen",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gregoryowenuk2usa@gmail.com",
+        "phone": "6508087429"
+      },
+      {
+        "firstName": "Nicolas",
+        "lastName": "Park",
+        "fullName": "Nicolas Park",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "njparkny@gmail.com",
+        "phone": "(914) 491-0797"
+      },
+      {
+        "firstName": "Achilles",
+        "lastName": "Perry",
+        "fullName": "Achilles Bradford Perry",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "perry.platypus915@gmail.com",
+        "phone": "9175872990"
+      },
+      {
+        "firstName": "Devan",
+        "lastName": "Phelan",
+        "fullName": "Devan Phelan",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "devan.phelan@gmail.com",
+        "phone": "(203) 969-5136"
+      },
+      {
+        "firstName": "Ayush",
+        "lastName": "Pillai",
+        "fullName": "Ayush Pillai",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ayushpillai1028@gmail.com",
+        "phone": "(508) 873-3187"
+      },
+      {
+        "firstName": "Preston",
+        "lastName": "Rodriguez",
+        "fullName": "Preston Mark Rodriguez",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "prestonrodriguez10@gmail.com",
+        "phone": "8135574969"
+      },
+      {
+        "firstName": "Max",
+        "lastName": "Rosenblum",
+        "fullName": "Max Julian Rosenblum",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mj.rosenblum@gmail.com",
+        "phone": "(858) 668-9049"
+      },
+      {
+        "firstName": "Arjan",
+        "lastName": "Sandhu",
+        "fullName": "Arjan Singh Sandhu",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "arjansandhu@gmail.com",
+        "phone": "6468086378"
+      },
+      {
+        "firstName": "Jurgis",
+        "lastName": "Schmedlen",
+        "fullName": "Jurgis M. Schmedlen",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jurgisschmedlen@gmail.com",
+        "phone": "(203) 451-9898"
+      },
+      {
+        "firstName": "Tobey",
+        "lastName": "Schwimmer",
+        "fullName": "Tobey Schwimmer",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tobeyschwimmer@gmail.com",
+        "phone": "(347) 380-3106"
+      },
+      {
+        "firstName": "David",
+        "lastName": "Scotch",
+        "fullName": "David Scotch",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "camscotch13@gmail.com",
+        "phone": "(310) 617-9764"
+      },
+      {
+        "firstName": "Kevin",
+        "lastName": "Seiter",
+        "fullName": "Kevin Seiter",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kevseiter731@gmail.com",
+        "phone": "(475) 225-3612"
+      },
+      {
+        "firstName": "Luke",
+        "lastName": "Shepard",
+        "fullName": "Luke Shepard",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "lukeshepard246@gmail.com",
+        "phone": "6103483115"
+      },
+      {
+        "firstName": "Imran",
+        "lastName": "Siddiqui",
+        "fullName": "Imran Mohsin Siddiqui",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "imran.siddiquijr@icloud.com",
+        "phone": "9174710202"
+      },
+      {
+        "firstName": "Santiago",
+        "lastName": "Simonian",
+        "fullName": "Santiago Simonian",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "santisimonian@gmail.com",
+        "phone": "9178478188"
+      },
+      {
+        "firstName": "Rohan",
+        "lastName": "Sivakumar",
+        "fullName": "Rohan Sivakumar",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rohan.sivakumar27@gmail.com",
+        "phone": "484-926-0560"
+      },
+      {
+        "firstName": "Myles",
+        "lastName": "Spiess",
+        "fullName": "Myles Edward Spiess",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "mylesspiess@gmail.com",
+        "phone": "(203) 939-5580"
+      },
+      {
+        "firstName": "Brett",
+        "lastName": "Suazo",
+        "fullName": "Brett Antonio Suazo",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bassuaz24@gmail.com",
+        "phone": "(703) 479-0733"
+      },
+      {
+        "firstName": "Marco",
+        "lastName": "Sukhatme",
+        "fullName": "Marco Sukhatme",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "msukhatme@gmail.com",
+        "phone": "(914) 450-2708"
+      },
+      {
+        "firstName": "Julian",
+        "lastName": "Sweet",
+        "fullName": "Julian Lins Sweet",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "julian.sweet03@gmail.com",
+        "phone": "4153194005"
+      },
+      {
+        "firstName": "Christopher",
+        "lastName": "Sweet",
+        "fullName": "Christopher Lins Sweet",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "christopher.sweet03@gmail.com",
+        "phone": "(415) 250-6471"
+      },
+      {
+        "firstName": "Sahm",
+        "lastName": "Taguchi",
+        "fullName": "Sahm Kevin Taguchi",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sahm.skt@gmail.com",
+        "phone": "5105147885"
+      },
+      {
+        "firstName": "Nicolas",
+        "lastName": "Tchkotoua",
+        "fullName": "Nicolas Thomas Tchkotoua",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tchkotouanicolas@gmail.com",
+        "phone": "2036095189"
+      },
+      {
+        "firstName": "Donovan",
+        "lastName": "Turck",
+        "fullName": "Donovan Turck",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "donovant0131@gmail.com",
+        "phone": "(347) 453-7278"
+      },
+      {
+        "firstName": "Julius",
+        "lastName": "Vatel",
+        "fullName": "Julius Patrick Vatel",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "julesvatel233@gmail.com",
+        "phone": "9173636702"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Wang",
+        "fullName": "Ethan Michael Wang",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethang414@gmail.com",
+        "phone": "(310) 882-3020"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Wells",
+        "fullName": "Jack Ryan Wells",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jack.r.wells@outlook.com",
+        "phone": "(973) 970-5093"
+      },
+      {
+        "firstName": "Heath",
+        "lastName": "Winter",
+        "fullName": "Heath Winter",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "h@heathw.com",
+        "phone": "3474294587"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Wong",
+        "fullName": "Jack Wong",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jack.wong.b123@gmail.com",
+        "phone": "(848) 230-0036"
+      },
+      {
+        "firstName": "Sreeanish",
+        "lastName": "Yarra",
+        "fullName": "Sreeanish Yarra",
+        "chapterGreekLetters": "Omicron Omicron",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "anishyarra@gmail.com",
+        "phone": "9085961132"
+      }
+    ]
+  }
+]

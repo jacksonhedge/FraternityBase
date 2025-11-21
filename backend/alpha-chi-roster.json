@@ -1,0 +1,652 @@
+[
+  {
+    "chapterName": "Chapter 1",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Contact 1-001",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Chapter 1",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Contact 1-002",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Chapter 2",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Contact 2 - 001",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Chapter 2",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Contact 2 - 002",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Lambda Xi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Caleb Alan A Ivy",
+        "position": "Undergrad",
+        "email": "deoog7@gmail.com"
+      }
+    ],
+    "phone": "(360) 510-8596",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Theta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Mitchell A. A Lamoriello",
+        "position": "Alumni",
+        "email": "mitchellalamoriello@gmail.com"
+      }
+    ],
+    "phone": "(407) 687-0962",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Sigma",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "William A. A Long",
+        "position": "Alumni",
+        "email": "blong317@comcast.net"
+      }
+    ],
+    "phone": "(678) 592-6638",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Eta Mu",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Kirubel Alemu A Nemaga",
+        "position": "Undergrad",
+        "email": "kirubelalemu1234@gmail.com"
+      }
+    ],
+    "phone": "(224) 550-2603",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Theta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Michael K. A'Hearn",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Alpha Eta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Barry A'Hearn",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Beta Mu",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Eric C. Aaberg",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Beta Rho",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Jan T. Aaberg",
+        "position": "Alumni",
+        "email": "sigs1963@sigmachi.com"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Tau",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Leroy A. Aafedt",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Gamma Epsilon",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "George N. Aagaard",
+        "position": "Alumni",
+        "email": "gretchen.aagaardshively@verizon.net"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Alpha Pi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Jason M. Aagenas",
+        "position": "Alumni",
+        "email": "jaagenas@albion.edu"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Beta Zeta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Edward G. Aakhus",
+        "position": "Alumni",
+        "email": "eaakhus@yahoo.com"
+      }
+    ],
+    "phone": "(619) 995-2570",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Beta Zeta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Jack Edward Aakhus",
+        "position": "Alumni",
+        "email": "jack4402@hotmail.com"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Beta Zeta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Daniel T. Aakhus",
+        "position": "Alumni",
+        "email": "d_aakhus@yahoo.com"
+      }
+    ],
+    "phone": "(218) 407-0965",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Alpha Lambda",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Nicholas E. Aalberg",
+        "position": "Alumni",
+        "email": "suprnova15@gmail.com"
+      }
+    ],
+    "phone": "(612) 432-0758",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Epsilon Eta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Karl W. Aalto",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Epsilon Xi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Niels A. Aalund",
+        "position": "Alumni",
+        "email": "naalund@sbcglobal.net"
+      }
+    ],
+    "phone": "(281) 687-9499",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Epsilon",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Lloyd H. Aalvik",
+        "position": "Alumni",
+        "email": "jjdist@teleport.com"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Lambda Theta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Khawaja-Shayan Aamir",
+        "position": "Alumni",
+        "email": "khshayan@outlook.com"
+      }
+    ],
+    "phone": "(647) 535-2462",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Delta Eta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "George W. Aamodt",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Beta Tau",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Peter B. Aamodt",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Delta Iota",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Benjamin Jacobs Aamodt",
+        "position": "Undergrad",
+        "email": "benjaminaamodt@gmail.com"
+      }
+    ],
+    "phone": "504-919-1848",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Zeta Kappa",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Charles A. Aamodt",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Beta Zeta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Gordon S. Aamoth",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Gamma Iota",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "David J. Aanestad",
+        "position": "Alumni",
+        "email": "daanestad@gmail.com"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Delta Eta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Paul Ryan Aaron",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Iota Lambda",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Arto R. Aaron III",
+        "position": "Alumni",
+        "email": "artoaaron111@gmail.com"
+      }
+    ],
+    "phone": "(270) 300-8149",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Kappa Beta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "David D. Aaron",
+        "position": "Alumni",
+        "email": "aard0001@unf.edu"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Eta Phi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Ashley D. Aaron",
+        "position": "Alumni",
+        "email": "theaarons@charter.net"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Chi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Jacob H. Aaron",
+        "position": "Alumni",
+        "email": "jackaaron93@gmail.com"
+      }
+    ],
+    "phone": "(908) 698-2929",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Alpha Upsilon",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Jacob Aaron",
+        "position": "Undergrad",
+        "email": "jacob.aaronvhs2021@gmail.com"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Lambda Upsilon",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Zachary Joseph Aaron",
+        "position": "Alumni",
+        "email": "zachjaaron@gmail.com"
+      }
+    ],
+    "phone": "(860) 990-8047",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Chi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Charles T. Aaron Jr.",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Theta Epsilon",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Donivan Michael Aaron",
+        "position": "Alumni",
+        "email": "donivan@msn.com"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Beta Iota",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "J. Richard Aaron",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Alpha Upsilon",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Max C. Aaron",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Beta Kappa",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Todd Aaron",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Gamma Sigma",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Jeffrey D. Aaron",
+        "position": "Alumni",
+        "email": "jda0016@auburn.edu"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Delta Phi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Russell K. Aaron Jr.",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Chapter Eternal"
+  },
+  {
+    "chapterName": "Gamma Zeta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Harry A. Aaron",
+        "position": "Alumni",
+        "email": "aaronh@union.edu"
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Alpha Eta",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Kurt A. Aarons",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Gamma Chi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Roger L. Aarons",
+        "position": "Alumni",
+        "email": "roger.aarons@gmail.com"
+      }
+    ],
+    "phone": "(703) 919-8784",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Epsilon Rho",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Chad E. Aarons",
+        "position": "Alumni",
+        "email": "caarons@msn.com"
+      }
+    ],
+    "phone": "(804) 512-3176",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Zeta Xi",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Wayne M. Aaronson",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Kappa Omega",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Michael Aarts",
+        "position": "Alumni",
+        "email": "michaelaarts@gmail.com"
+      }
+    ],
+    "phone": "(914) 523-5334",
+    "status": "Active"
+  },
+  {
+    "chapterName": "Delta Omicron",
+    "university": "Penn State University",
+    "officers": [
+      {
+        "name": "Axel F. Aartsen",
+        "position": "Alumni",
+        "email": ""
+      }
+    ],
+    "phone": "",
+    "status": "Active"
+  }
+]

@@ -1,0 +1,138 @@
+[
+  {
+    "chapterName": "Kappa Tau",
+    "university": "Minnesota State University-Mankato",
+    "members": [
+      {
+        "firstName": "Dillon",
+        "lastName": "Fang",
+        "fullName": "Dillon Case Fang",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dillonfang22@gmail.com",
+        "phone": "6519554348"
+      },
+      {
+        "firstName": "Beck",
+        "lastName": "Fluguear",
+        "fullName": "Beck Tobiah Fluguear",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bfluguear@gmail.com",
+        "phone": "7633139574"
+      },
+      {
+        "firstName": "Jack",
+        "lastName": "Knauer",
+        "fullName": "Jack Knauer",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackpknauer@gmail.com",
+        "phone": "(507) 513-9130"
+      },
+      {
+        "firstName": "Connor",
+        "lastName": "Kulas",
+        "fullName": "Connor Carew Kulas",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "connorkulas@icloud.com",
+        "phone": "(507) 382-5045"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Lindenfeld",
+        "fullName": "Joshua Daniel Lindenfeld",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "josh.lindenfeld1@gmail.com",
+        "phone": "5075082639"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "Loch",
+        "fullName": "Logan Reese Loch",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "logan.loch02@gmail.com",
+        "phone": "(612) 836-3233"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Lunde",
+        "fullName": "James Richard Lunde",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jameslunde05@gmail.com",
+        "phone": "61258053549"
+      },
+      {
+        "firstName": "Ozric",
+        "lastName": "Morehead",
+        "fullName": "Ozric Thomas Morehead",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ozzy321to.mo@gmail.com",
+        "phone": "7633605158"
+      },
+      {
+        "firstName": "Edward",
+        "lastName": "Nguyen",
+        "fullName": "Edward Huy Nguyen",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ngoedward7@gmail.com",
+        "phone": "(507) 351-3266"
+      },
+      {
+        "firstName": "Patrick",
+        "lastName": "Robinson",
+        "fullName": "Patrick Robinson",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "patrickrrobinson19@gmail.com",
+        "phone": "(612) 248-4128"
+      },
+      {
+        "firstName": "Landon",
+        "lastName": "Sabelko",
+        "fullName": "Landon Sabelko",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "landon.sabelko1@gmail.com",
+        "phone": "651-353-3085"
+      },
+      {
+        "firstName": "Troy",
+        "lastName": "Souvannaseng",
+        "fullName": "Troy Souvannaseng",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "troysou712@gmail.com",
+        "phone": "(952) 769-4913"
+      },
+      {
+        "firstName": "Brenton",
+        "lastName": "Westrum",
+        "fullName": "Brenton John Westrum",
+        "chapterGreekLetters": "Kappa Tau",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brenton.westrum@gmail.com",
+        "phone": "612-203-4697"
+      }
+    ]
+  }
+]

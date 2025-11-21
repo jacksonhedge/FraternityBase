@@ -1,0 +1,328 @@
+[
+  {
+    "chapterName": "Delta Phi",
+    "university": "University of Puget Sound",
+    "members": [
+      {
+        "firstName": "Vaughn",
+        "lastName": "Baldemor",
+        "fullName": "Vaughn Baldemor",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "vaughn.baldemor@gmail.com",
+        "phone": "(808) 729-4229"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Baldemor",
+        "fullName": "Andrew K Baldemor",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "andrewbaldemor24@gmail.com",
+        "phone": "8083796757"
+      },
+      {
+        "firstName": "Asa",
+        "lastName": "Bonner",
+        "fullName": "Asa William Bonner",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "asawilliambonner@gmail.com",
+        "phone": "(405) 664-4326"
+      },
+      {
+        "firstName": "Lia",
+        "lastName": "Borell",
+        "fullName": "Lia P. Borell",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "liamborell463@gmail.com",
+        "phone": "(651) 605-1979"
+      },
+      {
+        "firstName": "Carl",
+        "lastName": "Borgquist",
+        "fullName": "Carl Eric Borgquist",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ericborgquist@gmail.com",
+        "phone": "(406) 579-9100"
+      },
+      {
+        "firstName": "Campbell",
+        "lastName": "Botts",
+        "fullName": "Campbell Botts",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ctbotts@icloud.com",
+        "phone": "612-300-2015"
+      },
+      {
+        "firstName": "Rashad",
+        "lastName": "Brimah",
+        "fullName": "Rashad Adewale Brimah",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rashadabrimah@gmail.com",
+        "phone": "(720) 361-5860"
+      },
+      {
+        "firstName": "Mickey",
+        "lastName": "Cosgrove",
+        "fullName": "Mickey True Cosgrove",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coolcos22@gmail.com",
+        "phone": "(818) 306-0550"
+      },
+      {
+        "firstName": "Jon",
+        "lastName": "Crow",
+        "fullName": "Jon Crow",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jackcrow02@gmail.com",
+        "phone": "(612) 719-6667"
+      },
+      {
+        "firstName": "Charles",
+        "lastName": "DeRussy",
+        "fullName": "Charles Husted DeRussy",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cderussy1@gmail.com",
+        "phone": "(504) 439-9250"
+      },
+      {
+        "firstName": "Waylon",
+        "lastName": "Francis",
+        "fullName": "Waylon Edward Francis",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "waylon0310@gmail.com",
+        "phone": "(415) 792-8007"
+      },
+      {
+        "firstName": "Tomer",
+        "lastName": "Gabay",
+        "fullName": "Tomer Gabay",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "tomergabay2@gmail.com",
+        "phone": "(650) 250-3661"
+      },
+      {
+        "firstName": "Andrew Lee",
+        "lastName": "Goldenberg",
+        "fullName": "Andrew Lee Goldenberg",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "andrewgoldenberg10@gmail.com",
+        "phone": "(408) 386-5430"
+      },
+      {
+        "firstName": "Sam",
+        "lastName": "Lampert",
+        "fullName": "Sam Lampert",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "samsnowlampert@icloud.com",
+        "phone": "360-316-6251"
+      },
+      {
+        "firstName": "Aaron",
+        "lastName": "Landau",
+        "fullName": "Aaron Landau",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "aaron@newsengin.com",
+        "phone": "6109095988"
+      },
+      {
+        "firstName": "Aidan",
+        "lastName": "Matheson",
+        "fullName": "Aidan Scott Matheson",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "asmatheson98@gmail.com",
+        "phone": "(951) 225-5080"
+      },
+      {
+        "firstName": "Joaquin",
+        "lastName": "Mintz",
+        "fullName": "Joaquin Mintz",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ziggymintz@gmail.com",
+        "phone": "5108824744"
+      },
+      {
+        "firstName": "Nicolai",
+        "lastName": "Moore",
+        "fullName": "Nicolai Wilson Moore",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "yodanicolai@gmail.com",
+        "phone": "5416319693"
+      },
+      {
+        "firstName": "Bailey",
+        "lastName": "Nguyen",
+        "fullName": "Bailey Nguyen",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "bbnguyen2297@gmail.com",
+        "phone": "8084379902"
+      },
+      {
+        "firstName": "Gabe",
+        "lastName": "Oliver-Polsky",
+        "fullName": "Gabe Oliver-Polsky",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "gabeop2003@gmail.com",
+        "phone": "(510) 679-4813"
+      },
+      {
+        "firstName": "Logan",
+        "lastName": "Pollard",
+        "fullName": "Logan Pollard",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dlpollard30@outlook.com",
+        "phone": "(650) 304-6709"
+      },
+      {
+        "firstName": "Maxwell",
+        "lastName": "Reisinger",
+        "fullName": "Maxwell Timothy Reisinger",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "maxreisinger0411@gmail.com",
+        "phone": "7199224576"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Schaal",
+        "fullName": "Jake Schaal",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "thatjakeyouknow@gmail.com",
+        "phone": "773-798-7430"
+      },
+      {
+        "firstName": "Grayson",
+        "lastName": "Shearer",
+        "fullName": "Grayson Kinsley Shearer",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "shearer.grayson@gmail.com",
+        "phone": "(720) 590-3278"
+      },
+      {
+        "firstName": "Maxwell",
+        "lastName": "Smith",
+        "fullName": "Maxwell Mayne Smith",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "maxmsmith@icloud.com",
+        "phone": "3035524015"
+      },
+      {
+        "firstName": "Andrew",
+        "lastName": "Spitzer",
+        "fullName": "Andrew Joel Spitzer",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "andyrko@verizon.net",
+        "phone": "(571) 287-1664"
+      },
+      {
+        "firstName": "Izac",
+        "lastName": "Stoilkovich",
+        "fullName": "Izac Schroeder Stoilkovich",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "iss101@icloud.com",
+        "phone": "(310) 457-1770"
+      },
+      {
+        "firstName": "Britt",
+        "lastName": "Sutton",
+        "fullName": "Britt Sutton",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brittmccordsutton@gmail.com",
+        "phone": "(612) 442-7895"
+      },
+      {
+        "firstName": "Jaret",
+        "lastName": "Swerdlow",
+        "fullName": "Jaret Swerdlow",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jaretswerdlow@gmail.com",
+        "phone": "(858) 230-1974"
+      },
+      {
+        "firstName": "Charles",
+        "lastName": "Vermillion",
+        "fullName": "Charles E Vermillion",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "charlie.v123@outlook.com",
+        "phone": "4062231772"
+      },
+      {
+        "firstName": "Jacob",
+        "lastName": "Wallace",
+        "fullName": "Jacob Hays Wallace",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jhwallace2004@gmail.com",
+        "phone": "(303) 335-6469"
+      },
+      {
+        "firstName": "Robert",
+        "lastName": "Zane",
+        "fullName": "Robert Finian Zane",
+        "chapterGreekLetters": "Delta Phi",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "robertfzane@gmail.com",
+        "phone": "6178402571"
+      }
+    ]
+  }
+]

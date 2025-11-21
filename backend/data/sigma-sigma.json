@@ -1,0 +1,288 @@
+[
+  {
+    "chapterName": "Sigma Sigma",
+    "university": "Hampden-Sydney College",
+    "members": [
+      {
+        "firstName": "William",
+        "lastName": "Ames",
+        "fullName": "William Lee Ames",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "wames04@gmail.com",
+        "phone": "(804) 840-8639"
+      },
+      {
+        "firstName": "Jonah",
+        "lastName": "Barzel",
+        "fullName": "Jonah Isaac Barzel",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jibar1024@gmail.com",
+        "phone": "(804) 690-4196"
+      },
+      {
+        "firstName": "Paul",
+        "lastName": "Caldwell",
+        "fullName": "Paul Estil Caldwell",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "caldwellpc@icloud.com",
+        "phone": "(805) 955-8360"
+      },
+      {
+        "firstName": "Joshua",
+        "lastName": "Campbell",
+        "fullName": "Joshua Paul Campbell",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "skinsjcam3@gmail.com",
+        "phone": "(443) 333-1409"
+      },
+      {
+        "firstName": "Nicholas",
+        "lastName": "Carman",
+        "fullName": "Nicholas Owen Carman",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "cole.carmann@gmail.com",
+        "phone": "(804) 525-0839"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Davis",
+        "fullName": "John Richard Davis",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "davisjack5068@gmail.com",
+        "phone": "(540) 505-2337"
+      },
+      {
+        "firstName": "Lee",
+        "lastName": "Farmer",
+        "fullName": "Lee Benton Farmer",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "leefarmer054@gmail.com",
+        "phone": "(704) 488-1422"
+      },
+      {
+        "firstName": "Drew",
+        "lastName": "Fink",
+        "fullName": "Drew Alexander Fink",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "dfink1234@icloud.com",
+        "phone": "(804) 489-6679"
+      },
+      {
+        "firstName": "Kaidan",
+        "lastName": "Garst",
+        "fullName": "Kaidan Berkeley Garst",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kaidangarst@gmail.com",
+        "phone": "5403127277"
+      },
+      {
+        "firstName": "Cooper",
+        "lastName": "Goss",
+        "fullName": "Cooper J Goss",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "coopg6@yahoo.com",
+        "phone": "7576928224"
+      },
+      {
+        "firstName": "Steven",
+        "lastName": "Goudes-Shaw",
+        "fullName": "Steven Avery Goudes-Shaw",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "sagoudes@gmail.com",
+        "phone": "980-240-9626"
+      },
+      {
+        "firstName": "Kendal",
+        "lastName": "Harnsberger",
+        "fullName": "Kendal Bryce Harnsberger",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "kendal.b.harnsberger.@gmail.com",
+        "phone": "3363418330"
+      },
+      {
+        "firstName": "Colin",
+        "lastName": "Henry",
+        "fullName": "Colin Mitchell Henry",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "colinhenry0905@gmail.com",
+        "phone": "7577886240"
+      },
+      {
+        "firstName": "Paul",
+        "lastName": "Isenberg",
+        "fullName": "Paul Miles Isenberg",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "paulyisenberg@gmail.com",
+        "phone": "301-580-0690"
+      },
+      {
+        "firstName": "Brendan",
+        "lastName": "Li",
+        "fullName": "Brendan Li",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "brendancli9@gmail.com",
+        "phone": "8609122059"
+      },
+      {
+        "firstName": "Parker",
+        "lastName": "Lucas",
+        "fullName": "Parker John Lucas",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "parkerlucas202@gmail.com",
+        "phone": "(757) 525-0523"
+      },
+      {
+        "firstName": "Henry",
+        "lastName": "Mann",
+        "fullName": "Henry Mann",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "henry.mann33@gmail.com",
+        "phone": "7047705045"
+      },
+      {
+        "firstName": "Ethan",
+        "lastName": "Mick",
+        "fullName": "Ethan Davis Mick",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ethanmick18@gmail.com",
+        "phone": "(804) 510-3377"
+      },
+      {
+        "firstName": "Riley",
+        "lastName": "Mullins",
+        "fullName": "Riley Mullins",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "rileymorganmullins@gmail.com",
+        "phone": "8042974635"
+      },
+      {
+        "firstName": "Quinlan",
+        "lastName": "Ragsdale",
+        "fullName": "Quinlan Scott Ragsdale",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "qsragsdale4@gmail.com",
+        "phone": "4343279803"
+      },
+      {
+        "firstName": "Austin",
+        "lastName": "Rose",
+        "fullName": "Austin Frederick Rose",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "austinrose700@gmail.com",
+        "phone": "8049385256"
+      },
+      {
+        "firstName": "Jake",
+        "lastName": "Ryan",
+        "fullName": "Jake Ryan",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "jakeryan77777@gmail.com",
+        "phone": "7044931246"
+      },
+      {
+        "firstName": "Ian",
+        "lastName": "Shaw",
+        "fullName": "Ian Carter Shaw",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "ianshaw1013@gmail.com",
+        "phone": "7578033127"
+      },
+      {
+        "firstName": "Charles",
+        "lastName": "Sink",
+        "fullName": "Charles Wallace Sink",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "charliessink@gmail.com",
+        "phone": "(757) 846-3184"
+      },
+      {
+        "firstName": "Joseph",
+        "lastName": "Stone",
+        "fullName": "Joseph Ogden Stone",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "joestone55@icloud.com",
+        "phone": "434-363-7454"
+      },
+      {
+        "firstName": "Michael",
+        "lastName": "Williamson",
+        "fullName": "Michael Allen Williamson",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "williamsonmichael331@gmail.com",
+        "phone": "8042523650"
+      },
+      {
+        "firstName": "James",
+        "lastName": "Woerner",
+        "fullName": "James John Woerner",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "woernerjames0@gmail.com",
+        "phone": "2524897646"
+      },
+      {
+        "firstName": "Thomas",
+        "lastName": "Word",
+        "fullName": "Thomas Scott Word",
+        "chapterGreekLetters": "Sigma Sigma",
+        "memberType": "Undergrad",
+        "status": "Active",
+        "email": "thomasword4@gmail.com",
+        "phone": "804-822-0417"
+      }
+    ]
+  }
+]
